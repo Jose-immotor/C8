@@ -1,3 +1,4 @@
+#ifdef CONFIG_CMDLINE
 
 #ifndef  _CMDLINE_H_
 #define  _CMDLINE_H_
@@ -102,5 +103,7 @@ void CmdLine_AddStr(const char* str);
 #ifdef __cplusplus
 }
 #endif
+
+#endif 
 
 #endif

@@ -7,7 +7,7 @@ extern "C"{
 
 #include "typedef.h"
 
-uint16 CheckSum_Get(uint16* pCheckSum, const void* pData, uint8 len);
+uint16_t CheckSum_Get(uint16_t* pCheckSum, const void* pData, uint8_t len);
 
 #ifdef __cplusplus
 }

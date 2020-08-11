@@ -1,6 +1,6 @@
-#include "common.h"
+#include "Common.h"
 #ifdef CONFIG_CMDLINE
-#include "cmdline.h"
+#include "CmdLine.h"
 #include <stdarg.h>
 
 extern int str_htoi(const char *s);
@@ -88,7 +88,7 @@ int CmdLine_Printf(const char* lpszFormat, ...)
 
 	memset(g_Pfbuffer, 0, sizeof(g_Pfbuffer));
 	va_start(ptr, lpszFormat);
-	nLen = _vsnprintf(g_Pfbuffer, sizeof(g_Pfbuffer), lpszFormat, ptr);
+	nLen = vsnprintf(g_Pfbuffer, sizeof(g_Pfbuffer), lpszFormat, ptr);
 	va_end(ptr);
 	
 	if(g_CmdLine.printf) g_CmdLine.printf(g_Pfbuffer);
@@ -308,7 +308,7 @@ int CmdLine_GetArgCount(const char* str)
 			nArgCount++;
 		}
 	}
-
+	
 	return *str == ')' ? nArgCount : -1;
 }
 

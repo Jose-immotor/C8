@@ -5,9 +5,8 @@
 extern "C"{
 #endif
 
-#include "ArchDef.h"
-#include <stdarg.h>
-#include "smart_shell.h"
+#include "typedef.h"
+
 
 #define PRINTF_BUF_SIZE 1024
 

@@ -72,6 +72,7 @@ uint32_t usart0_get_byte(uint8_t *data)
 	
 	
 //    return app_fifo_get(&__g_usart0.rx_fifo,data);
+	return 0;
 }
 
 char rt_hw_console_getchar(void)
@@ -145,6 +146,7 @@ static bool usart0_tx_busy(void)
 //    {
 //        return true;
 //    }
+	return true;
 }
 
 /*!
