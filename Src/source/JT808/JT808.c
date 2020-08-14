@@ -85,12 +85,12 @@ UTP_EVENT_RC JT808_utpEventCb(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 	return UTP_EVENT_RC_SUCCESS;
 }
 
-void JT808_fsinit(uint8_t msgID, uint32_t param1, uint32_t param2)
+void JT808_fsm_init(uint8_t msgID, uint32_t param1, uint32_t param2)
 {
 
 }
 
-void JT808_fspreoperation(uint8_t msgID, uint32_t param1, uint32_t param2)
+void JT808_fsm_preoperation(uint8_t msgID, uint32_t param1, uint32_t param2)
 {
 	if (msgID == MSG_UTP_REQ_DONE)
 	{
@@ -103,17 +103,17 @@ void JT808_fspreoperation(uint8_t msgID, uint32_t param1, uint32_t param2)
 	}
 }
 
-void JT808_fsoperation(uint8_t msgID, uint32_t param1, uint32_t param2)
+void JT808_fsm_operation(uint8_t msgID, uint32_t param1, uint32_t param2)
 {
 
 }
 
-void JT808_fssleep(uint8_t msgID, uint32_t param1, uint32_t param2)
+void JT808_fsm_sleep(uint8_t msgID, uint32_t param1, uint32_t param2)
 {
 
 }
 
-void JT808_fswakeup(uint8_t msgID, uint32_t param1, uint32_t param2)
+void JT808_fsm_wakeup(uint8_t msgID, uint32_t param1, uint32_t param2)
 {
 
 }
@@ -127,11 +127,11 @@ void JT808_fsm(uint8_t msgID, uint32_t param1, uint32_t param2)
 	}
 	static const fsmDispatch[] =
 	{
-		{JT_STATE_INIT			, JT808_fsinit},
-		{JT_STATE_SLEEP			, JT808_fssleep},
-		{JT_STATE_WAKEUP		, JT808_fswakeup},
-		{JT_STATE_PREOPERATION	, JT808_fspreoperation},
-		{JT_STATE_OPERATION		, JT808_fsoperation},
+		{JT_STATE_INIT			, JT808_fsm_init},
+		{JT_STATE_SLEEP			, JT808_fsm_sleep},
+		{JT_STATE_WAKEUP		, JT808_fsm_wakeup},
+		{JT_STATE_PREOPERATION	, JT808_fsm_preoperation},
+		{JT_STATE_OPERATION		, JT808_fsm_operation},
 	};
 
 	for (int i = 0; i < GET_ELEMENT_COUNT(fsmDispatch); i++)
@@ -193,14 +193,15 @@ void JT808_init()
 	static const UtpCmd g_JtCmd[JT_CMD_SIZE] =
 	{
 		//位置越靠前，发送优先级越高
-		{&g_JtCmdEx[0],UTP_NOTIFY, JTCMD_MCU_HB		, "McuHb"		, (uint8_t*)& g_hbIntervalMs, 4},
+		{&g_JtCmdEx[0],UTP_NOTIFY, JTCMD_MCU_HB, "McuHb"		, (uint8_t*)& g_hbIntervalMs, 4},
+		{&g_JtCmdEx[5],UTP_NOTIFY, JTCMD_SIM_HB, "SimHb"		, (uint8_t*)& g_Jt.opState, 1, Null, 0, (UtpEventFn)JT808_event_simHb},
+
 		{&g_JtCmdEx[1],UTP_WRITE , JTCMD_SET_OP_STATE, "SetOpState"	, (uint8_t*)& g_Jt.setToOpState, 1},
 
 		{&g_JtCmdEx[2],UTP_READ , JTCMD_CMD_GET_SIM_ID, "GetSimID"	, (uint8_t*)& g_Jt.simID, sizeof(SimID), &g_protocolVer, 1},
 		{&g_JtCmdEx[3],UTP_READ , JTCMD_CMD_GET_SIM_CFG, "GetSimCfg", Null, 0, Null, 0, (UtpEventFn)JT808_cmd_getSimCfg},
 		{&g_JtCmdEx[4],UTP_WRITE, JTCMD_SET_OP_STATE, "SetOpState"	, (uint8_t*)& g_Jt.bleEnCtrl, 2, (uint8_t*)&g_bleEnCtrl, 2},
 
-		{&g_JtCmdEx[5],UTP_EVENT, JTCMD_SIM_HB, "SimHb"		, (uint8_t*)& g_Jt.opState, 1, Null, 0, (UtpEventFn)JT808_event_simHb},
 		{&g_JtCmdEx[6],UTP_EVENT, JTCMD_EVENT_DEV_STATE_CHANGED, "DevStateChanged", (uint8_t*)& g_Jt.devState, sizeof(JT_devState), Null, 0, (UtpEventFn)JT808_event_devStateChanged},
 	};
 
@@ -216,5 +217,5 @@ void JT808_init()
 	static const Obj obj = { "JT808", JT808_start, (ObjFn)JT808_sleep, JT808_run };
 	ObjList_Add(&obj);
 
-	Utp_Init(&g_JtUtp, &g_cfg, &g_jtJtUtpCfg);
+	Utp_Init(&g_JtUtp, &g_cfg, &g_jtFrameCfg);
 }

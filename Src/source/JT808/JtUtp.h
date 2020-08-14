@@ -35,7 +35,7 @@ extern "C"{
 		uint8_t  data[1];
 	}JtUtp;
 
-	extern const UtpFrameCfg g_jtJtUtpCfg;
+	extern const UtpFrameCfg g_jtFrameCfg;
 #ifdef __cplusplus
 }
 #endif

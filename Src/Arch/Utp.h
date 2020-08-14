@@ -142,14 +142,14 @@ typedef struct _UtpFrameCfg
 	int      rxBufLen;	//rxBuf的长度
 	uint8_t* rxBuf;		//存放接收到的RAW数据，转码前
 	int		 transcodeBufLen;//transcodeBuf的长度
-	uint8_t* transcodeBuf;	 //存放接收到的数据，rxBuf转码后的帧数据
+	uint8_t* transcodeBuf;	 //存放rxBuf转码后的帧数据
 
 	uint8_t result_SUCCESS;		//返回码定义：成功
 	uint8_t result_UNSUPPORTED;	//返回码定义：接收到不支持的请求
 
-	uint32_t waitRspMsDefault;	//默认的等待响应时间
+	uint32_t waitRspMsDefault;	//命令的默认的等待响应时间，如果命令要修改为非默认值，可以在命令的事件函数UTP_TX_START中修改pUtp->waitRspMs
 	uint32_t rxIntervalMs;		//接收数据间隔
-	uint32_t sendCmdIntervalMs;	//发送命令间隔时间
+	uint32_t sendCmdIntervalMs;	//发送2个命令之间的间隔时间
 
 	UtpFrameVerifyFn FrameVerify;	//帧校验函数
 	UtpBuildFrameFn	 FrameBuild;	//帧打包函数
@@ -188,7 +188,7 @@ typedef struct _UtpCmdEx
 	uint32_t rxRspTicks;
 
 	/*****************
-	发送请求延时时间，对下列命令类型有效：
+	发送标志:
 		0：表示不发送，
 		其他值：表示延时指定的时间MS发送
 	******************/
@@ -250,7 +250,7 @@ typedef struct _Utp
 	uint32_t waitRspMs;			//等待响应时间
 	SwTimer waitRspTimer;		//等待响应定时器
 
-	const UtpCmd* pCurrentCmd;	//当前的执行的命令，Null表示当前没有
+	const UtpCmd* pWaitRspCmd;	//当前的执行的请求，正在等待RSP的命令，可能是READ/WRITE，Null表示没有
 
 	/*****************************************************************/
 	const UtpCfg* cfg;

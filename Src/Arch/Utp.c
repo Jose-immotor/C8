@@ -165,13 +165,10 @@ static void Utp_ResetTxBuf(Utp* pUtp)
 	pUtp->state = UTP_FSM_INIT;
 	pUtp->txBufLen = 0;
 	pUtp->reTxCount = 0;
-	SwTimer_Stop(&pUtp->waitRspTimer);
 }
 
 static void Utp_ResetRxBuf(Utp* pUtp)
 {
-	pUtp->pCurrentCmd = Null;
-
 	Queue_reset(&pUtp->rxBufQueue);
 	pUtp->searchIndex = 0;
 	pUtp->head = 0;
@@ -190,7 +187,7 @@ static void Utp_ResetRxBuf(Utp* pUtp)
 void Utp_Reset(Utp* pUtp)
 {
 	//如果当前有正在发送的命令，立刻终止
-	if(pUtp->pCurrentCmd)
+	if(pUtp->pWaitRspCmd)
 	{
 		Utp_RspProc(pUtp, Null, 0, RSP_CANCEL);
 	}
@@ -223,22 +220,24 @@ static UTP_EVENT_RC Utp_Event(Utp* pUtp, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 
 static Bool Utp_RspProc(Utp* pUtp, const uint8_t* pRsp, int frameLen, UTP_RCV_RSP_RC rspCode)
 {
-	pUtp->pCurrentCmd->pExt->rcvRspErr = rspCode;
+	pUtp->pWaitRspCmd->pExt->rcvRspErr = rspCode;
 	if(rspCode == RSP_SUCCESS)
 	{
 		Utp_RcvRsp(pUtp, pRsp, rspCode, frameLen);
 	}
 	else
 	{
-		pUtp->pCurrentCmd->pExt->transferData = Null;
-		pUtp->pCurrentCmd->pExt->transferLen = 0;
-		Utp_Event(pUtp, pUtp->pCurrentCmd, UTP_REQ_FAILED);
+		pUtp->pWaitRspCmd->pExt->transferData = Null;
+		pUtp->pWaitRspCmd->pExt->transferLen = 0;
+		Utp_Event(pUtp, pUtp->pWaitRspCmd, UTP_REQ_FAILED);
 	}
 	
-	Utp_ResetTxBuf(pUtp);
-	Utp_ResetRxBuf(pUtp);
-
+	//响应处理结束
+	SwTimer_Stop(&pUtp->waitRspTimer);
+	pUtp->pWaitRspCmd = Null;
 	pUtp->rxRspTicks = GET_TICKS();
+
+	Utp_ResetTxBuf(pUtp);
 	return True;
 }
 
@@ -246,7 +245,7 @@ static void Utp_ReqProc(Utp* pUtp, const uint8_t* pReq, int frameLen)
 {	
 	const UtpFrameCfg* frameCfg = pUtp->frameCfg;
 	uint8_t rc = frameCfg->result_UNSUPPORTED;
-	uint8* pRsp = pUtp->frameCfg->txBuf;
+	uint8* txBuf = frameCfg->txBuf;
 	const uint8* pData = &pReq[frameCfg->dataByteInd];
 	const UtpCmd* pCmd = Utp_FindCmdItem(pUtp, pReq[frameCfg->cmdByteInd]);
 	int dlc = 1;
@@ -255,8 +254,6 @@ static void Utp_ReqProc(Utp* pUtp, const uint8_t* pReq, int frameLen)
 	{
 		rc = frameCfg->result_SUCCESS;
 		frameLen -= frameCfg->dataByteInd;
-		pUtp->state = UTP_FSM_RX_REQ;	//pUtp置忙标志，防止上层应用在函数ReqProc内部发起新的请求。
-				//int tranlen = MIN(frameLen, pCmd->dataLen);
 
 		//传输数据
 		pCmd->pExt->transferData = pData;
@@ -283,26 +280,30 @@ static void Utp_ReqProc(Utp* pUtp, const uint8_t* pReq, int frameLen)
 		rc = Utp_Event(pUtp, pCmd, UTP_GET_RSP);
 		if (rc == frameCfg->result_SUCCESS && pCmd->pExt->transferData)
 		{
-			memcpy(&pRsp[frameCfg->dataByteInd + 1], pCmd->pExt->transferData, pCmd->pExt->transferLen);
+			memcpy(&txBuf[frameCfg->dataByteInd + 1], pCmd->pExt->transferData, pCmd->pExt->transferLen);
 		}
 		dlc += pCmd->pExt->transferLen;
 
 		Utp_Event(pUtp, pCmd, UTP_REQ_SUCCESS);
-
-		if (pCmd->type == UTP_NOTIFY) 
-			return;
 	}
 
-	pRsp[frameCfg->dataByteInd] = rc;
+	//pCmd==Null，说明命令没有实现，返回UNSUPPORTED
+	if (pCmd==Null || pCmd->type != UTP_NOTIFY)
+	{
+		txBuf[frameCfg->cmdByteInd] = pReq[frameCfg->cmdByteInd];
+		txBuf[frameCfg->dataByteInd] = rc;
 
-	pUtp->txBufLen = frameCfg->FrameBuild(pUtp
-		, pReq[frameCfg->cmdByteInd]
-		, &pRsp[frameCfg->dataByteInd]
-		, dlc
-		, pReq
-		, pUtp->frameCfg->txBuf);
+		pUtp->txBufLen = frameCfg->FrameBuild(pUtp
+			, pReq[frameCfg->cmdByteInd]
+			, &txBuf[frameCfg->dataByteInd]
+			, dlc
+			, pReq
+			, txBuf);
 
-	Utp_SendFrame(pUtp, pRsp, frameLen);
+		Utp_SendFrame(pUtp, txBuf, frameLen);
+	}
+
+	Utp_ResetTxBuf(pUtp);
 }
 
 //接收帧处理
@@ -321,7 +322,6 @@ void Utp_RcvFrameHandler(Utp* pUtp, const uint8* pFrame, int frameLen)
 		Utp_ReqProc(pUtp, pFrame, frameLen);	//请求处理
 	}
 
-	pUtp->FrameState = FRAME_INIT;
 	return;
 }
 
@@ -334,7 +334,7 @@ static Bool Utp_SendReq(Utp* pUtp, uint8_t cmd, const void* pData, int len, uint
 	}
 
 	Utp_ResetTxBuf(pUtp);
-	Utp_ResetRxBuf(pUtp);
+	//Utp_ResetRxBuf(pUtp);
 
 	pUtp->txBufLen = pUtp->frameCfg->FrameBuild(pUtp, cmd, pData, len, Null, pUtp->frameCfg->txBuf);
 
@@ -389,11 +389,10 @@ static void Utp_RcvRsp(Utp* pUtp, const uint8_t* pRsp, int frameLen, UTP_RCV_RSP
 {
 	const UtpFrameCfg* frameCfg = pUtp->frameCfg;
 	uint8_t rspDlc = frameLen - frameCfg->dataByteInd;
-	const UtpCmd* pCmd = pUtp->pCurrentCmd;
+	const UtpCmd* pCmd = pUtp->pWaitRspCmd;
 
 	if(pCmd == Null) return;
 	if(pCmd->cmd != pRsp[frameCfg->cmdByteInd]) return;
-	pUtp->pCurrentCmd = Null;
 
 	pCmd->pExt->transferData = (uint8*)&pRsp[frameCfg->dataByteInd];
 	pCmd->pExt->transferLen = rspDlc;
@@ -458,21 +457,26 @@ static void Utp_CheckReq(Utp* pUtp)
 		//是否有待发的READ/WRITE命令(pExt->sendDelayMs > 0)
 		if(pExt->sendDelayMs && SwTimer_isTimerOutEx(pExt->rxRspTicks, pExt->sendDelayMs))
 		{
-			if(pCmd->type == UTP_READ)
-			{
-				Utp_SendReq(pUtp, pCmd->cmd, pCmd->pData, pCmd->dataLen, pUtp->waitRspMs, pUtp->maxTxCount);
-			}
-			else if (pCmd->type == UTP_NOTIFY)
+			if (pCmd->type == UTP_NOTIFY)
 			{
 				Utp_SendReq(pUtp, pCmd->cmd, pCmd->pStorage, pCmd->storageLen, 0, 0);
 				pCmd->pExt->rxRspTicks = GET_TICKS();
 			}
 			else
 			{
-				Utp_SendReq(pUtp, pCmd->cmd, pCmd->pStorage, pCmd->storageLen, pUtp->waitRspMs, pUtp->maxTxCount);
+				if(pCmd->type == UTP_READ)
+				{
+					Utp_SendReq(pUtp, pCmd->cmd, pCmd->pData, pCmd->dataLen, pUtp->waitRspMs, pUtp->maxTxCount);
+				}
+				else
+				{
+					//WRITE
+					Utp_SendReq(pUtp, pCmd->cmd, pCmd->pStorage, pCmd->storageLen, pUtp->waitRspMs, pUtp->maxTxCount);
+				}
+				pUtp->pWaitRspCmd = pCmd;
 			}
+			//清除发送标志
 			pExt->sendDelayMs = 0;
-			pUtp->pCurrentCmd = pCmd;
 			break;
 		}
 
@@ -483,7 +487,7 @@ static void Utp_CheckReq(Utp* pUtp)
 			{
 				Utp_SendReq(pUtp, pCmd->cmd, pCmd->pStorage, pCmd->storageLen, pUtp->waitRspMs, pUtp->maxTxCount);
 				pExt->sendDelayMs = 0;
-				pUtp->pCurrentCmd = pCmd;
+				pUtp->pWaitRspCmd = pCmd;
 				break;
 			}
 		}
@@ -503,12 +507,8 @@ void Utp_RxData(Utp* pUtp, uint8_t* pData, int len)
 	//检查接收数据的间隔是否超时，如果是则必须丢弃之前接收到的数据。
 	if (pUtp->rxDataTicks && SwTimer_isTimerOutEx(pUtp->rxDataTicks, pUtp->frameCfg->rxIntervalMs))
 	{
-		//Utp_ResetRsp(pUtp);
 		//清除接收缓冲区
-		Queue_reset(&pUtp->rxBufQueue);
-		pUtp->searchIndex = 0;
-		pUtp->head = 0;
-		pUtp->rxDataTicks = 0;
+		Utp_ResetRxBuf(pUtp);
 	}
 	pUtp->rxDataTicks = GET_TICKS();
 
@@ -531,7 +531,7 @@ void Utp_CheckRxFrame(Utp* pUtp)
 		}
 		else if(pUtp->searchIndex)
 		{
-			//移除队列中前面无效的帧数据
+			//移除队列中前面无效的数据
 			Queue_popElements(&pUtp->rxBufQueue, pUtp->searchIndex + 1);
 		}
 	}
@@ -569,8 +569,7 @@ void Utp_CheckRxFrame(Utp* pUtp)
 		//如果队列满（说明丢失帧尾字节），清除队列所有内容
 		if (Queue_isFull(&pUtp->rxBufQueue))
 		{
-			pUtp->head = 0;
-			Queue_reset(&pUtp->rxBufQueue);
+			Utp_ResetRxBuf(pUtp);
 		}
 	}
 }

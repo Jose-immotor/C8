@@ -90,7 +90,7 @@ static int Utp_BuildFrame(Utp* pUtp, uint8_t cmd, const void* pData, int len, co
 static uint8_t g_JtUtp_txBuff[128];			//发送数据缓冲区
 static uint8_t g_JtUtp_transcodeBuf[150];	//接收数据的转码缓冲区
 static uint8_t g_JtUtp_rxBuff[200];			//接收数据缓冲区
-const UtpFrameCfg g_jtJtUtpCfg =
+const UtpFrameCfg g_jtFrameCfg =
 {
 	//帧特征配置
 	.head = 0x7E,
