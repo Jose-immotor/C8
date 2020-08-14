@@ -7,10 +7,10 @@ extern "C"{
 
 typedef enum _MSG_ID
 {
-	MSG_TIMEOUT = 1,	//消息格式：(MSG_TIMEOUT, pTimer, timerID)
+	MSG_TIMEOUT = 1,	//MSG_TIMEOUT(pTimer, timerID)
 
-	MSG_RUN,
-	MSG_UTP_REQ_DONE,
+	MSG_RUN,			//MSG_RUN(0, 0)
+	MSG_UTP_REQ_DONE,	//MSG_RUN(pUtpCmd, UTP_TXF_EVENT)
 
 	MSG_MAX
 }MSG_ID;

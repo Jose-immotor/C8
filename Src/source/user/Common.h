@@ -5,7 +5,10 @@
 extern "C"{
 #endif
 	
+#ifdef WIN32
+#else
 #define XDEBUG
+#endif
 
 #include "ArchDef.h"
 #include "Obj.h"

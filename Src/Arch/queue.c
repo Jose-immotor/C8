@@ -146,12 +146,12 @@ void* Queue_searchByte(Queue* queue, uint8_t byte, int* offsetIndex)
 	{
 		if(queue->buf[i] == byte)
 		{
-			* offsetIndex = i + 1;
+			*offsetIndex = i;
 			return &queue->buf[queue->readInd];
 		}
 	}
 
-	* offsetIndex = queue->writeInd;
+	*offsetIndex = i;
 	return Null;
 }
 
