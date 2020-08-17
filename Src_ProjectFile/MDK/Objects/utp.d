@@ -1,0 +1,15 @@
+.\objects\utp.o: ..\..\Src\Arch\Utp.c
+.\objects\utp.o: ..\..\Src\Arch\ArchDef.h
+.\objects\utp.o: ..\..\Src\Arch\typedef.h
+.\objects\utp.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\utp.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+.\objects\utp.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\utp.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\utp.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\objects\utp.o: ..\..\Src\Arch\Dump.h
+.\objects\utp.o: ..\..\Src\Arch\_Macro.h
+.\objects\utp.o: ..\..\Src\source\debug\Printf.h
+.\objects\utp.o: ..\..\Src\Arch\ArchDef.h
+.\objects\utp.o: ..\..\Src\Arch\Utp.h
+.\objects\utp.o: ..\..\Src\Arch\SwTimer.h
+.\objects\utp.o: ..\..\Src\Arch\queue.h

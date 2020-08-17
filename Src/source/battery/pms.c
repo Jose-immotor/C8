@@ -10,12 +10,12 @@
  * 2020-05-25	   lane 	first implementation
 *******************************************************************************/
 #include <rtthread.h>
-//#include "Common.h"
+#include "Common.h"
 #include "pms.h"
 #include "fm175xx.h"
 //#include "Beep.h"
 //#include "Smart_System.h"
-//#include "Utp.h"
+//#include "nvc.h"
 #include "nfc_cmd_process.h"
 #include "battery.h"
 //#include "adc_sample.h"
@@ -40,11 +40,11 @@ Pms* g_pPms = &__g_Pms;
 st_base_param gl_base_param[NFC_READER_COUNT_MAX];
 
 //static struct rt_event     pms_event;
-BOOL pmsPortEventInit( void )
-{
-//	rt_event_init(&pms_event,"pms event",RT_IPC_FLAG_PRIO);
-    return TRUE;
-}
+//bool pmsPortEventInit( void )
+//{
+////	rt_event_init(&pms_event,"pms event",RT_IPC_FLAG_PRIO);
+//    return TRUE;
+//}
 
 //BOOL pmsPortEventPost( pmsEventType eEvent )
 //{
@@ -182,27 +182,28 @@ BOOL pmsPortEventInit( void )
 
 //    return vl_u16_tmp;
 //}
-//uint8 Pms_GetAveBatSoc(const BatStatePkt* pBatDesc)
-//{
-//	int i = 0;
-//	uint8 soc = 0;
 
-//	if(pBatDesc == Null)
-//	{
-//		pBatDesc = &g_pPms->m_batPkt;
-//	}
+uint8 Pms_GetAveBatSoc(const BatStatePkt* pBatDesc)
+{
+	int i = 0;
+	uint8 soc = 0;
 
-//	//Get Soc
-//	for(i = 0; i < MAX_BATTERY_COUNT; i++)
-//	{
-//		if(pBatDesc->desc[i].capacity)
-//		{
-//			soc += pBatDesc->desc[i].SOC;
-//		}
-//	}
+	if(pBatDesc == Null)
+	{
+		pBatDesc = &g_pPms->m_batPkt;
+	}
 
-//	return pBatDesc->batteryCount ? soc / pBatDesc->batteryCount : 0;
-//}
+	//Get Soc
+	for(i = 0; i < NFC_READER_COUNT_MAX; i++)
+	{
+		if(pBatDesc->desc[i].capacity)
+		{
+			soc += pBatDesc->desc[i].SOC;
+		}
+	}
+
+	return pBatDesc->batteryCount ? soc / pBatDesc->batteryCount : 0;
+}
 
 
 //#define PRINTF_SERIAL(str, pSerialNum){const uint8* p = (pSerialNum); Printf("%s[%02X%02X%02X%02X%02X%02X]\n",str, p[0], p[1], p[2], p[3], p[4], p[5]);}
@@ -214,16 +215,16 @@ void BatteryDescDump(const BatteryDesc* desc)
 		,desc->portId, pByte[0], pByte[1], pByte[2], pByte[3], pByte[4], pByte[5]);
 	
 	BAT_DUMP1(SOC);
-	BAT_DUMP1(voltage);
-	BAT_DUMP1(current);
-	BAT_DUMP1(temp);
-	BAT_DUMP1(fault);
-	BAT_DUMP1(damage);
-	BAT_DUMP1(cycleCount);
-	Printf("\t\tmaxVoltage=%d,%d\n", desc->maxVoltage, desc->maxVolCell);
-	Printf("\t\tminVoltage=%d,%d\n", desc->minVoltage, desc->minVolCell);
-	BAT_DUMP1(bmsPcbTemp);
-	BAT_DUMP1(connectorTemp);
+//	BAT_DUMP1(voltage);
+//	BAT_DUMP1(current);
+//	BAT_DUMP1(temp);
+//	BAT_DUMP1(fault);
+//	BAT_DUMP1(damage);
+//	BAT_DUMP1(cycleCount);
+//	Printf("\t\tmaxVoltage=%d,%d\n", desc->maxVoltage, desc->maxVolCell);
+//	Printf("\t\tminVoltage=%d,%d\n", desc->minVoltage, desc->minVolCell);
+//	BAT_DUMP1(bmsPcbTemp);
+//	BAT_DUMP1(connectorTemp);
 	BAT_DUMP1(mosState);
 }
 
@@ -243,17 +244,17 @@ void BatteryDump(const BatStatePkt* pPkt)
 	
 //	VerDesc_Dump(pVerDesc, "\tPms ");
 
-	PMS_DUMP(m_isNotDischarge);
-	PMS_DUMP(m_PowerOffAtOnce);
+//	PMS_DUMP(m_isNotDischarge);
+//	PMS_DUMP(m_PowerOffAtOnce);
 	
 	Printf("Battery info:\n");
 	
-	BAT_DUMP(MaxOutPutCurrent);
-	BAT_DUMP(workVoltate);
-	BAT_DUMP(workCurrent);
-	BAT_DUMP(packState);
+//	BAT_DUMP(MaxOutPutCurrent);
+//	BAT_DUMP(workVoltate);
+//	BAT_DUMP(workCurrent);
+//	BAT_DUMP(packState);
 	BAT_DUMP(batteryCount);
-	BAT_DUMP(deviceState);
+//	BAT_DUMP(deviceState);
 	for(i = 0; i < NFC_READER_COUNT_MAX; i++)
 	{
 		if(pPkt->desc[i].capacity)
@@ -665,15 +666,15 @@ void BatteryDump(const BatStatePkt* pPkt)
 ////	}
 ////}
 
-//uint8 Pms_GetBatCount()
-//{
-//	return g_pPms->m_batPkt.batteryCount;
-//}
+uint8 Pms_GetBatCount()
+{
+	return g_pPms->m_batPkt.batteryCount;
+}
 
-//Bool Pms_IsAccOn()
-//{
-//	return (g_pPms->m_deviceState.isAccOn);
-//}
+Bool Pms_IsAccOn()
+{
+	return (g_pPms->m_deviceState.isAccOn);
+}
 
 ////void Pms_SwitchProtocol(uint8 protocol)
 ////{
@@ -817,13 +818,13 @@ void BatteryDump(const BatStatePkt* pPkt)
 ////	}
 //}
 
-//void Pms_OnBatteryPlugIn(uint8 port)
-//{
+void Pms_OnBatteryPlugIn(uint8 port)
+{
 //	g_DeactiveBeepFlag = 0;
 //	if(g_DeactiveTimer == 0)
 //		g_DeactiveTimer = GET_TICKS();
-//	
-//	//如果是测试电池，响一声告警音
+	
+	//如果是测试电池，响一声告警音
 //	if(g_pPms->m_isTestBat)
 //	{
 //		NVC_PLAY(NVC_BAT_PLUG_IN);
@@ -833,12 +834,12 @@ void BatteryDump(const BatStatePkt* pPkt)
 //	{
 //		NVC_PLAY(NVC_INFO);
 //	}	
-//}
+}
 
-//void Pms_OnBatteryPlugOut(uint8 port)
-//{
-//	//判断是否全部电池拔出
-//}
+void Pms_OnBatteryPlugOut(uint8 port)
+{
+	//判断是否全部电池拔出
+}
 
 void Pms_OnBatteryChanged(uint8 port, Bool isPlugIn)
 {
@@ -853,14 +854,13 @@ void Pms_OnBatteryChanged(uint8 port, Bool isPlugIn)
 
 //	if(g_pPms->m_portMask)
 //		g_pPms->m_isNotDischarge = !Pms_IsNotDischarge();
-	rt_kprintf("Battery[%d] %s\n", port, isPlugIn ? "in" : "out");
-//	Printf("%sBattery[%d] %s\n", (g_pPms->m_isTestBat)?"Test ":"", port, isPlugIn ? "in" : "out");
+	Printf("%sBattery[%d] %s\n", (g_pPms->m_isTestBat)?"Test ":"", port, isPlugIn ? "in" : "out");
 //	LOG2(isPlugIn ? ET_PMS_BAT_PLUG_IN: ET_PMS_BAT_PLUG_OUT, Pms_GetBatCount(), Pms_GetAveBatSoc(Null));
 //	PostMsg(isPlugIn ? MSG_BATTERY_PLUG_IN :  MSG_BATTERY_PLUG_OUT);
-//	if(isPlugIn == PLUG_IN)
-//		Pms_OnBatteryPlugIn(port);
-//	else
-//		Pms_OnBatteryPlugOut(port);
+	if(isPlugIn == PLUG_IN)
+		Pms_OnBatteryPlugIn(port);
+	else
+		Pms_OnBatteryPlugOut(port);
 }
 
 ////void Pms_UpdateDeviceState(const BatStatePkt* pNewPkt, int len, BatStatePkt* pOlderPkt)
@@ -894,10 +894,7 @@ void Pms_OnBatteryChanged(uint8 port, Bool isPlugIn)
 ////	memcpy(&g_pPms->m_deviceState, &pNewPkt->deviceState, 1);
 
 ////	
-////	#ifdef CFG_WHEEL_LOCK
-////	g_pPms->m_isLock = pDevState->isLock;
-////	g_pPms->_AsSpeed = pNewPkt->Speed;
-////	#endif
+
 
 ////	if(pOlderPkt->packState != pNewPkt->packState)
 ////	{
@@ -1329,26 +1326,7 @@ void Pms_OnBatteryChanged(uint8 port, Bool isPlugIn)
 //}
 //#endif //CFG_CABIN_LOCK
 
-////#ifdef CFG_WHEEL_LOCK
-////void Pms_SetLock(Bool isLock)
-////{
-////	Fsm_SetActiveFlag(AF_PMS, True);
-////	g_pPms->m_setLock = isLock;
-////	g_pPms->m_isLock = !isLock;
-////	PostMsg(MSG_LOCK_KEY);
 
-////	if(isLock)
-////	{
-////		Beep_Mode(BEEP_LOCK);
-////	}
-////	else
-////	{
-////		Beep_Mode(BEEP_UNLOCK);
-////	}
-
-////	LOG2(ET_LOCK, 0, isLock);
-////}
-////#endif
 
 //#ifdef CFG_REMOTE_ACC
 //void Pms_SetAcc(Bool isOn)
@@ -1391,87 +1369,12 @@ void Pms_OnBatteryChanged(uint8 port, Bool isPlugIn)
 //}
 //#endif //CFG_REMOTE_ACC
 
-//#ifdef CFG_ASY
-//AsyInfoPkt  g_AsyInfo;
-//AsyStatePkt g_AsyState;
-////static AsyCtrlPkt g_PmsAsyCtrl = { 0 };
-////static AsyCtrlPkt g_LocalAsyCtrl = { 0 };
-////OP_CODE Pms_AsyInfo(uint8 cmd, const AsyInfoPkt* pData, uint8 dataLen, uint8* rspData, uint8* pRspLen)
-////{
-////	if(dataLen < sizeof(AsyInfoPkt)) return OP_PARAM_INVALID;
-////	
-////	memcpy(&g_AsyInfo, pData, sizeof(AsyInfoPkt));
-////	
-////	DUMP_BYTE(&g_AsyInfo, sizeof(AsyInfoPkt));
 
-////	return OP_SUCCESS;
-////}
 
-////OP_CODE Pms_AsyState(uint8 cmd, const AsyStatePkt* pData, uint8 dataLen, uint8* rspData, uint8* pRspLen)
-////{
-////	if(dataLen < sizeof(AsyStatePkt)) return OP_PARAM_INVALID;
-////	
-////	memcpy(&g_AsyState, pData, sizeof(AsyStatePkt));
-////	
-////	DUMP_BYTE(&g_AsyState, sizeof(g_AsyState));
-////	return OP_SUCCESS;
-////}
-////OP_CODE Pms_Event(uint8 cmd, const uint8* pData, uint8 dataLen, uint8* rspData, uint8* pRspLen)
-////{
-////	if(dataLen < 1) return OP_PARAM_INVALID;
-
-////	if(pData[0] == 0x01)
-////	{
-////		g_pPms->m_isBatSleep = True;
-////		Pms_Sleep(500);
-////	}
-////	
-////	return OP_SUCCESS;
-////}
-
-//void Pms_SetAsy(const AsyCtrlPkt* pPkt)
-//{
-////	g_PmsAsyCtrl.ctrl = !pPkt->ctrl;
-////	memcpy(&g_LocalAsyCtrl, pPkt, sizeof(AsyCtrlPkt));
-//}
-
-//uint8 g_ForcePmsDischarge = False;	//测试命令
-////Bool Pms_CheckForDischarge()
-////{
-////	//如果大电池在位，且在休眠状态。
-////	if((Pms_GetBatCount() && !IS_BAT_ON()) || g_ForcePmsDischarge)
-////	{
-////		Pms_Wakeup();
-////		
-////		static uint32 ticks = 0;	//如果没有启动充电，每5秒发送一个命令
-////		if (g_ForcePmsDischarge 
-////			||(Mcu_Get18650V() < 370 && SwTimer_isTimerOutEx(ticks, 5000)))	//18650电池电压小于3.7V
-////		{
-////			uint8 ctrl[5];
-////			uint32 time = 9000;	//2.5h
-////			ctrl[0] = 1;
-////			memcpy(&ctrl[1], &time, 4);
-////			
-////			Pms_SendCmd(PMS_CMD_SET_DISCHARGE, &ctrl, sizeof(ctrl), 3);
-////			ticks = GET_TICKS();
-////			g_ForcePmsDischarge = False;
-////			return True;
-////		}
-////	}
-////	return False;
-////}
-
-//#endif //CFG_ASY
-
-//void Pms_Sleep(uint32 ms)
-//{
-//}
 ////void Pms_UpgradePms()
 ////{
 ////}
-//void Pms_Wakeup()
-//{
-//}
+
 ////void Pms_Reset()
 ////{
 ////}
@@ -1831,8 +1734,6 @@ void Pms_Run()
 			pDesc->connectorTemp = dat;
 			
 			pDesc->mosState = (Battery_get_switch_state(i) & 0x0003);
-			
-			
 		}
 		else//置零
 		{

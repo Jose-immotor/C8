@@ -23,8 +23,6 @@ typedef struct{
 	unsigned int online_delay_cnt;
 }st_base_param;
 
-typedef uint8_t BOOL;
-
 typedef enum
 {
     EV_PMS_ONLINE                      = 1<<0,  /*!< Startup finished. */
@@ -66,14 +64,6 @@ typedef enum _PMS_EVENT
 	,PMS_SWITCH_PROTOCOL_REQ		= 0x05
 	,PMS_EVENT_LOG					= 0x07
 	,PMS_BMS_FAULT_CHANGED			= 0x08
-	#ifdef CFG_WHEEL_LOCK
-	,PMS_SPEED_CHANGED				= 0x09
-	#endif
-	#ifdef CFG_ASY
-	,PMS_ASY_INFO					= 0x0A
-	,PMS_ASY_STATE					= 0x0B
-	,PMS_EVENT_CHANGED				= 0x0C
-	#endif
 	
 	,PMS_EVENT_MAX			
 }PMS_EVENT;
@@ -95,16 +85,11 @@ typedef enum _PMS_CMD
 	,PMS_CMD_SYNC_STATE			= 0x2B
 	,PMS_CMD_SET_BAT_DISCHARGE	= 0x30
 	,PMS_CMD_SET_STOP_CONDITION	= 0x31
-	#ifdef CFG_WHEEL_LOCK
-	,PMS_CMD_SET_LOCK			= 0x32
-	#endif	
+
 	#ifdef CFG_REMOTE_ACC
 	,PMS_CMD_SET_ACC			= 0x33
 	#endif
-	#ifdef CFG_ASY
-	,PMS_CMD_SET_ASY			= 0x34
-	,PMS_CMD_SET_DISCHARGE		= 0x35
-	#endif
+
 	,PMS_CMD_MAX			
 }PMS_CMD;
 
@@ -145,34 +130,7 @@ typedef struct _GprsBatteryDesc
 	
 }GprsBatteryDesc;
 
-#ifdef CFG_ASY	//Motor vehicle speed controller，电动车调速控制器
-typedef struct
-{
-	uint8  hwVer;
-	uint8  sn[14];
-}AsyInfoPkt;
-extern AsyInfoPkt  g_AsyInfo;
 
-typedef struct
-{
-	uint16  state[4];
-	uint16  speed;
-	uint16  ctrl;
-	uint16  speedLimit;
-	uint16  odoMeter;
-}AsyStatePkt;
-extern AsyStatePkt  g_AsyState;
-
-typedef struct
-{
-	uint16  ctrl;
-
-	uint16  speedLimit;
-	uint16  odoMeter;
-}AsyCtrlPkt;
-extern AsyCtrlPkt g_LocalAsyCtrl;
-void Pms_SetAsy(const AsyCtrlPkt* pPkt);
-#endif
 
 typedef struct _PrtMask
 {
@@ -237,12 +195,9 @@ typedef struct _BatteryDesc
 typedef struct _BatStatePkt
 {
 	uint8  deviceState;
-	#ifdef CFG_WHEEL_LOCK
-	uint16  Speed;
-	uint8  reserved;
-	#else
+
 	uint8  reserved[3];
-	#endif
+
 	uint16  MaxOutPutCurrent;
 	uint16 workVoltate;
 	int16  workCurrent;
@@ -333,8 +288,6 @@ extern Pms* g_pPms;
 void Pms_Run(void);
 void Pms_Start(void);
 void Pms_Init(void);
-void Pms_Sleep(uint32 ms);
-void Pms_Wakeup(void);
 void BatteryDump(const BatStatePkt* pPkt);
 int Pms_GetBatInfo(uint8 batInd, void* pData);
 int Pms_GetBatInfo1(uint8 batInd, void* pData);
@@ -359,18 +312,16 @@ Bool Pms_SendCmd(uint8 cmd, const void* pData, int len, uint8 maxReTxCount);
 #ifdef CFG_CABIN_LOCK
 void Pms_SetCabinLock(Bool isLock);
 #endif
-#ifdef CFG_WHEEL_LOCK
-void Pms_SetLock(Bool isLock);
-#endif
+
 void Pms_RemoveAllSn(uint8 count);
 void Pms_SendCmdDischarge(void);
 void Pms_UpdateBatteryInfo(const BatteryDesc* pNewDesc, int count);
 Bool Battery_isIn(uint8 port);
 void Pms_SetBatInfo(const BatStatePkt* pNewPkt, int len);
 
-extern BOOL pmsPortEventInit( void );
-extern BOOL pmsPortEventPost( pmsEventType eEvent );
-extern BOOL pmsPortEventGet( pmsEventType * eEvent );
+//extern bool pmsPortEventInit( void );
+//extern bool pmsPortEventPost( pmsEventType eEvent );
+//extern bool pmsPortEventGet( pmsEventType * eEvent );
 extern int slave_rs485_cmd_param_changed_polling(void);
 
 #ifdef CFG_REMOTE_ACC

@@ -8,6 +8,7 @@ extern "C"{
 
 #include "typedef.h"
 #include "Bit.h"
+#include "Common.h"
 
 extern uint32_t g_dwDebugLevel;
 	
@@ -32,8 +33,9 @@ extern uint32_t g_dwDebugLevel;
 				while(1){;}	\
 			}
 			
-	#define Printf(...) {printf(__VA_ARGS__); /*while(RESET == usart_flag_get(CCU_DEBUG_COM, USART_FLAG_TC));*/}
-	
+//	#define Printf(...) {printf(__VA_ARGS__); /*while(RESET == usart_flag_get(CCU_DEBUG_COM, USART_FLAG_TC));*/}
+	#define Printf _Printf
+			
 	//#define Trace Printf
 	#define PFL(level, ...) {if (g_dwDebugLevel & level) {Printf(__VA_ARGS__);}}
 

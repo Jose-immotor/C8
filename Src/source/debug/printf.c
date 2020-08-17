@@ -1,7 +1,9 @@
 
-#include "common.h"
-//#include "drv_usart.h"
-
+#include "Printf.h"
+#include <string.h>
+#include <stdio.h>
+#include <stdarg.h>
+ 
 extern void _puts (const char *s);
 
 int vsnprintfEx(char* buffer, int bufLen, const char* lpszFormat, va_list ptr)
@@ -47,41 +49,36 @@ void _PrintfLevel(uint32 level, const char* lpszFormat, ...)
 {
 	int nLen = 0;
 	va_list ptr;
-	char g_Pfbuffer[RT_CONSOLEBUF_SIZE];
+	char g_Pfbuffer[PRINTF_BUF_SIZE];
 	
-	if( 0 == (level & g_dwDebugLevel)) return;
+//	if( 0 == (level & g_dwDebugLevel)) return;
 	
-//	rt_kprintf(lpszFormat);
 	va_start(ptr, lpszFormat);
-	
 	nLen = vsnprintfEx(g_Pfbuffer, sizeof(g_Pfbuffer)-1, lpszFormat, ptr);
-    if (nLen > RT_CONSOLEBUF_SIZE - 1)
-        nLen = RT_CONSOLEBUF_SIZE - 1;	
 	g_Pfbuffer[nLen] = 0;
 	va_end(ptr);
-//	usart0_send(g_Pfbuffer,nLen);
+	
 	_puts(g_Pfbuffer);
+	
 }
 
-//int _Printf(const char* lpszFormat, ...)
-//{
-//	int nLen = 0;
-//	va_list ptr;
-//	char g_Pfbuffer[PRINTF_BUF_SIZE];
-
-	//LOCK();
+int _Printf(const char* lpszFormat, ...)
+{
+	int nLen = 0;
+	va_list ptr;
+	char g_Pfbuffer[PRINTF_BUF_SIZE];
 
 //	memset(g_Pfbuffer, 0, sizeof(g_Pfbuffer));
-//	va_start(ptr, lpszFormat);
-//	nLen = vsnprintfEx(g_Pfbuffer, sizeof(g_Pfbuffer), lpszFormat, ptr);
-//	va_end(ptr);
+	va_start(ptr, lpszFormat);
+//	nLen = vsnprintfEx(g_Pfbuffer, sizeof(g_Pfbuffer)-1, lpszFormat, ptr);
+	nLen = vsnprintf(g_Pfbuffer, sizeof(g_Pfbuffer), lpszFormat, ptr);
 	
-//	_puts(g_Pfbuffer);
+	va_end(ptr);
+	
+	_puts(g_Pfbuffer);
 
-	//UNLOCK();
-
-//	return nLen;
-//}
+	return nLen;
+}
 
 
 /*---------------------------------------------------*/

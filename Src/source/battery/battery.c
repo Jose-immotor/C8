@@ -60,10 +60,6 @@ void Battery_timer_count_cb(void)
 
 
 }
-
-
-
-
 ////static unsigned char sl_battery_need2sleep_flag = 0;// 1表示让电池进入休眠状态
 unsigned char gl_illegal_charging_in_flag = 0;
 
@@ -1153,10 +1149,9 @@ void Battery_Process(void)
 
 void thread_battery_entry(void* parameter)
 {  
-	static uint8_t count = 0;
+//	static uint8_t count = 0;
 	rt_err_t result;
 	Pms_Init();
-	pmsPortEventInit();
 	Pms_Start();
     while (1)
     {

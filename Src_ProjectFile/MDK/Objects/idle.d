@@ -1,0 +1,11 @@
+.\objects\idle.o: ..\..\Src\rt-thread\src\idle.c
+.\objects\idle.o: ..\..\Src\rt-thread\include\rthw.h
+.\objects\idle.o: ..\..\Src\rt-thread\include\rtthread.h
+.\objects\idle.o: ..\..\Src\source\user\rtconfig.h
+.\objects\idle.o: ..\..\Src\rt-thread\include\rtdebug.h
+.\objects\idle.o: ..\..\Src\rt-thread\include\rtdef.h
+.\objects\idle.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+.\objects\idle.o: ..\..\Src\rt-thread\include\rtservice.h
+.\objects\idle.o: ..\..\Src\rt-thread\include\rtm.h
+.\objects\idle.o: ..\..\Src\rt-thread\include\rtthread.h
+.\objects\idle.o: ..\..\Src\rt-thread\components\finsh\finsh_api.h

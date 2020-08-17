@@ -1,0 +1,1817 @@
+Dependencies for Project 'C7Pms', Target 'C7Pms': (DO NOT MODIFY !)
+F (..\..\src\Firmware\CMSIS\GD\GD32F403\Source\ARM\startup_gd32f403.s)(0x5F35EA3E)(--cpu Cortex-M4.fp -g --apcs=interwork -I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include--pd "__UVISION_VERSION SETA 525" --pd "USE_STDPERIPH_DRIVER SETA 1"--list .\listings\startup_gd32f403.lst --xref -o .\objects\startup_gd32f403.o --depend .\objects\startup_gd32f403.d)
+F (..\..\src\Firmware\CMSIS\GD\GD32F403\Source\system_gd32f403.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\system_gd32f403.o --omf_browse .\objects\system_gd32f403.crf --depend .\objects\system_gd32f403.d)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\src\source\user\gd32f403_it.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\gd32f403_it.o --omf_browse .\objects\gd32f403_it.crf --depend .\objects\gd32f403_it.d)
+I (..\..\src\source\user\gd32f403_it.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+I (..\..\src\source\user\systick.h)(0x5F35EA3F)
+I (..\..\src\source\user\main.h)(0x5F35EA3F)
+F (..\..\src\source\user\main.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\Src\source\user\Common.h)(0x5F39DF29)()
+F (..\..\Src\rt-thread\src\clock.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\clock.o --omf_browse .\objects\clock.crf --depend .\objects\clock.d)
+I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+F (..\..\Src\rt-thread\src\components.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\components.o --omf_browse .\objects\components.crf --depend .\objects\components.d)
+I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+F (..\..\Src\rt-thread\src\cpu.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\cpu.o --omf_browse .\objects\cpu.crf --depend .\objects\cpu.d)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
+F (..\..\Src\rt-thread\src\idle.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\idle.o --omf_browse .\objects\idle.crf --depend .\objects\idle.d)
+I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+F (..\..\Src\rt-thread\src\ipc.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\ipc.o --omf_browse .\objects\ipc.crf --depend .\objects\ipc.d)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
+F (..\..\Src\rt-thread\src\irq.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\irq.o --omf_browse .\objects\irq.crf --depend .\objects\irq.d)
+I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+F (..\..\Src\rt-thread\src\kservice.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\kservice.o --omf_browse .\objects\kservice.crf --depend .\objects\kservice.d)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
+F (..\..\Src\rt-thread\src\mem.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\mem.o --omf_browse .\objects\mem.crf --depend .\objects\mem.d)
+I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+I (..\..\Src\rt-thread\components\finsh\finsh.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\ctype.h)(0x599ECD2E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
+F (..\..\Src\rt-thread\src\memheap.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\memheap.o --omf_browse .\objects\memheap.crf --depend .\objects\memheap.d)
+I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+F (..\..\Src\rt-thread\src\mempool.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\mempool.o --omf_browse .\objects\mempool.crf --depend .\objects\mempool.d)
+I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+F (..\..\Src\rt-thread\src\object.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\object.o --omf_browse .\objects\object.crf --depend .\objects\object.d)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
+F (..\..\Src\rt-thread\src\scheduler.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\scheduler.o --omf_browse .\objects\scheduler.crf --depend .\objects\scheduler.d)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
+F (..\..\Src\rt-thread\src\slab.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\slab.o --omf_browse .\objects\slab.crf --depend .\objects\slab.d)
+I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+F (..\..\Src\rt-thread\src\thread.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\thread.o --omf_browse .\objects\thread.crf --depend .\objects\thread.d)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
+F (..\..\Src\rt-thread\src\timer.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\timer.o --omf_browse .\objects\timer.crf --depend .\objects\timer.d)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
+F (..\..\src\rt-thread\libcpu\arm\cortex-m4\cpuport.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\cpuport.o --omf_browse .\objects\cpuport.crf --depend .\objects\cpuport.d)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+F (..\..\src\rt-thread\libcpu\arm\cortex-m4\context_rvds.S)(0x5F35EA3F)(--cpu Cortex-M4.fp -g --apcs=interwork -I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include--pd "__UVISION_VERSION SETA 525" --pd "USE_STDPERIPH_DRIVER SETA 1"--list .\listings\context_rvds.lst --xref -o .\objects\context_rvds.o --depend .\objects\context_rvds.d)
+F (..\..\src\source\drivers\board.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\board.o --omf_browse .\objects\board.crf --depend .\objects\board.d)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+I (..\..\Src\source\drivers\board.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\src\source\drivers\drv_usart.c)(0x5F35EA70)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\drv_usart.o --omf_browse .\objects\drv_usart.crf --depend .\objects\drv_usart.d)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+I (..\..\src\source\drivers\drv_usart.h)(0x5F35EA3F)
+I (..\..\src\source\drivers\app_fifo.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
+I (..\..\src\source\drivers\app_error.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x599ECD2E)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
+F (..\..\src\source\drivers\app_fifo.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\app_fifo.o --omf_browse .\objects\app_fifo.crf --depend .\objects\app_fifo.d)
+I (..\..\src\source\drivers\app_fifo.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
+I (..\..\src\source\drivers\app_error.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x599ECD2E)
+I (..\..\src\source\drivers\app_util.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\src\source\drivers\drv_i2c.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\drv_i2c.o --omf_browse .\objects\drv_i2c.crf --depend .\objects\drv_i2c.d)
+I (..\..\src\source\drivers\drv_i2c.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+F (..\..\src\rt-thread\components\finsh\cmd.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\cmd.o --omf_browse .\objects\cmd.crf --depend .\objects\cmd.d)
+I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+I (..\..\src\rt-thread\components\finsh\finsh.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\ctype.h)(0x599ECD2E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
+F (..\..\src\rt-thread\components\finsh\msh.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\msh.o --omf_browse .\objects\msh.crf --depend .\objects\msh.d)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+I (..\..\src\rt-thread\components\finsh\msh.h)(0x5F35EA3E)
+I (..\..\Src\rt-thread\components\finsh\finsh.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\ctype.h)(0x599ECD2E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
+I (..\..\Src\rt-thread\components\finsh\shell.h)(0x5F35EA3E)
+F (..\..\src\rt-thread\components\finsh\shell.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\shell.o --omf_browse .\objects\shell.crf --depend .\objects\shell.d)
+I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+I (..\..\src\rt-thread\components\finsh\finsh.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\ctype.h)(0x599ECD2E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
+I (..\..\src\rt-thread\components\finsh\shell.h)(0x5F35EA3E)
+I (..\..\src\rt-thread\components\finsh\msh.h)(0x5F35EA3E)
+F (..\..\Src\source\debug\Printf.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\printf.o --omf_browse .\objects\printf.crf --depend .\objects\printf.d)
+I (..\..\Src\source\debug\Printf.h)(0x5F39E58A)
+I (..\..\Src\Arch\ArchDef.h)(0x5F39E65D)
+I (..\..\Src\Arch\typedef.h)(0x5F35EA70)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
+I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
+I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
+F (..\..\src\source\debug\debug.c)(0x5F39DF29)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\debug.o --omf_browse .\objects\debug.crf --depend .\objects\debug.d)
+I (..\..\Src\Arch\ArchDef.h)(0x5F39E65D)
+I (..\..\Src\Arch\typedef.h)(0x5F35EA70)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
+I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
+I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
+I (..\..\Src\source\debug\Printf.h)(0x5F39E58A)
+I (..\..\src\source\debug\Debug.h)(0x5F39E681)
+I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\source\user\Common.h)(0x5F39DF29)
+I (..\..\Src\Arch\Obj.h)(0x5F35EA70)
+I (..\..\Src\Arch\Utp.h)(0x5F39DF29)
+I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
+I (..\..\Src\Arch\queue.h)(0x5F35EA70)
+F (..\..\src\source\debug\smart_shell.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\smart_shell.o --omf_browse .\objects\smart_shell.crf --depend .\objects\smart_shell.d)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\source\battery\Pms.h)(0x5F39E8E6)
+I (..\..\Src\source\user\common.h)(0x5F39DF29)
+I (..\..\Src\Arch\ArchDef.h)(0x5F39E65D)
+I (..\..\Src\Arch\typedef.h)(0x5F35EA70)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
+I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
+I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
+I (..\..\Src\source\debug\Printf.h)(0x5F39E58A)
+I (..\..\Src\Arch\Obj.h)(0x5F35EA70)
+I (..\..\Src\Arch\Utp.h)(0x5F39DF29)
+I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
+I (..\..\Src\Arch\queue.h)(0x5F35EA70)
+I (..\..\Src\source\debug\debug.h)(0x5F39E681)
+I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\source\002nfc\bmsfault.h)(0x5F35EA3F)
+I (..\..\Src\source\battery\Battery.h)(0x5F39E81B)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x599ECD2E)
+I (..\..\Src\source\002nfc\nfc_cmd_process.h)(0x5F35EA3F)
+I (..\..\Src\source\002nfc\fm175xx.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\Src\source\debug\console.c)(0x5F35EA70)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\console.o --omf_browse .\objects\console.crf --depend .\objects\console.d)
+I (..\..\Src\source\user\common.h)(0x5F39DF29)
+I (..\..\Src\Arch\ArchDef.h)(0x5F39E65D)
+I (..\..\Src\Arch\typedef.h)(0x5F35EA70)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
+I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
+I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
+I (..\..\Src\source\debug\Printf.h)(0x5F39E58A)
+I (..\..\Src\Arch\Obj.h)(0x5F35EA70)
+I (..\..\Src\Arch\Utp.h)(0x5F39DF29)
+I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
+I (..\..\Src\Arch\queue.h)(0x5F35EA70)
+I (..\..\Src\source\debug\debug.h)(0x5F39E681)
+I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\source\debug\console.h)(0x5F35EA70)
+F (..\..\Src\source\debug\console.h)(0x5F35EA70)()
+F (..\..\Src\source\debug\Debug.h)(0x5F39E681)()
+F (..\..\Src\source\debug\smart_shell.h)(0x5F35EA70)()
+F (..\..\src\source\002nfc\nfc.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\nfc.o --omf_browse .\objects\nfc.crf --depend .\objects\nfc.d)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
+I (..\..\Src\source\drivers\drv_i2c.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+I (..\..\src\source\002nfc\ntag_app.h)(0x5F35EA3F)
+I (..\..\src\source\002nfc\fm175xx.h)(0x5F35EA3F)
+I (..\..\src\source\002nfc\i2c1_driver.h)(0x5F35EA3F)
+F (..\..\src\source\002nfc\ntag_app.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\ntag_app.o --omf_browse .\objects\ntag_app.crf --depend .\objects\ntag_app.d)
+I (..\..\src\source\002nfc\fm175xx.h)(0x5F35EA3F)
+I (..\..\src\source\002nfc\ntag_app.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+I (..\..\Src\source\battery\battery.h)(0x5F39E81B)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x599ECD2E)
+I (..\..\Src\source\002nfc\nfc_cmd_process.h)(0x5F35EA3F)
+I (..\..\Src\Arch\typedef.h)(0x5F35EA70)
+I (..\..\src\source\002nfc\type_a.h)(0x5F35EA3F)
+I (..\..\src\source\002nfc\nfc_crc.h)(0x5F35EA3F)
+I (..\..\src\source\002nfc\modbus_master.h)(0x5F35EA3F)
+F (..\..\src\source\002nfc\nfc_cmd_process.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\nfc_cmd_process.o --omf_browse .\objects\nfc_cmd_process.crf --depend .\objects\nfc_cmd_process.d)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+I (..\..\src\source\002nfc\modbus_master.h)(0x5F35EA3F)
+I (..\..\src\source\002nfc\fm175xx.h)(0x5F35EA3F)
+I (..\..\src\source\002nfc\ntag_app.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+I (..\..\src\source\002nfc\nfc_cmd_process.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+I (..\..\Src\source\battery\battery.h)(0x5F39E81B)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x599ECD2E)
+I (..\..\Src\Arch\typedef.h)(0x5F35EA70)
+F (..\..\src\source\002nfc\fm175xx.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\fm175xx.o --omf_browse .\objects\fm175xx.crf --depend .\objects\fm175xx.d)
+I (..\..\src\source\002nfc\fm175xx.h)(0x5F35EA3F)
+I (..\..\src\source\002nfc\ntag_app.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+I (..\..\Src\source\drivers\drv_i2c.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+F (..\..\src\source\002nfc\modbus_master.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\modbus_master.o --omf_browse .\objects\modbus_master.crf --depend .\objects\modbus_master.d)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
+I (..\..\src\source\002nfc\ntag_app.h)(0x5F35EA3F)
+I (..\..\src\source\002nfc\fm175xx.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+I (..\..\src\source\002nfc\modbus_master.h)(0x5F35EA3F)
+I (..\..\src\source\002nfc\NFC_cmd_process.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+I (..\..\Src\source\battery\battery.h)(0x5F39E81B)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x599ECD2E)
+I (..\..\Src\Arch\typedef.h)(0x5F35EA70)
+F (..\..\src\source\002nfc\type_a.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\type_a.o --omf_browse .\objects\type_a.crf --depend .\objects\type_a.d)
+I (..\..\src\source\002nfc\FM175XX.h)(0x5F35EA3F)
+I (..\..\src\source\002nfc\type_a.h)(0x5F35EA3F)
+F (..\..\src\source\002nfc\nfc_crc.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\nfc_crc.o --omf_browse .\objects\nfc_crc.crf --depend .\objects\nfc_crc.d)
+I (..\..\src\source\002nfc\nfc_crc.h)(0x5F35EA3F)
+I (..\..\Src\Arch\typedef.h)(0x5F35EA70)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+F (..\..\src\source\battery\battery.c)(0x5F39E8E6)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\battery.o --omf_browse .\objects\battery.crf --depend .\objects\battery.d)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
+I (..\..\src\source\battery\pms.h)(0x5F39E8E6)
+I (..\..\Src\source\user\common.h)(0x5F39DF29)
+I (..\..\Src\Arch\ArchDef.h)(0x5F39E65D)
+I (..\..\Src\Arch\typedef.h)(0x5F35EA70)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
+I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
+I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
+I (..\..\Src\source\debug\Printf.h)(0x5F39E58A)
+I (..\..\Src\Arch\Obj.h)(0x5F35EA70)
+I (..\..\Src\Arch\Utp.h)(0x5F39DF29)
+I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
+I (..\..\Src\Arch\queue.h)(0x5F35EA70)
+I (..\..\Src\source\debug\debug.h)(0x5F39E681)
+I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\source\002nfc\bmsfault.h)(0x5F35EA3F)
+I (..\..\Src\source\battery\Battery.h)(0x5F39E81B)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x599ECD2E)
+I (..\..\Src\source\002nfc\nfc_cmd_process.h)(0x5F35EA3F)
+I (..\..\Src\source\002nfc\fm175xx.h)(0x5F35EA3F)
+I (..\..\Src\source\002nfc\modbus_master.h)(0x5F35EA3F)
+F (..\..\src\source\battery\pms.c)(0x5F39E909)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\pms.o --omf_browse .\objects\pms.crf --depend .\objects\pms.d)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+I (..\..\Src\source\user\Common.h)(0x5F39DF29)
+I (..\..\Src\Arch\ArchDef.h)(0x5F39E65D)
+I (..\..\Src\Arch\typedef.h)(0x5F35EA70)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
+I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
+I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
+I (..\..\Src\source\debug\Printf.h)(0x5F39E58A)
+I (..\..\Src\Arch\Obj.h)(0x5F35EA70)
+I (..\..\Src\Arch\Utp.h)(0x5F39DF29)
+I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
+I (..\..\Src\Arch\queue.h)(0x5F35EA70)
+I (..\..\Src\source\debug\debug.h)(0x5F39E681)
+I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\src\source\battery\pms.h)(0x5F39E8E6)
+I (..\..\Src\source\002nfc\bmsfault.h)(0x5F35EA3F)
+I (..\..\Src\source\battery\Battery.h)(0x5F39E81B)
+I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x599ECD2E)
+I (..\..\Src\source\002nfc\nfc_cmd_process.h)(0x5F35EA3F)
+I (..\..\Src\source\002nfc\fm175xx.h)(0x5F35EA3F)
+F (..\..\Src\Arch\_Macro.h)(0x5F35EA70)()
+F (..\..\Src\Arch\ArchDef.h)(0x5F39E65D)()
+F (..\..\Src\Arch\Bit.c)(0x5F35EA70)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\bit.o --omf_browse .\objects\bit.crf --depend .\objects\bit.d)
+I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\typedef.h)(0x5F35EA70)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+F (..\..\Src\Arch\Bit.h)(0x5F35EA70)()
+F (..\..\Src\Arch\CheckSum.c)(0x5F35EA70)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\checksum.o --omf_browse .\objects\checksum.crf --depend .\objects\checksum.d)
+I (..\..\Src\Arch\CheckSum.h)(0x5F35EA70)
+I (..\..\Src\Arch\typedef.h)(0x5F35EA70)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+F (..\..\Src\Arch\CheckSum.h)(0x5F35EA70)()
+F (..\..\Src\Arch\CmdLine.c)(0x5F35EA70)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\cmdline.o --omf_browse .\objects\cmdline.crf --depend .\objects\cmdline.d)
+I (..\..\Src\source\user\Common.h)(0x5F39DF29)
+I (..\..\Src\Arch\ArchDef.h)(0x5F39E65D)
+I (..\..\Src\Arch\typedef.h)(0x5F35EA70)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
+I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
+I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
+I (..\..\Src\source\debug\Printf.h)(0x5F39E58A)
+I (..\..\Src\Arch\Obj.h)(0x5F35EA70)
+I (..\..\Src\Arch\Utp.h)(0x5F39DF29)
+I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
+I (..\..\Src\Arch\queue.h)(0x5F35EA70)
+I (..\..\Src\source\debug\debug.h)(0x5F39E681)
+I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+F (..\..\Src\Arch\CmdLine.h)(0x5F35EA70)()
+F (..\..\Src\Arch\Dump.c)(0x5F35EA70)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\dump.o --omf_browse .\objects\dump.crf --depend .\objects\dump.d)
+I (..\..\Src\Arch\ArchDef.h)(0x5F39E65D)
+I (..\..\Src\Arch\typedef.h)(0x5F35EA70)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
+I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
+I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
+I (..\..\Src\source\debug\Printf.h)(0x5F39E58A)
+I (..\..\Src\source\debug\debug.h)(0x5F39E681)
+I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\source\user\Common.h)(0x5F39DF29)
+I (..\..\Src\Arch\Obj.h)(0x5F35EA70)
+I (..\..\Src\Arch\Utp.h)(0x5F39DF29)
+I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
+I (..\..\Src\Arch\queue.h)(0x5F35EA70)
+F (..\..\Src\Arch\Dump.h)(0x5F35EA70)()
+F (..\..\Src\Arch\HwFwVer.c)(0x5F35EA70)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\hwfwver.o --omf_browse .\objects\hwfwver.crf --depend .\objects\hwfwver.d)
+I (..\..\Src\source\user\Common.h)(0x5F39DF29)
+I (..\..\Src\Arch\ArchDef.h)(0x5F39E65D)
+I (..\..\Src\Arch\typedef.h)(0x5F35EA70)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
+I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
+I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
+I (..\..\Src\source\debug\Printf.h)(0x5F39E58A)
+I (..\..\Src\Arch\Obj.h)(0x5F35EA70)
+I (..\..\Src\Arch\Utp.h)(0x5F39DF29)
+I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
+I (..\..\Src\Arch\queue.h)(0x5F35EA70)
+I (..\..\Src\source\debug\debug.h)(0x5F39E681)
+I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\HwFwVer.h)(0x5F35EA70)
+F (..\..\Src\Arch\HwFwVer.h)(0x5F35EA70)()
+F (..\..\Src\Arch\Obj.c)(0x5F35EA70)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\obj.o --omf_browse .\objects\obj.crf --depend .\objects\obj.d)
+I (..\..\Src\source\user\Common.h)(0x5F39DF29)
+I (..\..\Src\Arch\ArchDef.h)(0x5F39E65D)
+I (..\..\Src\Arch\typedef.h)(0x5F35EA70)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
+I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
+I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
+I (..\..\Src\source\debug\Printf.h)(0x5F39E58A)
+I (..\..\Src\Arch\Obj.h)(0x5F35EA70)
+I (..\..\Src\Arch\Utp.h)(0x5F39DF29)
+I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
+I (..\..\Src\Arch\queue.h)(0x5F35EA70)
+I (..\..\Src\source\debug\debug.h)(0x5F39E681)
+I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+F (..\..\Src\Arch\Obj.h)(0x5F35EA70)()
+F (..\..\Src\Arch\queue.c)(0x5F39DF29)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\queue.o --omf_browse .\objects\queue.crf --depend .\objects\queue.d)
+I (..\..\Src\Arch\ArchDef.h)(0x5F39E65D)
+I (..\..\Src\Arch\typedef.h)(0x5F35EA70)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
+I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
+I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
+I (..\..\Src\source\debug\Printf.h)(0x5F39E58A)
+I (..\..\Src\Arch\queue.h)(0x5F35EA70)
+F (..\..\Src\Arch\queue.h)(0x5F35EA70)()
+F (..\..\Src\Arch\SwTimer.c)(0x5F35EA70)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\swtimer.o --omf_browse .\objects\swtimer.crf --depend .\objects\swtimer.d)
+I (..\..\Src\Arch\ArchDef.h)(0x5F39E65D)
+I (..\..\Src\Arch\typedef.h)(0x5F35EA70)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
+I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
+I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
+I (..\..\Src\source\debug\Printf.h)(0x5F39E58A)
+I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
+F (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)()
+F (..\..\Src\Arch\typedef.h)(0x5F35EA70)()
+F (..\..\Src\Arch\Utp.c)(0x5F39DF29)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\utp.o --omf_browse .\objects\utp.crf --depend .\objects\utp.d)
+I (..\..\Src\Arch\ArchDef.h)(0x5F39E65D)
+I (..\..\Src\Arch\typedef.h)(0x5F35EA70)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
+I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
+I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
+I (..\..\Src\source\debug\Printf.h)(0x5F39E58A)
+I (..\..\Src\Arch\Utp.h)(0x5F39DF29)
+I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
+I (..\..\Src\Arch\queue.h)(0x5F35EA70)
+F (..\..\Src\Firmware\GD32F403_standard_peripheral\Source\gd32f403_adc.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\gd32f403_adc.o --omf_browse .\objects\gd32f403_adc.crf --depend .\objects\gd32f403_adc.d)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\Src\Firmware\GD32F403_standard_peripheral\Source\gd32f403_bkp.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\gd32f403_bkp.o --omf_browse .\objects\gd32f403_bkp.crf --depend .\objects\gd32f403_bkp.d)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\Src\Firmware\GD32F403_standard_peripheral\Source\gd32f403_can.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\gd32f403_can.o --omf_browse .\objects\gd32f403_can.crf --depend .\objects\gd32f403_can.d)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\Src\Firmware\GD32F403_standard_peripheral\Source\gd32f403_crc.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\gd32f403_crc.o --omf_browse .\objects\gd32f403_crc.crf --depend .\objects\gd32f403_crc.d)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\Src\Firmware\GD32F403_standard_peripheral\Source\gd32f403_ctc.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\gd32f403_ctc.o --omf_browse .\objects\gd32f403_ctc.crf --depend .\objects\gd32f403_ctc.d)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\Src\Firmware\GD32F403_standard_peripheral\Source\gd32f403_dac.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\gd32f403_dac.o --omf_browse .\objects\gd32f403_dac.crf --depend .\objects\gd32f403_dac.d)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\Src\Firmware\GD32F403_standard_peripheral\Source\gd32f403_dbg.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\gd32f403_dbg.o --omf_browse .\objects\gd32f403_dbg.crf --depend .\objects\gd32f403_dbg.d)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\Src\Firmware\GD32F403_standard_peripheral\Source\gd32f403_dma.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\gd32f403_dma.o --omf_browse .\objects\gd32f403_dma.crf --depend .\objects\gd32f403_dma.d)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\Src\Firmware\GD32F403_standard_peripheral\Source\gd32f403_exmc.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\gd32f403_exmc.o --omf_browse .\objects\gd32f403_exmc.crf --depend .\objects\gd32f403_exmc.d)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+F (..\..\Src\Firmware\GD32F403_standard_peripheral\Source\gd32f403_exti.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\gd32f403_exti.o --omf_browse .\objects\gd32f403_exti.crf --depend .\objects\gd32f403_exti.d)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\Src\Firmware\GD32F403_standard_peripheral\Source\gd32f403_fmc.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\gd32f403_fmc.o --omf_browse .\objects\gd32f403_fmc.crf --depend .\objects\gd32f403_fmc.d)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\Src\Firmware\GD32F403_standard_peripheral\Source\gd32f403_fwdgt.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\gd32f403_fwdgt.o --omf_browse .\objects\gd32f403_fwdgt.crf --depend .\objects\gd32f403_fwdgt.d)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\Src\Firmware\GD32F403_standard_peripheral\Source\gd32f403_gpio.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\gd32f403_gpio.o --omf_browse .\objects\gd32f403_gpio.crf --depend .\objects\gd32f403_gpio.d)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\Src\Firmware\GD32F403_standard_peripheral\Source\gd32f403_i2c.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\gd32f403_i2c.o --omf_browse .\objects\gd32f403_i2c.crf --depend .\objects\gd32f403_i2c.d)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\Src\Firmware\GD32F403_standard_peripheral\Source\gd32f403_misc.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\gd32f403_misc.o --omf_browse .\objects\gd32f403_misc.crf --depend .\objects\gd32f403_misc.d)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\Src\Firmware\GD32F403_standard_peripheral\Source\gd32f403_pmu.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\gd32f403_pmu.o --omf_browse .\objects\gd32f403_pmu.crf --depend .\objects\gd32f403_pmu.d)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\Src\Firmware\GD32F403_standard_peripheral\Source\gd32f403_rcu.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\gd32f403_rcu.o --omf_browse .\objects\gd32f403_rcu.crf --depend .\objects\gd32f403_rcu.d)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\Src\Firmware\GD32F403_standard_peripheral\Source\gd32f403_rtc.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\gd32f403_rtc.o --omf_browse .\objects\gd32f403_rtc.crf --depend .\objects\gd32f403_rtc.d)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\Src\Firmware\GD32F403_standard_peripheral\Source\gd32f403_sdio.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\gd32f403_sdio.o --omf_browse .\objects\gd32f403_sdio.crf --depend .\objects\gd32f403_sdio.d)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\Src\Firmware\GD32F403_standard_peripheral\Source\gd32f403_spi.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\gd32f403_spi.o --omf_browse .\objects\gd32f403_spi.crf --depend .\objects\gd32f403_spi.d)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\Src\Firmware\GD32F403_standard_peripheral\Source\gd32f403_timer.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\gd32f403_timer.o --omf_browse .\objects\gd32f403_timer.crf --depend .\objects\gd32f403_timer.d)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\Src\Firmware\GD32F403_standard_peripheral\Source\gd32f403_usart.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\gd32f403_usart.o --omf_browse .\objects\gd32f403_usart.crf --depend .\objects\gd32f403_usart.d)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\Src\Firmware\GD32F403_standard_peripheral\Source\gd32f403_wwdgt.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\gd32f403_wwdgt.o --omf_browse .\objects\gd32f403_wwdgt.crf --depend .\objects\gd32f403_wwdgt.d)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
+I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
+I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
+F (..\..\Src\source\JT808\JT808.c)(0x5F39DF29)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\jt808.o --omf_browse .\objects\jt808.crf --depend .\objects\jt808.d)
+I (..\..\Src\source\user\Common.h)(0x5F39DF29)
+I (..\..\Src\Arch\ArchDef.h)(0x5F39E65D)
+I (..\..\Src\Arch\typedef.h)(0x5F35EA70)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
+I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
+I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
+I (..\..\Src\source\debug\Printf.h)(0x5F39E58A)
+I (..\..\Src\Arch\Obj.h)(0x5F35EA70)
+I (..\..\Src\Arch\Utp.h)(0x5F39DF29)
+I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
+I (..\..\Src\Arch\queue.h)(0x5F35EA70)
+I (..\..\Src\source\debug\debug.h)(0x5F39E681)
+I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\source\JT808\JT808.h)(0x5F39DF29)
+I (..\..\Src\Arch\HwFwVer.h)(0x5F35EA70)
+I (..\..\Src\source\user\MsgDef.h)(0x5F39DF29)
+I (..\..\Src\source\JT808\JtUtp.h)(0x5F39DF29)
+F (..\..\Src\source\JT808\JtUtp.c)(0x5F39DF29)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\rt-thread\include -I ..\..\Src\source\user -I ..\..\Src\source\drivers -I ..\..\Src\source\thread_ledrun -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\source\002nfc -I ..\..\Src\source\debug -I ..\..\Src\source\battery -I ..\..\Src\source\common -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\Arch -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER-o .\objects\jtutp.o --omf_browse .\objects\jtutp.crf --depend .\objects\jtutp.d)
+I (..\..\Src\source\user\common.h)(0x5F39DF29)
+I (..\..\Src\Arch\ArchDef.h)(0x5F39E65D)
+I (..\..\Src\Arch\typedef.h)(0x5F35EA70)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
+I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
+I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
+I (..\..\Src\source\debug\Printf.h)(0x5F39E58A)
+I (..\..\Src\Arch\Obj.h)(0x5F35EA70)
+I (..\..\Src\Arch\Utp.h)(0x5F39DF29)
+I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
+I (..\..\Src\Arch\queue.h)(0x5F35EA70)
+I (..\..\Src\source\debug\debug.h)(0x5F39E681)
+I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\source\JT808\JtUtp.h)(0x5F39DF29)
+I (..\..\Src\Arch\CheckSum.h)(0x5F35EA70)

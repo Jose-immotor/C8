@@ -374,27 +374,27 @@ GLOBAL_BPROC void Battery_timer_count_cb(void);
 #if 1
 typedef struct _Battery
 {
-	uint8_t  port; 			//
+	uint8  port; 			//
 	
-	uint8_t  isPresent:1; 	//is in port
-	uint8_t  isCharged:1; 		
-	uint8_t  Reserved:6; 		
+	uint8  isPresent:1; 	//is in port
+	uint8  isCharged:1; 		
+	uint8  Reserved:6; 		
 
 	//Battery properties
-	uint8_t  serialNum[SERIAL_NUM_SIZE];
-	uint8_t  soc;
-	uint8_t  soh;
-	uint8_t  temperature;
-	uint16_t voltage;
-	uint16_t current;
-	uint16_t cycleCount; 	//
-	uint16_t capacity; 	//
+	uint8  serialNum[SERIAL_NUM_SIZE];
+	uint8  soc;
+	uint8  soh;
+	uint8  temperature;
+	uint16 voltage;
+	uint16 current;
+	uint16 cycleCount; 	//
+	uint16 capacity; 	//
 	
-	uint8_t  batteryErr[BAT_ERR_SIZE]; //π ’œ¬Î
+	uint8  batteryErr[BAT_ERR_SIZE]; //π ’œ¬Î
 }Battery;
 #endif
 
-void Battery_Init(Battery* pBattery, uint8_t nPort);
+void Battery_Init(Battery* pBattery, uint8 nPort);
 
 
 #endif // MID_CONTROL_PROTOCOL_H__

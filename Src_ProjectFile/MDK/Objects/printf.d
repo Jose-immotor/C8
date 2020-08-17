@@ -1,0 +1,12 @@
+.\objects\printf.o: ..\..\Src\source\debug\Printf.c
+.\objects\printf.o: ..\..\Src\source\debug\Printf.h
+.\objects\printf.o: ..\..\Src\Arch\ArchDef.h
+.\objects\printf.o: ..\..\Src\Arch\typedef.h
+.\objects\printf.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\printf.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+.\objects\printf.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\printf.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\printf.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\objects\printf.o: ..\..\Src\Arch\Dump.h
+.\objects\printf.o: ..\..\Src\Arch\_Macro.h
+.\objects\printf.o: ..\..\Src\source\debug\Printf.h

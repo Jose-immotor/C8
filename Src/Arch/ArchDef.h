@@ -22,6 +22,9 @@ extern "C"{
 	#define UDELAY(uS) TIMER_Delay(TIMER0, (uS))
 	
 	#define GET_TICKS( ) system_ms_tick
+	
+	#define XDEBUG
+	
 #endif
 
 #include "typedef.h"	
@@ -31,6 +34,7 @@ extern "C"{
 #include <stdlib.h>
 #include "Dump.h"
 #include "_Macro.h"
+#include "Printf.h"
 
 	//ms ticks of system, 
 	extern volatile unsigned int system_ms_tick;

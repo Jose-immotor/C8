@@ -1,0 +1,11 @@
+.\objects\scheduler.o: ..\..\Src\rt-thread\src\scheduler.c
+.\objects\scheduler.o: ..\..\Src\rt-thread\include\rtthread.h
+.\objects\scheduler.o: ..\..\Src\source\user\rtconfig.h
+.\objects\scheduler.o: ..\..\Src\rt-thread\include\rtdebug.h
+.\objects\scheduler.o: ..\..\Src\rt-thread\include\rtdef.h
+.\objects\scheduler.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+.\objects\scheduler.o: ..\..\Src\rt-thread\include\rtservice.h
+.\objects\scheduler.o: ..\..\Src\rt-thread\include\rtm.h
+.\objects\scheduler.o: ..\..\Src\rt-thread\include\rtthread.h
+.\objects\scheduler.o: ..\..\Src\rt-thread\components\finsh\finsh_api.h
+.\objects\scheduler.o: ..\..\Src\rt-thread\include\rthw.h

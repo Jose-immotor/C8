@@ -5,16 +5,12 @@
 extern "C"{
 #endif
 
-#include "typedef.h"
+#include "ArchDef.h"
+#include <stdarg.h>
+  
+#define PRINTF_BUF_SIZE 256
 
-
-#define PRINTF_BUF_SIZE 1024
-
-#define Printf rt_kprintf//_Printf
-
-//#define _PrintfLevel rt_kprintf//_Printf
-//	if( 0 == (level & g_dwDebugLevel)) return;
-//	rt_kprintf(lpszFormat,...);
+//#define Printf _Printf
 
 void _PrintfLevel(uint32 level, const char* lpszFormat, ...);
 int _Printf( const char* lpszFormat, ...);
