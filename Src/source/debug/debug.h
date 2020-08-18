@@ -24,6 +24,10 @@ extern uint32_t g_dwDebugLevel;
 
 	#define DL_IO			BIT_4
 	#define DL_ADC			BIT_5
+	
+	#define DL_FSM			BIT_6
+	#define DL_LOG			BIT_7
+
 
 	#define DL_DEBUG		0xFFFFFFFF
 	
@@ -34,10 +38,11 @@ extern uint32_t g_dwDebugLevel;
 			}
 			
 //	#define Printf(...) {printf(__VA_ARGS__); /*while(RESET == usart_flag_get(CCU_DEBUG_COM, USART_FLAG_TC));*/}
-	#define Printf _Printf
+	#define Printf rt_kprintf//_Printf
 			
 	//#define Trace Printf
-	#define PFL(level, ...) {if (g_dwDebugLevel & level) {Printf(__VA_ARGS__);}}
+//	#define PFL(level, ...) {if (g_dwDebugLevel & level) {Printf(__VA_ARGS__);}}
+	#define PFL _PrintfLevel
 
 	#define SHELL(parenExpr) Printf parenExpr
 	

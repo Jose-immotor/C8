@@ -1,6 +1,7 @@
 .\objects\swtimer.o: ..\..\Src\Arch\SwTimer.c
 .\objects\swtimer.o: ..\..\Src\Arch\ArchDef.h
 .\objects\swtimer.o: ..\..\Src\Arch\typedef.h
+.\objects\swtimer.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\swtimer.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\swtimer.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
 .\objects\swtimer.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
@@ -10,4 +11,5 @@
 .\objects\swtimer.o: ..\..\Src\Arch\_Macro.h
 .\objects\swtimer.o: ..\..\Src\source\debug\Printf.h
 .\objects\swtimer.o: ..\..\Src\Arch\ArchDef.h
+.\objects\swtimer.o: ..\..\Src\Arch\Bit.h
 .\objects\swtimer.o: ..\..\Src\Arch\SwTimer.h

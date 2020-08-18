@@ -232,11 +232,8 @@ void NTAG_task_timer_reload(void)
 }
 void Battery_info_polling_Process(unsigned char bms_index)
 {
-    //开机查询一次电池版本信息
-    //if(vl_bat_info_flag[0]==0)
-    {
-        gl_cmd_buf[bms_index][ENUM_NFC_CMD_INDEX_R_VERSION] = 1;
-    }
+
+	gl_cmd_buf[bms_index][ENUM_NFC_CMD_INDEX_R_VERSION] = 1;
     
     //查询BMS 只读信息，从寄存器256到308
     gl_cmd_buf[bms_index][ENUM_NFC_CMD_INDEX_R_INFO1] = 1;
@@ -246,25 +243,7 @@ void Battery_info_polling_Process(unsigned char bms_index)
     gl_cmd_buf[bms_index][ENUM_NFC_CMD_INDEX_R_PARAM1] = 1;
     gl_cmd_buf[bms_index][ENUM_NFC_CMD_INDEX_R_PARAM2] = 1;
  
-
-    //开机查询一次
-    {
-        gl_cmd_buf[bms_index][ENUM_NFC_CMD_INDEX_R_USERDATA] = 1;
-    }
-
-//    gl_cmd_buf[bms_index][ENUM_NFC_CMD_INDEX_R_BLV] = 1;
-
-    #ifdef BAT_PMS_AUTHORITY_FUNCTION_EN
-    //电池双向认证流程
-    Authority_process();
-    #endif
-
-    //读取电池历史记录数据
-//    if((0 == gl_bat_history_record_param.is_earliest_param_valid)
-//        ||(0 == gl_bat_history_record_param.is_lastest_param_valid))
-//    {
-//        gl_cmd_buf[bms_index][ENUM_NFC_CMD_INDEX_HISTORY_RECORD] = 1;
-//    }
+	gl_cmd_buf[bms_index][ENUM_NFC_CMD_INDEX_R_USERDATA] = 1;
     
     return ;
 }

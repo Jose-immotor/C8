@@ -5,7 +5,7 @@
 extern "C"{
 #endif
 
-//#define CFG_SPP
+#include <stdbool.h>
 
 #ifdef WIN32
 typedef unsigned char 	uint8_t;
@@ -36,6 +36,7 @@ typedef unsigned long long uint64;
 typedef long long 		int64;
 typedef float 			float32;
 typedef double 			float64;
+typedef bool 			BOOL;
 //typedef unsigned char	bool;
 
 #ifdef WIN32

@@ -8,7 +8,7 @@ extern "C"{
 #include "common.h"
 //#include "datarom.h"
 #include "bmsfault.h"
-
+#include "msgdef.h"
 #include "nfc_cmd_process.h"
 
 //用于存储需要判断变化的数据，以比较
@@ -286,7 +286,6 @@ typedef struct _Pms
 extern Pms* g_pPms;
 
 void Pms_Run(void);
-void Pms_Start(void);
 void Pms_Init(void);
 void BatteryDump(const BatStatePkt* pPkt);
 int Pms_GetBatInfo(uint8 batInd, void* pData);
@@ -304,7 +303,7 @@ void Pms_UpgradePms(void);
 Bool Pms_FwIsValid(void);
 void Pms_ResetBatInfo(void);
 Bool Battery_SerialNumIsSame(const uint8* pSerialNum1, const uint8* pSerialNum12);
-Bool Battery_isOk(uint8 portId);
+
 void Pms_SetBatVerify(uint8 port0, uint8 port1);
 uint8 Pms_GetAveBatSoc(const BatStatePkt* pBatDesc);
 Bool Pms_IsNotDischarge(void);

@@ -30,6 +30,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdio.h>
+#include "rtthread.h"
 
 #if __STDC_VERSION__ < 199901L
     #error "must be C99 or higher. try to add '-std=c99' to compile parameters"
@@ -717,3 +718,9 @@ void cm_backtrace_fault(uint32_t fault_handler_lr, uint32_t fault_handler_sp) {
 
     print_call_stack(stack_pointer);
 }
+static int env_hardfault_init(void)
+{ 
+	cm_backtrace_init("C7Pms", "1.0", "1.0");
+	return RT_EOK;
+}
+INIT_ENV_EXPORT(env_hardfault_init);

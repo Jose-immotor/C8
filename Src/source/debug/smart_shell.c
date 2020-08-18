@@ -15,18 +15,18 @@
 ////#include "battery_process.h"
 #include <stdio.h>
 #include <stdint.h>
-//#include "cmdline.h"
+#include "smart_system.h"
 ////#include "fsm.h"
 ////#include "AtCmdCtrl.h"
 ////#include "Ble.h"
 ////#include "sim.h"
-////#include "datarom.h"
-////#include "Nvds.h"
+#include "datarom.h"
+#include "Nvds.h"
 #include "Pms.h"
 ////#include "Gyro.h"
 ////#include "Beep.h"
 ////#include "Sign.h"
-////#include "UtpDef.h"
+#include "main.h"
 ////#include "nvc.h"
 ////#include "gprs.h"
 #include "gd32f403.h"
@@ -95,15 +95,13 @@
 static void Dump(int argc, char**argv)
 {
 	int ind = 0;
-//	extern void SysCfg_Dump(void);
-
 //	extern void Sign_Dump();
 //	extern void power_dump();
 //	extern int g_MaxGpsCount;
-//	extern uint32 g_ActiveFlag;
-//	
+	extern uint32 g_ActiveFlag;
+
 	sscanf(&(*argv[1]), "%d", &ind);
-//	if(1 == ind || 0 == ind) DaraRom_Dump();
+	if(1 == ind || 0 == ind) DaraRom_Dump();
 //	if(2 == ind || 0 == ind) Sign_Dump();
 //	if(3 == ind || 0 == ind) Gps_Dump();
 //	if(4 == ind || 0 == ind) Gprs_Dump();
@@ -111,15 +109,15 @@ static void Dump(int argc, char**argv)
 //	if(6 == ind || 0 == ind) AtCmdCtrl_Dump(g_pBleAtCmdCtrl);
 	if(7 == ind || 0 == ind) BatteryDump(Null);
 //	if(8 == ind || 0 == ind) Ble_Dump();
-//	if(9 == ind || 0 == ind) DateTime_dump(Null);
-//	if(10 == ind) NvdsMap_Dump();
-//	if(11 == ind || 0 == ind)SysCfg_Dump();
+	if(9 == ind || 0 == ind) DateTime_dump(Null);
+	if(10 == ind) 			 NvdsMap_Dump();
+	if(11 == ind || 0 == ind)SysCfg_Dump();
 //	if(12 == ind || 0 == ind)power_dump();
 //	if(13 == ind || 0 == ind)adc_dump();
 
 //	Printf("g_MaxGpsCount=%d\n", g_MaxGpsCount);
-//	Printf("g_ActiveFlag=0x%x\n", g_ActiveFlag);
-//	Printf("g_dwDebugLevel = 0x%08x\n", g_dwDebugLevel);
+	Printf("g_ActiveFlag=0x%x\n", g_ActiveFlag);
+	Printf("g_dwDebugLevel = 0x%08x\n", g_dwDebugLevel);
 }
 MSH_CMD_EXPORT(Dump, Dump sample: Dump <uint8_t ind>);
 
@@ -142,28 +140,28 @@ MSH_CMD_EXPORT(Dump, Dump sample: Dump <uint8_t ind>);
 //	Printf("OK.\n");
 //}
 
-///*!
-// * \brief 设置
-// *		  
-// * \param  
-// *
-// * \return NONE 
-// */
-//static void Set(int argc, char**argv)
-//{
+/*!
+ * \brief 设置
+ *		  
+ * \param  
+ *
+ * \return NONE 
+ */
+static void Set(int argc, char**argv)
+{
 //	extern void Fsm_StateKeyOff(uint8 msgID);
 //	extern uint8_t g_ForceBatSoc;
 //	extern uint8_t g_ForcePmsDischarge;
 //	#define SET_VAR(_field) _field = value; Printf("%s=%d\n", #_field, value); break
 //	#define SET(_field) _field = value; Printf("%s=%d\n", #_field, value)
 //	
-//	int ind = 0;
-//	uint32 value;
-//	
-//	sscanf(&(*argv[1]), "%d", &ind);
-//	sscanf(&(*argv[2]), "%d", &value);
-//	switch(ind)
-//	{
+	int ind = 0;
+	uint32 value;
+	
+	sscanf(&(*argv[1]), "%d", &ind);
+	sscanf(&(*argv[2]), "%d", &value);
+	switch(ind)
+	{
 //		case 0: SET_VAR(g_TestFlag);
 //		case 1: SetActive(value); Nvds_Write_Setting(); break;
 //		case 2: SetForbidDischarge(value); Nvds_Write_Setting(); break;
@@ -177,12 +175,12 @@ MSH_CMD_EXPORT(Dump, Dump sample: Dump <uint8_t ind>);
 //		case 10: Sim_PowerReset(0); break;
 //		case 11: Nvc_SetVol(value); break;
 //		case 12: Fsm_StateKeyOff(MSG_FORCE_POWERDOWN); break;
-//		case 13: RTC_TimerStart(value, RTC_WAKEUP_TIMEID); break;
-//	}
+		case 13: RTC_TimerStart(value); break;
+	}
 //		
-//	//Nvds_Write_Setting();
-//}
-//MSH_CMD_EXPORT(Set, Set sample: Set <uint8_t ind uint32 value>);
+	//Nvds_Write_Setting();
+}
+MSH_CMD_EXPORT(Set, Set sample: Set <uint8_t ind uint32 value>);
 
 /*!
  * \brief 自检，检测电路板硬件
@@ -200,7 +198,7 @@ static void SelfTest(void)
 	
 	Printf("\r\nsID: %X%X%X\r\n",sn2,sn1,sn0);
 //	Printf("\tBleMac:%s; FwVer:[%s]\n"	, g_pBle->macValid ? g_Settings.sID : "fail", g_pBle->m_FwVer);
-//	Printf("\tFlash:%s\n"		, g_Settings.isFlashOk ? "pass" : "fail");
+	Printf("\tFlash:%s\n"		, g_Settings.isFlashOk ? "pass" : "fail");
 //	Printf("\tGyroscope:%s\n"	, g_Settings.isGyroOk  ? "pass" : "fail");
 //	Printf("\tSY6990:%s\n"	, g_Settings.is6990Ok  ? "pass" : "fail");
 //	if(!g_pGps->sateInview)
@@ -211,7 +209,6 @@ static void SelfTest(void)
 //	Printf("\tSimCar:%s\n"		, g_pGprs->isReg ? "pass" : "fail");
 
 //	Printf("\tGprsCSQ:[%d]\n", g_pSimCard->csq);
-//	Printf("\tPmsComm:[%d]\n", g_pPms->m_isCommOk);
 ////	if(flag)
 //	{
 //		Printf("\tMoto ErrCode1:0x%x\n", GetErrorCode(ERR_TYPE_MOTOR1));
@@ -223,18 +220,16 @@ static void SelfTest(void)
 }
 MSH_CMD_EXPORT(SelfTest , SelfTest board);
 
-///*!
-// * \brief 复位
-// *		  
-// * \param  NONE 
-// *
-// * \return NONE 
-// */
-//static void Reset(void)
-//{
-//    Boot(False);
-//}
-//MSH_CMD_EXPORT(Reset, Reboot System);
+/*!
+ * \brief 复位
+ *		  
+ * \param  NONE 
+ *
+ * \return NONE 
+ */
+static void Reset(void)
+{
+    Boot(False);
+}
+MSH_CMD_EXPORT(Reset, Reboot System);
 
-
-////#endif

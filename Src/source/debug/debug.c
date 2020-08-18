@@ -1,7 +1,7 @@
 
 #include "ArchDef.h"
 #include "Debug.h"
-//#include "Nvds.h"
+#include "Nvds.h"
 
 unsigned int g_dwDebugLevel = 0;
 #ifdef XDEBUG
@@ -24,8 +24,12 @@ void Debug_Init()
 	
 }
 
-void Debug_SetLevel(uint8_t level)
+//void Debug_SetLevel(uint8_t level)
+static void Debug_SetL(int argc, char**argv)
 {
+	int level;
+	
+	sscanf(&(*argv[1]), "%d", &level);
 	if(level == 0)
 	{
 		g_dwDebugLevel = 0;
@@ -37,6 +41,8 @@ void Debug_SetLevel(uint8_t level)
 		g_dwDebugLevel |= DL_WARNING;
 		if(level > 1)
 		{
+			g_dwDebugLevel |= DL_FSM;	
+			g_dwDebugLevel |= DL_LOG;
 		}
 		if(level > 2)
 		{
@@ -44,13 +50,19 @@ void Debug_SetLevel(uint8_t level)
 	}
 	
 	Printf("g_dwDebugLevel = 0x%08x\n", g_dwDebugLevel);	
-	//Nvds_Write(NVDS_DBG_INFO);
+	Nvds_Write_SysCfg();
 }
-	
-void Debug_SetBit(uint32_t nIndex, Bool isEnable)
+MSH_CMD_EXPORT(Debug_SetL, sample: Debug_SetLevel <uint8_t level>);
+
+//void Debug_SetBit(uint32_t nIndex, Bool isEnable)
+static void Debug_SetB(int argc, char**argv)
 {
 	#define PFOUT(value) Printf("\tBIT[%02d].%s\t = %d.\n", Uint32_t_getMaskBit(value), #value, (g_dwDebugLevel >> Uint32_t_getMaskBit(value)) & 0x01)
-
+	uint32_t nIndex;
+	int isEnable;
+	
+	sscanf(&(*argv[1]), "%d", &nIndex);
+	sscanf(&(*argv[2]), "%d", &isEnable);
 	if(isEnable)
 	{
 		g_dwDebugLevel |= (1 << nIndex);
@@ -79,10 +91,10 @@ void Debug_SetBit(uint32_t nIndex, Bool isEnable)
 	}
 	Printf("\n");
 	
-	//Printf("g_dwDebugLevel = 0x%08x\n", g_dwDebugLevel);	
-	//Nvds_Write(NVDS_DBG_INFO);
+	Printf("g_dwDebugLevel = 0x%08x\n", g_dwDebugLevel);	
+	Nvds_Write_SysCfg();
 }
-
+MSH_CMD_EXPORT(Debug_SetB, sample: Debug_SetB <nIndex isEnable>);
 
 #endif
 

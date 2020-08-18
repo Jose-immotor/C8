@@ -11,7 +11,9 @@ typedef enum _MSG_ID
 
 	MSG_RUN,			//MSG_RUN(0, 0)
 	MSG_UTP_REQ_DONE,	//MSG_RUN(pUtpCmd, UTP_TXF_EVENT)
-
+	MSG_BAT_PLUG_IN,
+	MSG_BATTERY_PLUG_OUT,
+	
 	MSG_MAX
 }MSG_ID;
 

@@ -13,12 +13,12 @@
 
 #include <rtthread.h>
 #include "common.h"
-//#include "safebuf.h"
-/*
+#include "safebuf.h"
+
 typedef struct{
 //    rt_device_t usart_dev;
 	SafeBuf     shell_SafeBuf;
 }smart_shell_param_t;
 extern smart_shell_param_t smart_shell_param;
-*/
+
 #endif

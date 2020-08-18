@@ -186,7 +186,7 @@ Bool Queue_writeBytes(Queue* queue, uint8_t* bytes, int numOfByte)
 	}
 	else if (queue->writeInd + numOfByte >= queue->bufSize)
 	{
-		return False;	//Full
+ 		return False;	//Full
 	}
 	memcpy(&queue->buf[queue->writeInd], bytes, numOfByte);
 	queue->writeInd += numOfByte;

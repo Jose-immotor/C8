@@ -3,7 +3,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
- 
+#include "debug.h"
+
 extern void _puts (const char *s);
 
 int vsnprintfEx(char* buffer, int bufLen, const char* lpszFormat, va_list ptr)
@@ -51,7 +52,7 @@ void _PrintfLevel(uint32 level, const char* lpszFormat, ...)
 	va_list ptr;
 	char g_Pfbuffer[PRINTF_BUF_SIZE];
 	
-//	if( 0 == (level & g_dwDebugLevel)) return;
+	if( 0 == (level & g_dwDebugLevel)) return;
 	
 	va_start(ptr, lpszFormat);
 	nLen = vsnprintfEx(g_Pfbuffer, sizeof(g_Pfbuffer)-1, lpszFormat, ptr);
@@ -68,9 +69,8 @@ int _Printf(const char* lpszFormat, ...)
 	va_list ptr;
 	char g_Pfbuffer[PRINTF_BUF_SIZE];
 
-//	memset(g_Pfbuffer, 0, sizeof(g_Pfbuffer));
+	memset(g_Pfbuffer, 0, sizeof(g_Pfbuffer));
 	va_start(ptr, lpszFormat);
-//	nLen = vsnprintfEx(g_Pfbuffer, sizeof(g_Pfbuffer)-1, lpszFormat, ptr);
 	nLen = vsnprintf(g_Pfbuffer, sizeof(g_Pfbuffer), lpszFormat, ptr);
 	
 	va_end(ptr);

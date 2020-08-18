@@ -13,11 +13,13 @@
 #include "Common.h"
 #include "pms.h"
 #include "fm175xx.h"
-//#include "Beep.h"
-//#include "Smart_System.h"
-//#include "nvc.h"
+#include "log.h"
+#include "Smart_System.h"
+#include "nvc.h"
 #include "nfc_cmd_process.h"
 #include "battery.h"
+#include "fsm.h"
+
 //#include "adc_sample.h"
 
 #define PLUG_IN  1
@@ -86,102 +88,102 @@ st_base_param gl_base_param[NFC_READER_COUNT_MAX];
 //{
 //	return g_PmsFwUpgradeTimer.m_isStart;
 //}
-//static int16 pms_get_max_output_current(void)
-//{
-//    st_modbus_reg_unit vl_tmp;
-//    unsigned short vl_tmp_value;
-//    
-//    vl_tmp.bits16_H = 0;
-//    vl_tmp.bits16_L = 0;
-//    //if(gl_bms_info_p[0]->reg_value_ready)
-//    if(slave_rs485_is_bat_valid(0))
-//    {
-//        vl_tmp = gl_bms_info_p[0]->reg_unit[MM_get_reg_addr_position_in_table(ENUM_REG_ADDR_BCAP)];
-//    }
+static int16 pms_get_max_output_current(void)
+{
+    st_modbus_reg_unit vl_tmp;
+    unsigned short vl_tmp_value;
+    
+    vl_tmp.bits16_H = 0;
+    vl_tmp.bits16_L = 0;
+    //if(gl_bms_info_p[0]->reg_value_ready)
+    if(slave_rs485_is_bat_valid(0))
+    {
+        vl_tmp = gl_bms_info_p[0]->reg_unit[MM_get_reg_addr_position_in_table(ENUM_REG_ADDR_BCAP)];
+    }
 
-//    vl_tmp_value = ((vl_tmp.bits16_H<<8)+vl_tmp.bits16_L);
+    vl_tmp_value = ((vl_tmp.bits16_H<<8)+vl_tmp.bits16_L);
 
-//    vl_tmp.bits16_H = 0;
-//    vl_tmp.bits16_L = 0;
-//    //if(gl_bms_info_p[1]->reg_value_ready)
-//    if(slave_rs485_is_bat_valid(1))
-//    {
-//        vl_tmp = gl_bms_info_p[1]->reg_unit[MM_get_reg_addr_position_in_table(ENUM_REG_ADDR_BCAP)];
-//    }
+    vl_tmp.bits16_H = 0;
+    vl_tmp.bits16_L = 0;
+    //if(gl_bms_info_p[1]->reg_value_ready)
+    if(slave_rs485_is_bat_valid(1))
+    {
+        vl_tmp = gl_bms_info_p[1]->reg_unit[MM_get_reg_addr_position_in_table(ENUM_REG_ADDR_BCAP)];
+    }
 
-//    vl_tmp_value += ((vl_tmp.bits16_H<<8)+vl_tmp.bits16_L);
+    vl_tmp_value += ((vl_tmp.bits16_H<<8)+vl_tmp.bits16_L);
 
-//    vl_tmp_value /=10;
-//    vl_tmp_value *=3;
+    vl_tmp_value /=10;
+    vl_tmp_value *=3;
 
-//	return vl_tmp_value;
+	return vl_tmp_value;
 
-//}
-//static uint16 pms_get_work_voltate(void)
-//{
-//    st_modbus_reg_unit vl_tmp;
-//    unsigned short vl_tmp_value;
-//    
-//    vl_tmp.bits16_H = 0;
-//    vl_tmp.bits16_L = 0;
+}
+static uint16 pms_get_work_voltate(void)
+{
+    st_modbus_reg_unit vl_tmp;
+    unsigned short vl_tmp_value;
+    
+    vl_tmp.bits16_H = 0;
+    vl_tmp.bits16_L = 0;
 
-//    if(slave_rs485_is_bat_valid(0))
-//    {
-//        vl_tmp = gl_bms_info_p[0]->reg_unit[MM_get_reg_addr_position_in_table(ENUM_REG_ADDR_TVOLT)];
-//        
-//    }
-//    else if(slave_rs485_is_bat_valid(1))
-//    {
-//        vl_tmp = gl_bms_info_p[1]->reg_unit[MM_get_reg_addr_position_in_table(ENUM_REG_ADDR_TVOLT)];
-//    }
+    if(slave_rs485_is_bat_valid(0))
+    {
+        vl_tmp = gl_bms_info_p[0]->reg_unit[MM_get_reg_addr_position_in_table(ENUM_REG_ADDR_TVOLT)];
+        
+    }
+    else if(slave_rs485_is_bat_valid(1))
+    {
+        vl_tmp = gl_bms_info_p[1]->reg_unit[MM_get_reg_addr_position_in_table(ENUM_REG_ADDR_TVOLT)];
+    }
 
-//    vl_tmp_value = ((vl_tmp.bits16_H<<8)+vl_tmp.bits16_L);
+    vl_tmp_value = ((vl_tmp.bits16_H<<8)+vl_tmp.bits16_L);
 
-//    return vl_tmp_value;
-//}
+    return vl_tmp_value;
+}
 
-//static int16 pms_get_work_current(void)
-//{
-//    st_modbus_reg_unit vl_tmp;
-//    int vl_tmp_value;
-//    int vl_real_value;
-//    unsigned short vl_u16_tmp;
-//    
-//    vl_tmp_value = 0;
-//    vl_real_value = 0;
-//    
-//    vl_tmp.bits16_H = 0xFF;
-//    vl_tmp.bits16_L = 0xFF;
-//    //if(gl_bms_info_p[0]->reg_value_ready)
-//    if(slave_rs485_is_bat_valid(0))
-//    {
-//        vl_tmp = gl_bms_info_p[0]->reg_unit[MM_get_reg_addr_position_in_table(ENUM_REG_ADDR_TCURR)];
-//    }
-//    if((vl_tmp.bits16_H != 0xFF)&&(vl_tmp.bits16_L != 0xFF))
-//    {
-//        vl_tmp_value = ((vl_tmp.bits16_H<<8)+vl_tmp.bits16_L);
-//        vl_real_value = vl_tmp_value-300*100;
-//    }
+static int16 pms_get_work_current(void)
+{
+    st_modbus_reg_unit vl_tmp;
+    int vl_tmp_value;
+    int vl_real_value;
+    unsigned short vl_u16_tmp;
+    
+    vl_tmp_value = 0;
+    vl_real_value = 0;
+    
+    vl_tmp.bits16_H = 0xFF;
+    vl_tmp.bits16_L = 0xFF;
+    //if(gl_bms_info_p[0]->reg_value_ready)
+    if(slave_rs485_is_bat_valid(0))
+    {
+        vl_tmp = gl_bms_info_p[0]->reg_unit[MM_get_reg_addr_position_in_table(ENUM_REG_ADDR_TCURR)];
+    }
+    if((vl_tmp.bits16_H != 0xFF)&&(vl_tmp.bits16_L != 0xFF))
+    {
+        vl_tmp_value = ((vl_tmp.bits16_H<<8)+vl_tmp.bits16_L);
+        vl_real_value = vl_tmp_value-300*100;
+    }
 
-//    vl_tmp.bits16_H = 0xFF;
-//    vl_tmp.bits16_L = 0xFF;
-//    //if(gl_bms_info_p[1]->reg_value_ready)
-//    if(slave_rs485_is_bat_valid(1))
-//    {
-//        vl_tmp = gl_bms_info_p[1]->reg_unit[MM_get_reg_addr_position_in_table(ENUM_REG_ADDR_TCURR)];
-//    }
+    vl_tmp.bits16_H = 0xFF;
+    vl_tmp.bits16_L = 0xFF;
+    //if(gl_bms_info_p[1]->reg_value_ready)
+    if(slave_rs485_is_bat_valid(1))
+    {
+        vl_tmp = gl_bms_info_p[1]->reg_unit[MM_get_reg_addr_position_in_table(ENUM_REG_ADDR_TCURR)];
+    }
 
-//    if((vl_tmp.bits16_H != 0xFF)&&(vl_tmp.bits16_L != 0xFF))
-//    {
-//        vl_tmp_value = ((vl_tmp.bits16_H<<8)+vl_tmp.bits16_L);
-//        vl_real_value += (vl_tmp_value-300*100);
-//    }
+    if((vl_tmp.bits16_H != 0xFF)&&(vl_tmp.bits16_L != 0xFF))
+    {
+        vl_tmp_value = ((vl_tmp.bits16_H<<8)+vl_tmp.bits16_L);
+        vl_real_value += (vl_tmp_value-300*100);
+    }
 
-//    vl_real_value += (300*100);
-//    vl_u16_tmp = vl_real_value;
+    vl_real_value += (300*100);
+    vl_u16_tmp = vl_real_value;
 
-//    return vl_u16_tmp;
-//}
+    return vl_u16_tmp;
+}
 
 uint8 Pms_GetAveBatSoc(const BatStatePkt* pBatDesc)
 {
@@ -215,8 +217,8 @@ void BatteryDescDump(const BatteryDesc* desc)
 		,desc->portId, pByte[0], pByte[1], pByte[2], pByte[3], pByte[4], pByte[5]);
 	
 	BAT_DUMP1(SOC);
-//	BAT_DUMP1(voltage);
-//	BAT_DUMP1(current);
+	BAT_DUMP1(voltage);
+	BAT_DUMP1(current);
 //	BAT_DUMP1(temp);
 //	BAT_DUMP1(fault);
 //	BAT_DUMP1(damage);
@@ -271,17 +273,7 @@ void BatteryDump(const BatStatePkt* pPkt)
 	}
 }
 
-////Bool Battery_isOk(uint8 portId)
-////{
-////	const BatteryDesc* pDesc = &g_pPms->m_batPkt.desc[portId];
 
-////	if((g_pPms->m_portMask >> portId) & 0x01)
-////	{
-////		return ((pDesc->fault | pDesc->damage) == 0);
-////	}
-
-////	return True;
-////}
 
 ////Bool Battery_isFault(const BatteryDesc* pDesc)
 ////{
@@ -843,20 +835,21 @@ void Pms_OnBatteryPlugOut(uint8 port)
 
 void Pms_OnBatteryChanged(uint8 port, Bool isPlugIn)
 {
-//	if(port == 0)
-//	{
-//		g_pPms->m_Port0Verify = BAT_VERIFY_NONE;
-//	}
-//	else
-//	{
-//		g_pPms->m_Port1Verify = BAT_VERIFY_NONE;
-//	}
+	if(port == 0)
+	{
+		g_pPms->m_Port0Verify = BAT_VERIFY_NONE;
+	}
+	else
+	{
+		g_pPms->m_Port1Verify = BAT_VERIFY_NONE;
+	}
 
 //	if(g_pPms->m_portMask)
 //		g_pPms->m_isNotDischarge = !Pms_IsNotDischarge();
 	Printf("%sBattery[%d] %s\n", (g_pPms->m_isTestBat)?"Test ":"", port, isPlugIn ? "in" : "out");
-//	LOG2(isPlugIn ? ET_PMS_BAT_PLUG_IN: ET_PMS_BAT_PLUG_OUT, Pms_GetBatCount(), Pms_GetAveBatSoc(Null));
-//	PostMsg(isPlugIn ? MSG_BATTERY_PLUG_IN :  MSG_BATTERY_PLUG_OUT);
+	LOG2(isPlugIn ? ET_PMS_BAT_PLUG_IN: ET_PMS_BAT_PLUG_OUT, Pms_GetBatCount(), Pms_GetAveBatSoc(Null));
+	PostMsg(isPlugIn ? MSG_BAT_PLUG_IN :  MSG_BATTERY_PLUG_OUT);
+				   
 	if(isPlugIn == PLUG_IN)
 		Pms_OnBatteryPlugIn(port);
 	else
@@ -1746,12 +1739,12 @@ void Pms_Run()
 //		}
 	}
 	g_pPms->m_totalPort = bat_num;
-//	g_pPms->m_deviceState.isAccOn = g_Settings.isRemoteAccOn;
+	g_pPms->m_deviceState.isAccOn = g_Settings.isRemoteAccOn;
 	g_pPms->m_deviceState.isTestBat = g_pPms->m_isTestBat;
 	g_pPms->m_batPkt.deviceState = g_pPms->m_deviceState.isAccOn;
-//	g_pPms->m_batPkt.MaxOutPutCurrent = pms_get_max_output_current();
-//	g_pPms->m_batPkt.workVoltate = pms_get_work_voltate();
-//	g_pPms->m_batPkt.workCurrent = pms_get_work_current();
+	g_pPms->m_batPkt.MaxOutPutCurrent = pms_get_max_output_current();
+	g_pPms->m_batPkt.workVoltate = pms_get_work_voltate();
+	g_pPms->m_batPkt.workCurrent = pms_get_work_current();
 	g_pPms->m_batPkt.batteryCount = bat_num;
 	g_pPms->m_batPkt.size = sizeof(BatStatePkt);
 //	Battery_check_and_process_testing_mode();
@@ -1764,11 +1757,6 @@ void Pms_Run()
 //		g_Settings.isTakeApart =1;
 //		LOG2(ET_TAKE_APART, g_Settings.devcfg, 0);
 //	}
-}
-
-void Pms_Start()
-{
-
 }
 
 void Pms_Init()

@@ -8,7 +8,6 @@
  * 2020-02-10     lane      first implementation
  */
 
-//#define BATTERY_PROCESS_C
 #include <string.h>
 #include "pms.h"
 #include "modbus_master.h"
@@ -16,49 +15,15 @@
 #include <stdint.h>
 
 unsigned char gl_cmd_buf[NFC_READER_COUNT_MAX][ENUM_NFC_CMD_INDEX_MAX];
-st_bat_history_record_param gl_bat_history_record_param;
-static unsigned int gl_Battery_delay_process_cnt = 4000;
+
 #define BATTERY_VOLTAGE_SHAKE_CNT_MAX 600
 static unsigned int gl_Battery_voltage_shake_cnt;
-st_bat_poll_param sl_bat_poll_param;
-unsigned int sl_bat_error_check_delay_after_bat_update_cnt;
+
 
 void Battery_timer_count_cb(void)
 {
 	if(gl_Battery_voltage_shake_cnt)
         gl_Battery_voltage_shake_cnt--;
-		
-    if(gl_Battery_delay_process_cnt)
-        --gl_Battery_delay_process_cnt;
-    if(sl_bat_poll_param.poll_inerval_timer_cnt)
-        --sl_bat_poll_param.poll_inerval_timer_cnt;
-    if(sl_bat_poll_param.poll_allways_en_delay_cnt)
-        --sl_bat_poll_param.poll_allways_en_delay_cnt;
-    if(sl_bat_poll_param.poll_interval_for_bms_update_cnt)
-        --sl_bat_poll_param.poll_interval_for_bms_update_cnt;
-
-    if(sl_bat_error_check_delay_after_bat_update_cnt)
-    {
-        sl_bat_error_check_delay_after_bat_update_cnt--;
-    }
-
-
-    #ifdef PMS_AUTO_INCREASE_SETTING_VOLTAGE_ENABLE
-    if(gl_charger_setting_V_offset_param.debount_time_cnt)
-    {
-        gl_charger_setting_V_offset_param.debount_time_cnt--;
-        if((!gl_charger_setting_V_offset_param.debount_time_cnt)&&
-            (gl_charger_setting_V_offset_param.voltage_offset_value < 4))
-        {
-            gl_charger_setting_V_offset_param.voltage_offset_value += 2;
-        }
-    }
-    #endif
-
-    if(gl_bat_history_record_param.NFC_CMD_interval_cnt)
-        gl_bat_history_record_param.NFC_CMD_interval_cnt--;
-
-
 }
 ////static unsigned char sl_battery_need2sleep_flag = 0;// 1表示让电池进入休眠状态
 unsigned char gl_illegal_charging_in_flag = 0;
@@ -121,20 +86,6 @@ unsigned short Battery_get_SOC(unsigned char bms_index)
 void Battery_clear_reg_valid_flag(unsigned char bms_index)
 {
     gl_bms_info_p[bms_index]->reg_value_ready = 0;
-    #ifdef BAT_PMS_AUTHORITY_FUNCTION_EN
-    //没有电池，复位电池认证参数
-    if((Is_Authority_done_about_bat_pms()) && 
-            ((0 == Authority_get_onoff_about_pms_bat()) ||
-            (Is_Authority_done_about_pms_bat())))
-    {
-        Authority_reset();
-    }
-    #endif
-}
-
-void Battery_clear_reg_valid_flag_on_version_info(unsigned char bms_index)
-{
-    gl_bms_info_p[bms_index]->reg_value_ready &= (~(BMS_DEV_INFO_FLAG_BIT));
 }
 
 void Battery_cmd_buf_clear(unsigned char bms_index)
@@ -162,36 +113,6 @@ unsigned char Battery_send_cmd(unsigned char bms_index)
     i = bms_index;
     //for(i = 0; i < NFC_READER_COUNT_MAX; i++)
     {
-        if(gl_cmd_buf[i][ENUM_NFC_CMD_INDEX_BYPASS])
-        {
-            unsigned char *vl_data;
-            unsigned int vl_data_len;
-//            slave_rs485_get_rx_data_from_buf(ENUM_COMM_INDEX_COMM, &vl_data, &vl_data_len);
-            //与电池通讯
-            //if(MM_set_BMS_index(i))
-            {
-                if((vl_data_len <= 7)|| // 这时候表示没有要透传的数据
-                    (MM_snd_bypass(MM_ADDR_VALUE, vl_data+5, vl_data_len-7)))
-                {
-                    gl_cmd_buf[i][ENUM_NFC_CMD_INDEX_BYPASS] = 0;
-                    return 1;
-                }
-            }
-        }
-        #ifdef BAT_PMS_AUTHORITY_FUNCTION_EN
-        if(gl_cmd_buf[i][ENUM_NFC_CMD_INDEX_AUTHORITY])
-        {
-            //与电池通讯
-            //if(MM_set_BMS_index(i))
-            {
-                if(MM_snd_authority_process())
-                {
-                    gl_cmd_buf[i][ENUM_NFC_CMD_INDEX_AUTHORITY] = 0;
-                    return 1;
-                }
-            }
-        }
-        #endif
         if(gl_cmd_buf[i][ENUM_NFC_CMD_INDEX_W_RESET])
         {
             unsigned short vl_k;
@@ -391,75 +312,7 @@ unsigned char Battery_send_cmd(unsigned char bms_index)
                     return 1;
                 }
             }
-        }
-//        else if(gl_cmd_buf[i][ENUM_NFC_CMD_INDEX_R_BLV])
-//        {
-//            unsigned char vl_tmp;
-
-//            //与电池1通讯
-//            //if(MM_set_BMS_index(i))
-//            {
-//                vl_tmp = 'V';
-//                if(MM_snd_update_packet(i, MM_ADDR_VALUE, &vl_tmp, 1))
-//                {
-//                    gl_cmd_buf[i][ENUM_NFC_CMD_INDEX_R_BLV] = 0;
-//                    return 1;
-//                }
-//            }
-//        }
-        else if(gl_cmd_buf[i][ENUM_NFC_CMD_INDEX_HISTORY_RECORD])
-        {
-            //与电池1通讯
-            //if(MM_set_BMS_index(i))
-            {
-                if(0 == gl_bat_history_record_param.is_earliest_param_valid)
-                {
-                    //读取电池里面的最近记录编号
-//                    gl_bat_history_record_param.history_record_lastest_index = Battery_get_newest_record_index_number();
-//                    //读取电池里面的最早记录编号
-//                    gl_bat_history_record_param.history_record_earliest_index = Battery_get_oldest_record_index_number();
-                
-                    if(MM_snd_read_history_record_cmd(MM_ADDR_VALUE, 
-                        gl_bat_history_record_param.history_record_earliest_index)
-                        )
-                    {
-                        gl_cmd_buf[i][ENUM_NFC_CMD_INDEX_HISTORY_RECORD] = 0;
-                        //设置间隔时间3S
-//                        Batter_history_record_set_nfc_cmd_interval_cnt(1000);
-                        return 1;
-                    }
-                }
-                else if(0 == gl_bat_history_record_param.is_lastest_param_valid)
-                {
-                    //读取电池里面的最近记录编号
-//                    gl_bat_history_record_param.history_record_lastest_index = Battery_get_newest_record_index_number();
-//                    //读取电池里面的最早记录编号
-//                    gl_bat_history_record_param.history_record_earliest_index = Battery_get_oldest_record_index_number();
-                    
-                    if(MM_snd_read_history_record_cmd(MM_ADDR_VALUE, 
-                        gl_bat_history_record_param.history_record_lastest_index)
-                        )
-                    {
-                        gl_cmd_buf[i][ENUM_NFC_CMD_INDEX_HISTORY_RECORD] = 0;
-                        //设置间隔时间3S
-//                        Batter_history_record_set_nfc_cmd_interval_cnt(1000);
-                        return 1;
-                    }
-                }
-                else
-                {
-//                    if(MM_snd_read_history_record_cmd(MM_ADDR_VALUE, 
-//                        Battery_history_record_get_real_index(gl_bat_history_record_param.history_record_begin_index + 1 + gl_bat_history_record_param.history_record_read_cnt))
-//                        )
-//                    {
-//                        gl_cmd_buf[i][ENUM_NFC_CMD_INDEX_HISTORY_RECORD] = 0;
-//                        //设置间隔时间3S
-////                        Batter_history_record_set_nfc_cmd_interval_cnt(1000);
-//                        return 1;
-//                    }
-                }
-            }
-        }
+        }     
     }    
 
     return 0;
@@ -600,46 +453,7 @@ void Battery_clear_switch_state(unsigned char bms_index, unsigned short on)
         gl_bms_info_p[bms_index]->reg_unit[vl_pos].bits16_L);
 
     vl_ctrl_value &=~(on);
-    if(on != 0xFFFF)//清除全部的话， 不用再执行下面
-    {
-//        //发送进入休眠状态的命令
-//        if(sl_battery_need2sleep_flag)
-//        {
-//            // bit5是进入浅度睡眠的标志
-//            vl_ctrl_value |= (1<<5);
-
-//            //睡眠时候，充电关闭
-//            vl_ctrl_value &= ~BMS_STATE_BIT_CHG_SWITCH;
-
-//            #if 0 // 不再设置电池进入深度睡眠，2018-6-29
-//            //如果是不允许放电并且是曾经在ACC ON状态
-//            if((0 == Battery_get_PMS_working_state())&&(main_get_have_been_ACC_ON_flag()))
-//            {
-//                //进入深度睡眠// bit6是进入深度睡眠的标志
-//                vl_ctrl_value |= (1<<6);
-//            }
-//            
-//            #else
-//            //2019-1-24
-//            #ifdef PMS_CMD_POWEROFF_TIME_COUNTER_ENABLE
-//            //if(
-//            //    main_cmd_poweroff_get_poweroff_flag_nonvolatilely()//已经停车执行过一次
-//            //    )
-//            //{
-//                //进入深度睡眠// bit6是进入深度睡眠的标志
-//            //    vl_ctrl_value |= (1<<6);
-//            //}  
-//            #endif
-//            #endif
-//            
-//        }
-//        else
-//        {
-//            // bit5是进入浅度睡眠的标志, 不需要睡眠时候就清除
-//            vl_ctrl_value &= (~(1<<5));
-//        }
-    }
-    
+        
     gl_bms_info_p[bms_index]->reg_unit[vl_pos].bits16_H = (vl_ctrl_value>>8)&0xff;
     gl_bms_info_p[bms_index]->reg_unit[vl_pos].bits16_L = (vl_ctrl_value>>0)&0xff;
     
@@ -654,51 +468,6 @@ void Battery_set_switch_state(unsigned char bms_index, unsigned short on)
                       gl_bms_info_p[bms_index]->reg_unit[vl_pos].bits16_L);
 
     vl_ctrl_value |= on;
-
-//    if(ENUM_CHARGE == gl_BP_info.bms_state)
-//    {
-//        //充电器接入
-//        vl_ctrl_value |= (1<<7);
-//    }
-//    else
-//    {
-//        //充电器拔出
-//        vl_ctrl_value &= ~(1<<7);
-//    }
-
-//    //发送进入休眠状态的命令
-//    if(sl_battery_need2sleep_flag)
-//    {
-//        // bit5是进入浅度睡眠的标志
-//        vl_ctrl_value |= (1<<5);
-//        //睡眠时候，充电关闭
-//        vl_ctrl_value &= ~BMS_STATE_BIT_CHG_SWITCH;
-
-//        #if 0 // 不再设置电池进入深度睡眠，2018-6-29
-//        //如果是不允许放电并且是曾经在ACC ON状态
-//        if((0 == Battery_get_PMS_working_state())&&(main_get_have_been_ACC_ON_flag()))
-//        {
-//            //进入深度睡眠// bit6是进入深度睡眠的标志
-//            vl_ctrl_value |= (1<<6);
-//        }
-//        #else
-//        //2019-1-24
-//        #ifdef PMS_CMD_POWEROFF_TIME_COUNTER_ENABLE
-//        //if(
-//        //    main_cmd_poweroff_get_poweroff_flag_nonvolatilely()//已经停车执行过一次
-//        //    )
-//        //{
-//            //进入深度睡眠// bit6是进入深度睡眠的标志
-//        //    vl_ctrl_value |= (1<<6);
-//        //}  
-//        #endif
-//        #endif
-//    }
-//    else
-//    {
-//        // bit5是进入浅度睡眠的标志, 不需要睡眠时候就清除
-//        vl_ctrl_value &= (~(1<<5));
-//    }
 
     gl_bms_info_p[bms_index]->reg_unit[vl_pos].bits16_H = (vl_ctrl_value>>8)&0xff;
     gl_bms_info_p[bms_index]->reg_unit[vl_pos].bits16_L = (vl_ctrl_value>>0)&0xff;
@@ -765,12 +534,9 @@ void Battery_sleep_process(void)
         }
 
     }
-    //else if(gl_Battery_delay_process_cnt && is_battery_voltage_OK(0)) //gl_Battery_delay_process_cnt延迟后，不能再操作
     else if(slave_rs485_is_bat_valid(0)) 
     {
         //电池0在线
-
-
         vl_bms_0_ctrl = Battery_get_switch_state(0);
 
         //打开电池0的充放电开关
@@ -780,12 +546,9 @@ void Battery_sleep_process(void)
         }
         
     }
-    //else if(gl_Battery_delay_process_cnt && is_battery_voltage_OK(1))//gl_Battery_delay_process_cnt延迟后，不能再操作
     else if(slave_rs485_is_bat_valid(1))
     {
         //电池1在线
-
-        
         vl_bms_1_ctrl = Battery_get_switch_state(1);
 
         //打开电池1的充放电开关
@@ -1149,22 +912,16 @@ void Battery_Process(void)
 
 void thread_battery_entry(void* parameter)
 {  
-//	static uint8_t count = 0;
 	rt_err_t result;
 	Pms_Init();
-	Pms_Start();
     while (1)
     {
         result = rt_sem_take(nfc_sem, RT_WAITING_FOREVER);
 		if (result == RT_EOK)
         {
 			Battery_Process();
-//			if(count++ >= 10)
-//			{
-//				count = 0;
-				Pms_Run();
-				slave_rs485_cmd_param_changed_polling();
-//			}
+			Pms_Run();
+			slave_rs485_cmd_param_changed_polling();
 		}
 		//延迟
         rt_thread_mdelay(100);

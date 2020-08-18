@@ -27,10 +27,84 @@ Project File Date:  08/17/2020
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'C7Pms'
+compiling fsm.c...
+..\..\Src\source\fsm\fsm.c(241): error:  #20: identifier "MSG_SIM_FAILED" is undefined
+  	if(MSG_TIMEOUT == msgID || MSG_SIM_FAILED == msgID)
+..\..\Src\source\fsm\fsm.c(256): error:  #20: identifier "MSG_SIM_POWEROFF" is undefined
+  			PostMsg(MSG_SIM_POWEROFF);
+..\..\Src\source\fsm\fsm.c(259): error:  #20: identifier "MSG_SIM_POWEROFF" is undefined
+  	else if(MSG_SIM_POWEROFF == msgID)
+..\..\Src\source\fsm\fsm.c(270): error:  #20: identifier "MSG_BLE_CNT" is undefined
+  	else if(MSG_BLE_CNT == msgID)
+..\..\Src\source\fsm\fsm.c(274): error:  #20: identifier "MSG_BLE_DIS_CNT" is undefined
+  	else if(MSG_BLE_DIS_CNT == msgID)
+..\..\Src\source\fsm\fsm.c(280): error:  #20: identifier "MSG_FORCE_POWERDOWN" is undefined
+  	else if(MSG_FORCE_POWERDOWN == msgID)//强制休眠
+..\..\Src\source\fsm\fsm.c(286): error:  #20: identifier "MSG_GPS_DIS_CNT" is undefined
+  	else if(MSG_GPS_DIS_CNT == msgID)//5分钟定位不成功，休眠
+..\..\Src\source\fsm\fsm.c(291): error:  #20: identifier "MSG_GPS_UPDATE" is undefined
+  	else if(MSG_GPS_UPDATE == msgID)
+..\..\Src\source\fsm\fsm.c(304): error:  #20: identifier "MSG_GPRS_UPDATE" is undefined
+  	else if(MSG_GPRS_UPDATE == msgID)
+..\..\Src\source\fsm\fsm.c(320): error:  #20: identifier "MSG_KEY_ON" is undefined
+  	else if(MSG_KEY_ON == msgID)
+..\..\Src\source\fsm\fsm.c(324): error:  #20: identifier "MSG_BATTERY_PLUG_IN" is undefined
+  	else if(MSG_BATTERY_PLUG_IN == msgID && MSG_12V_ON == msgID )
+..\..\Src\source\fsm\fsm.c(324): error:  #20: identifier "MSG_12V_ON" is undefined
+  	else if(MSG_BATTERY_PLUG_IN == msgID && MSG_12V_ON == msgID )
+..\..\Src\source\fsm\fsm.c(331): error:  #20: identifier "MSG_GYRO_ASSERT" is undefined
+  	else if(MSG_GYRO_ASSERT == msgID)
+..\..\Src\source\fsm\fsm.c(346): error:  #20: identifier "MSG_KEY_OFF" is undefined
+  	if(MSG_KEY_OFF == msgID || MSG_12V_OFF == msgID)
+..\..\Src\source\fsm\fsm.c(346): error:  #20: identifier "MSG_12V_OFF" is undefined
+  	if(MSG_KEY_OFF == msgID || MSG_12V_OFF == msgID)
+..\..\Src\source\fsm\fsm.c(354): error:  #20: identifier "MSG_GPS_UPDATE" is undefined
+  	else if(MSG_GPS_UPDATE == msgID)
+..\..\Src\source\fsm\fsm.c(359): error:  #20: identifier "MSG_GPRS_UPDATE" is undefined
+  	else if(MSG_GPRS_UPDATE == msgID)
+..\..\Src\source\fsm\fsm.c(364): error:  #20: identifier "MSG_GYRO_ASSERT" is undefined
+  	else if(MSG_GYRO_ASSERT == msgID)
+..\..\Src\source\fsm\fsm.c(387): error:  #20: identifier "MSG_PMS_WAKEUP" is undefined
+  	if(MSG_PMS_WAKEUP == msgID 
+..\..\Src\source\fsm\fsm.c(388): error:  #20: identifier "MSG_RTC_TIMEOUT" is undefined
+  		|| MSG_RTC_TIMEOUT == msgID
+..\..\Src\source\fsm\fsm.c(389): error:  #20: identifier "MSG_SIM_WAKEUP" is undefined
+  		|| MSG_SIM_WAKEUP == msgID
+..\..\Src\source\fsm\fsm.c(390): error:  #20: identifier "MSG_LOCK_KEY" is undefined
+  		|| MSG_LOCK_KEY == msgID
+..\..\Src\source\fsm\fsm.c(391): error:  #20: identifier "MSG_GPRS_UPDATE" is undefined
+  		|| MSG_GPRS_UPDATE == msgID
+..\..\Src\source\fsm\fsm.c(392): error:  #20: identifier "MSG_ADC_ISR" is undefined
+  		|| MSG_ADC_ISR == msgID
+..\..\Src\source\fsm\fsm.c(393): error:  #20: identifier "MSG_BLE_WAKEUP" is undefined
+  		|| MSG_BLE_WAKEUP == msgID
+..\..\Src\source\fsm\fsm.c(408): error:  #20: identifier "MSG_GYRO_IDLE" is undefined
+  	else if(MSG_GYRO_IDLE == msgID || MSG_SIM_FAILED == msgID || MSG_TIMEOUT== msgID)
+..\..\Src\source\fsm\fsm.c(408): error:  #20: identifier "MSG_SIM_FAILED" is undefined
+  	else if(MSG_GYRO_IDLE == msgID || MSG_SIM_FAILED == msgID || MSG_TIMEOUT== msgID)
+..\..\Src\source\fsm\fsm.c(419): error:  #20: identifier "MSG_GYRO_ASSERT" is undefined
+  	else if(MSG_GYRO_ASSERT == msgID)
+..\..\Src\source\fsm\fsm.c(497): error:  #20: identifier "MSG_12V_ON" is undefined
+  		if(MSG_12V_ON == g_pMsg->m_MsgID)
+..\..\Src\source\fsm\fsm.c(502): error:  #20: identifier "MSG_BATTERY_PLUG_IN" is undefined
+  		if(MSG_BATTERY_PLUG_IN == g_pMsg->m_MsgID || MSG_BATTERY_PLUG_OUT == g_pMsg->m_MsgID)
+..\..\Src\source\fsm\fsm.c: 0 warnings, 30 errors
+compiling main.c...
+..\..\src\source\user\main.c(33): warning:  #550-D: variable "g_ResetInitMs"  was set but never used
+  static uint32_t g_ResetInitMs = 0;
+..\..\src\source\user\main.c(34): warning:  #550-D: variable "g_isPowerOff"  was set but never used
+  static Bool g_isPowerOff = False;
+..\..\src\source\user\main.c: 2 warnings, 0 errors
+compiling JT808.c...
+compiling smart_shell.c...
+compiling battery.c...
+..\..\src\source\battery\battery.c(588): warning:  #550-D: variable "sl_both_voltage_equ_flag"  was set but never used
+      static unsigned char sl_both_voltage_equ_flag = 0;
+..\..\src\source\battery\battery.c(589): warning:  #550-D: variable "sl_both_voltage_diff_flag"  was set but never used
+      static unsigned char sl_both_voltage_diff_flag = 0;
+..\..\src\source\battery\battery.c: 2 warnings, 0 errors
 compiling pms.c...
-linking...
-Program Size: Code=38630 RO-data=2238 RW-data=256 ZI-data=7792  
-".\Objects\C7Pms.axf" - 0 Error(s), 0 Warning(s).
+".\Objects\C7Pms.axf" - 30 Error(s), 4 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -44,7 +118,8 @@ Package Vendor: GigaDevice
   C:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:03
+Target not created.
+Build Time Elapsed:  00:00:07
 </pre>
 </body>
 </html>

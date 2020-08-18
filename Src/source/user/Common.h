@@ -14,6 +14,9 @@ extern "C"{
 #include "Obj.h"
 #include "Utp.h"
 #include "debug.h"
+#include "message.h"
+#include "queue.h"
+#include "datatime.h"
 
 #ifdef __cplusplus
 }

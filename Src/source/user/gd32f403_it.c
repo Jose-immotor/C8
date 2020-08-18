@@ -169,7 +169,6 @@ void EXTI10_15_IRQHandler(void)
     }
 }
 
-
 /*!
     \brief      this function handles USART RBNE interrupt request and TBE interrupt request
     \param[in]  none
@@ -181,3 +180,5 @@ void USART0_IRQHandler(void)
 {
 	usart0_isr();
 }
+
+
