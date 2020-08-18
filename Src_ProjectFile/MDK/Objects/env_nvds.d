@@ -73,5 +73,6 @@
 .\objects\env_nvds.o: ..\..\Src\source\nvds\smart_system.h
 .\objects\env_nvds.o: ..\..\Src\source\nvds\datarom.h
 .\objects\env_nvds.o: ..\..\Src\source\nvc\nvc.h
+.\objects\env_nvds.o: ..\..\Src\source\user\main.h
 .\objects\env_nvds.o: ..\..\Src\source\nvds\log.h
 .\objects\env_nvds.o: ..\..\Src\source\nvds\Record.h

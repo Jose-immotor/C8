@@ -47,10 +47,16 @@ const char* g_pStateStr[] =
 const char* g_pMsgStr[] = 
 {
 	 "TIMEOUT"
+	,"RUN"
+	,"UTP_REQ_DONE"
 	,"KEY_ON"
 	,"KEY_OFF"
-	,"GYRO_ASSERT"
-	,"GYRO_IDLE"
+	,"BATTERY_PLUG_IN"
+	,"BATTERY_PLUG_OUT"
+	,"SIM_POWEROFF"
+	,"12V_OFF"
+	,"12V_ON"
+	
 	,"SIM_FAILED"
 	,"GPS_UPDATE"
 	,"GPRS_UPDATE "
@@ -58,8 +64,6 @@ const char* g_pMsgStr[] =
 	,"BLE_DIS_CNT"
 	,"PMS_WAKEUP"
 	,"PMS_SLEEP"
-	,"12V_OFF"
-	,"12V_ON"
 	,"5V_OFF"
 	,"5V_ON"
 	,"BATTERY_PLUG_IN"
@@ -73,7 +77,7 @@ const char* g_pMsgStr[] =
 	,"GPS_POWERON"
 	,"GPS_POWEROFF"
 	,"SIM_POWERON"
-	,"SIM_POWEROFF"
+	
  	,"FW_UPGRADE_DONE"	//= 28
 	,"SIM_COMM "
 	,"SIM_CARD_READY "
@@ -99,21 +103,6 @@ void Fsm_SetActiveFlag(ActiveFlag af, Bool isActive)
 }
 
 //Bool Fsm_CanGoSleep(){ return g_ActiveFlag == 0;}
-
-////Bool IsFirstOnDay()
-////{
-////	Bool bRet = False;
-//////	static S_RTC_TIME_DATA_T g_PowerDownDt;
-//////	S_RTC_TIME_DATA_T dt = {0};
-//////	
-//////	RTC_GetDateAndTime(&dt);
-//////	
-//////	bRet = (dt.u32Day != g_PowerDownDt.u32Day);
-//////	memcpy(&g_PowerDownDt, &dt, sizeof(S_RTC_TIME_DATA_T));
-////	return bRet;
-////}
-
-
 ////uint8 Fsm_Get(void)
 ////{
 ////	return g_FsmState;
@@ -125,8 +114,6 @@ void PostMsg(uint8 msgId)
 	
 	msg.m_MsgID  = msgId;
 	msg.m_Param1 = 0;
-	
-//	QUEUE_add(&g_Queue_fsm, &msg, sizeof(Message));
 	Queue_write(&g_Queue_fsm, &msg, sizeof(Message));
 }
 
@@ -201,7 +188,7 @@ void Fsm_SetState(FSM_STATE state)
 			Fsm_TimerStart(TIME_UPDATE_GPS_TO_SERVER, FSM_TIMERID_POWERDOWN);
 		}
 		//设置GPS连接超时时间5分钟，在KeyOff状态，5分钟后没有定位成功，则强制休眠	
-//		Fsm_StateKeyOff(MSG_GPS_DIS_CNT);
+//		Fsm_StateKeyOff(MSG_RUN);
 	}
 	else if(FSM_POWERDOWN == state)
 	{	
@@ -238,7 +225,7 @@ void Fsm_SetState(FSM_STATE state)
 //ACC OFF时处理逻辑
 void Fsm_StateKeyOff(uint8 msgID)
 {
-	if(MSG_TIMEOUT == msgID || MSG_SIM_FAILED == msgID)
+	if(MSG_TIMEOUT == msgID)// || MSG_SIM_FAILED == msgID)
 	{
 		//检查是否可以进入睡眠
 		if(g_ActiveFlag)
@@ -267,77 +254,77 @@ void Fsm_StateKeyOff(uint8 msgID)
 			Fsm_SetState(FSM_POWERDOWN);
 		}
 	}
-	else if(MSG_BLE_CNT == msgID)
-	{
-		SwTimer_Stop(&g_FsmTimer);
-	}
-	else if(MSG_BLE_DIS_CNT == msgID)
-	{
-		Fsm_TimerStart(TIME_UPDATE_GPS_TO_SERVER, FSM_TIMERID_POWERDOWN);
+//	else if(MSG_BLE_CNT == msgID)
+//	{
+//		SwTimer_Stop(&g_FsmTimer);
+//	}
+//	else if(MSG_BLE_DIS_CNT == msgID)
+//	{
+//		Fsm_TimerStart(TIME_UPDATE_GPS_TO_SERVER, FSM_TIMERID_POWERDOWN);
 
-//		Gprs_SetHearbeatInterval(TIME_HEARBEAT_SHORT);
-	}
-	else if(MSG_FORCE_POWERDOWN == msgID)//强制休眠
-	{
-		Fsm_TimerStart(1000, FSM_TIMERID_POWERDOWN);
+////		Gprs_SetHearbeatInterval(TIME_HEARBEAT_SHORT);
+//	}
+//	else if(MSG_FORCE_POWERDOWN == msgID)//强制休眠
+//	{
+//		Fsm_TimerStart(1000, FSM_TIMERID_POWERDOWN);
 
-//		Gprs_SetHearbeatInterval(TIME_HEARBEAT_SHORT);
-	}
-	else if(MSG_GPS_DIS_CNT == msgID)//5分钟定位不成功，休眠
+////		Gprs_SetHearbeatInterval(TIME_HEARBEAT_SHORT);
+//	}
+	else if(MSG_RUN == msgID)//5分钟定位不成功，休眠
 	{
 		Fsm_TimerStart(TIME_UPDATE_GPS_TO_SERVER, FSM_TIMERID_POWERDOWN);
 //		Fsm_TimerStart(10000, FSM_TIMERID_POWERDOWN);
 	}
-	else if(MSG_GPS_UPDATE == msgID)
-	{
-		g_isGpsUpdated++;
-		if(g_isGpsUpdated < g_MaxGpsCount)
-		{
-			SwTimer_ReStart(&g_FsmTimer);
-		}
-		else
-		{
-//			Gprs_SetHearbeatInterval(TIME_HEARBEAT_SHORT);
-		}
-		SwTimer_Stop(&g_FsmTimer);
-	}
-	else if(MSG_GPRS_UPDATE == msgID)
-	{
-		//PFL(DL_GPS, "MSG_GPRS_UPDATE: %d,%d,%d\n", g_isGpsUpdated, g_MaxGpsCount, g_pBle->isConnected);
-		//Gprs_SetHearbeatInterval(g_isGpsUpdated ? TIME_HEARBEAT_LONG : TIME_HEARBEAT_LONG_LONG);
-//		Gprs_SetHearbeatInterval(TIME_HEARBEAT_LONG_LONG);
-//		if(g_isGpsUpdated >= g_MaxGpsCount && !g_pBle->isConnected)// && 0)
+//	else if(MSG_GPS_UPDATE == msgID)
+//	{
+//		g_isGpsUpdated++;
+//		if(g_isGpsUpdated < g_MaxGpsCount)
 //		{
-//			#ifdef CFG_SIM_SLEEP
-//			Sim_Sleep();
-//			#else
-//			//不能立刻切换到关机状态，必须延时2S等待GPRS模组传输数据结束
-//			Fsm_TimerStart(TIME_WAITFOR_END, FSM_TIMERID_POWERDOWN);
-//			#endif
+//			SwTimer_ReStart(&g_FsmTimer);
 //		}
-		
-	}
+//		else
+//		{
+////			Gprs_SetHearbeatInterval(TIME_HEARBEAT_SHORT);
+//		}
+//		SwTimer_Stop(&g_FsmTimer);
+//	}
+//	else if(MSG_GPRS_UPDATE == msgID)
+//	{
+//		//PFL(DL_GPS, "MSG_GPRS_UPDATE: %d,%d,%d\n", g_isGpsUpdated, g_MaxGpsCount, g_pBle->isConnected);
+//		//Gprs_SetHearbeatInterval(g_isGpsUpdated ? TIME_HEARBEAT_LONG : TIME_HEARBEAT_LONG_LONG);
+////		Gprs_SetHearbeatInterval(TIME_HEARBEAT_LONG_LONG);
+////		if(g_isGpsUpdated >= g_MaxGpsCount && !g_pBle->isConnected)// && 0)
+////		{
+////			#ifdef CFG_SIM_SLEEP
+////			Sim_Sleep();
+////			#else
+////			//不能立刻切换到关机状态，必须延时2S等待GPRS模组传输数据结束
+////			Fsm_TimerStart(TIME_WAITFOR_END, FSM_TIMERID_POWERDOWN);
+////			#endif
+////		}
+//		
+//	}
 	else if(MSG_KEY_ON == msgID)
 	{
 		Fsm_SetState(FSM_KEY_ON);
 	}
-	else if(MSG_BATTERY_PLUG_IN == msgID && MSG_12V_ON == msgID )
+	else if(MSG_BATTERY_PLUG_IN == msgID)// && MSG_12V_ON == msgID )
 	{
 		if(Pms_IsAccOn())
 		{
 			Fsm_SetState(FSM_KEY_ON);
 		}
 	}
-	else if(MSG_GYRO_ASSERT == msgID)
-	{
-#ifdef CFG_NVC	
-		if(IsAlarmMode()) 
-		{
-			NVC_PLAY(NVC_WARNING);
-		}
-#endif	
-		Fsm_TimerStart(TIME_UPDATE_GPS_TO_SERVER, FSM_TIMERID_POWERDOWN);
-	}
+//	else if(MSG_GYRO_ASSERT == msgID)
+//	{
+//#ifdef CFG_NVC	
+//		if(IsAlarmMode()) 
+//		{
+//			NVC_PLAY(NVC_WARNING);
+//		}
+//#endif	
+//		Fsm_TimerStart(TIME_UPDATE_GPS_TO_SERVER, FSM_TIMERID_POWERDOWN);
+//	}
 	
 }
 
@@ -351,25 +338,25 @@ void Fsm_StateKeyOn(uint8 msgID)
 		Nvc_Reset();
 #endif		
 	}
-	else if(MSG_GPS_UPDATE == msgID)
-	{
-		g_isGpsUpdated++;
-		//Gprs_SetHearbeatInterval(TIME_HEARBEAT_SHORT);
-	}
-	else if(MSG_GPRS_UPDATE == msgID)
-	{
-		//Gprs_SetHearbeatInterval(g_isGpsUpdated ? TIME_HEARBEAT_LONG : TIME_HEARBEAT_LONG_LONG);
-//		Gprs_SetHearbeatInterval(TIME_HEARBEAT_LONG_LONG);
-	}
-	else if(MSG_GYRO_ASSERT == msgID)
-	{
-#ifdef CFG_NVC	
-		if(IsAlarmMode()) 
-		{
-			NVC_PLAY(NVC_WARNING);
-		}
-#endif		
-	}
+//	else if(MSG_GPS_UPDATE == msgID)
+//	{
+//		g_isGpsUpdated++;
+//		//Gprs_SetHearbeatInterval(TIME_HEARBEAT_SHORT);
+//	}
+//	else if(MSG_GPRS_UPDATE == msgID)
+//	{
+//		//Gprs_SetHearbeatInterval(g_isGpsUpdated ? TIME_HEARBEAT_LONG : TIME_HEARBEAT_LONG_LONG);
+////		Gprs_SetHearbeatInterval(TIME_HEARBEAT_LONG_LONG);
+//	}
+//	else if(MSG_GYRO_ASSERT == msgID)
+//	{
+//#ifdef CFG_NVC	
+//		if(IsAlarmMode()) 
+//		{
+//			NVC_PLAY(NVC_WARNING);
+//		}
+//#endif		
+//	}
 }
 
 void Fsm_StatePowerDown(uint8 msgID)
@@ -384,65 +371,66 @@ void Fsm_StatePowerDown(uint8 msgID)
 		BootWithReason(False);
 	}
 	*/
-	if(MSG_PMS_WAKEUP == msgID 
-		|| MSG_RTC_TIMEOUT == msgID
-		|| MSG_SIM_WAKEUP == msgID
-		|| MSG_LOCK_KEY == msgID
-		|| MSG_GPRS_UPDATE == msgID
-		|| MSG_ADC_ISR == msgID
-		|| MSG_BLE_WAKEUP == msgID
-#ifdef CFG_CABIN_LOCK	
-		|| MSG_CABIN_LOCK_CHANGED == msgID
-#endif	
-		)
-	{
-		Fsm_SetState(FSM_KEY_OFF);
-#ifdef CFG_SIM_SLEEP
-//		Sim_SendCmdInd(CMD_SIM_CSCLK);
-#endif
-		if(MSG_BLE_WAKEUP == msgID)
-		{
-//			Ble_DoConnected(Null);
-		}
-	}
-	else if(MSG_GYRO_IDLE == msgID || MSG_SIM_FAILED == msgID || MSG_TIMEOUT== msgID)
+//	if(MSG_PMS_WAKEUP == msgID 
+//		|| MSG_RTC_TIMEOUT == msgID
+//		|| MSG_SIM_WAKEUP == msgID
+//		|| MSG_LOCK_KEY == msgID
+//		|| MSG_GPRS_UPDATE == msgID
+//		|| MSG_ADC_ISR == msgID
+//		|| MSG_BLE_WAKEUP == msgID
+//#ifdef CFG_CABIN_LOCK	
+//		|| MSG_CABIN_LOCK_CHANGED == msgID
+//#endif	
+//		)
+//	{
+//		Fsm_SetState(FSM_KEY_OFF);
+//#ifdef CFG_SIM_SLEEP
+////		Sim_SendCmdInd(CMD_SIM_CSCLK);
+//#endif
+//		if(MSG_BLE_WAKEUP == msgID)
+//		{
+////			Ble_DoConnected(Null);
+//		}
+//	}
+//	else if(MSG_GYRO_IDLE == msgID || MSG_SIM_FAILED == msgID || MSG_TIMEOUT== msgID)
+	if(MSG_TIMEOUT== msgID)
 	{
 		g_GyroIsrCounter = 0;
 		//Sim_Reset();
 		Fsm_TimerStart(1000, 0);
 		Mcu_PowerDown();
 	}
-	else if(MSG_BLE_WAKEUP == msgID)
-	{
-		Fsm_TimerStart(1000, 0);
-	}
-	else if(MSG_GYRO_ASSERT == msgID)
-	{
-		#if 0
-		//在30秒内连续触发3次(每10秒/次)，认为是异动唤醒。
-		Fsm_TimerStart(10000, 0);
-		
-//		Sim_Reset();
-		if(++g_GyroIsrCounter >= 3)
-		{
-			Beep_Mode(BEEP_GRYO);
-			Fsm_StatePowerDown(MSG_LOCK_KEY);
-		}
-		#else
-#ifdef CFG_RENT
-		//没有语音提示.
-		Fsm_StateKeyOff(MSG_GYRO_ASSERT);
-		//Fsm_StatePowerDown(MSG_LOCK_KEY);
-#else
-	#ifdef CFG_NVC
-		NVC_PLAY(IsAlarmMode() ? NVC_INFO : NVC_WARNING);
-	#else
-//		Beep_Mode(BEEP_GRYO);
-	#endif
-		Fsm_StatePowerDown(MSG_LOCK_KEY);
-#endif
-		#endif
-	}
+//	else if(MSG_BLE_WAKEUP == msgID)
+//	{
+//		Fsm_TimerStart(1000, 0);
+//	}
+//	else if(MSG_GYRO_ASSERT == msgID)
+//	{
+//		#if 0
+//		//在30秒内连续触发3次(每10秒/次)，认为是异动唤醒。
+//		Fsm_TimerStart(10000, 0);
+//		
+////		Sim_Reset();
+//		if(++g_GyroIsrCounter >= 3)
+//		{
+//			Beep_Mode(BEEP_GRYO);
+//			Fsm_StatePowerDown(MSG_LOCK_KEY);
+//		}
+//		#else
+//#ifdef CFG_RENT
+//		//没有语音提示.
+//		Fsm_StateKeyOff(MSG_GYRO_ASSERT);
+//		//Fsm_StatePowerDown(MSG_LOCK_KEY);
+//#else
+//	#ifdef CFG_NVC
+//		NVC_PLAY(IsAlarmMode() ? NVC_INFO : NVC_WARNING);
+//	#else
+////		Beep_Mode(BEEP_GRYO);
+//	#endif
+//		Fsm_StatePowerDown(MSG_LOCK_KEY);
+//#endif
+//		#endif
+//	}
 }
 
 void Fsm_StateFwUpgrade(uint8 msgID)
@@ -520,15 +508,15 @@ void Fsm_MsgProc(void)
 //					}
 			}
 		}
-		else if(MSG_BATTERY_FAULT == g_pMsg->m_MsgID)
-		{
-			//Beep_Mode(BEEP_BAT_FAULT);
-		}
-		else if(MSG_FW_UPGRADE == g_pMsg->m_MsgID)
-		{
-			Fsm_SetState(FSM_FW_UPGRADE);
-			continue;
-		}
+//		else if(MSG_BATTERY_FAULT == g_pMsg->m_MsgID)
+//		{
+//			//Beep_Mode(BEEP_BAT_FAULT);
+//		}
+//		else if(MSG_FW_UPGRADE == g_pMsg->m_MsgID)
+//		{
+//			Fsm_SetState(FSM_FW_UPGRADE);
+//			continue;
+//		}
 		for(i = 0; i < GET_ELEMENT_COUNT(map); i++)
 		{
 			if(g_FsmState == map[i].state)

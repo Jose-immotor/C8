@@ -21,7 +21,7 @@
 ////#include "Lock.h"
 //#include "Beep.h"
 #include "nvc.h"
-//#include<string.h>
+#include "main.h"
 #include "log.h"
 //#include "record.h"
 
@@ -351,6 +351,7 @@ int env_nvds_init(void)
 	Nvds_HwInit();
 	LocalTimeInit();
 	Nvds_Start();
+	LOG2(ET_SYS_WAKEUP, g_Settings.devcfg, g_WakeupType);
 	return RT_EOK;
 }
 INIT_ENV_EXPORT(env_nvds_init);
