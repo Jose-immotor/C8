@@ -1,4 +1,5 @@
 
+#if 0
 
 #define NFC_CMD_PROCESS_C
 #include <string.h>
@@ -10,7 +11,6 @@
 #include "nfc_cmd_process.h"
 #include "battery.h"
 ////#include "rs485_protocol.h"
-
 ////extern unsigned char vl_BMS_index; //´Ó0¿ªÊ¼
 
 const st_nfc_cmd_table gl_nfc_cmd_table[] = {
@@ -1106,3 +1106,4 @@ unsigned char MM_history_record_err_cb(unsigned char *pl_rcv_buff,
 //}
 
 //#endif
+#endif

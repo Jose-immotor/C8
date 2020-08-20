@@ -14,6 +14,8 @@ extern "C"{
 #include "Obj.h"
 #include "Utp.h"
 #include "debug.h"
+#include "Bit.h"
+#include "SwTimer.h"
 
 #ifdef __cplusplus
 }
