@@ -1,3 +1,5 @@
+#if 0
+
 /*
  * File      : ntag_app.c
  * This file is part of RT-Thread RTOS
@@ -284,7 +286,7 @@ unsigned char NTAG_task_x(void)
 {
     unsigned char result;
     unsigned int vl_tmp_cnt;
-#if 0
+#if 1
     if(gl_NTAG_task_state[gl_NTAGTX_param.vl_BMS_index] == ENUM_NTAG_STATE_INIT)
     {
         //清除电池在线标志
@@ -369,114 +371,114 @@ unsigned char NTAG_task_x(void)
             NTAG_task_reset();
             return OK;
         }       
-   //     for(;;)
-   //     {
-   //         if(!gl_modbus_param.MM_NFC_snd_len[gl_NTAGTX_param.vl_BMS_index])
-   //         {
-   //             //进入低功耗
-   //             FM175XX_SoftPowerdown();
-			//    //重新初始化读卡器任务
-   //             NTAG_task_reset();
-   //             return OK;
-   //         }
-   //         gl_ntag_nfc_sending_receiving_flag = 1;
-   //         gl_modbus_param.MM_NFC_rcv_len[gl_NTAGTX_param.vl_BMS_index] = 0;
-   //         Pcd_SetTimer(300);
-   //         result = Pcd_Comm(Transceive,
-   //                           gl_modbus_param.MM_NFC_snd_buff[gl_NTAGTX_param.vl_BMS_index],
-   //                           gl_modbus_param.MM_NFC_snd_len[gl_NTAGTX_param.vl_BMS_index],
-   //                           gl_modbus_param.MM_NFC_rcv_buff[gl_NTAGTX_param.vl_BMS_index],
-   //                           &vl_tmp_cnt);
-   //         gl_ntag_nfc_sending_receiving_flag = 0;
-   //         #ifdef PMS_IIC_ERROR_COUNT_ENABLE
-   //         //顺便在这里统计读电池次数
-   //         gl_NTAG_read_cnt++;
-   //         #endif
-			//gl_modbus_param.MM_NFC_rcv_len[gl_NTAGTX_param.vl_BMS_index] = (vl_tmp_cnt+7)/8;
-   //         if(result == OK)
-   //         {                
-			//	if((gl_modbus_param.MM_NFC_rcv_len[gl_NTAGTX_param.vl_BMS_index] >= 5)&&
-   //                (MM_check_packet_head(gl_modbus_param.MM_NFC_rcv_buff[gl_NTAGTX_param.vl_BMS_index], 
-   //                                      gl_modbus_param.slave_addr[gl_NTAGTX_param.vl_BMS_index], 
-   //                                      gl_modbus_param.MM_fn_code[gl_NTAGTX_param.vl_BMS_index]))&&
-   //                (NTAG_rcv_CRC_check((unsigned char *)(gl_modbus_param.MM_NFC_rcv_buff[gl_NTAGTX_param.vl_BMS_index]), 
-   //                                         gl_modbus_param.MM_NFC_rcv_len[gl_NTAGTX_param.vl_BMS_index])))
-   //             {
-   //                 #ifdef PMS_IIC_ERROR_COUNT_ENABLE
-   //                 //顺便在这里统计读电池成功的次数
-   //                 gl_NTAG_read_sucess_cnt++;
-   //                 #endif
-			//		//数据包正确，跳转处理状态
-			//		if(MM_rsp_cmd_process(gl_modbus_param.MM_NFC_rcv_buff[gl_NTAGTX_param.vl_BMS_index],
-			//					gl_modbus_param.MM_NFC_rcv_len[gl_NTAGTX_param.vl_BMS_index],
-			//					gl_modbus_param.MM_NFC_snd_buff[gl_NTAGTX_param.vl_BMS_index],
-			//					gl_modbus_param.MM_NFC_snd_len[gl_NTAGTX_param.vl_BMS_index]))
-			//		{
-			//			NTAG_task_timer_reload();
-			//			//正确，进行处理
-			//			//清空接收缓存
-			//			gl_modbus_param.MM_NFC_snd_len[gl_NTAGTX_param.vl_BMS_index] = 0;
-			//			//标记发送命令结束
-			//			gl_bms_info_p[gl_NTAGTX_param.vl_BMS_index]->waiting_cmd_ack = 0;
-			//			//清空缓存数据
-			//			gl_modbus_param.MM_NFC_rcv_len[gl_NTAGTX_param.vl_BMS_index] = 0;
-			//			gl_modbus_param.MM_NFC_snd_len[gl_NTAGTX_param.vl_BMS_index] = 0;
-			//		}
-			//		else
-			//		{
-			//			//错误，进行处理
-			//			MM_err_process(gl_modbus_param.MM_NFC_rcv_buff[gl_NTAGTX_param.vl_BMS_index],
-			//							gl_modbus_param.MM_NFC_rcv_len[gl_NTAGTX_param.vl_BMS_index],
-			//							gl_modbus_param.MM_NFC_snd_buff[gl_NTAGTX_param.vl_BMS_index],
-			//							gl_modbus_param.MM_NFC_snd_len[gl_NTAGTX_param.vl_BMS_index]);
-			//			//进行定时器超时流程
-			//			//清空接收缓存
-			//			gl_modbus_param.MM_NFC_snd_len[gl_NTAGTX_param.vl_BMS_index] = 0;
-			//			//标记发送命令结束
-			//			gl_bms_info_p[gl_NTAGTX_param.vl_BMS_index]->waiting_cmd_ack = 0;
-			//			//清空缓存数据
-			//			gl_modbus_param.MM_NFC_rcv_len[gl_NTAGTX_param.vl_BMS_index] = 0;
-			//			gl_modbus_param.MM_NFC_snd_len[gl_NTAGTX_param.vl_BMS_index] = 0;
-			//		}
-   //             }
-   //             else
-   //             {
-   //                 result = ERROR;
-   //             }		
-   //         }
+        for(;;)
+        {
+            if(!gl_modbus_param.MM_NFC_snd_len[gl_NTAGTX_param.vl_BMS_index])
+            {
+                //进入低功耗
+                FM175XX_SoftPowerdown();
+			    //重新初始化读卡器任务
+                NTAG_task_reset();
+                return OK;
+            }
+            gl_ntag_nfc_sending_receiving_flag = 1;
+            gl_modbus_param.MM_NFC_rcv_len[gl_NTAGTX_param.vl_BMS_index] = 0;
+            Pcd_SetTimer(300);
+            result = Pcd_Comm(Transceive,
+                              gl_modbus_param.MM_NFC_snd_buff[gl_NTAGTX_param.vl_BMS_index],
+                              gl_modbus_param.MM_NFC_snd_len[gl_NTAGTX_param.vl_BMS_index],
+                              gl_modbus_param.MM_NFC_rcv_buff[gl_NTAGTX_param.vl_BMS_index],
+                              &vl_tmp_cnt);
+            gl_ntag_nfc_sending_receiving_flag = 0;
+            #ifdef PMS_IIC_ERROR_COUNT_ENABLE
+            //顺便在这里统计读电池次数
+            gl_NTAG_read_cnt++;
+            #endif
+			gl_modbus_param.MM_NFC_rcv_len[gl_NTAGTX_param.vl_BMS_index] = (vl_tmp_cnt+7)/8;
+            if(result == OK)
+            {                
+				if((gl_modbus_param.MM_NFC_rcv_len[gl_NTAGTX_param.vl_BMS_index] >= 5)&&
+                   (MM_check_packet_head(gl_modbus_param.MM_NFC_rcv_buff[gl_NTAGTX_param.vl_BMS_index], 
+                                         gl_modbus_param.slave_addr[gl_NTAGTX_param.vl_BMS_index], 
+                                         gl_modbus_param.MM_fn_code[gl_NTAGTX_param.vl_BMS_index]))&&
+                   (NTAG_rcv_CRC_check((unsigned char *)(gl_modbus_param.MM_NFC_rcv_buff[gl_NTAGTX_param.vl_BMS_index]), 
+                                            gl_modbus_param.MM_NFC_rcv_len[gl_NTAGTX_param.vl_BMS_index])))
+                {
+                    #ifdef PMS_IIC_ERROR_COUNT_ENABLE
+                    //顺便在这里统计读电池成功的次数
+                    gl_NTAG_read_sucess_cnt++;
+                    #endif
+					//数据包正确，跳转处理状态
+					if(MM_rsp_cmd_process(gl_modbus_param.MM_NFC_rcv_buff[gl_NTAGTX_param.vl_BMS_index],
+								gl_modbus_param.MM_NFC_rcv_len[gl_NTAGTX_param.vl_BMS_index],
+								gl_modbus_param.MM_NFC_snd_buff[gl_NTAGTX_param.vl_BMS_index],
+								gl_modbus_param.MM_NFC_snd_len[gl_NTAGTX_param.vl_BMS_index]))
+					{
+						NTAG_task_timer_reload();
+						//正确，进行处理
+						//清空接收缓存
+						gl_modbus_param.MM_NFC_snd_len[gl_NTAGTX_param.vl_BMS_index] = 0;
+						//标记发送命令结束
+						gl_bms_info_p[gl_NTAGTX_param.vl_BMS_index]->waiting_cmd_ack = 0;
+						//清空缓存数据
+						gl_modbus_param.MM_NFC_rcv_len[gl_NTAGTX_param.vl_BMS_index] = 0;
+						gl_modbus_param.MM_NFC_snd_len[gl_NTAGTX_param.vl_BMS_index] = 0;
+					}
+					else
+					{
+						//错误，进行处理
+						MM_err_process(gl_modbus_param.MM_NFC_rcv_buff[gl_NTAGTX_param.vl_BMS_index],
+										gl_modbus_param.MM_NFC_rcv_len[gl_NTAGTX_param.vl_BMS_index],
+										gl_modbus_param.MM_NFC_snd_buff[gl_NTAGTX_param.vl_BMS_index],
+										gl_modbus_param.MM_NFC_snd_len[gl_NTAGTX_param.vl_BMS_index]);
+						//进行定时器超时流程
+						//清空接收缓存
+						gl_modbus_param.MM_NFC_snd_len[gl_NTAGTX_param.vl_BMS_index] = 0;
+						//标记发送命令结束
+						gl_bms_info_p[gl_NTAGTX_param.vl_BMS_index]->waiting_cmd_ack = 0;
+						//清空缓存数据
+						gl_modbus_param.MM_NFC_rcv_len[gl_NTAGTX_param.vl_BMS_index] = 0;
+						gl_modbus_param.MM_NFC_snd_len[gl_NTAGTX_param.vl_BMS_index] = 0;
+					}
+                }
+                else
+                {
+                    result = ERROR;
+                }		
+            }
 
-   //         if (result==OK)
-   //         {             
-   //             MM_NFC_snd_done_cb();
-			//	//填充要发送的数据
-			//	if(0 == Battery_send_cmd(gl_NTAGTX_param.vl_BMS_index))
-			//	{
-   //                 //所有要发送的数据已发送完毕
-   //                 gl_bms_info_p[gl_NTAGTX_param.vl_BMS_index]->online = 1;//设置电池nfc在线
-			//		//没有数据，退出
-			//		NTAG_task_reset();
-			//		break;
-			//	}
-   //         }
-   //         else
-   //         {
-   //             #ifdef PMS_IIC_ERROR_COUNT_ENABLE
-   //             //顺便在这里统计读电池失败次数
-   //             gl_NTAG_read_faild_cnt++;
-   //             #endif
-   //             gl_modbus_param.MM_NFC_rcv_len[gl_NTAGTX_param.vl_BMS_index] = 0;
-   //             if(0 == MM_NFC_snd_ERR())
-   //             {
-   //                 //继续重发
-   //                 continue;
-   //             }
-   //             //进入低功耗
-   //             FM175XX_SoftPowerdown();
-   //             //重新初始化读卡器任务
-   //             NTAG_task_reset();
-   //             return ERROR;
-   //         }
-   //     }
+            if (result==OK)
+            {             
+                MM_NFC_snd_done_cb();
+				//填充要发送的数据
+				if(0 == Battery_send_cmd(gl_NTAGTX_param.vl_BMS_index))
+				{
+                    //所有要发送的数据已发送完毕
+                    gl_bms_info_p[gl_NTAGTX_param.vl_BMS_index]->online = 1;//设置电池nfc在线
+					//没有数据，退出
+					NTAG_task_reset();
+					break;
+				}
+            }
+            else
+            {
+                #ifdef PMS_IIC_ERROR_COUNT_ENABLE
+                //顺便在这里统计读电池失败次数
+                gl_NTAG_read_faild_cnt++;
+                #endif
+                gl_modbus_param.MM_NFC_rcv_len[gl_NTAGTX_param.vl_BMS_index] = 0;
+                if(0 == MM_NFC_snd_ERR())
+                {
+                    //继续重发
+                    continue;
+                }
+                //进入低功耗
+                FM175XX_SoftPowerdown();
+                //重新初始化读卡器任务
+                NTAG_task_reset();
+                return ERROR;
+            }
+        }
     }
 #endif
     return OK;
@@ -535,3 +537,4 @@ void NTAG_task_process(void)
 //    return gl_ntag_nfc_sending_receiving_flag;
 //}
 
+#endif

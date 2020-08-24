@@ -24,6 +24,7 @@ uint16_t Mod_CalcCrc(unsigned short crc, const uint8_t* pData, int len)
 
 static uint16_t Mod_SendFrame(Mod * pMod, const void* pData, uint16_t len)
 {
+	pMod->busErr = BUS_ERR_OK;
 	pMod->cfg->TxFn(pData, len);
 	return len;
 }
@@ -499,23 +500,32 @@ Bool Mod_SwitchCfg(Mod * pMod, const ModCfg * cfg)
 	return True;
 }
 
+void Mod_busErr(Mod* pMod, BUS_ERR err)
+{
+	pMod->busErr = err;
+}
+
 /************************************
 函数功能：从总线或者中断中接收数据，保存到接收缓冲区rxBufQueue队列中
 参数说明：
 	pMod：Mod对象。
 	pData：从总线或者中断中接收到的数据。
-	len：数据长度。
+	len：数据长度,如果为0，表示接收失败。
 返回值无
 ***************************************/
 void Mod_RxData(Mod * pMod, const uint8_t * pData, int len)
 {
-	//检查接收数据的间隔是否超时，如果是则必须丢弃之前接收到的数据。
-	pMod->rxDataTicks = GET_TICKS();
-
-	if (pMod->rxBufLen + len <= pMod->frameCfg->rxBufLen)
+	pMod->busErr = BUS_ERR_OK;
+	if (len)
 	{
-		memcpy(&pMod->frameCfg->rxBuf[pMod->rxBufLen], pData, len);
-		pMod->rxBufLen += len;
+		//检查接收数据的间隔是否超时，如果是则必须丢弃之前接收到的数据。
+		pMod->rxDataTicks = GET_TICKS();
+
+		if (pMod->rxBufLen + len <= pMod->frameCfg->rxBufLen)
+		{
+			memcpy(&pMod->frameCfg->rxBuf[pMod->rxBufLen], pData, len);
+			pMod->rxBufLen += len;
+		}
 	}
 }
 
@@ -542,11 +552,18 @@ void Mod_Run(Mod * pMod)
 
 	if (MOD_FSM_WAIT_RSP == pMod->state)	//判断等待响应是否超时
 	{
-		if (SwTimer_isTimerOut(&pMod->waitRspTimer))
+		if (SwTimer_isTimerOut(&pMod->waitRspTimer) || pMod->busErr)
 		{
 			if (pMod->reTxCount >= pMod->maxTxCount && pMod->maxTxCount != MOD_ENDLESS)
 			{
-				Mod_RspProc(pMod, Null, 0, MOD_RSP_TIMEOUT);
+				if (pMod->busErr)
+				{
+					Mod_RspProc(pMod, Null, 0, MOD_TRANS_FAILED);
+				}
+				else
+				{
+					Mod_RspProc(pMod, Null, 0, MOD_RSP_TIMEOUT);
+				}
 			}
 			else
 			{

@@ -29,9 +29,8 @@ void usart0_isr(void)
 	if(usart_interrupt_flag_get(USART0, USART_INT_FLAG_RBNE) != RESET)
     {
 		uint8_t data = usart_data_receive(USART0);
-		if(app_fifo_length(&__g_usart0.rx_fifo)<= __g_usart0.rx_fifo.buf_size_mask)
+		if(Queue_writeByte(&__g_usart0.rx_fifo, data))
 		{
-			app_fifo_put(&__g_usart0.rx_fifo,data);
 		}
 		else
 		{
@@ -77,11 +76,12 @@ uint32_t usart0_get_byte(uint8_t *data)
 
 char rt_hw_console_getchar(void)
 {
-	uint8_t data;
+	uint8_t* data;
 	
-	if(app_fifo_get(&__g_usart0.rx_fifo,&data) == APP_SUCCESS)
+	data = (uint8_t*)Queue_pop(&__g_usart0.rx_fifo);
+	if (data)
 	{
-		return data;
+		return *data;
 	}
 	else
 	{
@@ -136,7 +136,8 @@ void _puts (const char *s)
     }
 }
 
-static bool usart0_tx_busy(void)
+/*
+static Bool usart0_tx_busy(void)
 {    
 //    if((app_fifo_length(&__g_usart0.tx_fifo)==0) && usart_flag_get(USART0, USART_FLAG_TC))
 //    {
@@ -148,7 +149,7 @@ static bool usart0_tx_busy(void)
 //    }
 	return true;
 }
-
+*/
 /*!
  * \brief usart0作为调试串口，只使用接收中断.使用发送中断会出现Hard Fault
  *		  
@@ -188,8 +189,9 @@ int gd32_hw_usart_init(void)
 	usart = &__g_usart0;
 		
 	memset(usart, 0, sizeof(usart_t));
-    app_fifo_init(&usart->rx_fifo, usart->rx_buf, RX_BUFF_SIZE);
-//    app_fifo_init(&usart->tx_fifo, usart->tx_buf, TX_BUFF_SIZE);	
+
+    Queue_init(&usart->rx_fifo, usart->rx_buf, 1, RX_BUFF_SIZE);
+    //app_fifo_init(&usart->tx_fifo, usart->tx_buf, TX_BUFF_SIZE);	
 	usart->get_byte = usart0_get_byte;
 	usart->put_byte = usart0_put_byte;
 //	usart->tx_enable = usart3_tx_enable;

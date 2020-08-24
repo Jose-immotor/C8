@@ -1,3 +1,5 @@
+
+#if 0
 /**@file
  *
  * @defgroup app_fifo FIFO implementation
@@ -227,3 +229,5 @@ GLOBAL_NCP void MM_nfc_cmd_init(void);
 //GLOBAL_NCP unsigned char Authority_get_onoff_about_pms_bat(void);
 #endif // 
 /** @} */
+
+#endif

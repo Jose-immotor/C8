@@ -38,6 +38,14 @@ extern "C" {
 		MOD_ERR_ILLEG_ADDR = 0X02,	//非法地址
 	}MOD_ERR;
 
+	//总线错误定义
+	typedef enum
+	{
+		BUS_ERR_OK  = 0X01,	//非法功能
+		BUS_ERR_TX_FAILED,
+		BUS_ERR_RX_FAILED,
+	}BUS_ERR;
+
 	typedef enum
 	{
 		MOD_READ_COIL_STATUS = 0X01,	//读线圈状态,，
@@ -91,6 +99,7 @@ extern "C" {
 	{
 		MOD_RSP_SUCCESS = 0		//接收响应成功
 		, MOD_RSP_TIMEOUT		//接收响应超时，对方没响应
+		, MOD_TRANS_FAILED		//传输失败，传输总线错误，错误码在busErr中记录
 		, MOD_RSP_CANCEL		//取消发送
 	}MOD_RSP_RC;
 
@@ -247,6 +256,7 @@ extern "C" {
 
 		//记录接收数据帧的当前Ticks，用于计算接收一个数据帧内2个数据之间是否超时
 		uint32_t rxDataTicks;
+		BUS_ERR  busErr;	//总线错误
 
 		/*****************************************************************/
 		uint8_t reTxCount;	//重发次数
@@ -313,6 +323,9 @@ extern "C" {
 	Bool Mod_isIdle(Mod* pMod);
 	Bool Mod_SwitchCfg(Mod* pMod, const ModCfg* cfg);
 	const ModCmd* Mod_FindCmdItem(const ModCmd* pCmd, int count, uint8_t cmd);
+
+	//总线错误
+	void Mod_busErr(Mod* pMod, BUS_ERR err);
 
 #ifdef __cplusplus
 }

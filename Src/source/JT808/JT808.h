@@ -61,8 +61,13 @@ extern "C"{
 
 		JT_devState devState;
 
+		//是否定位成功
+		Bool isLocation;
+
 		uint16_t bleEnCtrl;
 	}JT808;
+
+	extern JT808* g_pJt;
 
 #ifdef __cplusplus
 }

@@ -3,6 +3,7 @@
 #include "Pms.h"
 #include "Battery.h"
 #include "Modbus.h"
+#include "JT808.h"
 
 static Battery g_Bat[2];
 static Pms g_pms;
@@ -79,6 +80,9 @@ const static ModFrameCfg g_frameCfg =
 };
 
 /********************************************************************/
+
+static Pms_FsmFn Pms_findStatusProcFun(NfcCardReaderStatus status);
+
 void Pms_setPreDischg(Bool en)	{ g_regCtrl.preDischg   = en; Bat_setPreDischg(g_pActiveBat, en); }
 void Pms_setDischg(Bool en)		{ g_regCtrl.dischgEn    = en; Bat_setDischg(g_pActiveBat, en); }
 void Pms_setChg(Bool en)		{ g_regCtrl.chgEn       = en; Bat_setChg(g_pActiveBat, en); }
@@ -88,6 +92,7 @@ void Pms_setDeepSleep(Bool en)	{ g_regCtrl.deepSleepEn = en; Bat_setDeepSleep(g_
 static int Pms_Tx(const uint8_t* pData, int len)
 {
 	//调用NFC发送数据命令
+	NfcCardReader_Send(&g_pms.cardReader, g_pActiveBat->port, pData, len);
 	return len;
 }
 
@@ -95,26 +100,28 @@ static int Pms_Tx(const uint8_t* pData, int len)
 void Pms_Rx(int nfcPort, const uint8_t* pData, int len)
 {
 	//从NFC驱动接收数据
+	if (g_pActiveBat->port != nfcPort) return;
+
 	Mod_RxData(g_pModBus, pData, len);
 }
 
-void Pms_postMsg(uint8_t msgId, uint32_t param1, uint32_t param2)
+void Pms_postMsg(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
 
 }
 
-void Pms_plugIn(int port)
+void Pms_plugIn(uint8_t port)
 {
 	Bat_msg(&g_Bat[port], BmsMsg_batPlugIn, 0, 0);
 }
 
-void Pms_plugOut(int port)
+void Pms_plugOut(uint8_t port)
 {
-	Battery* pBat = (port == 0) ? &g_Bat[1] : &g_Bat[0];
+	//Battery* pBat = (port == 0) ? &g_Bat[1] : &g_Bat[0];
 
 	Bat_msg(&g_Bat[port], BmsMsg_batPlugout, 0, 0);
 
-	if(g_Bat[0].presentStatus == BAT_NOT_IN && g_Bat[1].presentStatus == BAT_NOT_IN)
+	if(g_Bat[0].presentStatus != BAT_NOT_IN && g_Bat[1].presentStatus != BAT_NOT_IN)
 	{
 		*((uint16*)& g_regCtrl) = 0;
 	}
@@ -138,81 +145,95 @@ void Pms_SwitchPort()
 	}
 }
 
-static void Pms_switchStattus(PmsOpStatus newStatus)
+static void Pms_switchStatus(PmsOpStatus newStatus)
 {
 	if (newStatus == g_pms.opStatus) return;
 
+	g_pms.statusSwitchTicks = GET_TICKS();
+
 	if (newStatus == PMS_ACC_OFF)
 	{
-
+		Pms_setDischg(True);
 	}
 	else if (newStatus == PMS_ACC_ON)
 	{
-
+		Pms_setDischg(True);
 	}
 	else if (newStatus == PMS_SLEEP)
 	{
-
+		Pms_setDischg(True);
 	}
 	else if (newStatus == PMS_DEEP_SLEEP)
 	{
-
+		Pms_setDischg(False);
 	}
+
+	g_pms.opStatus = newStatus;
+	g_pms.Fsm = Pms_findStatusProcFun(newStatus);
 }
 
-static void Pms_fsm_accOff(uint8_t msgId, uint32_t param1, uint32_t param2)
+static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
-	if (msgId == PmsMsg_accOff)
+	if (msgId == PmsMsg_run)
 	{
-		Pms_switchStattus(PMS_ACC_OFF);
+		if (g_pJt->isLocation)
+		{
+			Pms_switchStatus(PMS_SLEEP);
+		}
+	}
+	else if (msgId == PmsMsg_accOn)
+	{
+		Pms_switchStatus(PMS_ACC_ON);
 	}
 	else if (msgId == PmsMsg_batPlugIn)
 	{
-
+		Pms_plugIn((uint8_t)param1);
 	}
-	else if (msgId == PmsMsg_batPlugout)
+	else if (msgId == PmsMsg_batPlugOut)
 	{
-
+		Pms_plugOut((uint8_t)param1);
 	}
 }
 
-static void Pms_fsm_accOn(uint8_t msgId, uint32_t param1, uint32_t param2)
+static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
 	if (msgId == PmsMsg_accOff)
 	{
-		Pms_switchStattus(PMS_ACC_OFF);
+		Pms_switchStatus(PMS_ACC_OFF);
 	}
 	else if (msgId == PmsMsg_batPlugIn)
 	{
-
+		Pms_plugIn((uint8_t)param1);
 	}
-	else if (msgId == PmsMsg_batPlugout)
+	else if (msgId == PmsMsg_batPlugOut)
 	{
-
+		Pms_plugOut((uint8_t)param1);
 	}
 }
 
-static void Pms_fsm_sleep(uint8_t msgId, uint32_t param1, uint32_t param2)
+static void Pms_fsm_sleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
 
 }
 
-static void Pms_fsm_deepSleep(uint8_t msgId, uint32_t param1, uint32_t param2)
+static void Pms_fsm_deepSleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
 
 }
 
-static void Pms_fsm_anyStatusDo(uint8_t msgId, uint32_t param1, uint32_t param2)
+//在任何状态下都要处理的消息函数
+static void Pms_fsm_anyStatusDo(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
 
 }
 
-static void Pms_fsm(uint8_t msgId, uint32_t param1, uint32_t param2)
+//查找状态响应的处理函数
+static Pms_FsmFn Pms_findStatusProcFun(NfcCardReaderStatus status)
 {
 	struct
 	{
-		BmsOpStatus opStatus;
-		void (*OpFun)(uint8_t msgId, uint32_t param1, uint32_t param2);
+		PmsOpStatus opStatus;
+		void (*OpFun)(PmsMsg msgId, uint32_t param1, uint32_t param2);
 	}
 	const static g_fsms[] =
 	{
@@ -222,16 +243,42 @@ static void Pms_fsm(uint8_t msgId, uint32_t param1, uint32_t param2)
 		{PMS_DEEP_SLEEP, Pms_fsm_deepSleep},
 	};
 
-	Pms_fsm_anyStatusDo(msgId, param1, param2);
-
 	for (int i = 0; i < GET_ELEMENT_COUNT(g_fsms); i++)
 	{
-		if (g_fsms[i].opStatus == g_pms.opStatus)
-		{
-			g_fsms[i].OpFun(msgId, param1, param2);
-			break;
-		}
+		if (g_fsms[i].opStatus == g_pms.opStatus) return  g_fsms[i].OpFun;
 	}
+
+	//程序不可能运行到这里
+	Assert(False);
+	return Null;
+}
+
+static void Pms_fsm(PmsMsg msgId, uint32_t param1, uint32_t param2)
+{
+	Pms_fsm_anyStatusDo(msgId, param1, param2);
+	g_pms.Fsm(msgId, param1, param2);
+}
+
+NfcCardReaderEventRc Pms_cardReaderEventCb(Pms* pms, NfcCardReaderEvent ev)
+{
+	if (ev == CARD_EVENT_SEARCH_SUCCESS)
+	{
+		Pms_postMsg(PmsMsg_batPlugIn, g_pms.cardReader.port, 0);
+	}
+	else if (ev == CARD_EVENT_SEARCH_FAILED)
+	{
+		Pms_postMsg(PmsMsg_batPlugOut, g_pms.cardReader.port, 0);
+	}
+	else if (ev == CARD_EVENT_RX_DATA_SUCCESS)
+	{
+		Pms_Rx(g_pms.cardReader.port, g_pms.cardReader.rxBuf, g_pms.cardReader.rxLen);
+	}
+	else if (ev == CARD_EVENT_RX_DATA_FAILED)
+	{
+		Mod_busErr(g_pModBus, BUS_ERR_RX_FAILED);
+	}
+
+	return CARD_EVENT_RC_SUCCESS;
 }
 
 void Pms_run()
@@ -244,7 +291,7 @@ void Pms_run()
 void Pms_start()
 {
 	//启动NFC驱动
-
+	Pms_switchStatus(PMS_ACC_OFF);
 }
 
 void Pms_init()
@@ -259,4 +306,6 @@ void Pms_init()
 
 	g_pActiveBat = &g_Bat[0];
 	Queue_init(&g_pms.msgQueue, g_pms.msgBuf, sizeof(Message), GET_ELEMENT_COUNT(g_pms.msgBuf));
+
+	NfcCardReader_init(&g_pms.cardReader, (NfcCardReader_EventFn)Pms_cardReaderEventCb, &g_pms);
 }

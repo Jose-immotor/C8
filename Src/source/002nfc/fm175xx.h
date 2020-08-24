@@ -1,3 +1,5 @@
+#if 1
+
 #ifndef FM175XX_H
 #define FM175XX_H
 
@@ -117,4 +119,11 @@ unsigned char Write_Ext_Reg(unsigned char reg_add, unsigned char reg_value);
 void FM17522_Delayms(unsigned int delayms);
 GLOBAL_FM17522 unsigned char i2c_fm17522_addr_init(void);
 GLOBAL_FM17522 unsigned char FM175XX_HardPowerdown(void);
+
+unsigned char FM175XX_switchPort(unsigned char port);
+
 #endif
+
+#endif
+
+
