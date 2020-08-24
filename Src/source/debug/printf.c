@@ -63,22 +63,22 @@ void _PrintfLevel(uint32 level, const char* lpszFormat, ...)
 	
 }
 
-int _Printf(const char* lpszFormat, ...)
-{
-	int nLen = 0;
-	va_list ptr;
-	char g_Pfbuffer[PRINTF_BUF_SIZE];
+//int _Printf(const char* lpszFormat, ...)
+//{
+//	int nLen = 0;
+//	va_list ptr;
+//	char g_Pfbuffer[PRINTF_BUF_SIZE];
 
-	memset(g_Pfbuffer, 0, sizeof(g_Pfbuffer));
-	va_start(ptr, lpszFormat);
-	nLen = vsnprintf(g_Pfbuffer, sizeof(g_Pfbuffer), lpszFormat, ptr);
-	
-	va_end(ptr);
-	
-	_puts(g_Pfbuffer);
+//	memset(g_Pfbuffer, 0, sizeof(g_Pfbuffer));
+//	va_start(ptr, lpszFormat);
+//	nLen = vsnprintf(g_Pfbuffer, sizeof(g_Pfbuffer), lpszFormat, ptr);
+//	
+//	va_end(ptr);
+//	
+//	_puts(g_Pfbuffer);
 
-	return nLen;
-}
+//	return nLen;
+//}
 
 
 /*---------------------------------------------------*/

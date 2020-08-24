@@ -3,24 +3,53 @@
 #include "mx25_cmd.h"
 #include "nvds.h"
 #include "log.h"
+#include "LogUser.h"
 
 #ifdef CFG_LOG
+
+void Record_DumpByCount(Record* pRecord, int count, uint8 moduleId)
+{
+	int ind = pRecord->itemCount - count;
+	if (ind < 0) ind = 0;
+
+	Record_DumpByInd(pRecord, ind, count, moduleId);
+}
+
+void Record_DumpByInd(Record* pRecord, int ind, int count, uint8 moduleId)
+{
+	LogItem item = { 0 };
+
+	Record_Seek(pRecord, ind);
+
+	while (Record_isValid(pRecord) && count--)
+	{
+		if (Record_Read(pRecord, &item, sizeof(LogItem)))
+		{
+//			WDT_FEED();
+			//仅打印制定的PMS节点信息
+			if (LogUser_IsPrintf(&item))
+			{
+				LogUser_Dump(&item, Null, Null);
+			}
+		}
+	}
+}
+
 void Record_Dump(Record* pRecord)
 {
 	Printf("Record Dump:\n");
 	
 	Printf("\t startAddr=%d.\n"		, pRecord->startAddr);
 	Printf("\t sectorCount=%d.\n"	, pRecord->sectorCount);
-	
-	Printf("\t pItem=0x%x.\n"		, pRecord->pItem);
-	Printf("\t itemSize=%d.\n"		, pRecord->itemSize);
-	Printf("\t total=%d.\n"			, pRecord->total);
-	
+	Printf("\t total=%d.\n"			, pRecord->itemCount);
 	Printf("\t writeSectorInd=%d.\n", pRecord->writeSectorInd);
 	Printf("\t readPointer=%d.\n"	, pRecord->readPointer);
-	
+	Printf("\t pItem=0x%x.\n"		, pRecord->pItem);
+	Printf("\t itemSize=%d.\n"		, pRecord->itemSize);
 	SectorMgr_Dump(&pRecord->recordMgr);
 }
+
+
 
 /*
 Bool Record_WritePointerUpdate(Record* pRecord)
@@ -34,14 +63,14 @@ Bool Record_WritePointerUpdate(Record* pRecord)
 		if(pRecord->writeSectorInd + 1 >= pRecord->sectorCount)
 		{
 			pRecord->writeSectorInd = 0;
-			pRecord->total -= pRecord->recordMgr.m_ItemCount;
+			pRecord->itemCount -= pRecord->recordMgr.m_ItemCount;
 		}
 		else
 		{
 			pRecord->writeSectorInd++;
 		}
 		
-		Assert(pRecord->total >= pRecord->recordMgr.m_ItemCount);
+		Assert(pRecord->itemCount >= pRecord->recordMgr.m_ItemCount);
 		
 		sectorAddr = pRecord->startAddr + pRecord->writeSectorInd * SECTOR_SIZE;
 		Mx25_EraseSector(sectorAddr);
@@ -71,19 +100,19 @@ void Record_ConvertSector(Record* pRecord, uint8* sec, int* ind)
 	*sec = pRecord->readStartSectorInd;
 
 	if(logInd < 0) logInd = 0;
-	if(logInd > pRecord->total) logInd = pRecord->total;
+	if(logInd > pRecord->itemCount) logInd = pRecord->itemCount;
 	
 	*ind = logInd;
 }
 
 Bool Record_isValid(Record* pRecord)
 {
-	return pRecord->total > 0 && pRecord->readPointer < pRecord->total;
+	return pRecord->itemCount > 0 && pRecord->readPointer < pRecord->itemCount;
 }
 
 int Record_GetTotal(Record* pRecord)
 {
-	return pRecord->total;
+	return pRecord->itemCount;
 }
 
 /*函数功能：计算扇区号和扇区内偏移地址
@@ -100,11 +129,11 @@ uint32 Record_CalcWriteSecAddr(Record* pRecord, uint32 itemInd, uint8* sec, uint
 	if(itemInd >= pRecord->maxItems) return RECORD_INVALID_ADD;
 
 	//当前所有扇区都有内容
-	if(pRecord->total == pRecord->maxItems)
+	if(pRecord->itemCount == pRecord->maxItems)
 	{
 		offsetSec = (pRecord->writeSectorInd + 1) % pRecord->sectorCount;
 	}
-	else if(pRecord->total > pRecord->maxItems - pRecord->itemsPerSec)
+	else if(pRecord->itemCount > pRecord->maxItems - pRecord->itemsPerSec)
 	{
 		offsetSec = pRecord->writeSectorInd;
 	}
@@ -126,27 +155,27 @@ Bool Record_Write(Record* pRecord, void* pRecData)
 	uint32 addrOfSec = 0;
 	memcpy(pRecord->pItem, pRecData, pRecord->itemSize);
 
-	if(g_LogRecord.sectorCount == 0) 	//还没有初始化完毕
+	if(pRecord->sectorCount == 0) 	//还没有初始化完毕
 		return False;
 	
 	if(SectorMgr_Write(&pRecord->recordMgr))
 	{
-		pRecord->total++;
+		pRecord->itemCount++;
 	}
-	if(pRecord->maxItems == pRecord->total)
+	if(pRecord->maxItems == pRecord->itemCount)
 	{
-		pRecord->total = pRecord->maxItems;
+		pRecord->itemCount = pRecord->maxItems;
 	}
 	
-	uint32 addr = Record_CalcWriteSecAddr(pRecord, pRecord->total % pRecord->maxItems, &pRecord->writeSectorInd, &addrOfSec);
+	uint32 addr = Record_CalcWriteSecAddr(pRecord, pRecord->itemCount % pRecord->maxItems, &pRecord->writeSectorInd, &addrOfSec);
 	if(addr == RECORD_INVALID_ADD) return False;
 	if(0 == addrOfSec)
 	{
 		Mx25_EraseSector(addr);
-		SectorMgr_Init(&pRecord->recordMgr, addr, pRecord->pItem, pRecord->itemSize);
-		if(pRecord->total >= pRecord->maxItems)	//擦除已写的扇区
+		SectorMgr_Init(&pRecord->recordMgr, SECTOR_SIZE, addr, pRecord->pItem, pRecord->itemSize);
+		if(pRecord->itemCount >= pRecord->maxItems)	//擦除已写的扇区
 		{
-			pRecord->total -= pRecord->itemsPerSec;
+			pRecord->itemCount -= pRecord->itemsPerSec;
 			//读指针要做相应的减除
 			pRecord->readPointer = (pRecord->readPointer > pRecord->itemsPerSec) ? (pRecord->readPointer-pRecord->itemsPerSec) : 0;
 		}
@@ -170,7 +199,7 @@ uint32 Record_CalcuReadSecAddr(Record* pRecord, uint32 itemInd, uint8* sec, uint
 	
 	if(itemInd >= pRecord->maxItems) return RECORD_INVALID_ADD;
 
-	if(pRecord->total >= pRecord->maxItems - pRecord->itemsPerSec)	//全部扇区的数据都是有效的
+	if(pRecord->itemCount >= pRecord->maxItems - pRecord->itemsPerSec)	//全部扇区的数据都是有效的
 	{
 		offsetSec = pRecord->writeSectorInd + 1;	//读指针为于写指针的下一个扇区
 	}
@@ -190,7 +219,7 @@ uint32 Record_CalcuReadSecAddr(Record* pRecord, uint32 itemInd, uint8* sec, uint
 
 void Record_Seek(Record* pRecord, uint32 pos)
 {
-	pRecord->readPointer = (pos > pRecord->total) ? pRecord->total : pos;
+	pRecord->readPointer = (pos > pRecord->itemCount) ? pRecord->itemCount : pos;
 }
 
 int Record_Read(Record* pRecord, void* pBuf, int buflen)
@@ -201,7 +230,7 @@ int Record_Read(Record* pRecord, void* pBuf, int buflen)
 	uint32 addr = 0;
 
 	for(i = pRecord->readPointer
-		; i < pRecord->total && buflen >= pRecord->itemSize
+		; i < pRecord->itemCount && buflen >= pRecord->itemSize
 		; i++)
 	{
 		addr = Record_CalcuReadSecAddr(pRecord, i, Null, Null);
@@ -219,7 +248,7 @@ int Record_Read(Record* pRecord, void* pBuf, int buflen)
 void Record_RemoveAll(Record* pRecord)
 {
 	int i = 0;
-	if(g_LogRecord.sectorCount == 0) 	//还没有初始化完毕
+	if(pRecord->sectorCount == 0) 	//还没有初始化完毕
 		return;
 
 	//擦除所有扇区
@@ -230,10 +259,10 @@ void Record_RemoveAll(Record* pRecord)
 
 	//重新初始化扇区管理器
 	pRecord->writeSectorInd = 0;
-	pRecord->total = 0;
+	pRecord->itemCount = 0;
 	pRecord->readPointer = 0;
 	pRecord->readStartSectorInd = 0;
-	SectorMgr_Init(&pRecord->recordMgr, pRecord->startAddr, pRecord->pItem, pRecord->itemSize);
+	SectorMgr_Init(&pRecord->recordMgr, SECTOR_SIZE, pRecord->startAddr, pRecord->pItem, pRecord->itemSize);
 }
 
 void Record_InitSectorMgr(SectorMgr* pSector, uint32 startAddr, void* pItem,
@@ -248,7 +277,7 @@ void Record_InitSectorMgr(SectorMgr* pSector, uint32 startAddr, void* pItem,
 	memcpy(temp,  pItem, itemSize);
 	
 	//从Flash读取设置值
-	bRet = SectorMgr_Init(pSector, startAddr, pItem , itemSize);
+	bRet = SectorMgr_Init(pSector, SECTOR_SIZE, startAddr, pItem , itemSize);
 	
 	if(bRet && !verify(pItem, 0))	//校验版本号
 	{
@@ -299,14 +328,14 @@ void Record_Init(Record* pRecord, void* pValue, void* pFlashAddr,
 				goto End;
 			}
 		}
-		pRecord->total += pRecord->recordMgr.m_ItemCount;
+		pRecord->itemCount += pRecord->recordMgr.m_ItemCount;
 	}
 	
 	//找不到可写扇区
 	if(writeSecInd == -1) 
 	{
 		writeSecInd = 0;
-		if(pRecord->total)	//发生不可预期的错误
+		if(pRecord->itemCount)	//发生不可预期的错误
 		{
 			Record_RemoveAll(pRecord);
 		}

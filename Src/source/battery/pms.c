@@ -847,7 +847,7 @@ void Pms_OnBatteryChanged(uint8 port, Bool isPlugIn)
 //	if(g_pPms->m_portMask)
 //		g_pPms->m_isNotDischarge = !Pms_IsNotDischarge();
 	Printf("%sBattery[%d] %s\n", (g_pPms->m_isTestBat)?"Test ":"", port, isPlugIn ? "in" : "out");
-	LOG2(isPlugIn ? ET_PMS_BAT_PLUG_IN: ET_PMS_BAT_PLUG_OUT, Pms_GetBatCount(), Pms_GetAveBatSoc(Null));
+//	LOG2(isPlugIn ? ET_PMS_BAT_PLUG_IN: ET_PMS_BAT_PLUG_OUT, Pms_GetBatCount(), Pms_GetAveBatSoc(Null));
 	PostMsg(isPlugIn ? MSG_BATTERY_PLUG_IN :  MSG_BATTERY_PLUG_OUT);
 				   
 	if(isPlugIn == PLUG_IN)

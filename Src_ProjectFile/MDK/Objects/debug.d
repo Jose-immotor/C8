@@ -64,6 +64,7 @@
 .\objects\debug.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h
 .\objects\debug.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\objects\debug.o: ..\..\Src\source\nvds\Nvds.h
+.\objects\debug.o: ..\..\Src\source\nvds\SectorMgr.h
 .\objects\debug.o: ..\..\Src\source\battery\Battery.h
 .\objects\debug.o: ..\..\Src\source\002nfc\nfc_cmd_process.h
 .\objects\debug.o: ..\..\Src\source\002nfc\fm175xx.h

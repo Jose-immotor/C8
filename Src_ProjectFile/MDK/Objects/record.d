@@ -72,3 +72,4 @@
 .\objects\record.o: ..\..\Src\source\002nfc\fm175xx.h
 .\objects\record.o: ..\..\Src\source\nvds\log.h
 .\objects\record.o: ..\..\Src\source\nvds\Record.h
+.\objects\record.o: ..\..\Src\source\nvds\LogUser.h

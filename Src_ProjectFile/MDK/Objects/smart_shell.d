@@ -66,6 +66,7 @@
 .\objects\smart_shell.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h
 .\objects\smart_shell.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\objects\smart_shell.o: ..\..\Src\source\nvds\Nvds.h
+.\objects\smart_shell.o: ..\..\Src\source\nvds\SectorMgr.h
 .\objects\smart_shell.o: ..\..\Src\source\battery\Battery.h
 .\objects\smart_shell.o: ..\..\Src\source\002nfc\nfc_cmd_process.h
 .\objects\smart_shell.o: ..\..\Src\source\002nfc\fm175xx.h

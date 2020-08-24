@@ -71,8 +71,8 @@
 .\objects\main.o: ..\..\Src\source\002nfc\fm175xx.h
 .\objects\main.o: ..\..\Src\source\user\msgdef.h
 .\objects\main.o: ..\..\Src\source\nvds\nvds.h
+.\objects\main.o: ..\..\Src\source\nvds\SectorMgr.h
 .\objects\main.o: ..\..\Src\source\nvds\log.h
 .\objects\main.o: ..\..\Src\source\nvds\Record.h
-.\objects\main.o: ..\..\Src\source\nvds\SectorMgr.h
 .\objects\main.o: ..\..\Src\source\nvds\smart_system.h
 .\objects\main.o: ..\..\Src\source\nvds\datarom.h

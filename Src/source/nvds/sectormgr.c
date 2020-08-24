@@ -43,7 +43,7 @@ Bool SectorMgr_Test()
 		buf1[i]= i;
 	}
 
-	SectorMgr_Init(sector, 0, tempBuf, sizeof(buf1));
+	SectorMgr_Init(sector, SECTOR_SIZE, 0, tempBuf, sizeof(buf1));
 
 	for(i = 0; i < (SECTOR_SIZE / BUF_SIZE); i++)
 	{
@@ -243,19 +243,21 @@ void SectorMgr_InitFullSector(SectorMgr* pSector, uint32 startAddr, uint16 itemS
 	pSector->m_readOffset  = (pSector->m_ItemCount - 1) * itemSize ;
 }
 
-Bool SectorMgr_Init(SectorMgr* pSector, uint32 startAddr, void* pItem, uint16 itemSize)
+Bool SectorMgr_Init(SectorMgr* pSector, uint16 sectorSize,
+					uint32 startAddr, void* pItem, uint16 itemSize)
 {	
 	memset(pSector, 0, sizeof(SectorMgr));
 
 	if(itemSize > MAX_ITEM_SIZE) return False;
 	
-	if(startAddr % SECTOR_SIZE) return False;	//startAddr必须要被SECTOR_SIZE整除
-	if(itemSize > SECTOR_SIZE) return False;	//size必须小于SECTOR_SIZE
+	if(startAddr % sectorSize) return False;	//startAddr必须要被SECTOR_SIZE整除
+	if(itemSize > sectorSize) return False;	//size必须小于SECTOR_SIZE
 	
 	pSector->m_startAddr = startAddr;
 	pSector->m_itemSize	 = itemSize;
 	pSector->m_pItem	 = pItem;
-
+	pSector->m_sectorSize = sectorSize;
+	
 	SectorMgr_CalcOffset(pSector);
 
 	if(pSector->m_ItemCount > 0 && pItem)

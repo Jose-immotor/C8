@@ -75,3 +75,4 @@
 .\objects\fsm.o: ..\..\Src\source\nvds\datarom.h
 .\objects\fsm.o: ..\..\Src\source\user\main.h
 .\objects\fsm.o: ..\..\Src\source\nvds\nvds.h
+.\objects\fsm.o: ..\..\Src\source\nvds\SectorMgr.h

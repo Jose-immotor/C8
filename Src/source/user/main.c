@@ -125,7 +125,7 @@ void Mcu_PowerDown()
 	int remainMin = 0;//Sign_GetRemainMin();
 //	
 //	g_isRtcTimeOut = False;
-	LOG2(ET_SYS_SLEEP, (uint8)remainMin, 0);//Mcu_GetRound5V());
+//	LOG2(ET_SYS_SLEEP, (uint8)remainMin, 0);//Mcu_GetRound5V());
 	Printf("power down.\n");
 	g_isPowerDown = True;
 	Enter_PowerDown();
@@ -152,7 +152,7 @@ void Mcu_PowerDown()
 //	Sim_SetTxDataTime(GPRS_SENDDATA_TIME_SHORT);
 //	
  	Printf("\nPower up.\n");	
-	LOG2(ET_SYS_WAKEUP, g_Settings.devcfg, g_WakeupType);
+//	LOG2(ET_SYS_WAKEUP, g_Settings.devcfg, g_WakeupType);
 	env_nvds_init();
 	Fsm_Init();
 	Fsm_Start();
@@ -182,8 +182,10 @@ void led_config(void);
  */
 int main(void)
 {
+//	env_nvds_init();
 	/* led config */
     led_config();
+	
     while(1)
 	{
 		gpio_bit_reset(GPIOE, GPIO_PIN_11);

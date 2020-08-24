@@ -14,398 +14,158 @@
 #include "nvds.h"
 #include "record.h"
 
-static LogItem g_LogItem;
-Record g_LogRecord;
-
-const static LogEventMap g_pStrLogEvent[] = 
+/*******************************
+函数功能：大括号字符换内容combo string处理，例如braceCheck("0-title1|1-title2", 1, buf, 0) => "0:title1"
+参数说明：
+	string：待处理的字符串，格式为 "0-title1|1-title2"
+	value:  字符串的值域。
+	buf:    输出缓冲区
+	offset: 输出缓冲区保存数据的偏移值
+返回值：buf缓冲区保存数据之后的偏移值
+***********************************/
+int braceProc(const char* str, int value, char* buf, int offset)
 {
-	 {MD_SYS, ET_SYS_RESET			, "SYS_RESET"}
-	,{MD_SYS, ET_SYS_SLEEP			, "SYS_SLEEP"}
-	,{MD_SYS, ET_SYS_WAKEUP			, "SYS_WAKEUP"}
-	,{MD_SYS, ET_SYS_ACTIVE			, "SYS_ACTIVE"}
-	,{MD_SYS, ET_SYS_INACTIVE		, "SYS_INACTIVE"}
-	,{MD_SYS, ET_SYS_DISCHARGE_ON	, "SYS_DISCHARGE_ON"}
-	,{MD_SYS, ET_SYS_DISCHARGE_OFF	, "SYS_DISCHARGE_OFF"}
-	,{MD_SYS, ET_SYS_ALARM_MODE_ON	, "SYS_ALARM_MODE_ON"}
-	,{MD_SYS, ET_SYS_ALARM_MODE_OFF	, "SYS_ALARM_MODE_OFF"}
-//	,{MD_SYS, ET_SYS_SIGN_OK		, "SYS_SIGN_OK"}
-	,{MD_SYS, ET_SYS_SIGN_FAILED	, "SYS_SIGN_FAILED"}
-	,{MD_SYS, ET_TAKE_APART	, "SYS_TAKE_APART"}
-	
-	,{MD_SIM, ET_SIM_PWR_ON		 , "SIM_PWR_ON"}
-	,{MD_SIM, ET_SIM_SLEEP		 , "SIM_SLEEP"}
-	,{MD_SIM, ET_SIM_WAKEUP		 , "SIM_WAKEUP"}
-	
-	,{MD_SIM, ET_GPRS_CNT		 , "GPRS_CNT"}
-	,{MD_SIM, ET_GPRS_DIS_CNT	 , "GPRS_DIS_CNT"}
-	,{MD_SIM, ET_GPRS_SEND_FAILED, "GPRS_SEND_FAILED"}
-	,{MD_SIM, ET_GPRS_HEARBEAT	 , "GPRS_HEARBEAT"}
-	,{MD_SIM, ET_GPRS_SMS		 , "GPRS_SMS"}
-	,{MD_SIM, ET_GPRS_UPG_START	 , "GPRS_UPG_START"}
-	,{MD_SIM, ET_GPRS_UPG_PROC	 , "GPRS_UPG_PROC"}
-	
-	,{MD_SIM, ET_GPS_PWR_ON 	, "GPS_PWR_ON"}
-	,{MD_SIM, ET_GPS_PWR_OFF	, "GPS_PWR_OFF"}
-	,{MD_SIM, ET_GPS_LOC_OK		, "GPS_LOC_OK"}
-	,{MD_SIM, ET_GPS_LOC_FAILED	, "GPS_LOC_FAILED"}
-	
-	,{MD_BLE, ET_BLE_CNT		, "BLE_CNT"}
-	,{MD_BLE, ET_BLE_DIS_CNT	, "BLE_DIS_CNT"}
-	
-	,{MD_GRYO, ET_PMS_ACC_ON		, "ACC_ON"}
-	,{MD_GRYO, ET_PMS_ACC_OFF		, "ACC_OFF"}
-	,{MD_GRYO, ET_PMS_BAT_PLUG_IN	, "BAT_PLUG_IN"}
-	,{MD_GRYO, ET_PMS_BAT_PLUG_OUT	, "BAT_PLUG_OUT"}
-	,{MD_GRYO, ET_PMS_BAT_VERIFY	, "BAT_VERIFY"}
-	,{MD_GRYO, ET_PACK_STATE_CHANGED, "PMS_PACK_STATE_CHANGED"}
-	,{MD_GRYO, ET_PMS_COMM_EVENT	, "PMS_COMM_EVENT"}
-	,{MD_GRYO, ET_PMS_PWR_EVENT		, "PMS_PWR_EVENT"}
-	,{MD_GRYO, ET_PMS_SET_DISCHARGE	, "PMS_SET_DISCHARGE"}
-	,{MD_GRYO, ET_PMS_LOG			, "PMS_LOG"}
-	,{MD_GRYO, ET_BMS_FAULT			, "BMS_FAULT"}
-	
-	,{MD_SYS, ET_LOCK				, "LOCK"}
-	,{MD_SYS, ET_CABIN_LOCK			, "CABIN_LOCK"}
-	
-	,{MD_UPG, ET_UPGRADE_SMART_START, "UPGRADE_SMART_START"}
-	,{MD_UPG, ET_UPGRADE_SMART_DONE	, "UPGRADE_SMART_DONE"}
-	,{MD_UPG, ET_UPGRADE_PMS_START	, "UPGRADE_PMS_START"}
-	,{MD_UPG, ET_UPGRADE_PMS_DONE	, "UPGRADE_PMS_DONE"}
-};
-
-//int Log_Find(int startInd, RecordVerifyItemFn verify, uint32 param);
-
-const char* Log_GetEventStr(uint8 logEvent)
-{
-	int i = 0;
-
-	for(i = 0; i < GET_ELEMENT_COUNT(g_pStrLogEvent); i++)
+	Bool isMatch = False;
+	int comboStrVal = 0;
+	while (str)
 	{
-		if(logEvent == g_pStrLogEvent[i].event) return g_pStrLogEvent[i].pStr;
-	}
-	return "No match event";
-}
-
-void Log_Dump(LogItem* item, const char* head, const char* tail)
-{
-	if(head == Null) head = "";
-	if(tail == Null) tail = "";
-	Printf("%s%s %s, 0x%02X(%02d), 0x%02X(%02d)%s", head
-		, DateTime_ToStr(item->dateTime)
-		, Log_GetEventStr(item->eventId)
-		, item->param1
-		, item->param1
-		, item->param2
-		, item->param2
-		, tail
-		);
-}
-
-/*!
- * \brief 复位
- *		  
- * \param  argc:参数数量;argv:参数指针的指针
- *
- * \return NONE 
- */
-static void Log_DumpByCount(int argc, char**argv)
-//void Log_DumpByCount(int count)
-{
-	int count;
-	
-	sscanf(&(*argv[1]), "%d", &count);
-	int ind = g_LogRecord.total - count;
-	if(ind < 0) ind = 0;
-
-	Log_DumpByInd(ind, count);
-}
-MSH_CMD_EXPORT(Log_DumpByCount, output log);
-
-/*!
- * \brief 复位
- *		  
- * \param  argc:参数数量;argv:参数指针的指针
- *
- * \return NONE 
- */
-typedef struct _LogInfoPkt
-{
-	uint32 records;
-	uint32 dataTime;
-}LogInfoPkt;
-static void Log_info(int argc, char**argv)
-{
-	LogItem logItem = {0};
-	LogInfoPkt pRst;
-	
-	pRst.records = g_LogRecord.total;
-	if(Log_Read(&logItem, 1, 0))
-	{
-		//修正时间
-		pRst.dataTime = logItem.dateTime;// - SECOND_OFFSET;
-	}
-	
-	Printf("LogInfo: [%s total=%d]\n", DateTime_ToStr(pRst.dataTime), pRst.records);
-}
-MSH_CMD_EXPORT(Log_info, printf log info);
-
-void Log_DumpByInd(int ind, int count)
-{
-	LogItem item = {0};
-	
-	Record_Seek(&g_LogRecord, ind);
-	
-	while(Record_isValid(&g_LogRecord) && count--)
-	{
-		if(Record_Read(&g_LogRecord, &item, sizeof(LogItem)))
+		int ret = sscanf(str, "%d-", &comboStrVal);
+		if (sscanf(str, "%d-", &comboStrVal) == 1 && comboStrVal == value)
 		{
-			if(item.eventId == ET_SYS_RESET) Printf("\n");
-			Printf("%03d:[", g_LogRecord.readPointer-1);
-			Log_Dump(&item, Null, "]\n");
+			//互联":"之前的数值
+			//str = strchr(str, ':') + 1;
+			while ((*str != '|') && (*str != 0))
+			{
+				isMatch = True;
+				buf[offset++] = *str;
+				str++;
+			}
+			break;
 		}
+		str = strchr(str, '|');
+		if (str) str += 1;	//越过字符'|'
 	}
-}
-//MSH_CMD_EXPORT(Log_DumpByInd,printf Log Dump By Ind);
-////2008/04/03 11:12:00
-//void Log_DumpByTimeStr(const char* pDataTime, int count)
-//{
-//	int year, month, day, hour, minute, sec;
-//	if(6 == sscanf(pDataTime, "%d/%d/%d %d:%d:%d", &year, &month, &day, &hour, &minute, &sec))
-//	{
-//		uint32 seconds = DateTime_GetSeconds(DateTime_MakeRtc(year, month, day, hour, minute, sec));
-//		Log_DumpByTime(seconds, count);
-//	}
-//	else
-//	{
-//		Printf("Date time format error\n");
-//	}
-//}
 
-//void Log_DumpByTime(uint32 seconds, int count)
-//{	
-//	int ind = Log_Find(0, (RecordVerifyItemFn)Log_FilterTime, seconds);
-
-//	Log_DumpByInd(ind, count);
-//}
-
-static Bool g_LogAllowAdd = True;
-void Log_Add(LogEvent logEvent, LogType logType, uint8 param1, uint8 param2)
-{
-	if(!g_LogAllowAdd || g_LogRecord.sectorCount == 0/*还没有被初始化*/) return;
-	
-	LogItem* item = &g_LogItem;
-	g_LogItem.dateTime = DateTime_GetSeconds(Null);
-	g_LogItem.version = LOG_DATA_VER;
-	g_LogItem.eventId = logEvent;
-	g_LogItem.logType = logType;
-	g_LogItem.param1 = param1;
-	g_LogItem.param2 = param2;
-
-	if(g_dwDebugLevel & DL_LOG)
+	if (!isMatch)
 	{
-		Printf("Log[%d][%s %s, 0x%02X(%02d), 0x%02X(%02d)]\n", g_LogRecord.total
-			, DateTime_ToStr(item->dateTime)
-			, Log_GetEventStr(item->eventId)
-			, item->param1
-			, item->param1
-			, item->param2
-			, item->param2
-			);
+		offset += sprintf(&buf[offset], "%d-unknown", value);
 	}
-	
-	Record_Write(&g_LogRecord, &g_LogItem);
+
+	return offset;
 }
 
-Bool Log_VerifyItem(LogItem* pItem, uint32 param)
+/************************************************************
+函数功能：32位整数按照BIT格式化输出。
+参数说明：
+	buf：输出缓冲区。
+	val：输出的目标值。
+	fmt：格式化内容，支持以下格式：
+		"%1B"		//输出val.BIT[0], 数值显示为10进制
+		"%1BX"		//输出和上面一样
+		"%0-1B"		//输出val.BIT[0-1], 数值显示为10进制
+		"%2-6BX"	//输出val.BIT[2-6], 数值显示为16进制
+		"%7-10B{1:Title1|2:Title2|...}"//输出val.BIT[7-10]，数值使用大括号内的字符串代替,大括号的字符串长度不能超过128个字节。
+		"%7-10BX{1:Title1|2:Title2|...}"//输出和上面一样。
+	numberOfBit：根据输出格式fmt计算的val的有效Bit总数。如果为Null，表示忽略这个参数。
+返回值：buf的长度
+************************************************************/
+int SprintfBit(char buf[], const char* fmt, uint32 val, uint8* numberOfBit)
 {
-	return (LOG_DATA_VER == pItem->version);	//校验版本号
-}
+	Bool isMatch = False;
+	uint8 byte, byte1, byte2 = 0;
+	uint8 bits = 0;
+	int v1, v2, len = 0;
+	const char* s = fmt;
+	const char* p = strstr(fmt, "%");
+	char brace[128];
 
-//int Log_Find(int startInd, RecordVerifyItemFn verify, uint32 param)
-//{
-//	int i = 0;
-//	LogItem item = {0};
-
-//	Record_Seek(&g_LogRecord, startInd);
-//	
-//	for(i = startInd; i < g_LogRecord.total; i++)
-//	{
-//		if(Record_Read(&g_LogRecord, &item, sizeof(LogItem)))
-//		{
-//			if(verify(&item, param))
-//			{
-//				return i;
-//			}
-//		}
-//		else
-//		{
-//			break;
-//		}
-//	}
-
-//	return LOG_INVALID_IND;
-//}
-
-//Bool Log_FilterTime(LogItem* pItem, uint32 param)
-//{
-//	return pItem->dateTime >= param;
-//}
-
-//Bool Log_FilterEvent(LogItem* pItem, uint8 events[], int count)
-//{
-//	for(int i = 0; i < count; i++)
-//	{
-//		if(pItem->eventId == events[i])
-//		{
-//			return True;
-//		}
-//	}
-//	
-//	return False;
-//}
-
-//int Log_ReadEx(LogItem* pLogItem, int count, uint8* readSectorOffset, int* ind)
-//{
-//	//当前所有扇区都有内容 
-//	int logInd = * ind;
-//	int i = 0;
-//	
-//	Record_ConvertSector(&g_LogRecord, readSectorOffset, ind);
-//	logInd = *ind;
-//	
-//	Record_Seek(&g_LogRecord, logInd);
-//	while(Record_isValid(&g_LogRecord) && i < count)
-//	{
-//		Record_Read(&g_LogRecord, &pLogItem[i++], sizeof(LogItem));
-//	}
-//	
-//	*ind = g_LogRecord.readPointer;
-//	
-//	return i * sizeof(LogItem);
-//}
-
-int Log_Read(LogItem* pLogItem, int count, int ind)
-{
-	int i = 0;
-	
-	Record_Seek(&g_LogRecord, ind);
-	while(Record_isValid(&g_LogRecord) && i < count)
+	while (p)
 	{
-		Record_Read(&g_LogRecord, &pLogItem[i++], sizeof(LogItem));
+		static int8 strFmt[] = { '%', 'X', 0 };
+		memcpy(&buf[len], s, (uint32)p - (uint32)s);
+		len += (uint32)p - (uint32)s;
+		s = p;
+
+		p++;
+
+		if ((3 <= sscanf(p, "%d%c%c%c", &v1, &byte, &byte1, &byte2)) && (byte == 'B' || byte == 'b'))	//Search string "%0B" or "%0BX"
+		{
+			isMatch = True;
+
+			//获取字符串的{}之间的字符 x#${0:title1|1:title2}=>0:title1|1:title2"
+			if ((byte1 == '{' || byte2 == '{') && sscanf(p, "%*[^{]{%[^}]", brace) == 1)
+			{
+				//大括号内的COMBO字符处理
+				len = braceProc(brace, GET_BITS(val, v1, v1), buf, len);
+				s = strstr(p, "}") + 1;
+			}
+			else
+			{
+				len += sprintf(&buf[len], "%d", GET_BITS(val, v1, v1));
+				if (byte1 == 'X' || byte1 == 'x')
+					s = strchr(p, byte1) + 1;
+				else
+					s = strstr(p, "B") + 1;
+			}
+
+			bits = MAX(bits, v1);
+		}
+		else
+		{
+			int ret = sscanf(p, "%d-%d%c%c%c", &v1, &v2, &byte, &byte1, &byte2);
+
+			if (ret >= 3 && (byte == 'B' || byte == 'b')) //%1-7B
+			{
+				isMatch = True;
+
+				v1 = MIN(v1, v2);
+				v2 = MAX(v1, v2);
+
+				if (ret >= 4)	//%1-7BX
+				{
+					strFmt[1] = (byte1 == 'X' || byte1 == 'x') ? byte1 : 'd';
+				}
+				if ((byte1 == '{' || byte2 == '{') && sscanf(p, "%*[^{]{%[^}]", brace) == 1)	//%1-7BX{...}
+				{
+					//大括号内的COMBO字符处理
+					len = braceProc(brace, GET_BITS(val, v1, v2), buf, len);
+					s = strstr(p, "}") + 1;
+				}
+				else
+				{
+					len += sprintf(&buf[len], strFmt, GET_BITS(val, v1, v2));
+					if (byte1 == 'X' || byte1 == 'x')
+						s = strchr(p, byte1) + 1;
+					else
+						s = strstr(p, "B") + 1;
+				}
+				bits = MAX(bits, v1);
+				bits = MAX(bits, v2);
+			}
+		}
+
+		//Search next "%..B"
+		p = strstr(p, "%");
 	}
 
-	return i * sizeof(LogItem);
+	//Copy tail of string to buff
+	p = (char*)(fmt + strlen(fmt));
+	memcpy(&buf[len], s, (uint32)p - (uint32)s);
+	len += (uint32)p - (uint32)s;
+	buf[len++] = 0;
+
+	if (numberOfBit) * numberOfBit = bits;
+	return isMatch ? len : 0;
 }
 
-////检索minute分钟之前发生的记录
-//int Log_FindByTime(uint32 seconds)
-//{
-//	return Log_Find(0, (RecordVerifyItemFn)Log_FilterTime, seconds);
-//}
-
-//int Log_ReadByEvents(uint8* pBuf, int len, int ind, uint8 events[], int count)
-//{
-//	int copyLen = 0;
-//	LogItem logItem = {0};
-//	
-//	Record_Seek(&g_LogRecord, ind);
-//	while(Record_isValid(&g_LogRecord) && (len-copyLen) >= sizeof(LogItem))
-//	{
-//		if(Record_Read(&g_LogRecord, &logItem, sizeof(LogItem)) && Log_FilterEvent(&logItem, events, count))
-//		{
-//			memcpy(&pBuf[copyLen], &logItem, sizeof(logItem));
-//			copyLen += sizeof(LogItem);
-//		}
-//	}
-
-//	return copyLen;
-//}
-
-//int Log_GetRemain(uint8 readSec, int pos)
-//{
-//	Record_ConvertSector(&g_LogRecord, &readSec, &pos);
-//	return (g_LogRecord.total - pos);
-//}
-
-//int Log_GetLogPkt(GprsLogPkt* pGprsLogPkt, int count, uint8* readSec, int* pos)
-//{
-//	int len = 0;
-//	LogItem* logItem = (LogItem*)&g_CommonBuf[256];
-//	
-//	Record_ConvertSector(&g_LogRecord, readSec, pos);
-//	if(g_LogRecord.total - *pos < count) return 0;
-//	
-//	Log_ReadEx(logItem, count, readSec, pos);
-//	
-//	for(int i = 0; i < count; i++)
-//	{
-//		if(!Log_VerifyItem(&logItem[i], 0))
-//		{
-//			return 0;	//测试是否存在非法数据记录
-//		}
-//		
-//		memcpy(&pGprsLogPkt[i], &logItem[i].dateTime, sizeof(GprsLogPkt));
-//		pGprsLogPkt[i].dateTime -= SECOND_OFFSET;	//修正时间，比服务器的时间快了8小时
-//		
-//		len += sizeof(GprsLogPkt);
-//	}
-//		
-//	//Printf("%s:(%d - %d)\n", DateTime_ToStr(seconds), logInd, len);
-//	return len;
-//}
-
-void Log_Init()
+void Log_Init(LogItem* item, uint8 moduleId, uint8 catId, uint8 subId, LogType logType, uint8 eventId, uint32 val)
 {
-	g_LogItem.version = LOG_DATA_VER;
-	Record_Init(&g_LogRecord,&g_LogItem,(void*)g_pNvdsMap->logBuf, 
-		sizeof(g_LogItem),MAX_LOG_SECTOR,(RecordVerifyItemFn)Log_VerifyItem);
+	item->dateTime = DateTime_GetSeconds(Null);
+	item->moduleId		= moduleId;
+	item->subId	= subId;
+	item->logType		= logType;
+	item->catId			= catId;
+
+	item->eventId = eventId;
+	memcpy(item->data, &val, 4);
 }
-
-//void Log_SetPostInd(int ind, int count)
-//{
-//	extern  Bool g_isPostEnable;
-//	g_SysCfg.readLogStartSector = g_LogRecord.readStartSectorInd;
-//	Record_ConvertSector(&g_LogRecord, &g_SysCfg.readLogStartSector, &ind);
-//	g_SysCfg.postLogInd = ind;
-//	g_SysCfg.readLogCount = count;
-//	g_isPostEnable = True;
-//	
-//	Nvds_Write_SysCfg();
-//	Printf("Set sector=%d, ind=%d, count=%d\n", g_SysCfg.readLogStartSector, g_SysCfg.postLogInd, count);
-//}
-
-//void Log_AddTest(int count, Bool allowAdd)
-//{
-//	static int seconds = 1527509100;
-//	LogItem logItem = {0};
-//	
-//	Printf("Log_AddTest, count=%d, allowAdd=%d\n", count, allowAdd);
-//	g_LogAllowAdd = allowAdd;
-
-//	if(count)
-//	{
-//		for(int i = 0; i < count; i++)
-//		{
-//			logItem.dateTime = seconds++;
-//			logItem.eventId = ET_SYS_WAKEUP;
-//			logItem.version = LOG_DATA_VER;
-
-//			Record_Write(&g_LogRecord, &logItem);
-//		}
-//	}
-//	
-//	Printf("Log ReadStartSectorInd=%d, total=%d\n", g_LogRecord.readStartSectorInd, g_LogRecord.total);
-//}
-
-void Log_RemoveAll()
-{
-	Record_RemoveAll(&g_LogRecord);
-	g_SysCfg.postLogInd = 0;
-	g_SysCfg.readLogStartSector = 0;
-	Nvds_Write_SysCfg();
-}
-////#ifdef LOG_TESTER
-////#include "LogTester.c"
-////#endif
-//#endif
-

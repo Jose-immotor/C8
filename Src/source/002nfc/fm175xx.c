@@ -534,7 +534,7 @@ unsigned char FM175XX_HardReset(void)
 	{
 		//À­µÍNPD½Å
 		FM17522_NPD_LOW;
-		FM17522_Delayms(1);
+		FM17522_Delayms(10);
 		//À­¸ßNPD½Å
 		FM17522_NPD_HIGHT;
 		FM17522_Delayms(10);

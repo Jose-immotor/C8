@@ -8,9 +8,12 @@ extern "C"{
 //定义所有NVD(非易失性数据)的在Flash中的位置
 #include "common.h"
 #include "typedef.h"
-
+#include "SectorMgr.h"
 #include "Battery.h"
-	
+
+#define EEPROM_FIRST_BYTE	0x55
+#define EEPROM_LATEST_BYTE	0xAA
+
 #define    BLOCK_SIZE       0x10000     // 64K Block size
 #define    SECTOR_SIZE      0x1000      // 4K SectorMgr size
 #define    PAGE_SIZE        0x0100      // 256 Byte Page size
@@ -37,9 +40,24 @@ typedef struct _SysCfg
 	uint8  reserved2[8];		//保留
 	uint8  SerialNums[BAT_SERIALNUM_COUNT][SERIAL_NUM_SIZE];
 }SysCfg;
+
+//调试信息区内容,必须在结构中增加firstByte和latestByte,用于校验从Flash中读取的区块内容的完整性
+//结构字节数必须为偶数(2字节对齐)，否则无法写入Flash
+typedef struct
+{
+	uint8 firstByte;
+	uint32 debugLevel;		//调试信息输出标志
+	uint8 pmsAddrForPrintf;	//指定打印输出的Pms地址，0：无效值,打印所有的PMS节点的信息。
+	uint8 pad;				//补位字节
+	uint8 Reserved[32];		//保留32个字节
+	uint8 latestByte;		//从存储区读出的字节不等于 EEPROM_LATEST_BYTE，说明该存储区被修改，已经失效
+}DebugInfo;
+
 #pragma pack() 
 
 extern SysCfg	g_SysCfg;
+extern DebugInfo	*g_pDbgInfo;
+
 
 #define MAX_LOG_SECTOR 8
 	
@@ -74,6 +92,31 @@ typedef struct _NvdsMap
 	uint8	binBuf1[FILE_BUF_SIZE];		//BIN文件
 	uint8	binBuf2[FILE_BUF_SIZE];		//BIN文件
 }NvdsMap;
+
+typedef enum
+{
+	NVDS_VER_INFO = 0,
+	NVDS_CFG_INFO,
+	NVDS_PDO_INFO,
+	NVDS_DBG_INFO,
+}NvdsID;
+
+/*Nvds事件定义*/
+typedef enum
+{
+	BE_DATA_ERROR,	//存储区数据检验失败，数据无效
+	BE_DATA_OK,		//存储区数据检验通过，数据有效
+	BE_ON_WRITE_BEFORE,	//写数据操作之前
+}BlockEventID;
+//事件函数定义
+typedef void (*BlockEventFn)(void* pData, BlockEventID eventId);
+typedef struct
+{
+	NvdsID		id;					//索引
+	SectorMgr	sectorMgr;			//扇区管理			
+	BlockEventFn Event;	//当存储块信息无效时，设置默认值的函数
+}Nvds;
+
 
 extern const NvdsMap* g_pNvdsMap;
 

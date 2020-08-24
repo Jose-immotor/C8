@@ -18,12 +18,14 @@
 #include "mx25_cmd.h"
 //#include "DataRom.h"
 #include "smart_system.h"
-////#include "Lock.h"
+#include "CcuLog.h"
 //#include "Beep.h"
 #include "nvc.h"
 #include "main.h"
+#include "LogUser.h"
 #include "log.h"
-//#include "record.h"
+#include "MemMap.h"
+#include "CcuDef.h"
 
 
 const NvdsMap* g_pNvdsMap = (NvdsMap*)0;	//Flash空间映射
@@ -32,9 +34,11 @@ static SectorMgr	g_MiscSectorMgr;
 static SectorMgr	g_SettingSectorMgr;
 static SectorMgr	g_SysCfgSectorMgr;			//调试数据数据扇区
 
-//extern void Ble_SetSpp(Bool isEnable);
+static Nvds  g_Nvds[4];
 
 SysCfg	g_SysCfg = {0};
+
+DebugInfo	*g_pDbgInfo;
 
 ////检验轨迹和时间信息，是否需要保存
 
@@ -43,8 +47,8 @@ void NvdsMap_Dump(void)
 	#define PRINTF_MISC(_field) Printf("\t%s=%d\n", #_field, g_MiscSectorMgr._field);
 	#define PRINTF_SETTING(_field) Printf("\t%s=%d\n", #_field, g_SettingSectorMgr._field);
 	#define PRINTF_CFG(_field) Printf("\t%s=%d\n", #_field, g_SysCfgSectorMgr._field);
-	#define PRINTF_LOG(_field) Printf("\t%s=%d\n", #_field, g_LogRecord._field);
-	#define PRINTF_LOGRECORD(_field) Printf("\t%s=%d\n", #_field, g_LogRecord.recordMgr._field);
+	#define PRINTF_LOG(_field) //Printf("\t%s=%d\n", #_field, g_LogRecord._field);
+	#define PRINTF_LOGRECORD(_field) //Printf("\t%s=%d\n", #_field, g_LogRecord.recordMgr._field);
 	#define PRINTF_SYSCFG(_field) Printf("\t%s=%d\n", #_field, g_SysCfg._field);
 	
 	Printf("Dump NvdsMap:\n");
@@ -79,7 +83,7 @@ void NvdsMap_Dump(void)
 	PRINTF_LOG(startAddr);//扇区的起始地址
 	PRINTF_LOG(sectorCount);//总扇区数
 	PRINTF_LOG(itemSize);//扇区Item大小
-	PRINTF_LOG(total);//
+	PRINTF_LOG(itemCount);//
 	PRINTF_LOG(writeSectorInd);//
 	PRINTF_LOG(readStartSectorInd);//
 	PRINTF_LOG(writeSectorInd);//
@@ -183,7 +187,7 @@ void Nvds_InitSectorMgr(SectorMgr* pSector, uint32 startAddr, void* pItem, uint1
 	memcpy(temp,  pItem, itemSize);
 	
 	//从Flash读取设置值
-	bRet = SectorMgr_Init(pSector, startAddr, pItem , itemSize);
+	bRet = SectorMgr_Init(pSector, SECTOR_SIZE, startAddr, pItem , itemSize);
 	if(bRet && version != *((uint8*)pItem))	//校验版本号
 	{
 		//Printf("Ver is not match.\n");
@@ -213,7 +217,7 @@ void Nvds_InitSysCfg()
 	else
 	{
 		g_SysCfg.postLogInd = 0;
-		g_SysCfg.readLogStartSector = g_LogRecord.readStartSectorInd;
+//		g_SysCfg.readLogStartSector = g_LogRecord.readStartSectorInd;
 		g_SysCfg.readLogCount = 0;
 	}
 	//此时还没有初始化串口，不能打印
@@ -265,7 +269,7 @@ void Nvds_Reset()
 	SectorMgr_Erase(&g_SysCfgSectorMgr);
 	memset(&g_SysCfg, 0, sizeof(SysCfg));
 #ifdef CFG_LOG	
-	Log_RemoveAll();	
+//	Log_RemoveAll();	
 #endif			
 	Nvds_Start();
 	Nvds_SettingDefault();
@@ -290,7 +294,7 @@ void Nvds_Start()
 	Nvds_InitSectorMgr(&g_SettingSectorMgr,(uint32)&g_pNvdsMap->runSettingAddr,
 			&g_Settings.settingVer,&g_Settings.settingEnd-&g_Settings.settingVer,SETTING_VER);	
 	Nvds_Write_Setting();
-	Log_Init();
+	LogUser_Init();
 	Nvds_InitSysCfg();
 
 	g_Settings.isFlashOk = Mx25_ReadIdTest();
@@ -304,54 +308,98 @@ void Nvds_Start()
 	}
 }
 
-//void Nvds_Tester()
-//{
-//	Printf("Log_Add 1 test ");
+void DbgInfo_Event(DebugInfo* p, BlockEventID eventId)
+{
+	if (eventId == BE_DATA_ERROR)
+	{
+		//数据错误，设定默认值
+		memset(p, 0, sizeof(DebugInfo));
 
-//	int i = 0;
-//	int* pInt = (int*)g_CommonBuf;
-//	SysCfg* pSysCfg = &g_SysCfg;
-//	SysCfg compare;
+		//不能再这里打印输出，UART没初始化，会导致程序堵塞
+		//Printf("DbgInfo error.\n");
 
-//	SectorMgr_Erase(&g_SysCfgSectorMgr);
+		g_dwDebugLevel = 0xFF;
+	}
+	else if (eventId == BE_DATA_OK)
+	{
+		g_dwDebugLevel = p->debugLevel;
+	}
+	else if (eventId == BE_ON_WRITE_BEFORE)
+	{
+		p->debugLevel = g_dwDebugLevel;
+	}
+}
 
-//	for(i = 0; i < SECTOR_SIZE/sizeof(g_SysCfg) + 20; i++)
-//	{
-//		for(int j = 0; j < sizeof(g_SysCfg); j++)
-//		{
-//			pInt[j] = rand();
-//		}
-//		memcpy(pSysCfg, pInt, sizeof(g_SysCfg));
-//		memcpy(&compare, pInt, sizeof(g_SysCfg));
-//		g_SysCfg.version = SYS_CFG_VER;
-//		pSysCfg->version = SYS_CFG_VER;
-//		compare.version = SYS_CFG_VER;
-//		SectorMgr_Write(&g_SysCfgSectorMgr);
+void Nvds_InitItem(Nvds* p, uint8 id, void* pData, int dataLength, void* eepRomAddr, BlockEventFn event)
+{
+	Assert(id < GET_ELEMENT_COUNT(g_Nvds));
+	Assert(dataLength % 2 == 0);	//dataLength必须为偶数(2字节对齐)，否则无法写入Flash
 
-//		memset(pSysCfg, 0, sizeof(g_SysCfg));
-//		SectorMgr_Read(&g_SysCfgSectorMgr, pSysCfg);
+	uint8* pByte = (uint8*)pData;
+	p->id = id;
+	p->Event = event;
 
-//		Printf("Read=%d: ", g_SysCfgSectorMgr.m_readOffset);
-//		DUMP_BYTE(pSysCfg, sizeof(g_SysCfg));
-//		
-//		if(memcmp(pSysCfg, &compare, sizeof(g_SysCfg) )!= 0)
-//		{
-//			DUMP_BYTE(pSysCfg, sizeof(g_SysCfg));
-//			DUMP_BYTE(&compare, sizeof(g_SysCfg));
-//			Assert(False);
-//		}
-//	}
-//	Printf("Log_Init test passed\n");
-////	Assert(False);
-//}
+	SectorMgr_Init(&p->sectorMgr, SECTOR_SIZE, (uint32)eepRomAddr, pData, dataLength);
+
+	//检验内容是否有效
+	if (pByte[0] != EEPROM_FIRST_BYTE || pByte[dataLength - 1] != EEPROM_LATEST_BYTE)
+	{
+		//数据无效，重新调用默认的初始化函数
+		p->Event(pByte, BE_DATA_ERROR);
+
+		pByte[0] = EEPROM_FIRST_BYTE;
+		pByte[dataLength - 1] = EEPROM_LATEST_BYTE;
+		if(p->sectorMgr.m_ItemCount)	//如果被写过,则执行删除操作
+		{
+			SectorMgr_Erase(&p->sectorMgr);
+		}
+	}
+	else
+	{
+		p->Event(pByte, BE_DATA_OK);
+	}
+
+}
+
 int env_nvds_init(void)
-{ 
+{
+	static DebugInfo	g_dbgInfo;
+	
+	g_pDbgInfo = &g_dbgInfo;
+	
 	Smart_SettingsInit();
-	DaraRom_Init();		
+	DaraRom_Init();
 	Nvds_HwInit();
 	LocalTimeInit();
-	Nvds_Start();
-	LOG2(ET_SYS_WAKEUP, g_Settings.devcfg, g_WakeupType);
+	
+	Nvds* p = g_Nvds;
+	Nvds_InitItem(p++, NVDS_DBG_INFO, &g_dbgInfo, sizeof(g_dbgInfo), &g_pMemMap->dbgInfo, (BlockEventFn)DbgInfo_Event);
+	
+	LogUser_Init();
+	LOG_TRACE1(CCU_ADDR, CCU_CATID_COMMON, ET_SUBID_UNDEFIND, CCU_ET_MCU_RESET, 0);
 	return RT_EOK;
 }
-INIT_ENV_EXPORT(env_nvds_init);
+void thread_nvds_entry(void* parameter)
+{
+	env_nvds_init();	
+    while (1)
+    {
+		rt_thread_mdelay(100);
+    }
+}
+
+struct rt_thread thread_nvds;
+unsigned char thread_nvds_stack[2048];
+
+static int app_nvds_init(void)
+{
+	rt_err_t res;
+	res=rt_thread_init(&thread_nvds,"nvds",thread_nvds_entry, RT_NULL,&thread_nvds_stack[0],
+    sizeof(thread_nvds_stack), 5, 10);	
+    if (res == RT_EOK) /* 如果获得线程控制块，启动这个线程 */
+        rt_thread_startup(&thread_nvds);
+	else
+		rt_kprintf("\n!!create thread nvds failed!\n");
+    return 0;
+}
+INIT_APP_EXPORT(app_nvds_init);

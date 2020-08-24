@@ -5,14 +5,42 @@
 extern "C"{
 #endif
 
-
+#if defined ( __CC_ARM   )
+#pragma anon_unions
+#endif
 
 #include "Record.h"
 #include "time.h"
 
 #define LOG_INVALID_IND 0xFFFFFFFF
 
-//typedef Bool (*LogItemFilterFn)(LogItem)
+#define LOG_BUF_TYPE_SIZE			16
+#define LOG_BUF_MODULEID_ID_SIZE	16
+#define LOG_BUF_EVENT_ID_SIZE		32
+#define LOG_BUF_EVENT_VALUE_SIZE	256
+
+typedef Bool(*LogItemFilterFn)(void* pItem, uint32 pParam);
+
+typedef enum _LogType
+{
+	  LT_TRACE
+	, LT_WARNING
+	, LT_ERROR
+}LogType;
+
+struct _LogItem;
+typedef const char* (*LogToStrFn)(const struct _LogItem* pItem, char* buf, int size);
+typedef struct _LogModule
+{
+	uint8		moduleIdMin;	//模块ID最小值，记录触发的log的模块ID
+	uint8		moduleIdMax;	//模块ID最大值，记录触发的log的模块ID
+	LogToStrFn	EventIdToStr;	//事件ID转换到字符串函数指针
+	LogToStrFn	ValueToStr;		//事件值转换到字符串函数指针
+	LogToStrFn	MoudleIdToStr;	//模块ID转换到字符串函数指针
+	LogToStrFn	SubIdToStr;		//事件子ID转换到字符串函数指针
+	LogToStrFn	CatIdToStr;		//事件类别ID转换到字符串函数指针
+}LogModule;
+
 #define SECOND_OFFSET 28800
 typedef enum _ModType
 {
@@ -23,12 +51,6 @@ typedef enum _ModType
 	,MD_FLASH
 	,MD_UPG
 }ModType;
-
-typedef enum _LogType
-{
-	 LT_INFO
-	,LT_ALARM
-}LogType;
 
 typedef enum _LogEvent
 {
@@ -94,24 +116,47 @@ typedef enum _LogEvent
 	
 }LogEvent;
 
+typedef const char* (*LogFmtFn)(const char* str);
 typedef struct _LogEventMap
 {
-	ModType  modType;
-	LogEvent event;
-	const char* pStr;
+	//uint8	moudleId;	//
+	uint8	catId;	//
+	uint8	subId;	//
+	uint8	eventId;	//
+	const char* pEventIdStr;	//长度没限制
+
+/************************************************************
+	pFmt：长度必须<=250，支持以下格式：
+		"%1B"		//输出val.BIT[0], 数值显示为10进制
+		"%1BX"		//输出和上面一样
+		"%0-1B"		//输出val.BIT[0-1], 数值显示为10进制
+		"%2-6BX"	//输出val.BIT[2-6], 数值显示为16进制
+		"%7-10B{1:Title1|2:Title2|...}"//输出val.BIT[7-10]，数值使用大括号内的字符串代替,大括号的字符串长度不能超过128个字节。
+		"%7-10BX{1:Title1|2:Title2|...}"//输出和上面一样。
+************************************************************/
+	const char* pEventValueStrFmt;	
+
+	LogFmtFn Format;
 }LogEventMap;
 
 #define LOG_DATA_VER 1	//注意: 修改该版本号，会导致删除以前保存在Flash的所有数据。
 #pragma pack(1) 
+//该结构的字节收必须偶数，否则会导致存储性能下降
 typedef struct _LogItem
 {	
-	uint8 version:3;	//第一个Field必须是版本号
-	uint8 reserved:3;
-	uint8 logType:2;
-	time_t dateTime;
-	uint8 eventId;
-	uint8 param1;
-	uint8 param2;
+	uint32 dateTime;	//日期时间，从1971年1月1日开始到现在的秒数
+	uint8 version : 1;	//版本号
+	uint8 logType : 2;	//参考 LogType
+	uint8 reserved : 2;
+	uint8 catId : 3;	//类别ID，根据subId的种类归类
+	uint8 moduleId;		//模块ID，记录触发的log的模块ID
+	uint8 subId;		//模块子ID
+	uint8 eventId;//事件ID
+	union
+	{
+		uint8 data[4];	//事件参数
+		uint32 asUint32;
+	};
 }LogItem;
 
 typedef struct _GprsLogPkt
@@ -124,12 +169,11 @@ typedef struct _GprsLogPkt
 
 #pragma pack() 
 
-extern Record g_LogRecord;
+
 
 Bool Log_FilterTime(LogItem* pItem, uint32 param);
 Bool Log_FilterEvent(LogItem* pItem, uint8 events[], int count);
 
-void Log_Init(void);
 void Log_Dump(LogItem* item, const char* head, const char* tail);
 void Log_Add(LogEvent logEvent, LogType logType, uint8 param1, uint8 param2);
 int Log_Read(LogItem* pLogItem, int count, int ind);
@@ -150,8 +194,8 @@ int Log_GetRemain(uint8 readSec, int pos);
 #define LOG1(x) 			Log_Add(x, LT_INFO, 0, 0);
 #define LOG2(x,x1,x2) 		Log_Add(x, LT_INFO, (x1), (x2));
 
-
-void Log_Tester(void);
+void Log_Init(LogItem* item, uint8 moduleId, uint8 catId, uint8 subId, LogType logType, uint8 eventId, uint32 val);
+int SprintfBit(char buf[], const char* fmt, uint32 val, uint8* numberOfBit);
 
 #ifdef __cplusplus
 }
