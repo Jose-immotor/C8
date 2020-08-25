@@ -76,3 +76,5 @@
 .\objects\main.o: ..\..\Src\source\nvds\Record.h
 .\objects\main.o: ..\..\Src\source\nvds\smart_system.h
 .\objects\main.o: ..\..\Src\source\nvds\datarom.h
+.\objects\main.o: ..\..\src\source\user\CcuLed.h
+.\objects\main.o: ..\..\Src\Arch\Led.h

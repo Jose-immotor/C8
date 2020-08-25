@@ -15,6 +15,7 @@
 #include "nvds.h"
 #include "log.h"
 #include "smart_system.h"
+#include "CcuLed.h"
 
 volatile bool g_isPowerDown = False;//休眠标志，False-没有休眠，True-休眠
 
@@ -171,7 +172,6 @@ void Mcu_Sleep()
 	Mcu_PowerDown();
 }
 
-void led_config(void);
 /*!
  * \brief main function
  *		  
@@ -182,30 +182,11 @@ void led_config(void);
  */
 int main(void)
 {
-//	env_nvds_init();
-	/* led config */
-    led_config();
-	
+	RunLed_Init();
     while(1)
 	{
-		gpio_bit_reset(GPIOE, GPIO_PIN_11);
-		rt_thread_mdelay(500);
-		gpio_bit_set(GPIOE, GPIO_PIN_11);
-		rt_thread_mdelay(500);
+		RunLed_Run();
+		rt_thread_mdelay(100);
     }
 }
 
-/*!
-    \brief      led config
-    \param[in]  none
-    \param[out] none
-    \retval     none
-*/
-void led_config(void)
-{
-    /* enable the led clock */
-    rcu_periph_clock_enable(RCU_GPIOE);
-    /* configure led GPIO port */ 
-    gpio_init(GPIOE, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ,GPIO_PIN_11);
-	gpio_bit_set(GPIOE, GPIO_PIN_11);
-}

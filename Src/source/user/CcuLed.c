@@ -5,7 +5,7 @@
 
 static LedState g_RunLedMode[] = 
 {
-	{LED_RUN_MODE					, 0, 1000, 1000},	//正常运行，呼吸灯
+	{LED_RUN_MODE					, 0, 200, 1000},	//正常运行，呼吸灯
 	{LED_RELAY_1_2_FAULT			, 0, 200 , 50},		//1#或者2#继电器故障
 	{LED_BP_NO_BATTERY_OR_SOC_LESS	, 0, 200 , 200},	//备电仓没电池，或者电池电量不足
 };
@@ -28,7 +28,7 @@ void RunLed_SetMode(LedID mode)
 	g_pLedMode = RunLed_GetMode(mode);
 }
 
-void RunLed_Run()
+void RunLed_Run(void)
 {
 	static uint32 tick = 0;
 	static Bool isOn = True;
@@ -44,9 +44,10 @@ void RunLed_Run()
 
 void RunLed_Init()
 {
-	static Obj g_LedObj;
-	Obj_Register(&g_LedObj, "LED", Null, Null, RunLed_Run);
+//	static Obj g_LedObj;
+//	Obj_Register(&g_LedObj, "LED", Null, Null, RunLed_Run);
 
 	g_pLedMode = RunLed_GetMode(LED_RUN_MODE);
 	g_pLedIO = IO_Get(CTRL_MCU_LED);
+	
 }
