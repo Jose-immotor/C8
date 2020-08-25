@@ -1,3 +1,4 @@
+#if 0
 
 
 /**@file
@@ -143,3 +144,4 @@ GLOBAL_MM unsigned char MM_is_all_snd_done(void);
 
 #endif // 
 /** @} */
+#endif

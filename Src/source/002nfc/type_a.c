@@ -1,3 +1,5 @@
+#if 1
+
 /*************************************************************/
 //2014.07.15修改版
 /*************************************************************/
@@ -322,3 +324,32 @@ unsigned char TypeA_CardActivate(unsigned char *pTagType,
     return result;
 }
 
+/****************************************************************/
+/*名称: TypeA_RATS 													           */
+/*功能: 该函数实现ISO14443A-4协议中的RATS处理			     */
+/*输入: param byte bit8-bit5：FSDI,bit4-bit0 ：CID     */
+/*       ats 用于保存RATS命令返回的数据                */
+/*输出:															                   */
+/* OK: 应答正确												                 */
+/* ERROR: 应答错误												             */
+/****************************************************************/
+unsigned char TypeA_RATS(unsigned char param, unsigned char* ats)
+{
+	unsigned char send_buff[4];
+	unsigned char result;
+	unsigned int rece_bitlen;
+	//unsigned long CID = 0;
+
+	send_buff[0] = 0xE0;
+	send_buff[1] = param;                                //
+	//CID = param & 0x0f;
+	Write_Reg(BitFramingReg, 0x00);
+	Set_BitMask(TxModeReg, 0x80);                         //设置发送CRC
+	Set_BitMask(RxModeReg, 0x80);                         //设置接收CRC
+	Clear_BitMask(Status2Reg, 0x08);
+	Pcd_SetTimer(5);
+	Clear_FIFO();
+	result = Pcd_Comm(Transceive, send_buff, 2, ats, &rece_bitlen);
+	return result;
+}
+#endif

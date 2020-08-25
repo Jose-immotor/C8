@@ -15,76 +15,8 @@
 ////#include "battery_process.h"
 #include <stdio.h>
 #include <stdint.h>
-#include "smart_system.h"
-////#include "fsm.h"
-////#include "AtCmdCtrl.h"
-////#include "Ble.h"
-////#include "sim.h"
-#include "datarom.h"
-#include "Nvds.h"
-#include "Pms.h"
-////#include "Gyro.h"
-////#include "Beep.h"
-////#include "Sign.h"
-#include "main.h"
-////#include "nvc.h"
-////#include "gprs.h"
+
 #include "gd32f403.h"
-
-//#define SHELL_RX_BUF_SIZE 64
-//#define DBL_IS_TRUE(dl) ((dl & g_dwDebugLevel) > 0)
-//#define SET_DBL_BIT(dl, isTrue) \
-//	if(isTrue)	\
-//		g_dwDebugLevel |= (1 << GetBitInd(dl));	\
-//	else	\
-//		g_dwDebugLevel &= ~(1 << GetBitInd(dl));
-
-////SafeBuf g_Uart0SafeBuf;
-
-//extern void _puts (const char *s);
-//extern void Ble_Dump(void);
-//	
-
-//smart_shell_param_t smart_shell_param;
-
-//void SimSendAtCmd(const char* pAtCmd, uint32 second)
-//{
-//	uint8_t buf[64] = {0};
-//	uint32 cmdLen = strlen(pAtCmd);
-
-//	memcpy(buf, pAtCmd, cmdLen);
-//	
-//	buf[cmdLen++] = '\r';
-//	buf[cmdLen++] = '\n';
-//	buf[cmdLen] = 0;
-
-//	//Printf("%s", buf);
-////	Sim_TxAtCmd((char*)buf, cmdLen);
-//}
-
-//void BleSendAtCmd(const char* pAtCmd)
-//{	
-//	uint8_t buf[64] = {0};
-//	uint32 cmdLen = strlen(pAtCmd);
-
-//	memcpy(buf, pAtCmd, cmdLen);
-//	
-//	buf[cmdLen++] = '\r';
-//	buf[cmdLen++] = '\n';
-//	buf[cmdLen] = 0;
-//	//Printf("%s", buf);
-//	
-////	Ble_Send((char*)buf, cmdLen);
-//}
-
-//void FlashTest()
-//{
-//	extern uint8_t Mx25_ReadIdTest( void );
-
-//	Mx25_ReadIdTest();
-
-//}
-
 /*!
  * \brief ´òÓ¡×´Ì¬ÐÅÏ¢
  *		  
@@ -197,17 +129,8 @@ static void SelfTest(void)
 	__IO uint32_t sn2=*(__IO uint32_t*)(0x1FFFF7F0);
 	
 	Printf("\r\nsID: %X%X%X\r\n",sn2,sn1,sn0);
-//	Printf("\tBleMac:%s; FwVer:[%s]\n"	, g_pBle->macValid ? g_Settings.sID : "fail", g_pBle->m_FwVer);
-	Printf("\tFlash:%s\n"		, g_Settings.isFlashOk ? "pass" : "fail");
-//	Printf("\tGyroscope:%s\n"	, g_Settings.isGyroOk  ? "pass" : "fail");
-//	Printf("\tSY6990:%s\n"	, g_Settings.is6990Ok  ? "pass" : "fail");
-//	if(!g_pGps->sateInview)
-//		Printf("\tGps:searching...\n");
-//	else 
-//		Printf("\tGps:pass; sateInview=%d\n", Gps_GetSateInview());
-//	Printf("\tSimHw:%s\n"		, g_pSimCard->isCommOk ? "pass" : "fail");
-//	Printf("\tSimCar:%s\n"		, g_pGprs->isReg ? "pass" : "fail");
 
+<<<<<<< .mine
 //	Printf("\tGprsCSQ:[%d]\n", g_pSimCard->csq);
 ////	if(flag)
 //	{
@@ -217,6 +140,17 @@ static void SelfTest(void)
 //		Printf("\tErrCode:0x%x\n", GetErrorCodeDec());
 //		ErrList_Dump();
 //	}
+=======
+
+
+
+
+
+
+
+
+
+>>>>>>> .theirs
 }
 MSH_CMD_EXPORT(SelfTest , SelfTest board);
 

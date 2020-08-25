@@ -14,7 +14,8 @@ extern "C"{
 #include "Obj.h"
 #include "Utp.h"
 #include "debug.h"
-#include "message.h"
+#include "Bit.h"
+#include "SwTimer.h"#include "message.h"
 #include "queue.h"
 #include "datatime.h"
 

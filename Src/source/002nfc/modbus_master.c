@@ -1,4 +1,6 @@
 
+#if 0
+
 
 //#define MODBUS_MASTER_C
 #include <string.h>
@@ -330,3 +332,5 @@ unsigned char MM_NFC_snd_ERR(void)
 //{
 //    
 //}
+
+#endif

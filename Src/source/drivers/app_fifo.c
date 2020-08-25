@@ -1,3 +1,5 @@
+
+#if 0
 /* Copyright (c) 2013 Nordic Semiconductor. All Rights Reserved.
  *
  * The information contained herein is property of Nordic Semiconductor ASA.
@@ -205,4 +207,6 @@ uint32_t app_fifo_length(app_fifo_t * p_fifo)
   uint32_t tmp = p_fifo->read_pos;
   return p_fifo->write_pos - tmp;
 }
+
+#endif
 

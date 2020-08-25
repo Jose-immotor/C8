@@ -2,6 +2,7 @@
 #include "ArchDef.h"
 #include "SwTimer.h"
 
+//system_ms_tick must be modify in MS timer of system
 volatile unsigned int system_ms_tick;
 void SwTimer_Init(SwTimer* pTimer, uint32_t timeOutMs, uint32_t nId)
 {

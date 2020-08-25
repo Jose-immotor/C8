@@ -1,3 +1,5 @@
+#if 0
+
 /*
  * File      : ntag_app.c
  * This file is part of RT-Thread RTOS
@@ -512,3 +514,4 @@ void NTAG_task_process(void)
 //    return gl_ntag_nfc_sending_receiving_flag;
 //}
 
+#endif

@@ -1,3 +1,4 @@
+#if 1
 /*
  * File      : fm175xx.c
  * This file is part of RT-Thread RTOS
@@ -19,6 +20,7 @@
 #include "drv_i2c.h"
 #include <rtthread.h>
 
+static unsigned char g_iicPortAddr = 0;
 
 #define ERROR		1
 #define	OK			0
@@ -28,7 +30,7 @@ const unsigned char gl_FM17522_Slave_Addr[6] = {FM17522_I2C_ADDR, FM17522_I2C_AD
 
 unsigned char Fm17522_get_slave_addr(void)
 {
-    return gl_FM17522_Slave_Addr[gl_NTAGTX_param.vl_BMS_index];
+    return gl_FM17522_Slave_Addr[g_iicPortAddr];
 }
 
 
@@ -530,7 +532,7 @@ unsigned char  FM175XX_SoftReset(void)
 
 unsigned char FM175XX_HardReset(void)
 {	
-	if(gl_NTAGTX_param.vl_BMS_index == 0)
+	if(g_iicPortAddr == 0)
 	{
 		//拉低NPD脚
 		FM17522_NPD_LOW;
@@ -540,7 +542,33 @@ unsigned char FM175XX_HardReset(void)
 		FM17522_Delayms(10);
 		return OK;
 	}
-	else if(gl_NTAGTX_param.vl_BMS_index == 1)
+	else if(g_iicPortAddr == 1)
+	{
+		//拉低NPD脚
+		FM17522_NPD_LOW;
+		FM17522_Delayms(1);
+		//拉高NPD脚
+		FM17522_NPD_HIGHT;
+		FM17522_Delayms(10);
+		return OK;
+	}
+	return ERROR;
+}
+
+unsigned char FM175XX_switchPort(uint8_t port)
+{
+	g_iicPortAddr = port;
+	if (port == 0)
+	{
+		//拉低NPD脚
+		FM17522_NPD_LOW;
+		FM17522_Delayms(1);
+		//拉高NPD脚
+		FM17522_NPD_HIGHT;
+		FM17522_Delayms(10);
+		return OK;
+	}
+	else if (port == 1)
 	{
 		//拉低NPD脚
 		FM17522_NPD_LOW;
@@ -589,13 +617,13 @@ unsigned char FM175XX_SoftPowerdown(void)
 /*********************************************/
 unsigned char FM175XX_HardPowerdown(void)
 {	
-	if(gl_NTAGTX_param.vl_BMS_index == 0)
+	if(g_iicPortAddr == 0)
 	{
 		//拉低NPD脚
 		FM17522_NPD_LOW;
 		return OK;
 	}
-	else if(gl_NTAGTX_param.vl_BMS_index == 1)
+	else if(g_iicPortAddr == 1)
 	{
 		//拉低NPD脚
 		FM17522_NPD_LOW;
@@ -638,3 +666,5 @@ void FM17522_Delayms(unsigned int delayms)
 	return ;
 }
 
+
+#endif

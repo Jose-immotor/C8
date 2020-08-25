@@ -29,4 +29,6 @@ GLOABL_TYPEA unsigned char TypeA_Anticollision(unsigned char selcode, unsigned c
 GLOABL_TYPEA unsigned char TypeA_Select(unsigned char selcode, unsigned char *pSnr, unsigned char *pSak);
 GLOABL_TYPEA unsigned char TypeA_Halt(void);
 GLOABL_TYPEA unsigned char TypeA_CardActivate(unsigned char *pTagType, unsigned char *pSnr, unsigned char *pSak);
+unsigned char TypeA_RATS(unsigned char param, unsigned char* ats);
+
 #endif

@@ -16,7 +16,7 @@ extern "C"{
 	#define UDELAY(...)
 	
 	extern CRITICAL_SECTION g_CriticalSection;
-	#define Printf printf
+	//#define Printf printf
 #else
 	#define MDELAY(mS) TIMER_Delay(TIMER0, (mS)*1000)
 	#define UDELAY(uS) TIMER_Delay(TIMER0, (uS))

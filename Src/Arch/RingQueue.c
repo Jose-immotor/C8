@@ -1,7 +1,7 @@
 
 #include "ArchDef.h"
 #include "RingQueue.h"
-
+/*
 void RingQueue_Dump(RingQueue* ringQueue)
 {
 	Queue* queue = (Queue*)ringQueue;
@@ -14,7 +14,7 @@ void RingQueue_Dump(RingQueue* ringQueue)
 	Printf("\t m_isEmpty=0x%x\n"	, ringQueue->isFull);
 	Printf("\t m_isFull=0x%x\n"		, ringQueue->isEmpty);
 }
-
+*/
 void* RingQueue_getNew(RingQueue* ringQueue)
 {
 	Queue* queue = (Queue*)ringQueue;

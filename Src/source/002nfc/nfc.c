@@ -1,3 +1,5 @@
+#ifdef OLDER_CODE
+
 /*
  * File      : fm17522_process.c
  * This file is part of RT-Thread RTOS
@@ -105,3 +107,5 @@ static int app_nfc_init(void)
     return 0;
 }
 INIT_APP_EXPORT(app_nfc_init);
+
+#endif
