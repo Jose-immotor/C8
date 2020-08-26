@@ -26,11 +26,13 @@ extern "C"{
 
 	typedef enum
 	{
-		JT_STATE_INIT			= 0,
+		JT_STATE_INIT			= 0x00,
 		JT_STATE_SLEEP			= 0x01,
 		JT_STATE_WAKEUP			= 0x02,
 		JT_STATE_PREOPERATION	= 0x04,
 		JT_STATE_OPERATION		= 0x05,
+
+		JT_STATE_UNKNOWN		= 0xFF,
 	}JT_state;
 
 	typedef struct _JT_devState
@@ -50,6 +52,7 @@ extern "C"{
 		uint8_t SN[12];
 	}SimID;
 
+	typedef void (*JT808fsmFn)(uint8_t msgID, uint32_t param1, uint32_t param2);
 	typedef struct _JT808
 	{
 		//当前JT808的操作状态
@@ -65,6 +68,8 @@ extern "C"{
 		Bool isLocation;
 
 		uint16_t bleEnCtrl;
+
+		JT808fsmFn fsm;
 	}JT808;
 
 	extern JT808* g_pJt;

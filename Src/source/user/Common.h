@@ -10,12 +10,14 @@ extern "C"{
 #define XDEBUG
 #endif
 
+#define CFG_LOG
+
 #include "ArchDef.h"
 #include "Obj.h"
 #include "Utp.h"
-#include "debug.h"
 #include "Bit.h"
 #include "SwTimer.h"
+#include "Log.h"
 
 #ifdef __cplusplus
 }

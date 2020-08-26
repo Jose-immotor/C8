@@ -11,6 +11,8 @@ static uint32_t g_hbIntervalMs = 2000;	//MCU心跳时间间隔，单位Ms
 
 void JT808_fsm(uint8_t msgID, uint32_t param1, uint32_t param2);
 
+static JT808fsmFn JT808_findFsm(JT_state state);
+
 UTP_EVENT_RC JT808_cmd_getSimCfg(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
 	if (ev == UTP_TX_START)
@@ -19,12 +21,16 @@ UTP_EVENT_RC JT808_cmd_getSimCfg(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT e
 	return UTP_EVENT_RC_SUCCESS;
 }
 
-void JT808_switchState(JT808* pJt, JT_state oldState, JT_state newState)
+void JT808_switchState(JT808* pJt, JT_state newState)
 {
+	if (pJt->opState == newState) return;
+
 	switch (newState)
 	{
 		case JT_STATE_INIT:
 		{
+			//发送心跳帧
+			Utp_SendCmd(&g_JtUtp, JTCMD_MCU_HB);
 			break;
 		}
 		case JT_STATE_SLEEP:
@@ -50,6 +56,8 @@ void JT808_switchState(JT808* pJt, JT_state oldState, JT_state newState)
 			break;
 		}
 	}
+
+	pJt->fsm = JT808_findFsm(newState);
 }
 
 UTP_EVENT_RC JT808_event_simHb(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
@@ -57,7 +65,7 @@ UTP_EVENT_RC JT808_event_simHb(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 	if (ev == UTP_CHANGED_BEFORE)
 	{
 		JT_state newOp = *pCmd->pExt->transferData;
-		JT808_switchState(pJt, g_Jt.opState, newOp);
+		JT808_switchState(pJt, newOp);
 	}
 	return UTP_EVENT_RC_SUCCESS;
 }
@@ -88,7 +96,6 @@ UTP_EVENT_RC JT808_utpEventCb(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 
 void JT808_fsm_init(uint8_t msgID, uint32_t param1, uint32_t param2)
 {
-
 }
 
 void JT808_fsm_preoperation(uint8_t msgID, uint32_t param1, uint32_t param2)
@@ -119,12 +126,12 @@ void JT808_fsm_wakeup(uint8_t msgID, uint32_t param1, uint32_t param2)
 
 }
 
-void JT808_fsm(uint8_t msgID, uint32_t param1, uint32_t param2)
+static JT808fsmFn JT808_findFsm(JT_state state)
 {
 	struct
 	{
 		JT_state state;
-		void (*fsm)(uint8_t msgID, uint32_t param1, uint32_t param2);
+		JT808fsmFn fsm;
 	}
 	static const fsmDispatch[] =
 	{
@@ -134,15 +141,22 @@ void JT808_fsm(uint8_t msgID, uint32_t param1, uint32_t param2)
 		{JT_STATE_PREOPERATION	, JT808_fsm_preoperation},
 		{JT_STATE_OPERATION		, JT808_fsm_operation},
 	};
-
 	for (int i = 0; i < GET_ELEMENT_COUNT(fsmDispatch); i++)
 	{
 		if (g_Jt.opState == fsmDispatch[i].state)
 		{
-			fsmDispatch[i].fsm(msgID, param1, param2);
-			break;
+			return fsmDispatch[i].fsm;
 		}
 	}
+
+	//程序不可能运行到这里
+	Assert(False);
+	return Null;
+}
+
+void JT808_fsm(uint8_t msgID, uint32_t param1, uint32_t param2)
+{
+	g_pJt->fsm(msgID, param1, param2);
 }
 
 //发送数据到总线
@@ -150,6 +164,12 @@ int JT808_txData(const uint8_t* pData, int len)
 {
 	//transfer data to bus.
 	return len;
+}
+
+//从总线上接收数据
+void JT808_rxDataProc(const uint8_t* pData, int len)
+{
+	Utp_RxData(&g_JtUtp, pData, len);
 }
 
 void JT808_timerProc()
@@ -176,9 +196,7 @@ Bool JT808_sleep()
 void JT808_start()
 {
 	//启动硬件，使能中断
-
-	//发送心跳帧
-	Utp_SendCmd(&g_JtUtp, JTCMD_MCU_HB);
+	JT808_switchState(g_pJt, JT_STATE_INIT);
 }
 
 /************************************************
@@ -218,5 +236,6 @@ void JT808_init()
 	static const Obj obj = { "JT808", JT808_start, (ObjFn)JT808_sleep, JT808_run };
 	ObjList_Add(&obj);
 
+	g_Jt.opState = JT_STATE_UNKNOWN;	//初始化为一个UNKNOWN值
 	Utp_Init(&g_JtUtp, &g_cfg, &g_jtFrameCfg);
 }

@@ -19,7 +19,8 @@ extern "C" {
 		PMS_ACC_OFF	,		//熄火,初始状态
 		PMS_ACC_ON	,		//点火
 		PMS_SLEEP	,		//浅休眠
-		PMS_DEEP_SLEEP,	//深度休眠
+		PMS_DEEP_SLEEP,		//深度休眠
+		PMS_CAN_ERR,		//CAN通信错误
 	}PmsOpStatus;
 
 	//PMS消息定义
@@ -40,7 +41,7 @@ extern "C" {
 	}PmsMsg;
 
 	struct _Pms;
-	typedef void (*Pms_FsmFn)(uint8_t msgId, uint32_t param1, uint32_t param2);
+	typedef void (*Pms_FsmFn)(PmsMsg msgId, uint32_t param1, uint32_t param2);
 	typedef struct _Pms
 	{
 		Mod modBus;

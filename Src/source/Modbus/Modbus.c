@@ -59,7 +59,6 @@ uint8_t* Mod_getRspData(const ModCmd* pCmd, const uint8_t* pRsp, int len, uint8_
 		{
 			*dlc = (uint8_t)((rspFmt[i].dlcInd == -1) ? rspFmt[i].dlc : pRsp[rspFmt[i].dlcInd]);
 			return (uint8_t*)&pRsp[rspFmt[i].dataInd];
-			break;
 		}
 	}
 
@@ -400,7 +399,7 @@ void Mod_DelaySendCmd(const ModCfg * cfg, uint8_t cmd, uint32_t delayMs)
 
 static void Mod_RcvRsp(Mod * pMod, const uint8_t * pRsp, int frameLen, MOD_RSP_RC rspCode)
 {
-	const ModFrameCfg* frameCfg = pMod->frameCfg;
+//	const ModFrameCfg* frameCfg = pMod->frameCfg;
 	const ModCmd* pCmd = pMod->pWaitRspCmd;
 	uint8_t rspDlc = 0;
 

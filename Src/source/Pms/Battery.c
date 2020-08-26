@@ -110,6 +110,10 @@ MOD_EVENT_RC Bat_event_readBmsInfo(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EV
 	{
 		pBat->presentStatus = BAT_IN;
 	}
+	if (ev == MOD_CHANGED_BEFORE)
+	{
+
+	}
 
 	return MOD_EVENT_RC_SUCCESS;
 }
