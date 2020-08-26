@@ -71,7 +71,7 @@ Bool Queue_init(Queue* queue, void* pbuffer, unsigned short itemSize, unsigned i
  * ***************************************/
 void* Queue_searchByte(Queue* queue, uint8_t byte, int* offsetIndex);
 Bool Queue_writeByte(Queue* queue, uint8_t byte);
-Bool Queue_writeBytes(Queue* queue, uint8_t* bytes, int numOfByte);
+Bool Queue_writeBytes(Queue* queue, const uint8_t* bytes, int numOfByte);
 
 #ifdef __cplusplus
 }

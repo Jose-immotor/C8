@@ -223,7 +223,7 @@ static Bool Utp_RspProc(Utp* pUtp, const uint8_t* pRsp, int frameLen, UTP_RCV_RS
 	pUtp->pWaitRspCmd->pExt->rcvRspErr = rspCode;
 	if(rspCode == RSP_SUCCESS)
 	{
-		Utp_RcvRsp(pUtp, pRsp, rspCode, frameLen);
+		Utp_RcvRsp(pUtp, pRsp, frameLen, rspCode);
 	}
 	else
 	{
@@ -502,7 +502,7 @@ static void Utp_CheckReq(Utp* pUtp)
 	len：数据长度。
 返回值无
 ***************************************/
-void Utp_RxData(Utp* pUtp, uint8_t* pData, int len)
+void Utp_RxData(Utp* pUtp, const uint8_t* pData, int len)
 {
 	//检查接收数据的间隔是否超时，如果是则必须丢弃之前接收到的数据。
 	if (pUtp->rxDataTicks && SwTimer_isTimerOutEx(pUtp->rxDataTicks, pUtp->frameCfg->rxIntervalMs))

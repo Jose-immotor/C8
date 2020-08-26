@@ -174,7 +174,7 @@ Bool Queue_writeByte(Queue* queue, uint8_t byte)
 	return True;
 }
 
-Bool Queue_writeBytes(Queue* queue, uint8_t* bytes, int numOfByte)
+Bool Queue_writeBytes(Queue* queue, const uint8_t* bytes, int numOfByte)
 {
 	//if elementSize != 1, can't call function Queue_writeByte.
 	if(queue->elementSize != 1) return False;

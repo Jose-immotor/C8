@@ -54,6 +54,7 @@ void LogUser_init()
 		.base.storage = &g_logItem,
 		.base.storageSize = sizeof(LogItem),
 		.base.exchangeBuf = &g_logItem_exchangeBuf,
+		.base.exchangeBufSize = sizeof(g_logItem_exchangeBuf),
 
 		.base.Verify = (ItemVerifyFn)LogItem_Verify,
 		.base.Read  = LogItem_FmcRead,	
