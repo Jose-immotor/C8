@@ -73,6 +73,7 @@ extern "C"{
 	}JT808;
 
 	extern JT808* g_pJt;
+	void JT808_init();
 
 #ifdef __cplusplus
 }

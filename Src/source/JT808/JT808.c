@@ -234,7 +234,7 @@ void JT808_init()
 	};
 
 	static const Obj obj = { "JT808", JT808_start, (ObjFn)JT808_sleep, JT808_run };
-	ObjList_Add(&obj);
+	ObjList_add(&obj);
 
 	g_Jt.opState = JT_STATE_UNKNOWN;	//初始化为一个UNKNOWN值
 	Utp_Init(&g_JtUtp, &g_cfg, &g_jtFrameCfg);

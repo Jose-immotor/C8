@@ -21,7 +21,9 @@ extern "C"{
 #include "McuFlashMap.h"
 #include "ExternFlashMap.h"
 #include "NvdsUser.h"
-
+#include "rtthread.h"
+#include "gd32f403.h"
+	
 #ifdef __cplusplus
 }
 #endif

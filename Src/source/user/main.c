@@ -6,65 +6,31 @@
  * Change Logs:
  * Date		      Author		Notes
  * 2020-07-28	  lane 	 	    first implementation
+ * 2020-08-27	  Allen	 	    modified
 *******************************************************************************/
 
-#include "rtthread.h"
-#include "gd32f403.h"
+#include "Common.h"
+#include "led.h"
+#include "JT808.h"
+#include "Pms.h"
 
-void led_config(void);
-
-static void led_thread_entry(void)
-{
-    while(1)
-    {
-		gpio_bit_reset(GPIOE, GPIO_PIN_11);
-		rt_thread_mdelay(500);
-		gpio_bit_set(GPIOE, GPIO_PIN_11);
-		rt_thread_mdelay(500);
-    }
-}
-
-/*!
- * \brief main function
- *		  
- * \param[in]  none
- * \param[out] none
- *
- * \return     none
- */
 int main(void)
 {
-	rt_thread_t led_task_tid;    
-	
-	/* led config */
-    led_config();
-	
+	//MCU硬件初始化
+	//Todo...
 
-	led_task_tid= rt_thread_create("led4",/* 线程名称 */
-                            led_thread_entry, RT_NULL,
-                            1024, 3, 10); //
+	//所有对象初始化
+	Led_init();
+	JT808_init();
+	Pms_init();
 	
-	rt_thread_startup(led_task_tid);
+	//对象启动
+	ObjList_start();
+
     while(1)
 	{
-//		gpio_bit_reset(GPIOE, GPIO_PIN_11);
-//		rt_thread_mdelay(2000);
-//		gpio_bit_set(GPIOE, GPIO_PIN_11);
-		rt_thread_mdelay(2000);
+		//对象运行
+		ObjList_run();
     }
 }
 
-/*!
-    \brief      led config
-    \param[in]  none
-    \param[out] none
-    \retval     none
-*/
-void led_config(void)
-{
-    /* enable the led clock */
-    rcu_periph_clock_enable(RCU_GPIOE);
-    /* configure led GPIO port */ 
-    gpio_init(GPIOE, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ,GPIO_PIN_11);
-	gpio_bit_set(GPIOE, GPIO_PIN_11);
-}

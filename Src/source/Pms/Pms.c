@@ -261,6 +261,7 @@ static Pms_FsmFn Pms_findStatusProcFun(PmsOpStatus status)
 
 static void Pms_fsm(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
+	Pms_SwitchPort();
 	Pms_fsm_anyStatusDo(msgId, param1, param2);
 	g_pms.Fsm(msgId, param1, param2);
 }
@@ -289,21 +290,25 @@ NfcCardReaderEventRc Pms_cardReaderEventCb(Pms* pms, NfcCardReaderEvent ev)
 
 void Pms_run()
 {
+	NfcCardReader_run(&g_pms.cardReader);
+	Mod_Run(g_pModBus);
 	Bat_run(&g_Bat[0]);
 	Bat_run(&g_Bat[1]);
-	Pms_SwitchPort();
+
+	Pms_fsm(PmsMsg_run, 0, 0);
 }
 
 void Pms_start()
 {
 	//Æô¶¯NFCÇý¶¯
+	NfcCardReader_start(&g_pms.cardReader);
 	Pms_switchStatus(PMS_ACC_OFF);
 }
 
 void Pms_init()
 {
 	static const Obj obj = { "Pms", Pms_start, Null, Pms_run };
-	ObjList_Add(&obj);
+	ObjList_add(&obj);
 
 	Mod_Init(g_pModBus, &g_Bat0Cfg, &g_frameCfg);
 

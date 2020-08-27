@@ -57,6 +57,7 @@ static Bool DbgInfo_Event(DbgInfo* p, NvdsEventID eventId)
 	return True;
 }
 
+//配置每个存储结构存放在FLASH的位置
 const NvdsItem g_NvdsItems[NVDS_ITEM_COUNT] =
 {
 	{NVDS_CFG_INFO, {CFG_INFO_ADDR, MCU_FLASH_SECTOR_SIZE, &g_cfgInfo , sizeof(g_cfgInfo), g_exchBuf, sizeof(g_exchBuf)}, &g_nvdsSecMgr[0], (NvdsEventFn)CfgInfo_Event},

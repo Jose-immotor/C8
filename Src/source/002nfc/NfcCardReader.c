@@ -188,7 +188,7 @@ Bool NfcCardReader_Send(NfcCardReader* pReader, uint8_t port, const void* data, 
 	return True;
 }
 
-static void NfcCardReader_run(NfcCardReader* pReader)
+void NfcCardReader_run(NfcCardReader* pReader)
 {
 	NfcCardReader_fsm(pReader, CARD_READER_MSG_RUN, 0);
 }

@@ -14,9 +14,9 @@ extern "C" {
 
 	typedef enum
 	{
-		NVDS_CFG_INFO = 1,
-		NVDS_PDO_INFO,
-		NVDS_DBG_INFO,
+		NVDS_CFG_INFO = 1,	//配置信息区内容ID
+		NVDS_PDO_INFO,		//过程数据区内容ID
+		NVDS_DBG_INFO,		//调试信息区内容ID
 	}NvdsID;
 
 	//配置信息区内容,存储系统在运行过程中配置完不修改或者很少修改的内容，

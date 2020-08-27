@@ -1,3 +1,4 @@
+
 #ifndef __NFC_CARD_READER__H_
 #define __NFC_CARD_READER__H_
 
@@ -79,7 +80,8 @@ extern "C" {
 	void NfcCardReader_init(NfcCardReader* pReader, NfcCardReader_EventFn Event, void* cbObj);
 	Bool NfcCardReader_isIdle(NfcCardReader* pReader);
 	Bool NfcCardReader_Send(NfcCardReader* pReader, uint8_t port, const void* data, int len);
-
+	void NfcCardReader_run(NfcCardReader* pReader);
+	void NfcCardReader_start(NfcCardReader* pReader);
 #ifdef __cplusplus
 }
 #endif
