@@ -49,8 +49,8 @@ void LogUser_init()
 
 	static const RecordCfg recordCfg = 
 	{
-		.base.startAddr = 0,	//待定，根据实际分配
-		.base.sectorSize = 512,	//待定，根据实际定义
+		.base.startAddr = LOG_AREA_ADDR,	//待定，根据实际分配
+		.base.sectorSize = EX_FLASH_SECTOR_SIZE,	//待定，根据实际定义
 		.base.storage = &g_logItem,
 		.base.storageSize = sizeof(LogItem),
 		.base.exchangeBuf = &g_logItem_exchangeBuf,

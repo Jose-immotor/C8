@@ -18,7 +18,9 @@ extern "C"{
 #include "Bit.h"
 #include "SwTimer.h"
 #include "Log.h"
-#include "FlashMap.h"
+#include "McuFlashMap.h"
+#include "ExternFlashMap.h"
+#include "NvdsUser.h"
 
 #ifdef __cplusplus
 }
