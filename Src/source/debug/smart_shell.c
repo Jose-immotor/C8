@@ -10,12 +10,7 @@
  * 2020-02-25     lane      first implementation
  */
  
-#include <stdio.h>
-#include <stdio.h>
-#include <stdint.h>
-#include "gd32f403.h"
-#include "rtthread.h"
-#include "debug.h"
+#include "common.h"
 #include "datatime.h"
 /*!
  * \brief ´òÓ¡×´Ì¬ÐÅÏ¢

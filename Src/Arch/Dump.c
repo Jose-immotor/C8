@@ -1,7 +1,6 @@
 
 #include "ArchDef.h"
 #include "Dump.h"
-#include "debug.h"
 
 void DumpByte(const uint8_t* pData, uint16_t len, uint8_t cols)
 {

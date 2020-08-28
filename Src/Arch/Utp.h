@@ -279,7 +279,7 @@ void Utp_Reset(Utp* pUtp);
 	len：数据长度。
 返回值无
 ***************************************/
-void Utp_RxData(Utp* pUtp, uint8_t* pData, int len);
+void Utp_RxData(Utp* pUtp, const uint8_t* pData, int len);
 
 
 /*******************************************

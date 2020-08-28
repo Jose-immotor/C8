@@ -9,8 +9,7 @@
 .\objects\utp.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\objects\utp.o: ..\..\Src\Arch\Dump.h
 .\objects\utp.o: ..\..\Src\Arch\_Macro.h
-.\objects\utp.o: ..\..\Src\source\debug\Printf.h
-.\objects\utp.o: ..\..\Src\Arch\ArchDef.h
+.\objects\utp.o: ..\..\Src\Arch\Dbg.h
 .\objects\utp.o: ..\..\Src\Arch\Bit.h
 .\objects\utp.o: ..\..\Src\Arch\Utp.h
 .\objects\utp.o: ..\..\Src\Arch\SwTimer.h

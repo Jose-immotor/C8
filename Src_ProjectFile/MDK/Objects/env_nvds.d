@@ -18,8 +18,7 @@
 .\objects\env_nvds.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\objects\env_nvds.o: ..\..\Src\Arch\Dump.h
 .\objects\env_nvds.o: ..\..\Src\Arch\_Macro.h
-.\objects\env_nvds.o: ..\..\Src\source\debug\Printf.h
-.\objects\env_nvds.o: ..\..\Src\Arch\ArchDef.h
+.\objects\env_nvds.o: ..\..\Src\Arch\Dbg.h
 .\objects\env_nvds.o: ..\..\Src\Arch\Bit.h
 .\objects\env_nvds.o: ..\..\Src\Arch\Obj.h
 .\objects\env_nvds.o: ..\..\Src\Arch\Utp.h
@@ -63,7 +62,13 @@
 .\objects\env_nvds.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h
 .\objects\env_nvds.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h
 .\objects\env_nvds.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
-.\objects\env_nvds.o: ..\..\Src\source\nvds\nvds.h
+.\objects\env_nvds.o: ..\..\Src\Arch\Log.h
+.\objects\env_nvds.o: ..\..\Src\Arch\Record.h
+.\objects\env_nvds.o: ..\..\Src\Arch\SectorMgr.h
+.\objects\env_nvds.o: ..\..\Src\source\user\McuFlashMap.h
+.\objects\env_nvds.o: ..\..\Src\source\user\ExternFlashMap.h
+.\objects\env_nvds.o: ..\..\Src\source\nvds\NvdsUser.h
+.\objects\env_nvds.o: ..\..\Src\source\nvds\Nvds.h
 .\objects\env_nvds.o: ..\..\Src\source\nvds\SectorMgr.h
 .\objects\env_nvds.o: ..\..\Src\source\Pms\Battery.h
 .\objects\env_nvds.o: ..\..\Src\source\Pms\BmsReg.h
@@ -74,7 +79,6 @@
 .\objects\env_nvds.o: ..\..\Src\source\nvds\datarom.h
 .\objects\env_nvds.o: ..\..\Src\source\nvds\CcuLog.h
 .\objects\env_nvds.o: ..\..\Src\source\nvds\Log.h
-.\objects\env_nvds.o: ..\..\Src\source\nvds\Record.h
 .\objects\env_nvds.o: ..\..\Src\source\nvc\nvc.h
 .\objects\env_nvds.o: ..\..\Src\source\user\main.h
 .\objects\env_nvds.o: ..\..\Src\source\nvds\LogUser.h

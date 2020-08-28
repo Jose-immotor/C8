@@ -1,5 +1,5 @@
 
-#include "Common.h"
+#include "ArchDef.h"
 #include "HwFwVer.h"
 
 void HwFwVer_Dump(const char* headStr, const HwFwVer* pHwFwVer, const char* tailStr)

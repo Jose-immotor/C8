@@ -8,7 +8,7 @@
  * 2020-02-25     lane      first implementation
  */
 #include "rtc.h"
-#include "main.h"
+//#include "main.h"
 #include "date.h"
 #include <string.h>
 #include "common.h"
@@ -224,9 +224,9 @@ void RTC_Alarm_IRQHandler(void)
 		rtc_lwoff_wait();		                       ///<Wait until last write operation on RTC registers has finished
 		
 //		PostMsg(MSG_RTC_TIMEOUT);
-		if(g_isPowerDown)	
+//		if(g_isPowerDown)	
 		{
-			SetWakeUpType(WAKEUP_RTC);
+//			SetWakeUpType(WAKEUP_RTC);
 		}
 	}
 	rt_interrupt_leave();
@@ -241,7 +241,7 @@ void RTC_IRQHandler(void)
 	rt_interrupt_enter();
 	if (rtc_flag_get(RTC_FLAG_ALARM) != RESET)
 	{
-		SetWakeUpType(WAKEUP_RTC);
+//		SetWakeUpType(WAKEUP_RTC);
 		/* Clear Interrupt pending bit */
 		rtc_flag_clear(RTC_FLAG_ALARM);
 	}

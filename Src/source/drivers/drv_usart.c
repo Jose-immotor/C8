@@ -18,8 +18,13 @@
 #include "gd32f403.h"
 #include "drv_usart.h"
 #include <string.h>
+#include <stdarg.h>
+#include <string.h>
+#include <stdio.h>
 
 usart_t __g_usart0;
+
+#define PRINTF_BUF_SIZE 256
 
 void usart0_isr(void)
 {
@@ -72,19 +77,19 @@ uint32_t usart0_put_byte(uint8_t data)
     return sta;   
 }
 	
-uint8_t usart0_send(void *buffer, uint8_t cnt)
-{
-	uint8_t i;
-	uint8_t tx_buf[TX_BUFF_SIZE];
-	
-	memcpy(tx_buf, buffer, cnt);
-	for(i=0; i< cnt; i++)
-	{	
-		usart0_put_byte(tx_buf[i]);
-	}
+//uint8_t usart0_send(void *buffer, uint8_t cnt)
+//{
+//	uint8_t i;
+//	uint8_t tx_buf[TX_BUFF_SIZE];
+//	
+//	memcpy(tx_buf, buffer, cnt);
+//	for(i=0; i< cnt; i++)
+//	{	
+//		usart0_put_byte(tx_buf[i]);
+//	}
 
-	return 0;
-}
+//	return 0;
+//}
 
 void _puts (const char *s)
 {
@@ -99,6 +104,23 @@ void _puts (const char *s)
             break;
         }
     }
+}
+
+int _Printf(const char* lpszFormat, ...)
+{
+	int nLen = 0;
+	va_list ptr;
+	char g_Pfbuffer[PRINTF_BUF_SIZE];
+
+	memset(g_Pfbuffer, 0, sizeof(g_Pfbuffer));
+	va_start(ptr, lpszFormat);
+	nLen = vsnprintf(g_Pfbuffer, sizeof(g_Pfbuffer), lpszFormat, ptr);
+	
+	va_end(ptr);
+	
+	_puts(g_Pfbuffer);
+
+	return nLen;
 }
 
 /*!

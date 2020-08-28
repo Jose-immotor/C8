@@ -1,4 +1,5 @@
-#include "Common.h"
+#include "ArchDef.h"
+
 #ifdef CONFIG_CMDLINE
 #include "CmdLine.h"
 #include <stdarg.h>

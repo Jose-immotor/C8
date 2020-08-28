@@ -36,8 +36,8 @@ OF SUCH DAMAGE.
 */
 
 #include "gd32f403_it.h"
-#include "systick.h"
-#include "main.h"
+//#include "systick.h"
+//#include "main.h"
 
 /*!
     \brief      this function handles NMI exception

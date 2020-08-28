@@ -1,6 +1,6 @@
-#include "Common.h"
-#include "Obj.h"
 
+#include "ArchDef.h"
+#include "Obj.h"
 
 const Obj* g_ObjList[20] = { 0 };
 void ObjList_Add(const Obj* pObj)

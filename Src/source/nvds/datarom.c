@@ -80,8 +80,8 @@ void DaraRom_Init()
 		g_pDataRom->m_AppSubVer  = g_DefaultVerDesc.m_AppSubVer;
 		g_pDataRom->m_AppMinorVer = g_DefaultVerDesc.m_AppMinorVer;
 		g_pDataRom->m_AppBuildeNum  = g_DefaultVerDesc.m_AppBuildeNum;
-		strcpy(g_pDataRom->m_IpAddr, IP_ADDR);
-		g_pDataRom->m_IpPort = IP_PORT;
+//		strcpy(g_pDataRom->m_IpAddr, IP_ADDR);
+//		g_pDataRom->m_IpPort = IP_PORT;
 //	}
 	DaraRom_Dump();
 }

@@ -9,7 +9,6 @@
 .\objects\swtimer.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\objects\swtimer.o: ..\..\Src\Arch\Dump.h
 .\objects\swtimer.o: ..\..\Src\Arch\_Macro.h
-.\objects\swtimer.o: ..\..\Src\source\debug\Printf.h
-.\objects\swtimer.o: ..\..\Src\Arch\ArchDef.h
+.\objects\swtimer.o: ..\..\Src\Arch\Dbg.h
 .\objects\swtimer.o: ..\..\Src\Arch\Bit.h
 .\objects\swtimer.o: ..\..\Src\Arch\SwTimer.h

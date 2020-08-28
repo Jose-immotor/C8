@@ -7,18 +7,25 @@ extern "C"{
 	
 #ifdef WIN32
 #else
-#define XDEBUG
+//#define XDEBUG
 #endif
+
+#define CFG_LOG
 
 #include "ArchDef.h"
 #include "Obj.h"
 #include "Utp.h"
-#include "debug.h"
 #include "Bit.h"
 #include "SwTimer.h"
 #include "message.h"
 #include "queue.h"
 #include "datatime.h"
+#include "Log.h"
+#include "McuFlashMap.h"
+#include "ExternFlashMap.h"
+#include "NvdsUser.h"
+#include "rtthread.h"
+#include "gd32f403.h"
 
 #ifdef __cplusplus
 }

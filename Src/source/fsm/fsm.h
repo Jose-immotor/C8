@@ -27,7 +27,7 @@ void Fsm_Dump(void );
 uint8 Fsm_Get(void);
 void Fsm_SetMaxGpsCount(int value);
 void PostMsg(uint8 msgId);
-void Fsm_SetActiveFlag(ActiveFlag af, Bool isActive);
+//void Fsm_SetActiveFlag(ActiveFlag af, Bool isActive);
 void Fsm_SetState(FSM_STATE state);
 #ifdef __cplusplus
 }

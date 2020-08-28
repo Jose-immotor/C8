@@ -6,64 +6,64 @@
  * Change Logs:
  * Date		      Author		Notes
  * 2020-07-28	  lane 	 	    first implementation
+ * 2020-08-27	  Allen	 	    modified
 *******************************************************************************/
 
-#include "rtthread.h"
 #include "rtc.h"
-#include "fsm.h"
 #include "pms.h"
 #include "nvds.h"
-#include "log.h"
-#include "smart_system.h"
-#include "CcuLed.h"
+#include "Common.h"
+#include "led.h"
+#include "JT808.h"
+#include "Obj.h"
 
 volatile bool g_isPowerDown = False;//休眠标志，False-没有休眠，True-休眠
 
-WakeupType g_WakeupType;
-WakeupType GetWakeUpType()
-{
-	return g_WakeupType;
-}
-void SetWakeUpType(WakeupType type)
-{
-	g_WakeupType = type;
-}
+//WakeupType g_WakeupType;
+//WakeupType GetWakeUpType()
+//{
+//	return g_WakeupType;
+//}
+//void SetWakeUpType(WakeupType type)
+//{
+//	g_WakeupType = type;
+//}
 
 //处理延时复位功能，主要用于响应一些外部命令，执行后需要应答，然后执行MCU复位操作
 uint32 g_ResetMs = 0;
 static uint32_t g_ResetInitMs = 0;
-static Bool g_isPowerOff = False;
-void ResetDelay(MCURST reason, uint32 ms);
+//static Bool g_isPowerOff = False;
+//void ResetDelay(MCURST reason, uint32 ms);
 void DelayPowerOff(uint32 ms)
 {
-	ResetDelay(MCURST_18650_POWER_OFF, ms);
-	g_isPowerOff = True;
+//	ResetDelay(MCURST_18650_POWER_OFF, ms);
+//	g_isPowerOff = True;
 }
 void ResetStop()
 {
 	g_ResetMs = 0;
 //	Fsm_SetActiveFlag(AF_MCU_RESET, False);
 }
-void ResetDelay(MCURST reason, uint32 ms)
-{
-//	Printf("Mcu %s after %d ms\n", (g_pPms->m_isTestBat) ? "shut down":"reset", ms);
-	
-	g_SysCfg.resetReason = reason;
-	g_isPowerOff = False;
-	g_ResetInitMs = GET_TICKS();
-	g_ResetMs = ms;
-	if(ms)
-	{
-//		Fsm_SetActiveFlag(AF_MCU_RESET, True);
-	}
-}
+//void ResetDelay(MCURST reason, uint32 ms)
+//{
+////	Printf("Mcu %s after %d ms\n", (g_pPms->m_isTestBat) ? "shut down":"reset", ms);
+//	
+//	g_SysCfg.resetReason = reason;
+//	g_isPowerOff = False;
+//	g_ResetInitMs = GET_TICKS();
+//	g_ResetMs = ms;
+//	if(ms)
+//	{
+////		Fsm_SetActiveFlag(AF_MCU_RESET, True);
+//	}
+//}
 void Boot(Bool isFromAppRom)
 {
 	Printf("Mcu reset\n");
 
 	//复位之前保存
-	Nvds_Write_Setting();
-	Nvds_Write_SysCfg();
+//	Nvds_Write_Setting();
+//	Nvds_Write_SysCfg();
 	
 	rt_thread_mdelay(100);
 	
@@ -154,9 +154,9 @@ void Mcu_PowerDown()
 //	
  	Printf("\nPower up.\n");	
 //	LOG2(ET_SYS_WAKEUP, g_Settings.devcfg, g_WakeupType);
-	env_nvds_init();
-	Fsm_Init();
-	Fsm_Start();
+//	env_nvds_init();
+//	Fsm_Init();
+//	Fsm_Start();
 	
 }
 /*!
@@ -168,7 +168,7 @@ void Mcu_PowerDown()
  */
 void Mcu_Sleep()
 {
-	PFL(DL_MAIN, "Mcu sleep.\n");
+//	PFL(DL_MAIN, "Mcu sleep.\n");
 	Mcu_PowerDown();
 }
 
@@ -182,10 +182,22 @@ void Mcu_Sleep()
  */
 int main(void)
 {
-	RunLed_Init();
+	Printf("\nPower up.\n");	
+	//MCU硬件初始化
+	//Todo...
+
+	//所有对象初始化
+	Led_init();
+//	JT808_init();
+	Pms_init();
+	
+	//对象启动
+	ObjList_Start();
+
     while(1)
 	{
-		RunLed_Run();
+		//对象运行
+		ObjList_Run();
 		rt_thread_mdelay(100);
     }
 }

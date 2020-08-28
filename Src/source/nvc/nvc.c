@@ -10,11 +10,7 @@
 #include "Common.h"
 #include "Nvc.h"
 #include "Sif.h"
-//#include "Datarom.h"
-#include "Smart_system.h"
 #include "fsm.h"
-//#include "queue.h"
-#include "printf.h"
 #include "drv_hwtimer.h"
 
 static const uint32 CLK_US = 100;
@@ -79,7 +75,7 @@ Bool Nvc_IsPwrOn()
 
 void Nvc_Add(uint8 audioInd, uint8 maxRepeat)
 {
-	if(g_Settings.vol == 0) return;	//不响
+//	if(g_Settings.vol == 0) return;	//不响
 	
 	NvcItem nvcItem = {0};
 	nvcItem.cmd = audioInd;
@@ -115,7 +111,7 @@ void Nvc_Play(uint8 audioInd, uint8 maxRepeat)
 		Queue_reset(&g_NvcQueue);
 		
 		//控制8级音量，E0音量最小，E7音量最大，默认最大
-		Nvc_Add(CONVERT_TO_VOL(g_Settings.vol), 1);
+//		Nvc_Add(CONVERT_TO_VOL(g_Settings.vol), 1);
 	}
 	Nvc_Add(audioInd, maxRepeat);
 }
@@ -154,7 +150,7 @@ void Nvc_Reset()
 {
 	Queue_reset(&g_NvcQueue);
 	Nvc_SetPower(False);
-	Fsm_SetActiveFlag(AF_NVC, False);
+//	Fsm_SetActiveFlag(AF_NVC, False);
 }
 
 //void Nvc_Start()
@@ -194,7 +190,7 @@ void Nvc_Run()
 		else if(Nvc_IsPwrOn())
 		{
 			Nvc_SetPower(False);
-			Fsm_SetActiveFlag(AF_NVC, False);
+//			Fsm_SetActiveFlag(AF_NVC, False);
 		}
 	}
 	else
