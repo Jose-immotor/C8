@@ -215,8 +215,8 @@ void JT808_init()
 		.pCbObj = &g_Jt,
 	};
 
-	static const Obj obj = { "JT808", JT808_start, (ObjFn)JT808_sleep, JT808_run };
-	ObjList_Add(&obj);
+//	static const Obj obj = { "JT808", JT808_start, (ObjFn)JT808_sleep, JT808_run };
+//	ObjList_Add(&obj);
 
 	Utp_Init(&g_JtUtp, &g_cfg, &g_jtFrameCfg);
 }

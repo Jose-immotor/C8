@@ -4,6 +4,11 @@
 #include "Modbus.h"
 #include "Bit.h"
 
+//包头信息
+#define MM_PCB_VALUE 0x02
+#define MM_RESERVE_VALUE 0x00
+#define MM_ADDR_VALUE 0x01
+
 static Bool Mod_RspProc(Mod* pMod, const uint8_t* pRsp, int frameLen, MOD_RSP_RC rspCode);
 static void Mod_RcvRsp(Mod* pMod, const uint8_t* pRsp, int frameLen, MOD_RSP_RC rspCode);
 
@@ -42,20 +47,20 @@ uint8_t* Mod_getRspData(const ModCmd* pCmd, const uint8_t* pRsp, int len, uint8_
 	}
 	static const rspFmt[] = 
 	{
-		{MOD_READ_COIL_STATUS, 2 , 3},
-		{MOD_READ_HOLDING_REG, 2 , 3},
-		{MOD_WEITE_SINGLE_REG, -1, 4, 2},
+		{MOD_READ_COIL_STATUS, 5 , 6},
+		{MOD_READ_HOLDING_REG, 5 , 6},
+		{MOD_WEITE_SINGLE_REG, -1, 4, 5},
 	};
 
-	if (pRsp[1] > 0x80)
+	if (pRsp[4] > 0x80)
 	{
 		*dlc = len - 2;
-		return (uint8_t*)&pRsp[2];
+		return (uint8_t*)&pRsp[5];
 	}
 
 	for (int i = 0; i < GET_ELEMENT_COUNT(rspFmt); i++)
 	{
-		if (pRsp[1] == rspFmt[i].cmd)
+		if (pRsp[4] == rspFmt[i].cmd)
 		{
 			*dlc = (uint8_t)((rspFmt[i].dlcInd == -1) ? rspFmt[i].dlc : pRsp[rspFmt[i].dlcInd]);
 			return (uint8_t*)&pRsp[rspFmt[i].dataInd];
@@ -69,9 +74,15 @@ uint8_t* Mod_getRspData(const ModCmd* pCmd, const uint8_t* pRsp, int len, uint8_
 
 static int Mod_frameBuild(Mod* pMod, const ModCmd* pCmd, uint8_t* rspFrame)
 {
-	int ind = 2;
-	rspFrame[0] = pMod->addr;
-	rspFrame[1] = pCmd->modCmd;
+	int ind = 5;
+	
+	rspFrame[0] = MM_PCB_VALUE;
+	rspFrame[1] = MM_RESERVE_VALUE;
+	rspFrame[2] = MM_RESERVE_VALUE;
+	rspFrame[3] = MM_ADDR_VALUE;
+	
+//	rspFrame[4] = pMod->addr;
+	rspFrame[4] = pCmd->modCmd;
 
 	if (pCmd->pParam)
 	{
@@ -89,10 +100,10 @@ static int Mod_frameBuild(Mod* pMod, const ModCmd* pCmd, uint8_t* rspFrame)
 		}
 	}
 
-	uint16 crc = Mod_CalcCrc(0x6363, rspFrame, ind);
+//	uint16 crc = Mod_CalcCrc(0x6363, rspFrame, ind);
 
-	rspFrame[ind++] = (uint8_t)(crc >> 8);
-	rspFrame[ind++] = (uint8_t)(crc);
+//	rspFrame[ind++] = (uint8_t)(crc >> 8);
+//	rspFrame[ind++] = (uint8_t)(crc);
 
 	return ind;
 }
@@ -106,11 +117,12 @@ static Bool Mod_FrameVerify(Mod * pMod, const uint8_t * pData, int len, const ui
 	}
 	else
 	{
-		if (pReq[0] != pMod->addr) return False;
+		if ((pData[0] != MM_PCB_VALUE)||(pData[1] != MM_RESERVE_VALUE)||
+			(pData[2] != MM_RESERVE_VALUE)||(pData[3] != MM_ADDR_VALUE)) return False;
 	}
 
 	uint16 calcCrc = Mod_CalcCrc(0x6363, pData, len - 2);
-	uint16 crc = AS_UINT16(pData[len - 2], pData[len - 1]);
+	uint16 crc = AS_UINT16(pData[len - 1], pData[len - 2]);//低位在前
 	return (calcCrc == crc);
 }
 
@@ -230,7 +242,7 @@ static Bool Mod_RspProc(Mod * pMod, const uint8_t * pRsp, int frameLen, MOD_RSP_
 	pMod->pWaitRspCmd->pExt->rcvRspErr = rspCode;
 	if (rspCode == MOD_RSP_SUCCESS)
 	{
-		Mod_RcvRsp(pMod, pRsp, rspCode, frameLen);
+		Mod_RcvRsp(pMod, pRsp, frameLen, rspCode);
 	}
 	else
 	{
@@ -254,12 +266,13 @@ static void Mod_ReqProc(Mod * pMod, const uint8_t * pReq, int frameLen)
 	//const ModFrameCfg* frameCfg = pMod->frameCfg;
 	//uint8_t rc = frameCfg->result_UNSUPPORTED;
 	//uint8_t* txBuf = frameCfg->txBuf;
-	//const uint8_t* pData = &pReq[MODBUS_CMD_IND];
-	//const ModCmd* pCmd = Mod_FindCmdItem(pMod->cfg->cmdArray, pMod->cfg->cmdCount, pReq[MODBUS_CMD_IND]);
+//	const uint8_t* pData = &pReq[MODBUS_READDATA_IND];
+//	const ModCmd* pCmd = Mod_FindCmdItem(pMod->cfg->cmdArray, pMod->cfg->cmdCount, pMod->pWaitRspCmd->cmd);
+//	const ModCmd* pCmd = Mod_FindCmdItem(pMod->cfg->cmdArray, pMod->cfg->cmdCount, pReq[MODBUS_CMD_IND]);
 	//int dlc = 1;
 
-	//if (pCmd)
-	//{
+//	if (pCmd)
+//	{
 	//	rc = frameCfg->result_SUCCESS;
 	//	frameLen -= pReq[MODBUS_LEN_IND];
 
@@ -267,18 +280,19 @@ static void Mod_ReqProc(Mod * pMod, const uint8_t * pReq, int frameLen)
 	//	pCmd->pExt->transferData = pData;
 	//	pCmd->pExt->transferLen = frameLen;
 
-	//	if (pCmd->pStorage && pCmd->storageLen)
-	//	{
-	//		if (memcmp(pCmd->pStorage, pData, pCmd->storageLen) != 0)
-	//		{
+//		if (pCmd->pStorage && pCmd->storageLen)
+//		{
+//			
+//			if (memcmp(pCmd->pStorage, pData, pCmd->storageLen) != 0)
+//			{
 	//			MOD_EVENT_RC evRc = Mod_Event(pMod, pCmd, MOD_CHANGED_BEFORE);
 	//			if (evRc == MOD_EVENT_RC_SUCCESS)
 	//			{
-	//				memcpy(pCmd->pStorage, pData, MIN(pCmd->storageLen, frameLen));
+//				memcpy(pCmd->pStorage, pData, MIN(pCmd->storageLen, frameLen));
 	//				Mod_Event(pMod, pCmd, MOD_CHANGED_AFTER);
-	//			}
-	//		}
-	//	}
+//			}
+//		}
+//	}
 
 	//	if (pCmd->pData)
 	//	{
@@ -322,7 +336,7 @@ void Mod_RcvFrameHandler(Mod * pMod, const uint8_t * pFrame, int frameLen)
 		//判断请求帧和响应帧是否匹配
 		if (Mod_FrameVerify(pMod, pFrame, frameLen, pMod->frameCfg->txBuf))
 		{
-			//Mod_RspProc(pMod, pFrame, frameLen, MOD_RSP_SUCCESS);	//响应处理
+			Mod_RspProc(pMod, pFrame, frameLen, MOD_RSP_SUCCESS);	//响应处理
 		}
 	}
 	else

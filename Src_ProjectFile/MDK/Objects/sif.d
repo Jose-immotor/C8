@@ -19,7 +19,7 @@
 .\objects\sif.o: ..\..\Src\Arch\queue.h
 .\objects\sif.o: ..\..\Src\source\debug\debug.h
 .\objects\sif.o: ..\..\Src\source\user\Common.h
-.\objects\sif.o: ..\..\Src\source\fsm\message.h
+.\objects\sif.o: ..\..\Src\Arch\message.h
 .\objects\sif.o: ..\..\Src\source\rtc\datatime.h
 .\objects\sif.o: ..\..\Src\source\rtc\Rtc.h
 .\objects\sif.o: ..\..\Src\rt-thread\include\rtthread.h

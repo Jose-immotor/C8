@@ -19,7 +19,7 @@
 .\objects\console.o: ..\..\Src\Arch\queue.h
 .\objects\console.o: ..\..\Src\source\debug\debug.h
 .\objects\console.o: ..\..\Src\source\user\Common.h
-.\objects\console.o: ..\..\Src\source\fsm\message.h
+.\objects\console.o: ..\..\Src\Arch\message.h
 .\objects\console.o: ..\..\Src\source\rtc\datatime.h
 .\objects\console.o: ..\..\Src\source\rtc\Rtc.h
 .\objects\console.o: ..\..\Src\rt-thread\include\rtthread.h

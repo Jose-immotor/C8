@@ -25,7 +25,8 @@ static DrvIo g_InIOs[1];
 static DrvIo g_OutputIOs[] =
 {
 	// ‰≥ˆ≈‰÷√	
-	{CTRL_MCU_LED	, "CTRL_MCU_LED"	, GPIOE, GPIO_PIN_11 ,GPIO_MODE_OUT_PP}
+	{CTRL_MCU_LED	, "CTRL_MCU_LED"	, GPIOE, GPIO_PIN_11 ,GPIO_MODE_OUT_PP},
+	{IO_NFC_NPD_A	, "NFC_NPD_A"			, GPIOE, GPIO_PIN_14 ,GPIO_MODE_OUT_PP}
 };
 
 ////=============================================

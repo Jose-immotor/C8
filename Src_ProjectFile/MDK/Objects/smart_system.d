@@ -19,7 +19,7 @@
 .\objects\smart_system.o: ..\..\Src\Arch\queue.h
 .\objects\smart_system.o: ..\..\Src\source\debug\debug.h
 .\objects\smart_system.o: ..\..\Src\source\user\Common.h
-.\objects\smart_system.o: ..\..\Src\source\fsm\message.h
+.\objects\smart_system.o: ..\..\Src\Arch\message.h
 .\objects\smart_system.o: ..\..\Src\source\rtc\datatime.h
 .\objects\smart_system.o: ..\..\Src\source\rtc\Rtc.h
 .\objects\smart_system.o: ..\..\Src\rt-thread\include\rtthread.h
@@ -65,9 +65,9 @@
 .\objects\smart_system.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\objects\smart_system.o: ..\..\Src\source\nvds\nvds.h
 .\objects\smart_system.o: ..\..\Src\source\nvds\SectorMgr.h
-.\objects\smart_system.o: ..\..\Src\source\battery\Battery.h
-.\objects\smart_system.o: ..\..\Src\source\002nfc\nfc_cmd_process.h
-.\objects\smart_system.o: ..\..\Src\source\002nfc\fm175xx.h
+.\objects\smart_system.o: ..\..\Src\source\Pms\Battery.h
+.\objects\smart_system.o: ..\..\Src\source\Pms\BmsReg.h
+.\objects\smart_system.o: ..\..\Src\source\Modbus\ModBus.h
 .\objects\smart_system.o: ..\..\Src\source\nvds\smart_system.h
 .\objects\smart_system.o: ..\..\Src\source\nvds\datarom.h
 .\objects\smart_system.o: ..\..\Src\source\nvds\errordef.h

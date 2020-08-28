@@ -485,5 +485,5 @@ uint8 Mx25_ReadWriteTest( void )
 // 
 //	Printf("Mx25_ReadWriteTest: %s\r\n", (error_cnt == 0 ) ? "OK" : "FAILED");
 //    return ( error_cnt == 0 );
-
+	return 0;
 }

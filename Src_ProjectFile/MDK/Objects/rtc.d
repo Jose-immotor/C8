@@ -61,7 +61,7 @@
 .\objects\rtc.o: ..\..\Src\Arch\queue.h
 .\objects\rtc.o: ..\..\Src\source\debug\debug.h
 .\objects\rtc.o: ..\..\Src\source\user\Common.h
-.\objects\rtc.o: ..\..\Src\source\fsm\message.h
+.\objects\rtc.o: ..\..\Src\Arch\message.h
 .\objects\rtc.o: ..\..\Src\source\rtc\datatime.h
 .\objects\rtc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\objects\rtc.o: ..\..\Src\source\rtc\date.h

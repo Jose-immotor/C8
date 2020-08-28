@@ -25,7 +25,7 @@
 .\objects\loguser.o: ..\..\Src\Arch\queue.h
 .\objects\loguser.o: ..\..\Src\source\debug\debug.h
 .\objects\loguser.o: ..\..\Src\source\user\Common.h
-.\objects\loguser.o: ..\..\Src\source\fsm\message.h
+.\objects\loguser.o: ..\..\Src\Arch\message.h
 .\objects\loguser.o: ..\..\Src\source\rtc\datatime.h
 .\objects\loguser.o: ..\..\Src\source\rtc\Rtc.h
 .\objects\loguser.o: ..\..\Src\rt-thread\include\rtthread.h
@@ -68,12 +68,12 @@
 .\objects\loguser.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h
 .\objects\loguser.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h
 .\objects\loguser.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h
-.\objects\loguser.o: ..\..\Src\source\battery\Battery.h
-.\objects\loguser.o: ..\..\Src\source\002nfc\nfc_cmd_process.h
-.\objects\loguser.o: ..\..\Src\source\002nfc\fm175xx.h
+.\objects\loguser.o: ..\..\Src\source\Pms\Battery.h
+.\objects\loguser.o: ..\..\Src\source\Pms\BmsReg.h
+.\objects\loguser.o: ..\..\Src\source\Modbus\ModBus.h
 .\objects\loguser.o: ..\..\Src\source\nvds\CcuDef.h
 .\objects\loguser.o: ..\..\Src\source\nvds\CcuLog.h
 .\objects\loguser.o: ..\..\Src\source\nvds\PmsLog.h
-.\objects\loguser.o: ..\..\Src\source\battery\PmsPeripheralDef.h
+.\objects\loguser.o: ..\..\Src\source\Pms\PmsPeripheralDef.h
 .\objects\loguser.o: ..\..\Src\source\nvds\ShelfLockLog.h
 .\objects\loguser.o: ..\..\Src\source\nvds\MeterLog.h

@@ -1,5 +1,5 @@
-.\objects\i2c1_driver.o: ..\..\Src\source\002nfc\i2c1_driver.c
-.\objects\i2c1_driver.o: ..\..\Src\source\002nfc\i2c1_driver.h
+.\objects\i2c1_driver.o: ..\..\Src\source\nfc\i2c1_driver.c
+.\objects\i2c1_driver.o: ..\..\Src\source\nfc\i2c1_driver.h
 .\objects\i2c1_driver.o: ..\..\Src\rt-thread\include\rtthread.h
 .\objects\i2c1_driver.o: ..\..\Src\source\user\rtconfig.h
 .\objects\i2c1_driver.o: ..\..\Src\rt-thread\include\rtdebug.h

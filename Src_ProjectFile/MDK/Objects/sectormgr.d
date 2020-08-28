@@ -19,7 +19,7 @@
 .\objects\sectormgr.o: ..\..\Src\Arch\queue.h
 .\objects\sectormgr.o: ..\..\Src\source\debug\debug.h
 .\objects\sectormgr.o: ..\..\Src\source\user\Common.h
-.\objects\sectormgr.o: ..\..\Src\source\fsm\message.h
+.\objects\sectormgr.o: ..\..\Src\Arch\message.h
 .\objects\sectormgr.o: ..\..\Src\source\rtc\datatime.h
 .\objects\sectormgr.o: ..\..\Src\source\rtc\Rtc.h
 .\objects\sectormgr.o: ..\..\Src\rt-thread\include\rtthread.h
@@ -66,6 +66,6 @@
 .\objects\sectormgr.o: ..\..\Src\source\nvds\sectormgr.h
 .\objects\sectormgr.o: ..\..\Src\source\nvds\mx25_cmd.h
 .\objects\sectormgr.o: ..\..\Src\source\nvds\nvds.h
-.\objects\sectormgr.o: ..\..\Src\source\battery\Battery.h
-.\objects\sectormgr.o: ..\..\Src\source\002nfc\nfc_cmd_process.h
-.\objects\sectormgr.o: ..\..\Src\source\002nfc\fm175xx.h
+.\objects\sectormgr.o: ..\..\Src\source\Pms\Battery.h
+.\objects\sectormgr.o: ..\..\Src\source\Pms\BmsReg.h
+.\objects\sectormgr.o: ..\..\Src\source\Modbus\ModBus.h

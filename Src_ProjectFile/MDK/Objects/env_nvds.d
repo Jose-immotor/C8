@@ -27,7 +27,7 @@
 .\objects\env_nvds.o: ..\..\Src\Arch\queue.h
 .\objects\env_nvds.o: ..\..\Src\source\debug\debug.h
 .\objects\env_nvds.o: ..\..\Src\source\user\Common.h
-.\objects\env_nvds.o: ..\..\Src\source\fsm\message.h
+.\objects\env_nvds.o: ..\..\Src\Arch\message.h
 .\objects\env_nvds.o: ..\..\Src\source\rtc\datatime.h
 .\objects\env_nvds.o: ..\..\Src\source\rtc\Rtc.h
 .\objects\env_nvds.o: ..\..\Src\source\drivers\board.h
@@ -65,9 +65,9 @@
 .\objects\env_nvds.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\objects\env_nvds.o: ..\..\Src\source\nvds\nvds.h
 .\objects\env_nvds.o: ..\..\Src\source\nvds\SectorMgr.h
-.\objects\env_nvds.o: ..\..\Src\source\battery\Battery.h
-.\objects\env_nvds.o: ..\..\Src\source\002nfc\nfc_cmd_process.h
-.\objects\env_nvds.o: ..\..\Src\source\002nfc\fm175xx.h
+.\objects\env_nvds.o: ..\..\Src\source\Pms\Battery.h
+.\objects\env_nvds.o: ..\..\Src\source\Pms\BmsReg.h
+.\objects\env_nvds.o: ..\..\Src\source\Modbus\ModBus.h
 .\objects\env_nvds.o: ..\..\Src\source\drivers\drv_spi.h
 .\objects\env_nvds.o: ..\..\Src\source\nvds\mx25_cmd.h
 .\objects\env_nvds.o: ..\..\Src\source\nvds\smart_system.h

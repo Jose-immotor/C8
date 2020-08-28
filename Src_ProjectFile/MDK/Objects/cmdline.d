@@ -19,7 +19,7 @@
 .\objects\cmdline.o: ..\..\Src\Arch\queue.h
 .\objects\cmdline.o: ..\..\Src\source\debug\debug.h
 .\objects\cmdline.o: ..\..\Src\source\user\Common.h
-.\objects\cmdline.o: ..\..\Src\source\fsm\message.h
+.\objects\cmdline.o: ..\..\Src\Arch\message.h
 .\objects\cmdline.o: ..\..\Src\source\rtc\datatime.h
 .\objects\cmdline.o: ..\..\Src\source\rtc\Rtc.h
 .\objects\cmdline.o: ..\..\Src\rt-thread\include\rtthread.h

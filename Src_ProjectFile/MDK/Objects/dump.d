@@ -19,7 +19,7 @@
 .\objects\dump.o: ..\..\Src\Arch\SwTimer.h
 .\objects\dump.o: ..\..\Src\Arch\queue.h
 .\objects\dump.o: ..\..\Src\source\debug\debug.h
-.\objects\dump.o: ..\..\Src\source\fsm\message.h
+.\objects\dump.o: ..\..\Src\Arch\message.h
 .\objects\dump.o: ..\..\Src\source\rtc\datatime.h
 .\objects\dump.o: ..\..\Src\source\rtc\Rtc.h
 .\objects\dump.o: ..\..\Src\rt-thread\include\rtthread.h

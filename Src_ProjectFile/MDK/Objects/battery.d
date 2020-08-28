@@ -1,12 +1,11 @@
-.\objects\battery.o: ..\..\src\source\battery\battery.c
-.\objects\battery.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
-.\objects\battery.o: ..\..\src\source\battery\pms.h
-.\objects\battery.o: ..\..\Src\source\user\common.h
+.\objects\battery.o: ..\..\Src\source\Pms\Battery.c
+.\objects\battery.o: ..\..\Src\source\user\Common.h
 .\objects\battery.o: ..\..\Src\Arch\ArchDef.h
 .\objects\battery.o: ..\..\Src\Arch\typedef.h
 .\objects\battery.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\battery.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\battery.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+.\objects\battery.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\objects\battery.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\battery.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\objects\battery.o: ..\..\Src\Arch\Dump.h
@@ -20,7 +19,7 @@
 .\objects\battery.o: ..\..\Src\Arch\queue.h
 .\objects\battery.o: ..\..\Src\source\debug\debug.h
 .\objects\battery.o: ..\..\Src\source\user\Common.h
-.\objects\battery.o: ..\..\Src\source\fsm\message.h
+.\objects\battery.o: ..\..\Src\Arch\message.h
 .\objects\battery.o: ..\..\Src\source\rtc\datatime.h
 .\objects\battery.o: ..\..\Src\source\rtc\Rtc.h
 .\objects\battery.o: ..\..\Src\rt-thread\include\rtthread.h
@@ -64,9 +63,6 @@
 .\objects\battery.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h
 .\objects\battery.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h
 .\objects\battery.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
-.\objects\battery.o: ..\..\Src\source\002nfc\bmsfault.h
-.\objects\battery.o: ..\..\Src\source\battery\Battery.h
-.\objects\battery.o: ..\..\Src\source\002nfc\nfc_cmd_process.h
-.\objects\battery.o: ..\..\Src\source\002nfc\fm175xx.h
-.\objects\battery.o: ..\..\Src\source\user\msgdef.h
-.\objects\battery.o: ..\..\Src\source\002nfc\modbus_master.h
+.\objects\battery.o: ..\..\Src\source\Pms\Battery.h
+.\objects\battery.o: ..\..\Src\source\Pms\BmsReg.h
+.\objects\battery.o: ..\..\Src\source\Modbus\ModBus.h

@@ -19,7 +19,7 @@
 .\objects\mx25_cmd.o: ..\..\Src\Arch\queue.h
 .\objects\mx25_cmd.o: ..\..\Src\source\debug\debug.h
 .\objects\mx25_cmd.o: ..\..\Src\source\user\Common.h
-.\objects\mx25_cmd.o: ..\..\Src\source\fsm\message.h
+.\objects\mx25_cmd.o: ..\..\Src\Arch\message.h
 .\objects\mx25_cmd.o: ..\..\Src\source\rtc\datatime.h
 .\objects\mx25_cmd.o: ..\..\Src\source\rtc\Rtc.h
 .\objects\mx25_cmd.o: ..\..\Src\rt-thread\include\rtthread.h

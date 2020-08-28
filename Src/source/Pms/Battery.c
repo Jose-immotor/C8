@@ -117,7 +117,7 @@ MOD_EVENT_RC Bat_event_readBmsInfo(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EV
 
 static void Bat_fsm_init(Battery* pBat, uint8_t msgId, uint32_t param1, uint32_t param2)
 {
-	if (msgId == BmsMsg_batPlugIn || msgId == BmsMsg_wakeup)
+	if (msgId == BmsMsg_batPlugIn || msgId == BmsMsg_wakeup|| msgId == BmsMsg_run)
 	{
 		pBat->presentStatus = BAT_UNKNOWN;
 		pBat->isReadyFroInquery = True;

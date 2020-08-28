@@ -46,7 +46,7 @@ void ResetStop()
 }
 void ResetDelay(MCURST reason, uint32 ms)
 {
-	Printf("Mcu %s after %d ms\n", (g_pPms->m_isTestBat) ? "shut down":"reset", ms);
+//	Printf("Mcu %s after %d ms\n", (g_pPms->m_isTestBat) ? "shut down":"reset", ms);
 	
 	g_SysCfg.resetReason = reason;
 	g_isPowerOff = False;

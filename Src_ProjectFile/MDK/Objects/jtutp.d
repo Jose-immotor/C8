@@ -19,7 +19,7 @@
 .\objects\jtutp.o: ..\..\Src\Arch\queue.h
 .\objects\jtutp.o: ..\..\Src\source\debug\debug.h
 .\objects\jtutp.o: ..\..\Src\source\user\Common.h
-.\objects\jtutp.o: ..\..\Src\source\fsm\message.h
+.\objects\jtutp.o: ..\..\Src\Arch\message.h
 .\objects\jtutp.o: ..\..\Src\source\rtc\datatime.h
 .\objects\jtutp.o: ..\..\Src\source\rtc\Rtc.h
 .\objects\jtutp.o: ..\..\Src\rt-thread\include\rtthread.h

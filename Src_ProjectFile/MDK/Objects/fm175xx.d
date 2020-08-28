@@ -1,6 +1,6 @@
-.\objects\fm175xx.o: ..\..\src\source\002nfc\fm175xx.c
-.\objects\fm175xx.o: ..\..\src\source\002nfc\fm175xx.h
-.\objects\fm175xx.o: ..\..\src\source\002nfc\ntag_app.h
+.\objects\fm175xx.o: ..\..\Src\source\nfc\fm175xx.c
+.\objects\fm175xx.o: ..\..\Src\source\nfc\fm175xx.h
+.\objects\fm175xx.o: ..\..\Src\source\drivers\drv_i2c.h
 .\objects\fm175xx.o: ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h
 .\objects\fm175xx.o: ..\..\Src\Firmware\CMSIS\core_cm4.h
 .\objects\fm175xx.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
@@ -33,7 +33,6 @@
 .\objects\fm175xx.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h
 .\objects\fm175xx.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h
 .\objects\fm175xx.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h
-.\objects\fm175xx.o: ..\..\Src\source\drivers\drv_i2c.h
 .\objects\fm175xx.o: ..\..\Src\rt-thread\include\rtthread.h
 .\objects\fm175xx.o: ..\..\Src\source\user\rtconfig.h
 .\objects\fm175xx.o: ..\..\Src\rt-thread\include\rtdebug.h
@@ -43,3 +42,7 @@
 .\objects\fm175xx.o: ..\..\Src\rt-thread\include\rtm.h
 .\objects\fm175xx.o: ..\..\Src\rt-thread\include\rtthread.h
 .\objects\fm175xx.o: ..\..\Src\rt-thread\components\finsh\finsh_api.h
+.\objects\fm175xx.o: ..\..\Src\source\drivers\DriverIo.h
+.\objects\fm175xx.o: ..\..\Src\Arch\typedef.h
+.\objects\fm175xx.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+.\objects\fm175xx.o: ..\..\Src\source\user\MsgDef.h

@@ -19,7 +19,7 @@
 .\objects\debug.o: ..\..\Src\Arch\SwTimer.h
 .\objects\debug.o: ..\..\Src\Arch\queue.h
 .\objects\debug.o: ..\..\Src\source\debug\debug.h
-.\objects\debug.o: ..\..\Src\source\fsm\message.h
+.\objects\debug.o: ..\..\Src\Arch\message.h
 .\objects\debug.o: ..\..\Src\source\rtc\datatime.h
 .\objects\debug.o: ..\..\Src\source\rtc\Rtc.h
 .\objects\debug.o: ..\..\Src\rt-thread\include\rtthread.h
@@ -65,6 +65,6 @@
 .\objects\debug.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\objects\debug.o: ..\..\Src\source\nvds\Nvds.h
 .\objects\debug.o: ..\..\Src\source\nvds\SectorMgr.h
-.\objects\debug.o: ..\..\Src\source\battery\Battery.h
-.\objects\debug.o: ..\..\Src\source\002nfc\nfc_cmd_process.h
-.\objects\debug.o: ..\..\Src\source\002nfc\fm175xx.h
+.\objects\debug.o: ..\..\Src\source\Pms\Battery.h
+.\objects\debug.o: ..\..\Src\source\Pms\BmsReg.h
+.\objects\debug.o: ..\..\Src\source\Modbus\ModBus.h

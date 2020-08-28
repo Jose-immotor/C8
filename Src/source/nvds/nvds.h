@@ -38,7 +38,7 @@ typedef struct _SysCfg
 	uint32 postLogInd;			//上传Log的编号
 	uint32 readLogCount;		//读取记录数
 	uint8  reserved2[8];		//保留
-	uint8  SerialNums[BAT_SERIALNUM_COUNT][SERIAL_NUM_SIZE];
+	uint8  SerialNums[BAT_SERIALNUM_COUNT][2];//[SERIAL_NUM_SIZE];
 }SysCfg;
 
 //调试信息区内容,必须在结构中增加firstByte和latestByte,用于校验从Flash中读取的区块内容的完整性

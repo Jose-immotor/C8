@@ -37,41 +37,8 @@ void usart0_isr(void)
 			//overflow
 		}
     }
-//	if(RESET != usart_interrupt_flag_get(USART0, USART_INT_FLAG_TBE))
-//	{
-//		if(app_fifo_length(&__g_usart0.tx_fifo)>0)
-//		{
-//			uint8_t data;
-//			/* Write one byte to the transmit data register */
-//			app_fifo_get(&__g_usart0.tx_fifo,&data);
-//			usart_data_transmit(USART0, data);
-//		}
-//		else
-//		{
-//			/* Disable the USART Transmit interrupt */
-//			 usart_interrupt_disable(USART0, USART_INT_TBE);
-//		}
-//    }
     /* leave interrupt */
     rt_interrupt_leave();
-}
-
-/*!
- * @brief  handle slave rs485 communication
- *		  
- * \param  None
- *
- * \return None
- */
-uint32_t usart0_get_byte(uint8_t *data)
-{    
-//		if(usart_interrupt_flag_get(USART0, USART_INT_FLAG_RBNE) != RESET)
-//    {
-//		uint8_t data = usart_data_receive(USART0);
-	
-	
-//    return app_fifo_get(&__g_usart0.rx_fifo,data);
-	return 0;
 }
 
 char rt_hw_console_getchar(void)
@@ -99,9 +66,7 @@ char rt_hw_console_getchar(void)
 uint32_t usart0_put_byte(uint8_t data)
 {    
     uint32_t sta;
-//    sta=app_fifo_put(&__g_usart0.tx_fifo,data);
-//    /* Enable interrupt on USART TX Buffer*/
-//	usart_interrupt_enable(USART0, USART_INT_TBE);
+
 	usart_data_transmit(USART0, data);
 	while(RESET == usart_flag_get(USART0, USART_FLAG_TBE));
     return sta;   
@@ -136,20 +101,6 @@ void _puts (const char *s)
     }
 }
 
-/*
-static Bool usart0_tx_busy(void)
-{    
-//    if((app_fifo_length(&__g_usart0.tx_fifo)==0) && usart_flag_get(USART0, USART_FLAG_TC))
-//    {
-//        return false;
-//    }
-//    else
-//    {
-//        return true;
-//    }
-	return true;
-}
-*/
 /*!
  * \brief usart0作为调试串口，只使用接收中断.使用发送中断会出现Hard Fault
  *		  
@@ -191,11 +142,6 @@ int gd32_hw_usart_init(void)
 	memset(usart, 0, sizeof(usart_t));
 
     Queue_init(&usart->rx_fifo, usart->rx_buf, 1, RX_BUFF_SIZE);
-    //app_fifo_init(&usart->tx_fifo, usart->tx_buf, TX_BUFF_SIZE);	
-	usart->get_byte = usart0_get_byte;
-	usart->put_byte = usart0_put_byte;
-//	usart->tx_enable = usart3_tx_enable;
-//	usart->tx_busy = usart0_tx_busy;
 #endif	
 
     return 0;

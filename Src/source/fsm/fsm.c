@@ -204,10 +204,10 @@ void Fsm_SetState(FSM_STATE state)
 //		{
 //			Ble_Sleep();
 //		}
-		if(!IsActive() && g_pPms->m_portMask == 0)
-			DelayPowerOff(10);
-		else
-			Mcu_Sleep();
+//		if(!IsActive() && g_pPms->m_portMask == 0)
+//			DelayPowerOff(10);
+//		else
+//			Mcu_Sleep();
 	}
 	else if(FSM_KEY_ON == state)
 	{		
@@ -310,10 +310,10 @@ void Fsm_StateKeyOff(uint8 msgID)
 	}
 	else if(MSG_BATTERY_PLUG_IN == msgID)// && MSG_12V_ON == msgID )
 	{
-		if(Pms_IsAccOn())
-		{
-			Fsm_SetState(FSM_KEY_ON);
-		}
+//		if(Pms_IsAccOn())
+//		{
+//			Fsm_SetState(FSM_KEY_ON);
+//		}
 	}
 //	else if(MSG_GYRO_ASSERT == msgID)
 //	{
@@ -491,22 +491,22 @@ void Fsm_MsgProc(void)
 		{
 //			Gprs_SetHearbeatInterval(1);
 			//所有电池拔出
-			if((g_pPms->m_portMask == 0)&& g_ResetMs == 0)
-			{
-				//如果是测试电池拔出引起的复位，则恢复出厂设置
-				if(g_pPms->m_isTestBat)
-				{
-					Nvds_Reset();
-					DelayPowerOff(1500);
-				}
-//					else if(!g_pBle->isConnected)
-//					{
-//						if(!IsActive())
-//							DelayPowerOff(1500);
-//						else
-//							ResetDelay(MCURST_ALL_BAT_PLUG_OUT, 5000);
-//					}
-			}
+//			if((g_pPms->m_portMask == 0)&& g_ResetMs == 0)
+//			{
+//				//如果是测试电池拔出引起的复位，则恢复出厂设置
+//				if(g_pPms->m_isTestBat)
+//				{
+//					Nvds_Reset();
+//					DelayPowerOff(1500);
+//				}
+////					else if(!g_pBle->isConnected)
+////					{
+////						if(!IsActive())
+////							DelayPowerOff(1500);
+////						else
+////							ResetDelay(MCURST_ALL_BAT_PLUG_OUT, 5000);
+////					}
+//			}
 		}
 //		else if(MSG_BATTERY_FAULT == g_pMsg->m_MsgID)
 //		{

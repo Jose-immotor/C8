@@ -19,7 +19,7 @@
 .\objects\printf.o: ..\..\Src\Arch\SwTimer.h
 .\objects\printf.o: ..\..\Src\Arch\queue.h
 .\objects\printf.o: ..\..\Src\source\debug\debug.h
-.\objects\printf.o: ..\..\Src\source\fsm\message.h
+.\objects\printf.o: ..\..\Src\Arch\message.h
 .\objects\printf.o: ..\..\Src\source\rtc\datatime.h
 .\objects\printf.o: ..\..\Src\source\rtc\Rtc.h
 .\objects\printf.o: ..\..\Src\rt-thread\include\rtthread.h

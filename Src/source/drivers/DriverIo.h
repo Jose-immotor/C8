@@ -70,6 +70,8 @@ typedef enum
 typedef enum
 {
 	CTRL_MCU_LED=0x01,		//PE11, MCU‘À––µ∆
+	IO_NFC_NPD_A,
+	
 	
 }IO_ID;
 

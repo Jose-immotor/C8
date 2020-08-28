@@ -13,7 +13,7 @@ static Battery* g_pActiveBat;	//当前正砸通信的电池
 static BmsRegCtrl g_regCtrl;		//电池控制
 
 //以下是命令参数定义
-const static uint8_t g_bmsID[]    = { 0x00, 0x00, 0x00, 34 };
+const static uint8_t g_bmsID[]    = { 0x00, 0x00, 0x00, 33 };
 const static uint8_t g_bmsInfo1[] = { (uint8)(BMS_REG_INFO_ADDR_1 >> 8), (uint8)BMS_REG_INFO_ADDR_1, (uint8)(BMS_REG_INFO_COUNT_1 >> 8), (uint8)BMS_REG_INFO_COUNT_1};
 const static uint8_t g_bmsInfo2[] = { (uint8)(BMS_REG_INFO_ADDR_2 >> 8), (uint8)BMS_REG_INFO_ADDR_2, (uint8)(BMS_REG_INFO_COUNT_2 >> 8), (uint8)BMS_REG_INFO_COUNT_2};
 const static uint8_t g_bmsCtrl[]  =  { (uint8)(BMS_REG_CTRL_ADDR >> 8) , (uint8)BMS_REG_CTRL_ADDR  , (uint8)(BMS_REG_CTRL_COUNT >> 8)  , (uint8)BMS_REG_CTRL_COUNT };
@@ -286,6 +286,8 @@ void Pms_run()
 	Bat_run(&g_Bat[0]);
 	Bat_run(&g_Bat[1]);
 	Pms_SwitchPort();
+	Mod_Run(g_pModBus);
+//	Pms_fsm(PmsMsg_run,0,0);
 }
 
 void Pms_start()
@@ -294,11 +296,24 @@ void Pms_start()
 	Pms_switchStatus(PMS_ACC_OFF);
 }
 
+void thread_nfc_entry(void* parameter)
+{
+	NfcCardReader_start(&g_pms.cardReader);
+    while (1)
+    {
+		NfcCardReader_run(&g_pms.cardReader);
+		rt_thread_mdelay(100);
+    }
+}
+
+struct rt_thread thread_nfc;
+unsigned char thread_nfc_stack[1024];
 void Pms_init()
 {
-	static const Obj obj = { "Pms", Pms_start, Null, Pms_run };
-	ObjList_Add(&obj);
-
+//	static const Obj obj = { "Pms", Pms_start, Null, Pms_run };
+//	ObjList_Add(&obj);
+	rt_err_t res;
+	
 	Mod_Init(g_pModBus, &g_Bat0Cfg, &g_frameCfg);
 
 	Bat_init(&g_Bat[0], 0, &g_Bat0Cfg);
@@ -308,4 +323,36 @@ void Pms_init()
 	Queue_init(&g_pms.msgQueue, g_pms.msgBuf, sizeof(Message), GET_ELEMENT_COUNT(g_pms.msgBuf));
 
 	NfcCardReader_init(&g_pms.cardReader, (NfcCardReader_EventFn)Pms_cardReaderEventCb, &g_pms);
+	//启动NFC线程
+	res=rt_thread_init(&thread_nfc,"nfc",thread_nfc_entry, RT_NULL,&thread_nfc_stack[0],
+    sizeof(thread_nfc_stack), 1, 10);	
+    if (res == RT_EOK) /* 如果获得线程控制块，启动这个线程 */
+        rt_thread_startup(&thread_nfc);
 }
+
+void thread_pms_entry(void* parameter)
+{
+	Pms_init();
+	Pms_start();
+    while (1)
+    {
+		Pms_run();
+		rt_thread_mdelay(100);
+    }
+}
+
+struct rt_thread thread_pms;
+unsigned char thread_pms_stack[1024];
+
+static int app_pms_init(void)
+{
+	rt_err_t res;
+	res=rt_thread_init(&thread_pms,"pms",thread_pms_entry, RT_NULL,&thread_pms_stack[0],
+    sizeof(thread_pms_stack), 2, 10);	
+    if (res == RT_EOK) /* 如果获得线程控制块，启动这个线程 */
+        rt_thread_startup(&thread_pms);
+	else
+		rt_kprintf("\n!!create thread pms failed!\n");
+    return 0;
+}
+INIT_APP_EXPORT(app_pms_init);

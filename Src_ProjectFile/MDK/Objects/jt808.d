@@ -19,7 +19,7 @@
 .\objects\jt808.o: ..\..\Src\Arch\queue.h
 .\objects\jt808.o: ..\..\Src\source\debug\debug.h
 .\objects\jt808.o: ..\..\Src\source\user\Common.h
-.\objects\jt808.o: ..\..\Src\source\fsm\message.h
+.\objects\jt808.o: ..\..\Src\Arch\message.h
 .\objects\jt808.o: ..\..\Src\source\rtc\datatime.h
 .\objects\jt808.o: ..\..\Src\source\rtc\Rtc.h
 .\objects\jt808.o: ..\..\Src\rt-thread\include\rtthread.h

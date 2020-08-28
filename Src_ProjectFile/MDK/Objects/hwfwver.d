@@ -19,7 +19,7 @@
 .\objects\hwfwver.o: ..\..\Src\Arch\queue.h
 .\objects\hwfwver.o: ..\..\Src\source\debug\debug.h
 .\objects\hwfwver.o: ..\..\Src\source\user\Common.h
-.\objects\hwfwver.o: ..\..\Src\source\fsm\message.h
+.\objects\hwfwver.o: ..\..\Src\Arch\message.h
 .\objects\hwfwver.o: ..\..\Src\source\rtc\datatime.h
 .\objects\hwfwver.o: ..\..\Src\source\rtc\Rtc.h
 .\objects\hwfwver.o: ..\..\Src\rt-thread\include\rtthread.h

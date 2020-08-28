@@ -19,7 +19,7 @@
 .\objects\cculog.o: ..\..\Src\Arch\queue.h
 .\objects\cculog.o: ..\..\Src\source\debug\debug.h
 .\objects\cculog.o: ..\..\Src\source\user\Common.h
-.\objects\cculog.o: ..\..\Src\source\fsm\message.h
+.\objects\cculog.o: ..\..\Src\Arch\message.h
 .\objects\cculog.o: ..\..\Src\source\rtc\datatime.h
 .\objects\cculog.o: ..\..\Src\source\rtc\Rtc.h
 .\objects\cculog.o: ..\..\Src\rt-thread\include\rtthread.h

@@ -53,7 +53,7 @@
 .\objects\gd32f403_it.o: ..\..\Src\Arch\queue.h
 .\objects\gd32f403_it.o: ..\..\Src\source\debug\debug.h
 .\objects\gd32f403_it.o: ..\..\Src\source\user\Common.h
-.\objects\gd32f403_it.o: ..\..\Src\source\fsm\message.h
+.\objects\gd32f403_it.o: ..\..\Src\Arch\message.h
 .\objects\gd32f403_it.o: ..\..\Src\source\rtc\datatime.h
 .\objects\gd32f403_it.o: ..\..\Src\source\rtc\Rtc.h
 .\objects\gd32f403_it.o: ..\..\Src\rt-thread\include\rtthread.h

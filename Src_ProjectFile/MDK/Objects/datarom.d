@@ -19,7 +19,7 @@
 .\objects\datarom.o: ..\..\Src\Arch\queue.h
 .\objects\datarom.o: ..\..\Src\source\debug\debug.h
 .\objects\datarom.o: ..\..\Src\source\user\Common.h
-.\objects\datarom.o: ..\..\Src\source\fsm\message.h
+.\objects\datarom.o: ..\..\Src\Arch\message.h
 .\objects\datarom.o: ..\..\Src\source\rtc\datatime.h
 .\objects\datarom.o: ..\..\Src\source\rtc\Rtc.h
 .\objects\datarom.o: ..\..\Src\rt-thread\include\rtthread.h

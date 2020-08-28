@@ -24,20 +24,10 @@
 //485接收数组buff长度
 #define RX_BUFF_SIZE          256
 
-
-
 typedef struct
 {
 	uint8_t rx_buf[RX_BUFF_SIZE];
-	//uint8_t tx_buf[TX_BUFF_SIZE];
 	Queue rx_fifo;
-	//Queue tx_fifo;
-
-	uint8_t rx_flag;
-	uint32_t (*get_byte)(uint8_t*);
-	uint32_t (*put_byte)(uint8_t data);
-	void (*tx_enable)(Bool enable);
-	Bool (*tx_busy)(void);
 }usart_t;
 
 extern usart_t __g_usart0;

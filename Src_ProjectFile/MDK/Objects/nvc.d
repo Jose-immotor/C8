@@ -19,7 +19,7 @@
 .\objects\nvc.o: ..\..\Src\Arch\queue.h
 .\objects\nvc.o: ..\..\Src\source\debug\debug.h
 .\objects\nvc.o: ..\..\Src\source\user\Common.h
-.\objects\nvc.o: ..\..\Src\source\fsm\message.h
+.\objects\nvc.o: ..\..\Src\Arch\message.h
 .\objects\nvc.o: ..\..\Src\source\rtc\datatime.h
 .\objects\nvc.o: ..\..\Src\source\rtc\Rtc.h
 .\objects\nvc.o: ..\..\Src\rt-thread\include\rtthread.h

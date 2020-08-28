@@ -19,7 +19,7 @@
 .\objects\record.o: ..\..\Src\Arch\queue.h
 .\objects\record.o: ..\..\Src\source\debug\debug.h
 .\objects\record.o: ..\..\Src\source\user\Common.h
-.\objects\record.o: ..\..\Src\source\fsm\message.h
+.\objects\record.o: ..\..\Src\Arch\message.h
 .\objects\record.o: ..\..\Src\source\rtc\datatime.h
 .\objects\record.o: ..\..\Src\source\rtc\Rtc.h
 .\objects\record.o: ..\..\Src\rt-thread\include\rtthread.h
@@ -67,9 +67,9 @@
 .\objects\record.o: ..\..\Src\source\nvds\SectorMgr.h
 .\objects\record.o: ..\..\Src\source\nvds\mx25_cmd.h
 .\objects\record.o: ..\..\Src\source\nvds\nvds.h
-.\objects\record.o: ..\..\Src\source\battery\Battery.h
-.\objects\record.o: ..\..\Src\source\002nfc\nfc_cmd_process.h
-.\objects\record.o: ..\..\Src\source\002nfc\fm175xx.h
+.\objects\record.o: ..\..\Src\source\Pms\Battery.h
+.\objects\record.o: ..\..\Src\source\Pms\BmsReg.h
+.\objects\record.o: ..\..\Src\source\Modbus\ModBus.h
 .\objects\record.o: ..\..\Src\source\nvds\log.h
 .\objects\record.o: ..\..\Src\source\nvds\Record.h
 .\objects\record.o: ..\..\Src\source\nvds\LogUser.h
