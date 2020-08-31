@@ -133,16 +133,10 @@ void Pms_SwitchPort()
 
 	if (!Mod_isIdle(g_pModBus)) return;
 
-	if (!Bat_isReadyFroInquery(g_pActiveBat))
-	{
-		if (Bat_isReadyFroInquery(pBat))
-		{
-			Bat_msg(g_pActiveBat, BmsMsg_deactive, 0, 0);
-			Mod_SwitchCfg(g_pModBus, (g_pActiveBat->port == 0) ? &g_Bat1Cfg : &g_Bat0Cfg);
-			Bat_msg(pBat, BmsMsg_active, *((uint32*)& g_regCtrl), 0);
-			g_pActiveBat = pBat;
-		}
-	}
+	Bat_msg(g_pActiveBat, BmsMsg_deactive, 0, 0);
+	Mod_SwitchCfg(g_pModBus, (g_pActiveBat->port == 0) ? &g_Bat1Cfg : &g_Bat0Cfg);
+	Bat_msg(pBat, BmsMsg_active, *((uint32*)& g_regCtrl), 0);
+	g_pActiveBat = pBat;
 }
 
 static void Pms_switchStatus(PmsOpStatus newStatus)

@@ -19,8 +19,6 @@ static void Bat_onPlugOut(Battery* pBat)
 {
 	pBat->presentStatus = BAT_NOT_IN;
 
-	Bat_fsm(pBat, BmsMsg_batPlugout, 0, 0);
-
 	if (pBat->isActive)
 	{
 		Mod_Reset(g_pModBus);
@@ -43,11 +41,11 @@ static void Bat_switchStatus(Battery* pBat, BmsOpStatus opStatus)
 	pBat->statusSwitchTicks = GET_TICKS();
 	if (BmsStatus_init == opStatus)
 	{
-		pBat->presentStatus = BAT_NOT_IN;
 		Mod_ResetCmds(pBat->cfg);
 	}
 	else if (BmsStatus_readInfo == opStatus)
 	{
+		pBat->presentStatus = BAT_IN;
 		Bat_sendCmd(pBat, BMS_READ_INFO_1);
 		Bat_sendCmd(pBat, BMS_READ_INFO_2);
 	}
@@ -95,7 +93,7 @@ MOD_EVENT_RC Bat_event(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev)
 		{
 			if (pCmd->pExt->rcvRspErr == MOD_RSP_TIMEOUT)
 			{
-				pBat->presentStatus = BAT_NOT_IN;
+				Bat_fsm(pBat, BmsMsg_batPlugout, 0, 0);
 			}
 		}
 	}
@@ -121,63 +119,31 @@ MOD_EVENT_RC Bat_event_readBmsInfo(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EV
 
 static void Bat_fsm_init(Battery* pBat, uint8_t msgId, uint32_t param1, uint32_t param2)
 {
-	if (msgId == BmsMsg_batPlugIn || msgId == BmsMsg_wakeup)
+	if (msgId == BmsMsg_cmdDone)
 	{
-		pBat->presentStatus = BAT_UNKNOWN;
-		pBat->isReadyFroInquery = True;
-		Bat_sendCmd(pBat, BMS_READ_ID);
-		Bat_sendCmd(pBat, BMS_READ_INFO_1);
-		Bat_sendCmd(pBat, BMS_READ_INFO_2);
+		Bat_sendCmd(pBat, BMS_READ_CTRL);
+		Bat_switchStatus(pBat, BmsStatus_readInfo);
 	}
 	else if (msgId == BmsMsg_active)
 	{
-		pBat->isActive = True;
-		pBat->bmsCtrl.ctrl = (uint16)param1;
-		Bat_switchStatus(pBat, BmsStatus_readInfo);
+		Bat_sendCmd(pBat, BMS_READ_ID);
 	}
 }
 
 static void Bat_fsm_readInfo(Battery* pBat, uint8_t msgId, uint32_t param1, uint32_t param2)
 {
-	if (msgId == BmsMsg_cmdDone)
+	if (msgId == BmsMsg_active)
 	{
-		if (Mod_isIdle(g_pModBus))
-		{
-			Bat_switchStatus(pBat, BmsStatus_idle);
-		}
+		Bat_sendCmd(pBat, BMS_READ_INFO_1);
+		Bat_sendCmd(pBat, BMS_READ_INFO_2);
 	}
-	else if (msgId == BmsMsg_cmdDone)
+	else if (msgId == BmsMsg_batPlugout)
 	{
-		pBat->presentStatus = BAT_NOT_IN;
-
-		Bat_fsm(pBat, BmsMsg_batPlugout, 0, 0);
-
-		if (pBat->isActive)
-		{
-			Mod_Reset(g_pModBus);
-		}
-		else
-		{
-			Mod_ResetCmds(pBat->cfg);
-		}
+		Bat_onPlugOut(pBat);
+		Bat_switchStatus(pBat, BmsStatus_init);
 	}
 }
-/*
-static void Bat_fsm_idle(Battery* pBat, uint8_t msgId, uint32_t param1, uint32_t param2)
-{
 
-}
-
-static void Bat_fsm_sleep(Battery* pBat, uint8_t msgId, uint32_t param1, uint32_t param2)
-{
-
-}
-
-static void Bat_fsm_deepSleep(Battery* pBat, uint8_t msgId, uint32_t param1, uint32_t param2)
-{
-
-}
-*/
 static void Bat_fsm(Battery* pBat, uint8_t msgId, uint32_t param1, uint32_t param2)
 {
 	struct
@@ -194,18 +160,7 @@ static void Bat_fsm(Battery* pBat, uint8_t msgId, uint32_t param1, uint32_t para
 		//{BmsStatus_deepSleep	, Bat_fsm_deepSleep},
 	 };
 
-	if (msgId == BmsMsg_batPlugout)
-	{
-		Bat_onPlugOut(pBat);
-		Bat_switchStatus(pBat, BmsStatus_init);
-		return;
-	}
-	else if (msgId == BmsMsg_active)
-	{
-		pBat->isActive = True;
-		Bat_switchStatus(pBat, BmsStatus_readInfo);
-	}
-	else if (msgId == BmsMsg_deactive)
+	if (msgId == BmsMsg_deactive)
 	{
 		pBat->isActive = False;
 	}
@@ -235,13 +190,6 @@ static void Bat_fsm(Battery* pBat, uint8_t msgId, uint32_t param1, uint32_t para
 Bool Bat_isReady(Battery* pBat)
 {
 	return pBat->presentStatus == BAT_IN;
-}
-
-//是否准备好查询电池信息
-Bool Bat_isReadyFroInquery(Battery* pBat)
-{
-	if (pBat->isReadyFroInquery) return True;
-	return (pBat->idleTicks && SwTimer_isTimerOutEx(pBat->idleTicks, BMS_INQUERY_INTERVAL_MS));
 }
 
 void Bat_setPreDischg(Battery* pBat, Bool en) { pBat->pBmsReg_Ctrl->preDischg = en; Bat_sendCmd(pBat, BMS_READ_CTRL); }
