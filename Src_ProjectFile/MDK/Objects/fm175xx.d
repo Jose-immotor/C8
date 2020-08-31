@@ -42,7 +42,7 @@
 .\objects\fm175xx.o: ..\..\Src\rt-thread\include\rtm.h
 .\objects\fm175xx.o: ..\..\Src\rt-thread\include\rtthread.h
 .\objects\fm175xx.o: ..\..\Src\rt-thread\components\finsh\finsh_api.h
-.\objects\fm175xx.o: ..\..\Src\source\drivers\DriverIo.h
+.\objects\fm175xx.o: ..\..\Src\source\drivers\drv_gpio.h
 .\objects\fm175xx.o: ..\..\Src\Arch\typedef.h
 .\objects\fm175xx.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\fm175xx.o: ..\..\Src\source\user\MsgDef.h

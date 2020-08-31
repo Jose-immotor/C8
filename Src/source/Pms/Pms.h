@@ -66,6 +66,7 @@ extern "C" {
 	void Pms_Rx(int nfcPort, const uint8_t* pData, int len);
 	void Pms_postMsg(PmsMsg msgId, uint32_t param1, uint32_t param2);
 
+	void Pms_NfcRead_Init(void);
 #ifdef __cplusplus
 }
 #endif

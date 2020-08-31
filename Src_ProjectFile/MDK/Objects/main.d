@@ -75,3 +75,6 @@
 .\objects\main.o: ..\..\src\source\user\led.h
 .\objects\main.o: ..\..\Src\source\JT808\JT808.h
 .\objects\main.o: ..\..\Src\Arch\HwFwVer.h
+.\objects\main.o: ..\..\Src\source\CmBacktrace\cm_backtrace.h
+.\objects\main.o: ..\..\Src\source\CmBacktrace\cmb_def.h
+.\objects\main.o: ..\..\Src\source\CmBacktrace\cmb_cfg.h

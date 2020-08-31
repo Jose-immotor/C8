@@ -718,9 +718,3 @@ void cm_backtrace_fault(uint32_t fault_handler_lr, uint32_t fault_handler_sp) {
 
     print_call_stack(stack_pointer);
 }
-static int env_hardfault_init(void)
-{ 
-	cm_backtrace_init("C7Pms", "1.0", "1.0");
-	return RT_EOK;
-}
-INIT_ENV_EXPORT(env_hardfault_init);

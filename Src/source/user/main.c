@@ -15,7 +15,7 @@
 #include "Common.h"
 #include "led.h"
 #include "JT808.h"
-#include "Obj.h"
+#include <cm_backtrace.h>
 
 volatile bool g_isPowerDown = False;//休眠标志，False-没有休眠，True-休眠
 
@@ -187,10 +187,11 @@ int main(void)
 	//Todo...
 
 	//所有对象初始化
+	cm_backtrace_init("C7Pms", "1.0", "1.0");
 	Led_init();
 //	JT808_init();
 	Pms_init();
-	
+//	Pms_NfcRead_Init();
 	//对象启动
 	ObjList_Start();
 
