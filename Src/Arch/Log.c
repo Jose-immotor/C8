@@ -6,7 +6,6 @@
 
 #ifdef CFG_LOG
 
-LogMgr* g_plogMgr;
 
 void Log_Dump(LogMgr* logMgr, LogItem* pItem, const char* head, const char* tail);
 

@@ -5,9 +5,9 @@
 extern Mod* g_pModBus;
 static void Bat_fsm(Battery* pBat, uint8_t msgId, uint32_t param1, uint32_t param2);
 
-uint8* Bat_getBID(Battery* pBat)
+const uint8* Bat_getBID(Battery* pBat)
 {
-	return Null;
+	return (uint8*)&pBat->bmsID.sn34;
 }
 
 static void Bat_sendCmd(Battery* pBat, uint8_t cmd)

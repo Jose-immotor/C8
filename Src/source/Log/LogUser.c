@@ -3,6 +3,8 @@
 #include "LogUser.h"
 #include "SysLog.h"
 
+LogMgr* g_plogMgr;
+
 //从Flsah读取数据
 Bool LogItem_FmcRead(uint32 addr, void* buf, int len)
 {

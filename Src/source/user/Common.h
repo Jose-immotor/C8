@@ -23,6 +23,8 @@ extern "C"{
 #include "NvdsUser.h"
 #include "rtthread.h"
 #include "gd32f403.h"
+#include "LogUser.h"
+#include "SysLog.h"
 	
 #ifdef __cplusplus
 }

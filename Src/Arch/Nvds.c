@@ -5,7 +5,7 @@ static Nvds g_Nvds;
 
 Bool Nvds_verify(const uint8* pByte, int len)
 {
-	return (pByte[0] != EEPROM_FIRST_BYTE || pByte[len - 1] != EEPROM_LATEST_BYTE);
+	return (pByte[0] == EEPROM_FIRST_BYTE && pByte[len - 1] == EEPROM_LATEST_BYTE);
 }
 
 //¸ù¾ÝIDÐ´NVDS
