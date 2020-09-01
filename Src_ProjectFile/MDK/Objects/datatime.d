@@ -61,10 +61,10 @@
 .\objects\datatime.o: ..\..\Src\source\drivers\board.h
 .\objects\datatime.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\objects\datatime.o: ..\..\Src\Arch\Log.h
-.\objects\datatime.o: ..\..\Src\source\user\common.h
 .\objects\datatime.o: ..\..\Src\Arch\Record.h
 .\objects\datatime.o: ..\..\Src\Arch\SectorMgr.h
 .\objects\datatime.o: ..\..\Src\source\user\McuFlashMap.h
 .\objects\datatime.o: ..\..\Src\source\user\ExternFlashMap.h
 .\objects\datatime.o: ..\..\Src\source\nvds\NvdsUser.h
 .\objects\datatime.o: ..\..\Src\Arch\Nvds.h
+.\objects\datatime.o: ..\..\Src\source\nvds\LogUser.h

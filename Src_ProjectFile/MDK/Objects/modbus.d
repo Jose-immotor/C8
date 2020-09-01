@@ -61,11 +61,11 @@
 .\objects\modbus.o: ..\..\Src\source\drivers\board.h
 .\objects\modbus.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\objects\modbus.o: ..\..\Src\Arch\Log.h
-.\objects\modbus.o: ..\..\Src\source\user\common.h
 .\objects\modbus.o: ..\..\Src\Arch\Record.h
 .\objects\modbus.o: ..\..\Src\Arch\SectorMgr.h
 .\objects\modbus.o: ..\..\Src\source\user\McuFlashMap.h
 .\objects\modbus.o: ..\..\Src\source\user\ExternFlashMap.h
 .\objects\modbus.o: ..\..\Src\source\nvds\NvdsUser.h
 .\objects\modbus.o: ..\..\Src\Arch\Nvds.h
+.\objects\modbus.o: ..\..\Src\source\nvds\LogUser.h
 .\objects\modbus.o: ..\..\Src\source\Modbus\Modbus.h

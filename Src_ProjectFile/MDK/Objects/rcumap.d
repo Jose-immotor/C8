@@ -61,11 +61,11 @@
 .\objects\rcumap.o: ..\..\Src\source\drivers\board.h
 .\objects\rcumap.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\objects\rcumap.o: ..\..\Src\Arch\Log.h
-.\objects\rcumap.o: ..\..\Src\source\user\common.h
 .\objects\rcumap.o: ..\..\Src\Arch\Record.h
 .\objects\rcumap.o: ..\..\Src\Arch\SectorMgr.h
 .\objects\rcumap.o: ..\..\Src\source\user\McuFlashMap.h
 .\objects\rcumap.o: ..\..\Src\source\user\ExternFlashMap.h
 .\objects\rcumap.o: ..\..\Src\source\nvds\NvdsUser.h
 .\objects\rcumap.o: ..\..\Src\Arch\Nvds.h
+.\objects\rcumap.o: ..\..\Src\source\nvds\LogUser.h
 .\objects\rcumap.o: ..\..\Src\source\drivers\RcuMap.h

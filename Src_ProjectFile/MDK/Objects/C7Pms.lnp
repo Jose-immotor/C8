@@ -88,7 +88,7 @@
 ".\objects\datatime.o"
 ".\objects\nvc.o"
 ".\objects\sif.o"
-".\objects\loguser_1.o"
+".\objects\loguser.o"
 ".\objects\syslog.o"
 --strict --scatter ".\Objects\C7Pms.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols

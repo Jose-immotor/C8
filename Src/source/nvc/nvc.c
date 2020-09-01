@@ -10,7 +10,6 @@
 #include "Common.h"
 #include "Nvc.h"
 #include "Sif.h"
-#include "fsm.h"
 #include "drv_hwtimer.h"
 
 static const uint32 CLK_US = 100;

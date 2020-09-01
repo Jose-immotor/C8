@@ -62,10 +62,10 @@
 .\objects\rtc.o: ..\..\Src\source\rtc\datatime.h
 .\objects\rtc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\objects\rtc.o: ..\..\Src\Arch\Log.h
-.\objects\rtc.o: ..\..\Src\source\user\common.h
 .\objects\rtc.o: ..\..\Src\Arch\Record.h
 .\objects\rtc.o: ..\..\Src\Arch\SectorMgr.h
 .\objects\rtc.o: ..\..\Src\source\user\McuFlashMap.h
 .\objects\rtc.o: ..\..\Src\source\user\ExternFlashMap.h
 .\objects\rtc.o: ..\..\Src\source\nvds\NvdsUser.h
 .\objects\rtc.o: ..\..\Src\Arch\Nvds.h
+.\objects\rtc.o: ..\..\Src\source\nvds\LogUser.h

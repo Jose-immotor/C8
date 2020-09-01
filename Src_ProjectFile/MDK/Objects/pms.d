@@ -61,13 +61,13 @@
 .\objects\pms.o: ..\..\Src\source\drivers\board.h
 .\objects\pms.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\objects\pms.o: ..\..\Src\Arch\Log.h
-.\objects\pms.o: ..\..\Src\source\user\common.h
 .\objects\pms.o: ..\..\Src\Arch\Record.h
 .\objects\pms.o: ..\..\Src\Arch\SectorMgr.h
 .\objects\pms.o: ..\..\Src\source\user\McuFlashMap.h
 .\objects\pms.o: ..\..\Src\source\user\ExternFlashMap.h
 .\objects\pms.o: ..\..\Src\source\nvds\NvdsUser.h
 .\objects\pms.o: ..\..\Src\Arch\Nvds.h
+.\objects\pms.o: ..\..\Src\source\nvds\LogUser.h
 .\objects\pms.o: ..\..\Src\source\Pms\Pms.h
 .\objects\pms.o: ..\..\Src\source\Modbus\ModBus.h
 .\objects\pms.o: ..\..\Src\source\Pms\BmsReg.h

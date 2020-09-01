@@ -61,12 +61,12 @@
 .\objects\jtutp.o: ..\..\Src\source\drivers\board.h
 .\objects\jtutp.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\objects\jtutp.o: ..\..\Src\Arch\Log.h
-.\objects\jtutp.o: ..\..\Src\source\user\common.h
 .\objects\jtutp.o: ..\..\Src\Arch\Record.h
 .\objects\jtutp.o: ..\..\Src\Arch\SectorMgr.h
 .\objects\jtutp.o: ..\..\Src\source\user\McuFlashMap.h
 .\objects\jtutp.o: ..\..\Src\source\user\ExternFlashMap.h
 .\objects\jtutp.o: ..\..\Src\source\nvds\NvdsUser.h
 .\objects\jtutp.o: ..\..\Src\Arch\Nvds.h
+.\objects\jtutp.o: ..\..\Src\source\nvds\LogUser.h
 .\objects\jtutp.o: ..\..\Src\source\JT808\JtUtp.h
 .\objects\jtutp.o: ..\..\Src\Arch\CheckSum.h

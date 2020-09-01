@@ -61,13 +61,13 @@
 .\objects\nfccardreader.o: ..\..\Src\source\drivers\board.h
 .\objects\nfccardreader.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\objects\nfccardreader.o: ..\..\Src\Arch\Log.h
-.\objects\nfccardreader.o: ..\..\Src\source\user\common.h
 .\objects\nfccardreader.o: ..\..\Src\Arch\Record.h
 .\objects\nfccardreader.o: ..\..\Src\Arch\SectorMgr.h
 .\objects\nfccardreader.o: ..\..\Src\source\user\McuFlashMap.h
 .\objects\nfccardreader.o: ..\..\Src\source\user\ExternFlashMap.h
 .\objects\nfccardreader.o: ..\..\Src\source\nvds\NvdsUser.h
 .\objects\nfccardreader.o: ..\..\Src\Arch\Nvds.h
+.\objects\nfccardreader.o: ..\..\Src\source\nvds\LogUser.h
 .\objects\nfccardreader.o: ..\..\Src\source\nfc\NfcCardReader.h
 .\objects\nfccardreader.o: ..\..\Src\source\nfc\fm175xx.h
 .\objects\nfccardreader.o: ..\..\Src\source\drivers\drv_i2c.h

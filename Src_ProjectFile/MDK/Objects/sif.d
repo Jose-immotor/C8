@@ -61,12 +61,12 @@
 .\objects\sif.o: ..\..\Src\source\drivers\board.h
 .\objects\sif.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\objects\sif.o: ..\..\Src\Arch\Log.h
-.\objects\sif.o: ..\..\Src\source\user\common.h
 .\objects\sif.o: ..\..\Src\Arch\Record.h
 .\objects\sif.o: ..\..\Src\Arch\SectorMgr.h
 .\objects\sif.o: ..\..\Src\source\user\McuFlashMap.h
 .\objects\sif.o: ..\..\Src\source\user\ExternFlashMap.h
 .\objects\sif.o: ..\..\Src\source\nvds\NvdsUser.h
 .\objects\sif.o: ..\..\Src\Arch\Nvds.h
+.\objects\sif.o: ..\..\Src\source\nvds\LogUser.h
 .\objects\sif.o: ..\..\Src\source\nvc\Sif.h
 .\objects\sif.o: ..\..\Src\source\nvc\nvc.h

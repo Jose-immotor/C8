@@ -61,14 +61,13 @@
 .\objects\nvc.o: ..\..\Src\source\drivers\board.h
 .\objects\nvc.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\objects\nvc.o: ..\..\Src\Arch\Log.h
-.\objects\nvc.o: ..\..\Src\source\user\common.h
 .\objects\nvc.o: ..\..\Src\Arch\Record.h
 .\objects\nvc.o: ..\..\Src\Arch\SectorMgr.h
 .\objects\nvc.o: ..\..\Src\source\user\McuFlashMap.h
 .\objects\nvc.o: ..\..\Src\source\user\ExternFlashMap.h
 .\objects\nvc.o: ..\..\Src\source\nvds\NvdsUser.h
 .\objects\nvc.o: ..\..\Src\Arch\Nvds.h
+.\objects\nvc.o: ..\..\Src\source\nvds\LogUser.h
 .\objects\nvc.o: ..\..\Src\source\nvc\Nvc.h
 .\objects\nvc.o: ..\..\Src\source\nvc\Sif.h
-.\objects\nvc.o: ..\..\Src\source\fsm\fsm.h
 .\objects\nvc.o: ..\..\Src\source\drivers\drv_hwtimer.h

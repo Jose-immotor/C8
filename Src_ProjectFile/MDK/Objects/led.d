@@ -61,13 +61,13 @@
 .\objects\led.o: ..\..\Src\source\drivers\board.h
 .\objects\led.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\objects\led.o: ..\..\Src\Arch\Log.h
-.\objects\led.o: ..\..\Src\source\user\common.h
 .\objects\led.o: ..\..\Src\Arch\Record.h
 .\objects\led.o: ..\..\Src\Arch\SectorMgr.h
 .\objects\led.o: ..\..\Src\source\user\McuFlashMap.h
 .\objects\led.o: ..\..\Src\source\user\ExternFlashMap.h
 .\objects\led.o: ..\..\Src\source\nvds\NvdsUser.h
 .\objects\led.o: ..\..\Src\Arch\Nvds.h
+.\objects\led.o: ..\..\Src\source\nvds\LogUser.h
 .\objects\led.o: ..\..\Src\source\user\led.h
 .\objects\led.o: ..\..\Src\source\drivers\drv_gpio.h
 .\objects\led.o: ..\..\Src\source\user\MsgDef.h

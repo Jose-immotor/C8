@@ -5,8 +5,10 @@
 extern "C"{
 #endif
 
-#include "common.h"
+//#include "common.h"
 #include "Record.h"
+
+#define CFG_LOG
 
 #ifdef CFG_LOG
 

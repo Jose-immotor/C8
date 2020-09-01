@@ -61,10 +61,10 @@
 .\objects\smart_shell.o: ..\..\Src\source\drivers\board.h
 .\objects\smart_shell.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\objects\smart_shell.o: ..\..\Src\Arch\Log.h
-.\objects\smart_shell.o: ..\..\Src\source\user\common.h
 .\objects\smart_shell.o: ..\..\Src\Arch\Record.h
 .\objects\smart_shell.o: ..\..\Src\Arch\SectorMgr.h
 .\objects\smart_shell.o: ..\..\Src\source\user\McuFlashMap.h
 .\objects\smart_shell.o: ..\..\Src\source\user\ExternFlashMap.h
 .\objects\smart_shell.o: ..\..\Src\source\nvds\NvdsUser.h
 .\objects\smart_shell.o: ..\..\Src\Arch\Nvds.h
+.\objects\smart_shell.o: ..\..\Src\source\nvds\LogUser.h

@@ -2,22 +2,26 @@
 #include "Common.h"
 #include "LogUser.h"
 #include "SysLog.h"
+#include "drv_spi.h"
 
 //从Flsah读取数据
 Bool LogItem_FmcRead(uint32 addr, void* buf, int len)
 {
-	return False;
+	spi_flash_buffer_read(addr,buf,len);
+	return True;
 }
 
 //写数据到Flsah
 Bool LogItem_FmcWrite(uint32 addr, const void* pData, int len)
 {
-	return False;
+	spi_flash_buffer_write(addr,(uint8_t*)pData,len);
+	return True;
 }
 
 //Flsah擦除
 void LogItem_FmcErase(uint32 addr, int len)
 {
+	spi_flash_sector_erase(addr);
 }
 
 Bool LogItem_Verify(const LogItem* pItem)

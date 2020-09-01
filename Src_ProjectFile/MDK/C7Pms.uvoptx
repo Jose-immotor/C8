@@ -135,7 +135,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
-          <Name></Name>
+          <Name>d</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -154,7 +154,7 @@
           <Type>0</Type>
           <LineNumber>484</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>134230002</Address>
+          <Address>134230386</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -170,7 +170,7 @@
           <Type>0</Type>
           <LineNumber>182</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>134231680</Address>
+          <Address>134232064</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -186,7 +186,7 @@
           <Type>0</Type>
           <LineNumber>447</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>134233706</Address>
+          <Address>134234118</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -202,7 +202,7 @@
           <Type>0</Type>
           <LineNumber>102</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>134232024</Address>
+          <Address>134232408</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -218,7 +218,7 @@
           <Type>0</Type>
           <LineNumber>98</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>134232012</Address>
+          <Address>134232396</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -234,7 +234,7 @@
           <Type>0</Type>
           <LineNumber>152</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>134231726</Address>
+          <Address>134232110</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -250,7 +250,7 @@
           <Type>0</Type>
           <LineNumber>365</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>134233478</Address>
+          <Address>134233890</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -266,7 +266,7 @@
           <Type>0</Type>
           <LineNumber>466</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>134233800</Address>
+          <Address>134234212</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -282,7 +282,7 @@
           <Type>0</Type>
           <LineNumber>404</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>134233572</Address>
+          <Address>134233984</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -298,7 +298,7 @@
           <Type>0</Type>
           <LineNumber>408</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>134233586</Address>
+          <Address>134233998</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -314,7 +314,7 @@
           <Type>0</Type>
           <LineNumber>416</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>134233610</Address>
+          <Address>134234022</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -330,7 +330,7 @@
           <Type>0</Type>
           <LineNumber>419</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>134233620</Address>
+          <Address>134234032</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -346,7 +346,7 @@
           <Type>0</Type>
           <LineNumber>182</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>134238388</Address>
+          <Address>134239392</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -356,38 +356,6 @@
           <Filename>..\..\Src\source\nfc\fm175xx.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\C7Pms\../../Src/source/nfc/fm175xx.c\182</Expression>
-        </Bp>
-        <Bp>
-          <Number>13</Number>
-          <Type>0</Type>
-          <LineNumber>75</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134236032</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\Src\Arch\SectorMgr.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\C7Pms\../../Src/Arch/SectorMgr.c\75</Expression>
-        </Bp>
-        <Bp>
-          <Number>14</Number>
-          <Type>0</Type>
-          <LineNumber>76</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134236050</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\Src\Arch\SectorMgr.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\C7Pms\../../Src/Arch/SectorMgr.c\76</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -404,34 +372,84 @@
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>pExt</ItemText>
+          <ItemText>g_BmsCmdEx</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
-          <ItemText>g_BmsCmdEx</ItemText>
+          <ItemText>g_Bat</ItemText>
         </Ww>
         <Ww>
           <count>4</count>
           <WinNumber>1</WinNumber>
-          <ItemText>g_Bat</ItemText>
+          <ItemText>pReader</ItemText>
         </Ww>
         <Ww>
           <count>5</count>
           <WinNumber>1</WinNumber>
-          <ItemText>pReader</ItemText>
+          <ItemText>frameCfg</ItemText>
         </Ww>
         <Ww>
           <count>6</count>
           <WinNumber>1</WinNumber>
-          <ItemText>frameCfg</ItemText>
+          <ItemText>item</ItemText>
+        </Ww>
+        <Ww>
+          <count>7</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>pSector</ItemText>
+        </Ww>
+        <Ww>
+          <count>8</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>pByte</ItemText>
+        </Ww>
+        <Ww>
+          <count>9</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>nvdsItemArray</ItemText>
+        </Ww>
+        <Ww>
+          <count>10</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>g_NvdsItems</ItemText>
+        </Ww>
+        <Ww>
+          <count>11</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>p</ItemText>
+        </Ww>
+        <Ww>
+          <count>12</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>g_cfgInfo</ItemText>
+        </Ww>
+        <Ww>
+          <count>13</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>g_pdoInfo</ItemText>
+        </Ww>
+        <Ww>
+          <count>14</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>g_degInfo</ItemText>
+        </Ww>
+        <Ww>
+          <count>15</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>g_degInfo</ItemText>
+        </Ww>
+        <Ww>
+          <count>16</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>pRecord</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
         <Mm>
           <WinNumber>1</WinNumber>
           <SubType>0</SubType>
-          <ItemText>pMod-&gt;frameCfg-&gt;txBuf</ItemText>
+          <ItemText>0x20001018</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow1>
@@ -1694,7 +1712,7 @@
 
   <Group>
     <GroupName>log</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

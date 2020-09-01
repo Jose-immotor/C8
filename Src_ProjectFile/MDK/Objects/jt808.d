@@ -61,13 +61,13 @@
 .\objects\jt808.o: ..\..\Src\source\drivers\board.h
 .\objects\jt808.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\objects\jt808.o: ..\..\Src\Arch\Log.h
-.\objects\jt808.o: ..\..\Src\source\user\common.h
 .\objects\jt808.o: ..\..\Src\Arch\Record.h
 .\objects\jt808.o: ..\..\Src\Arch\SectorMgr.h
 .\objects\jt808.o: ..\..\Src\source\user\McuFlashMap.h
 .\objects\jt808.o: ..\..\Src\source\user\ExternFlashMap.h
 .\objects\jt808.o: ..\..\Src\source\nvds\NvdsUser.h
 .\objects\jt808.o: ..\..\Src\Arch\Nvds.h
+.\objects\jt808.o: ..\..\Src\source\nvds\LogUser.h
 .\objects\jt808.o: ..\..\Src\source\JT808\JT808.h
 .\objects\jt808.o: ..\..\Src\Arch\HwFwVer.h
 .\objects\jt808.o: ..\..\Src\source\user\MsgDef.h

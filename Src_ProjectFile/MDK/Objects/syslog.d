@@ -61,11 +61,11 @@
 .\objects\syslog.o: ..\..\Src\source\drivers\board.h
 .\objects\syslog.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\objects\syslog.o: ..\..\Src\Arch\Log.h
-.\objects\syslog.o: ..\..\Src\source\user\common.h
 .\objects\syslog.o: ..\..\Src\Arch\Record.h
 .\objects\syslog.o: ..\..\Src\Arch\SectorMgr.h
 .\objects\syslog.o: ..\..\Src\source\user\McuFlashMap.h
 .\objects\syslog.o: ..\..\Src\source\user\ExternFlashMap.h
 .\objects\syslog.o: ..\..\Src\source\nvds\NvdsUser.h
 .\objects\syslog.o: ..\..\Src\Arch\Nvds.h
+.\objects\syslog.o: ..\..\Src\source\nvds\LogUser.h
 .\objects\syslog.o: ..\..\Src\source\Log\SysLog.h

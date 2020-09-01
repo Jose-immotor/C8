@@ -61,13 +61,13 @@
 .\objects\drv_gpio.o: ..\..\Src\source\drivers\board.h
 .\objects\drv_gpio.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\objects\drv_gpio.o: ..\..\Src\Arch\Log.h
-.\objects\drv_gpio.o: ..\..\Src\source\user\common.h
 .\objects\drv_gpio.o: ..\..\Src\Arch\Record.h
 .\objects\drv_gpio.o: ..\..\Src\Arch\SectorMgr.h
 .\objects\drv_gpio.o: ..\..\Src\source\user\McuFlashMap.h
 .\objects\drv_gpio.o: ..\..\Src\source\user\ExternFlashMap.h
 .\objects\drv_gpio.o: ..\..\Src\source\nvds\NvdsUser.h
 .\objects\drv_gpio.o: ..\..\Src\Arch\Nvds.h
+.\objects\drv_gpio.o: ..\..\Src\source\nvds\LogUser.h
 .\objects\drv_gpio.o: ..\..\Src\source\drivers\drv_gpio.h
 .\objects\drv_gpio.o: ..\..\Src\source\user\MsgDef.h
 .\objects\drv_gpio.o: ..\..\Src\Arch\Led.h

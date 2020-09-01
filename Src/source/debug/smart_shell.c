@@ -44,7 +44,7 @@ static void Dump(int argc, char**argv)
 
 ////	Printf("g_MaxGpsCount=%d\n", g_MaxGpsCount);
 //	Printf("g_ActiveFlag=0x%x\n", g_ActiveFlag);
-//	Printf("g_dwDebugLevel = 0x%08x\n", g_dwDebugLevel);
+	Printf("g_dwDebugLevel = 0x%04x\n", g_dwDebugLevel);
 }
 MSH_CMD_EXPORT(Dump, Dump sample: Dump <uint8_t ind>);
 

@@ -16,6 +16,7 @@
 #include "JT808.h"
 #include <cm_backtrace.h>
 
+
 volatile bool g_isPowerDown = False;//休眠标志，False-没有休眠，True-休眠
 
 //WakeupType g_WakeupType;
@@ -188,6 +189,7 @@ int main(void)
 	//所有对象初始化
 	cm_backtrace_init("C7Pms", "1.0", "1.0");
 	NvdsUser_Init();
+	LogUser_init();
 	Led_init();
 //	JT808_init();
 	Pms_init();

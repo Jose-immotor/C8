@@ -61,13 +61,13 @@
 .\objects\battery.o: ..\..\Src\source\drivers\board.h
 .\objects\battery.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\time.h
 .\objects\battery.o: ..\..\Src\Arch\Log.h
-.\objects\battery.o: ..\..\Src\source\user\common.h
 .\objects\battery.o: ..\..\Src\Arch\Record.h
 .\objects\battery.o: ..\..\Src\Arch\SectorMgr.h
 .\objects\battery.o: ..\..\Src\source\user\McuFlashMap.h
 .\objects\battery.o: ..\..\Src\source\user\ExternFlashMap.h
 .\objects\battery.o: ..\..\Src\source\nvds\NvdsUser.h
 .\objects\battery.o: ..\..\Src\Arch\Nvds.h
+.\objects\battery.o: ..\..\Src\source\nvds\LogUser.h
 .\objects\battery.o: ..\..\Src\source\Pms\Battery.h
 .\objects\battery.o: ..\..\Src\source\Pms\BmsReg.h
 .\objects\battery.o: ..\..\Src\source\Modbus\ModBus.h
