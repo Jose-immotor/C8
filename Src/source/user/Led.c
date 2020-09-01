@@ -37,7 +37,7 @@ void Led_init()
 	.Start = Led_start,
 	};
 
-	ObjList_Add(&obj);
+	ObjList_add(&obj);
 
 	g_pLedIO = IO_Get(CTRL_MCU_LED);
 }

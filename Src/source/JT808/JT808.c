@@ -3,11 +3,14 @@
 #include "JT808.h"
 #include "MsgDef.h"
 #include "JtUtp.h"
+#include "JtTlv0900.h"
+#include "JtTlv8900.h"
 
 static JT808 g_Jt;
 JT808* g_pJt = &g_Jt;
 static Utp g_JtUtp;
 static uint32_t g_hbIntervalMs = 2000;	//MCU心跳时间间隔，单位Ms
+static uint8_t g_txBuf[128];
 
 void JT808_fsm(uint8_t msgID, uint32_t param1, uint32_t param2);
 
@@ -75,6 +78,15 @@ UTP_EVENT_RC JT808_event_devStateChanged(JT808* pJt, const UtpCmd* pCmd, UTP_TXF
 	return UTP_EVENT_RC_SUCCESS;
 }
 
+UTP_EVENT_RC JT808_event_rcvSvrData(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
+{
+	if (ev == UTP_GET_RSP)
+	{
+		JtTlv8900_proc(pCmd->pStorage, pCmd->storageLen);
+	}
+	return UTP_EVENT_RC_SUCCESS;
+}
+
 //所有的命令，有传输事件发生，都会调用该回调函数
 UTP_EVENT_RC JT808_utpEventCb(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
@@ -88,6 +100,13 @@ UTP_EVENT_RC JT808_utpEventCb(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 		if (ev == UTP_REQ_SUCCESS || ev == UTP_REQ_FAILED)
 		{
 			Utp_DelaySendCmd(&g_JtUtp, JTCMD_MCU_HB, 2000);
+		}
+	}
+	else if (pCmd->cmd == JTCMD_CMD_SEND_TO_SVR)
+	{
+		if (ev == UTP_REQ_SUCCESS)
+		{
+			JtTlv0900_updateMirror(pCmd->pExt->transferData, pCmd->pExt->transferLen);
 		}
 	}
 
@@ -113,7 +132,14 @@ void JT808_fsm_preoperation(uint8_t msgID, uint32_t param1, uint32_t param2)
 
 void JT808_fsm_operation(uint8_t msgID, uint32_t param1, uint32_t param2)
 {
-
+	if (msgID == MSG_RUN)
+	{
+		if (Utp_isIdle(&g_JtUtp))
+		{
+			int len = JtTlv0900_getChangedTlv(g_txBuf, sizeof(g_txBuf));
+			if (len) Utp_SendCmd(&g_JtUtp, JTCMD_CMD_SEND_TO_SVR);
+		}
+	}
 }
 
 void JT808_fsm_sleep(uint8_t msgID, uint32_t param1, uint32_t param2)
@@ -204,11 +230,12 @@ void JT808_start()
 ************************************************/
 void JT808_init()
 {
-	#define JT_CMD_SIZE 7
+	#define JT_CMD_SIZE 9
 	static UtpCmdEx g_JtCmdEx[JT_CMD_SIZE];
 	//static uint8_t g_JtState = JT_STATE_INIT;
 	static uint16_t g_bleEnCtrl = 0;
 	static uint8_t g_protocolVer = 1;	//传输协议版本号
+	static uint8_t g_rxBuf[128];
 	static const UtpCmd g_JtCmd[JT_CMD_SIZE] =
 	{
 		//位置越靠前，发送优先级越高
@@ -222,6 +249,9 @@ void JT808_init()
 		{&g_JtCmdEx[4],UTP_WRITE, JTCMD_SET_OP_STATE, "SetOpState"	, (uint8_t*)& g_Jt.bleEnCtrl, 2, (uint8_t*)&g_bleEnCtrl, 2},
 
 		{&g_JtCmdEx[6],UTP_EVENT, JTCMD_EVENT_DEV_STATE_CHANGED, "DevStateChanged", (uint8_t*)& g_Jt.devState, sizeof(JT_devState), Null, 0, (UtpEventFn)JT808_event_devStateChanged},
+		{&g_JtCmdEx[7],UTP_EVENT, JTCMD_EVT_RCV_SVR_DATA, "RcvSvrData", (uint8_t*)g_rxBuf, sizeof(g_rxBuf), Null, 0, (UtpEventFn)JT808_event_rcvSvrData},
+
+		{&g_JtCmdEx[8],UTP_WRITE, JTCMD_CMD_SEND_TO_SVR, "SendDataToSvr", (uint8_t*)g_txBuf, sizeof(g_txBuf)},
 	};
 
 	static const UtpCfg g_cfg =
@@ -234,8 +264,11 @@ void JT808_init()
 	};
 
 	static const Obj obj = { "JT808", JT808_start, (ObjFn)JT808_sleep, JT808_run };
-	ObjList_Add(&obj);
+	ObjList_add(&obj);
 
 	g_Jt.opState = JT_STATE_UNKNOWN;	//初始化为一个UNKNOWN值
 	Utp_Init(&g_JtUtp, &g_cfg, &g_jtFrameCfg);
+
+	JtTlv8900_init();
+	JtTlv0900_init();
 }

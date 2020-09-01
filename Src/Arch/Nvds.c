@@ -19,6 +19,11 @@ void Nvds_write(uint8_t nvdsId)
 			Bool isOk = p->Event ? p->Event(p->secCfg.storage, BE_ON_WRITE_BEFORE) : True;
 			if (isOk)
 			{
+				if (p->mirror)
+					isOk = (memcpy(p->secCfg.storage, p->mirror, p->secCfg.storageSize) != 0);
+			}
+			if (isOk)
+			{
 				SectorMgr_Write(p->sectorMgr);
 			}
 			break;
@@ -50,6 +55,10 @@ void Nvds_InitItem(const NvdsItem* item)
 	{
 		item->Event(pByte, BE_DATA_OK);
 	}
+
+	//更新镜像变量
+	if (item->mirror)
+		memcpy(item->mirror, item->secCfg.storage, item->secCfg.storageSize);
 }
 
 void Nvds_Init(const NvdsItem* nvdsItemArray, int count)

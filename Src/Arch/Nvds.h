@@ -27,7 +27,6 @@ extern "C" {
 	{
 		//NvdsID
 		uint8 id;
-
 		//NvdsID存储的扇区配置
 		SectorCfg secCfg;
 		//Nnds扇区管理对象指针
@@ -35,6 +34,10 @@ extern "C" {
 
 		//NvdsID存储的事件函数定义
 		NvdsEventFn Event;
+
+		//secCfg.storage的镜像对象，用于和原值作比较，决定是否写入FLASH
+		//如果mirror=Null，表示写入Flash时不和原值比较
+		void* mirror;
 	}NvdsItem;
 
 	typedef struct _Nvds

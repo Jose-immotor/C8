@@ -76,7 +76,8 @@ uint32_t usart0_put_byte(uint8_t data)
 	while(RESET == usart_flag_get(USART0, USART_FLAG_TBE));
     return sta;   
 }
-	
+
+#if 0
 //uint8_t usart0_send(void *buffer, uint8_t cnt)
 //{
 //	uint8_t i;
@@ -122,6 +123,8 @@ int _Printf(const char* lpszFormat, ...)
 
 	return nLen;
 }
+
+#endif
 
 /*!
  * \brief usart0作为调试串口，只使用接收中断.使用发送中断会出现Hard Fault

@@ -73,10 +73,10 @@ typedef void (*DebugWriteFn)();
 				Printf( "Assertion Failed! %s,%s,%s,line=%d\n", #parenExpr,__FILE__,__FUNCTION__,_LINE_);	\
 				while(1){;}	\
 			}
-	extern int _Printf(const char* lpszFormat, ...);	
-	#define Printf(...) {_Printf(__VA_ARGS__); /*while(RESET == usart_flag_get(CCU_DEBUG_COM, USART_FLAG_TC));*/}
+			
+	#define Printf(...) {printf(__VA_ARGS__); /*while(RESET == usart_flag_get(CCU_DEBUG_COM, USART_FLAG_TC));*/}
 	
-	#define PFL(level, ...) {if (g_dwDebugLevel & level) {_Printf(__VA_ARGS__);}}
+	#define PFL(level, ...) {if (g_dwDebugLevel & level) {Printf(__VA_ARGS__);}}
 	
 	#define PFL_WARNING(...) 	PFL(DL_WARNING, "WARNING: %s(),line=%d: ",_FUNC_, _LINE_); PFL(DL_WARNING, __VA_ARGS__);
 	#define PFL_ERROR(...) 	PFL(DL_ERROR, "ERROR: %s(),line=%d:",_FUNC_, _LINE_); PFL(DL_ERROR, __VA_ARGS__);

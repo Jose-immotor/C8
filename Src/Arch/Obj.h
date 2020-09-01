@@ -17,11 +17,11 @@ extern "C" {
 		ObjFn Run;
 	}Obj;
 
-	void ObjList_Add(const Obj* pObj);
+	void ObjList_add(const Obj* pObj);
 
-	void ObjList_Start();
-	void ObjList_Stop();
-	void ObjList_Run();
+	void ObjList_start();
+	void ObjList_stop();
+	void ObjList_run();
 
 #ifdef __cplusplus
 }

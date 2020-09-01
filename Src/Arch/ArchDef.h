@@ -5,8 +5,6 @@
 extern "C"{
 #endif
 
-#include "gd32f403.h"
-
 #ifdef WIN32
 	#define _CRT_SECURE_NO_WARNINGS
 	
@@ -23,8 +21,11 @@ extern "C"{
 	#define MDELAY(mS) TIMER_Delay(TIMER0, (mS)*1000)
 	#define UDELAY(uS) TIMER_Delay(TIMER0, (uS))
 	
-	#define GET_TICKS( ) rt_tick_get()//system_ms_tick
+	#define GET_TICKS( ) system_ms_tick
 #endif
+
+#define CFG_LOG
+//#define XDEBUG
 
 #include "typedef.h"	
 #include <stdarg.h>
@@ -34,9 +35,6 @@ extern "C"{
 #include "Dump.h"
 #include "_Macro.h"
 #include "Dbg.h"
-
-#define CFG_LOG
-//#define XDEBUG
 
 	//ms ticks of system, 
 	extern volatile unsigned int system_ms_tick;

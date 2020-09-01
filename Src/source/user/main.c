@@ -9,13 +9,12 @@
  * 2020-08-27	  Allen	 	    modified
 *******************************************************************************/
 
-#include "rtc.h"
 #include "pms.h"
 #include "Common.h"
 #include "led.h"
 #include "JT808.h"
 #include <cm_backtrace.h>
-
+#include "Debug.h"
 
 volatile bool g_isPowerDown = False;//休眠标志，False-没有休眠，True-休眠
 
@@ -80,7 +79,7 @@ void Boot(Bool isFromAppRom)
  */
 void Enter_PowerDown()
 {	
-	RTC_TimerStart(24*60*60);
+//	RTC_TimerStart(24*60*60);
 //	//485 power
 //	POWER_3V3_485_OFF;
 //	//NFC power
@@ -182,24 +181,27 @@ void Mcu_Sleep()
  */
 int main(void)
 {
-	Printf("\nPower up.\n");	
+	Printf("\n\nPower up.\n");	
 	//MCU硬件初始化
 	//Todo...
 
 	//所有对象初始化
 	cm_backtrace_init("C7Pms", "1.0", "1.0");
+//	LocalTimeInit();
+	Debug_Init();
 	NvdsUser_Init();
 	LogUser_init();
+//	LOG_TRACE1(SYS_CATID_COMMON, 0, SysEvtID_McuReset, 0);
 	Led_init();
 //	JT808_init();
 	Pms_init();
 	//对象启动
-	ObjList_Start();
+	ObjList_start();
 
     while(1)
 	{
 		//对象运行
-		ObjList_Run();
+		ObjList_run();
 		rt_thread_mdelay(100);
     }
 }

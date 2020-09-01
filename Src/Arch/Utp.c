@@ -1,9 +1,21 @@
+/*
+ * Copyright (c) 2020-2020, Immotor
+ *
+ * Change Logs:
+ * Date           Author       Notes
+ * 2020-08-27     Allen      first version
+ */
 
 #include "ArchDef.h"
 #include "Utp.h"
 
 static Bool Utp_RspProc(Utp* pUtp, const uint8_t* pRsp, int frameLen, UTP_RCV_RSP_RC rspCode);
 static void Utp_RcvRsp(Utp* pUtp, const uint8_t* pRsp, int frameLen, UTP_RCV_RSP_RC rspCode);
+
+Bool Utp_isIdle(const Utp* pUtp)
+{
+	return pUtp->state == UTP_FSM_INIT;
+}
 
 /*
 把Payload数据加上帧头和帧为，并且转码。
@@ -76,13 +88,15 @@ Bool Utp_ConvertToHost(const UtpFrameCfg* frameCfg, uint8_t* dst, uint16_t dstSi
 	int i = *dstInd;
 #define FRAME_RESET() {i = 0; *state = FRAME_INIT;}
 
-
-	if (frameCfg->head == byte)
+	if (*state == FRAME_INIT)
 	{
-		i = 0;
-		*state = FRAME_FOUND_HEAD;
+		if (frameCfg->head == byte)
+		{
+			i = 0;
+			*state = FRAME_FOUND_HEAD;
 
-		dst[i++] = byte;
+			dst[i++] = byte;
+		}
 	}
 	else if (*state == FRAME_FOUND_HEAD)
 	{
@@ -461,6 +475,8 @@ static void Utp_CheckReq(Utp* pUtp)
 			{
 				Utp_SendReq(pUtp, pCmd->cmd, pCmd->pStorage, pCmd->storageLen, 0, 0);
 				pCmd->pExt->rxRspTicks = GET_TICKS();
+				Utp_Event(pUtp, pCmd, UTP_REQ_SUCCESS);
+				Utp_ResetTxBuf(pUtp);
 			}
 			else
 			{
@@ -546,7 +562,7 @@ void Utp_CheckRxFrame(Utp* pUtp)
 
 			for (int i = pUtp->headIndex; i <= pUtp->searchIndex; i++)
 			{
-				//转码
+				//转码,转码出来的数据包含帧头和帧尾
 				isOk = Utp_ConvertToHost(frameCfg, frameCfg->transcodeBuf, frameCfg->transcodeBufLen, &frameLen, &state, pUtp->head[i]);
 				if (isOk)
 				{
@@ -558,11 +574,11 @@ void Utp_CheckRxFrame(Utp* pUtp)
 			//数据队列中移除
 			Queue_popElements(&pUtp->rxBufQueue, pUtp->searchIndex + 1);
 
-			//帧校验
-			if (isOk && frameCfg->FrameVerify(pUtp, frameCfg->transcodeBuf, frameLen, Null))
+			//帧校验，去掉帧头和帧尾
+			if (isOk && frameCfg->FrameVerify(pUtp, &frameCfg->transcodeBuf[1], frameLen-2, Null))
 			{
-				//帧处理
-				Utp_RcvFrameHandler(pUtp, frameCfg->transcodeBuf, frameLen);
+				//帧处理,去掉帧头和帧尾
+				Utp_RcvFrameHandler(pUtp, &frameCfg->transcodeBuf[1], frameLen-2);
 			}
 		}
 

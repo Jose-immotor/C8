@@ -111,6 +111,7 @@ extern "C" {
 
 	void Bat_init(Battery* pBat, int port, const ModCfg* cfg);
 	void Bat_run(Battery* pBat);
+	uint8* Bat_getBID(Battery* pBat);
 
 	//电池信息有效
 	Bool Bat_isReady(Battery* pBat);

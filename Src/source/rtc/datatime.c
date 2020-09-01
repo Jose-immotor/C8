@@ -1,6 +1,10 @@
 
+#include "drv_rtc.h"
+#include "date.h"
 #include "common.h"
 #include "datatime.h"
+
+S_RTC_TIME_DATA_T sInitTime;
 
 S_RTC_TIME_DATA_T* DateTime_MakeRtc(int year, int month, int day, int hour, int minute, int sec)
 {
@@ -123,9 +127,153 @@ char* DateTime_ToStr(uint32 seconds)
 	return buf;
 }
 
+/**
+ * @brief LocalTimeSync
+ * @param[in] cnt 秒计数
+ * @param[out] none
+ * @param 
+ * @return 
+ * 
+ * @attention 
+ */
+void LocalTimeSync(S_RTC_TIME_DATA_T* time )
+{
+	static struct rtc_time systime;
+	static uint32_t timedata=0;
+	
+	/* Time Setting */
+	Printf("DataTime sync:");
+	DateTime_dump(time);
+	
+	sInitTime.u32Year       = time->u32Year;
+	sInitTime.u32Month      = time->u32Month;
+	sInitTime.u32Day        = time->u32Day;
+	sInitTime.u32Hour       = time->u32Hour;
+	sInitTime.u32Minute     = time->u32Minute;
+	sInitTime.u32Second     = time->u32Second;
+	
+	
+	memcpy(&systime,&sInitTime,sizeof(struct rtc_time));
+	
+	timedata = mktimev(&systime);
+	
+    /* change the current time */
+    rtc_counter_set(timedata);
+    rtc_lwoff_wait();	
+}
+
+/**
+ *  @brief    Read current date/time from RTC setting
+ *
+ *  @param[out]    sPt \n
+ *                     Specify the time property and current time. It includes: \n
+ *                     u32Year: Year value                                      \n
+ *                     u32Month: Month value                                    \n
+ *                     u32Day: Day value                                        \n
+ *                     u32DayOfWeek: Day of week                                \n
+ *                     u32Hour: Hour value                                      \n
+ *                     u32Minute: Minute value                                  \n
+ *                     u32Second: Second value                                  \n
+ *                     u32TimeScale: \ref RTC_CLOCK_12 / \ref RTC_CLOCK_24          \n
+ *                     u8AmPm: \ref RTC_AM / \ref RTC_PM                            \n
+ *
+ *  @return   None
+ *
+ */
+void RTC_GetDateAndTime(S_RTC_TIME_DATA_T *sPt)
+{
+	uint32_t timevar=0;
+	static struct rtc_time systime;
+
+
+	timevar = rtc_counter_get();
+	
+	to_tm(timevar, &systime);
+	
+	memcpy(&sInitTime,&systime,sizeof(struct rtc_time));
+	
+    sPt->u32TimeScale = sInitTime.u32TimeScale;    /* 12/24-hour */
+    sPt->u32DayOfWeek = sInitTime.u32DayOfWeek;          /* Day of week */
+    sPt->u32Year      = sInitTime.u32Year;
+    sPt->u32Month     = sInitTime.u32Month;
+    sPt->u32Day       = sInitTime.u32Day;	
+	
+    if (sInitTime.u32TimeScale == RTC_CLOCK_12)  /* Compute12/24 hour */
+    {
+		if(sInitTime.u32Hour >= 13)
+		{
+		    sPt->u32AmPm = RTC_PM;
+			sPt->u32Hour = sInitTime.u32Hour - 12;
+		}
+		else
+		{
+		    sPt->u32AmPm = RTC_AM;
+			sPt->u32Hour = sInitTime.u32Hour;
+		}
+		sPt->u32Minute   = sInitTime.u32Minute;
+		sPt->u32Second   = sInitTime.u32Second;
+    }
+	else 
+	{
+        sPt->u32Hour     = sInitTime.u32Hour;
+		sPt->u32Minute   = sInitTime.u32Minute;
+		sPt->u32Second   = sInitTime.u32Second;
+    }
+}
+
+//RTC定时唤醒
+void RTC_TimerStart(uint32_t second)
+{
+    rcu_periph_clock_enable(RCU_BKPI);
+    rcu_periph_clock_enable(RCU_PMU);	
+	/* Enable RTC Clock */
+	rcu_periph_clock_enable(RCU_RTC);
+	/* Wait for RTC registers synchronization */
+	rtc_register_sync_wait();
+
+	rtc_lwoff_wait();
+	rtc_alarm_config(rtc_counter_get()+second);
+	/* Wait until last write operation on RTC registers has finished */
+	rtc_lwoff_wait();
+		
+	rtc_interrupt_enable(RTC_INT_ALARM);
+	rtc_lwoff_wait();
+}
+
+/**
+ * @brief LocalTimeInit
+ * @param[in] none
+ * @param[out] none
+ * @param 
+ * @return 
+ * 
+ * @attention 
+ */
+void LocalTimeInit(void)
+{
+    static struct rtc_time systime;
+	/* Time Setting */
+    sInitTime.u32Year       = 2020;
+    sInitTime.u32Month      = 1;
+    sInitTime.u32Day        = 1;
+    sInitTime.u32Hour       = 12;
+    sInitTime.u32Minute     = 0;
+    sInitTime.u32Second     = 0;
+    sInitTime.u32DayOfWeek  = RTC_WEDNESDAY;
+    sInitTime.u32TimeScale  = RTC_CLOCK_24;
+	sInitTime.u32AmPm       = RTC_AM;
+	
+	memcpy(&systime,&sInitTime,sizeof(struct rtc_time));
+
+	rtc_configuration();	
+    /* change the current time */
+    rtc_counter_set(mktimev(&systime));
+	/* Wait until last write operation on RTC registers has finished */
+	rtc_lwoff_wait();
+}
+
 void DateTime_Add_Test()
 {
-
 	S_RTC_TIME_DATA_T dataTime[] = 
 	{
 		 {2016, 11, 10, 0, 17, 30, 50, RTC_CLOCK_24}

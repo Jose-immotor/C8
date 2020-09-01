@@ -61,7 +61,7 @@ typedef enum
 //UTP 传输状态
 typedef enum
 {
-	UTP_FSM_INIT = 0	//初始化
+	UTP_FSM_INIT = 0	//初始状态，空闲
 	, UTP_FSM_RX_REQ	//接收到请求
 	, UTP_FSM_WAIT_RSP	//等待响应
 }UTP_FSM;
@@ -300,6 +300,9 @@ void Utp_SendCmd(Utp* pUtp, uint8_t cmd);
 返回值：无
 *******************************************/
 void Utp_DelaySendCmd(Utp* pUtp, uint8_t cmd, uint32_t delayMs);
+
+//协议栈是否空闲
+Bool Utp_isIdle(const Utp* pUtp);
 
 #ifdef __cplusplus
 }

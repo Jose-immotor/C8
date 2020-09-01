@@ -33,6 +33,7 @@ typedef struct
 extern usart_t __g_usart0;
 
 uint32_t usart0_get_byte(uint8_t *data);
+uint32_t usart0_put_byte(uint8_t data);
 uint8_t usart0_send(void *buffer, uint8_t cnt);
 
 #endif

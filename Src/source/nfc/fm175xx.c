@@ -639,34 +639,6 @@ unsigned char FM175XX_HardPowerdown(void)
 	}
 	return ERROR;
 }
-///*********************************************/
-///*函数名：	    Read_Ext_Reg    */
-///*功能：	    读取扩展寄存器    */
-///*输入参数：	reg_add，寄存器地址    */
-///*返回值：	    寄存器数值    */
-///*********************************************/
-//unsigned char Read_Ext_Reg(unsigned char reg_add)
-//{
-//    unsigned char result;
-// 	Write_Reg(0x0F,0x80+reg_add);
-//    
-// 	result = Read_Reg(0x0F);
-//    return result;
-//}
-///*********************************************/
-///*函数名：	    Write_Ext_Reg    */
-///*功能：	    写入扩展寄存器    */
-///*输入参数：	reg_add，寄存器地址；reg_value，寄存器数值    */
-///*返回值：	    OK
-//				ERROR    */
-///*********************************************/
-
-//unsigned char Write_Ext_Reg(unsigned char reg_add, unsigned char reg_value)
-//{
-//	Write_Reg(0x0F,0x40+reg_add);
-//	Write_Reg(0x0F,0xC0+reg_value);
-//	return OK;
-//} 
 
 void FM17522_Delayms(unsigned int delayms)
 {
@@ -677,7 +649,6 @@ void FM17522_Delayms(unsigned int delayms)
 static void nfc_ms_timer_cb(void* parameter)
 {
 	Pcd_Comm_timer_cb();//NFC timeout
-//	NTAG_task_timer_cb();//检测NFC通讯计时，如果没有通讯10秒后，重新初始化
 }
 
 rt_timer_t nfc_ms_handler;

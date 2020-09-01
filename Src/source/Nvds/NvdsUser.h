@@ -24,7 +24,11 @@ extern "C" {
 	typedef struct
 	{
 		uint8 firstByte;
-
+		struct
+		{
+			uint8 isActive : 1;		//BIT[0]:车辆是否激活
+			uint8 reserved : 7;		//BIT[1-7]:保留
+		};
 		uint8 Reserved[16];	//保留16个字节
 		uint8 latestByte;	//从存储区读出的字节不等于 EEPROM_LATEST_BYTE，说明该存储区被修改，已经失效
 	}CfgInfo;
@@ -34,6 +38,14 @@ extern "C" {
 	typedef struct
 	{
 		uint8 firstByte;
+		struct
+		{
+			uint8 isRemoteAccOn : 1;//BIT[0]:车辆远程点火
+			uint8 isWheelLock : 1;	//BIT[1]:轮毂锁
+			uint8 isCanbinLock : 1;	//BIT[2]:座舱锁
+			uint8 reserved : 5;		//BIT[3-7]:保留
+		};
+
 		uint32 resetCounter;	//复位计数器
 		uint32 timeStamp;		//时间戳，1. SM启动时会SM的本地时间同步到该值。2. 系统复位时，要保存该值
 		uint8 Reserved[16];		//保留16个字节

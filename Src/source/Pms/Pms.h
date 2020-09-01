@@ -1,6 +1,6 @@
 
-#ifndef __BATTERY_MGR_H_
-#define __BATTERY_MGR_H_
+#ifndef __PMS_H_
+#define __PMS_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -12,6 +12,9 @@ extern "C" {
 #include "queue.h"
 #include "Message.h"
 #include "NfcCardReader.h"
+#include "Battery.h"
+
+#define MAX_BAT_COUNT 2
 
 	//电池操作状态
 	typedef enum _PmsOpStatus
@@ -60,6 +63,7 @@ extern "C" {
 	}Pms;
 
 	extern Mod* g_pModBus;
+	extern Battery g_Bat[];
 
 	//从总线接收到的数据，调用该函数处理
 	void Pms_init();

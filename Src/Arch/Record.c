@@ -215,15 +215,13 @@ void Record_Init(Record* pRecord, const RecordCfg* cfg)
 	int writeSecInd = -1;
 	SectorCfg* secCfg = &pRecord->sectorCfg;
 	
+	memset(pRecord, 0, sizeof(Record));
+	pRecord->cfg = cfg;
 	memcpy(secCfg, &cfg->base, sizeof(SectorCfg));
 
 	Assert((uint32)cfg->base.startAddr % cfg->base.sectorSize == 0);
 	pRecord->itemsPerSec = secCfg->sectorSize / secCfg->storageSize;
 	pRecord->maxItems = pRecord->cfg->sectorCount * pRecord->itemsPerSec;
-
-	memset(pRecord, 0, sizeof(Record));
-	pRecord->cfg = cfg;
-	memcpy(secCfg, &cfg->base, sizeof(SectorCfg));
 
 	//遍历所有扇区，统计有效的记录总数, 找出可写扇区。
 	SectorMgr* pMgr = &pRecord->sector;

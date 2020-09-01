@@ -12,6 +12,7 @@
  
 #include "common.h"
 #include "datatime.h"
+
 /*!
  * \brief ´òÓ¡×´Ì¬ÐÅÏ¢
  *		  
@@ -23,6 +24,7 @@ static void Dump(int argc, char**argv)
 {
 	int ind = 0;
 	extern void BatteryDump(void);
+	extern void DateTime_dump(S_RTC_TIME_DATA_T* dt);
 ////	extern void power_dump();
 ////	extern int g_MaxGpsCount;
 //	extern uint32 g_ActiveFlag;
@@ -149,4 +151,25 @@ static void Reset(void)
 //    Boot(False);
 }
 MSH_CMD_EXPORT(Reset, Reboot System);
+
+static void Debug_SetL(int argc, char**argv)
+{
+	uint32_t value;
+
+	sscanf(&(*argv[1]), "%d", &value);
+	g_dwDebugLevel = value;
+	Dbg_SetLevel(value);
+}
+MSH_CMD_EXPORT(Debug_SetL, Debug_SetL sample: Debug_SetL <uint32_t ind>);
+
+static void Debug_SetB (int argc, char**argv)
+{
+	uint32_t nIndex;
+	int isEnable;
+
+	sscanf(&(*argv[1]), "%d", &nIndex);
+	sscanf(&(*argv[2]), "%d", &isEnable);
+	Dbg_SetBit(nIndex, isEnable);
+}
+MSH_CMD_EXPORT(Debug_SetB, Debug_SetL sample: Debug_SetL <uint32_t ind>);
 

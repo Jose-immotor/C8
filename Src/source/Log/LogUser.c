@@ -65,7 +65,7 @@ void LogUser_init()
 		.base.Write = LogItem_FmcWrite,	
 		.base.Erase = LogItem_FmcErase,	
 
-		.sectorCount = 2,	//待定，根据实际分配
+		.sectorCount = 4,	//待定，根据实际分配
 	};
 
 	Log_Init(&g_logMgr, &cfg, &recordCfg);

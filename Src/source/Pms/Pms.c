@@ -5,7 +5,7 @@
 #include "Modbus.h"
 #include "JT808.h"
 
-static Battery g_Bat[2];
+Battery g_Bat[MAX_BAT_COUNT];
 static Pms g_pms;
 Mod* g_pModBus = &g_pms.modBus;
 
@@ -313,7 +313,7 @@ NfcCardReaderEventRc Pms_cardReaderEventCb(Pms* pms, NfcCardReaderEvent ev)
 
 void Pms_run()
 {
-	NfcCardReader_run(&g_pms.cardReader);
+//	NfcCardReader_run(&g_pms.cardReader);
 	Mod_Run(g_pModBus);
 	Bat_run(&g_Bat[0]);
 	Bat_run(&g_Bat[1]);
@@ -333,7 +333,7 @@ void Pms_start()
 void Pms_init()
 {
 	static const Obj obj = { "Pms", Pms_start, Null, Pms_run };
-	ObjList_Add(&obj);
+	ObjList_add(&obj);
 
 	Mod_Init(g_pModBus, &g_Bat0Cfg, &g_frameCfg);
 

@@ -5,9 +5,14 @@
 
 #define NVDS_ITEM_COUNT 3
 
-static CfgInfo	g_cfgInfo;
-static PdoInfo	g_pdoInfo;
-static DbgInfo	g_degInfo;
+CfgInfo	g_cfgInfo;
+PdoInfo	g_pdoInfo;
+DbgInfo	g_degInfo;
+
+//g_pdoInfo的镜像对象，用于和原值作比较，决定是否写入FLASH
+static PdoInfo g_pdoInfo_mirror;
+static PdoInfo g_cfgInfo_mirror;
+static PdoInfo g_degInfo_mirror;
 
 //上面多个存储变量的公用的交换缓冲区，长度取最大值
 static uint8_t		g_exchBuf[sizeof(PdoInfo)];
@@ -56,7 +61,6 @@ static Bool PdoInfo_Event(PdoInfo* p, NvdsEventID eventId)
 	{
 		memset(p, 0, sizeof(PdoInfo));
 	}
-
 	return True;
 }
 
