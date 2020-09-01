@@ -215,6 +215,8 @@ void Record_Init(Record* pRecord, const RecordCfg* cfg)
 	int writeSecInd = -1;
 	SectorCfg* secCfg = &pRecord->sectorCfg;
 
+	memcpy(secCfg, &cfg->base, sizeof(SectorCfg));
+
 	Assert((uint32)cfg->base.startAddr % cfg->base.sectorSize == 0);
 	pRecord->itemsPerSec = secCfg->sectorSize / secCfg->storageSize;
 	pRecord->maxItems = pRecord->cfg->sectorCount * pRecord->itemsPerSec;

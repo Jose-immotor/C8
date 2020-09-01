@@ -475,6 +475,8 @@ static void Utp_CheckReq(Utp* pUtp)
 			{
 				Utp_SendReq(pUtp, pCmd->cmd, pCmd->pStorage, pCmd->storageLen, 0, 0);
 				pCmd->pExt->rxRspTicks = GET_TICKS();
+				Utp_Event(pUtp, pCmd, UTP_REQ_SUCCESS);
+				Utp_ResetTxBuf(pUtp);
 			}
 			else
 			{
