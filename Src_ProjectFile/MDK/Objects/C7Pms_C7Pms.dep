@@ -771,7 +771,7 @@ I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F
 F (..\..\Src\rt-thread\src\clock.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\clock.o --omf_browse .\objects\clock.crf --depend .\objects\clock.d)
 I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -781,7 +781,7 @@ I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
 F (..\..\Src\rt-thread\src\components.c)(0x5F3A297D)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\components.o --omf_browse .\objects\components.crf --depend .\objects\components.d)
 I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -790,7 +790,7 @@ I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
 F (..\..\Src\rt-thread\src\cpu.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\cpu.o --omf_browse .\objects\cpu.crf --depend .\objects\cpu.d)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -801,7 +801,7 @@ I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
 F (..\..\Src\rt-thread\src\idle.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\idle.o --omf_browse .\objects\idle.crf --depend .\objects\idle.d)
 I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -810,7 +810,7 @@ I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
 F (..\..\Src\rt-thread\src\ipc.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\ipc.o --omf_browse .\objects\ipc.crf --depend .\objects\ipc.d)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -821,7 +821,7 @@ I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
 F (..\..\Src\rt-thread\src\irq.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\irq.o --omf_browse .\objects\irq.crf --depend .\objects\irq.d)
 I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -830,7 +830,7 @@ I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
 F (..\..\Src\rt-thread\src\kservice.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\kservice.o --omf_browse .\objects\kservice.crf --depend .\objects\kservice.d)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -841,7 +841,7 @@ I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
 F (..\..\Src\rt-thread\src\mem.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\mem.o --omf_browse .\objects\mem.crf --depend .\objects\mem.d)
 I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -857,7 +857,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
 F (..\..\Src\rt-thread\src\memheap.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\memheap.o --omf_browse .\objects\memheap.crf --depend .\objects\memheap.d)
 I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -867,7 +867,7 @@ I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
 F (..\..\Src\rt-thread\src\mempool.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\mempool.o --omf_browse .\objects\mempool.crf --depend .\objects\mempool.d)
 I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -876,7 +876,7 @@ I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
 F (..\..\Src\rt-thread\src\object.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\object.o --omf_browse .\objects\object.crf --depend .\objects\object.d)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -886,7 +886,7 @@ I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
 I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
 F (..\..\Src\rt-thread\src\scheduler.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\scheduler.o --omf_browse .\objects\scheduler.crf --depend .\objects\scheduler.d)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -897,7 +897,7 @@ I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
 F (..\..\Src\rt-thread\src\slab.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\slab.o --omf_browse .\objects\slab.crf --depend .\objects\slab.d)
 I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -906,7 +906,7 @@ I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
 F (..\..\Src\rt-thread\src\thread.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\thread.o --omf_browse .\objects\thread.crf --depend .\objects\thread.d)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -916,7 +916,7 @@ I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
 I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
 F (..\..\Src\rt-thread\src\timer.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\timer.o --omf_browse .\objects\timer.crf --depend .\objects\timer.d)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -927,7 +927,7 @@ I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
 F (..\..\src\rt-thread\components\finsh\cmd.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\cmd.o --omf_browse .\objects\cmd.crf --depend .\objects\cmd.d)
 I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -942,7 +942,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
 F (..\..\src\rt-thread\components\finsh\msh.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\msh.o --omf_browse .\objects\msh.crf --depend .\objects\msh.d)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -960,7 +960,7 @@ I (..\..\Src\rt-thread\components\finsh\shell.h)(0x5F35EA3E)
 F (..\..\src\rt-thread\components\finsh\shell.c)(0x5F35EA3E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\shell.o --omf_browse .\objects\shell.crf --depend .\objects\shell.d)
 I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -977,7 +977,7 @@ I (..\..\src\rt-thread\components\finsh\shell.h)(0x5F35EA3E)
 I (..\..\src\rt-thread\components\finsh\msh.h)(0x5F35EA3E)
 F (..\..\src\rt-thread\libcpu\arm\cortex-m4\cpuport.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\cpuport.o --omf_browse .\objects\cpuport.crf --depend .\objects\cpuport.d)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -985,8 +985,8 @@ I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
 F (..\..\src\rt-thread\libcpu\arm\cortex-m4\context_rvds.S)(0x5F3A21F4)(--cpu Cortex-M4.fp -g --apcs=interwork -I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include--pd "__UVISION_VERSION SETA 525" --pd "USE_STDPERIPH_DRIVER SETA 1"--list .\listings\context_rvds.lst --xref -o .\objects\context_rvds.o --depend .\objects\context_rvds.d)
-F (..\..\Src\Arch\Bit.c)(0x5F35EA70)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\bit.o --omf_browse .\objects\bit.crf --depend .\objects\bit.d)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+F (..\..\Src\Arch\Bit.c)(0x5F4CB589)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\bit.o --omf_browse .\objects\bit.crf --depend .\objects\bit.d)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\typedef.h)(0x5F3A1C32)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x599ECD2E)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
@@ -1037,7 +1037,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 F (..\..\Src\Arch\Dump.c)(0x5F486004)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\dump.o --omf_browse .\objects\dump.crf --depend .\objects\dump.d)
 I (..\..\Src\Arch\ArchDef.h)(0x5F48B24B)
 I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
@@ -1080,7 +1080,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 F (..\..\Src\Arch\HwFwVer.c)(0x5F486004)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\hwfwver.o --omf_browse .\objects\hwfwver.crf --depend .\objects\hwfwver.d)
 I (..\..\Src\Arch\ArchDef.h)(0x5F48B24B)
 I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
@@ -1123,7 +1123,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\HwFwVer.h)(0x5F35EA70)
 F (..\..\Src\Arch\queue.c)(0x5F486006)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\queue.o --omf_browse .\objects\queue.crf --depend .\objects\queue.d)
 I (..\..\Src\Arch\ArchDef.h)(0x5F48B24B)
@@ -1167,7 +1167,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\queue.h)(0x5F486004)
 F (..\..\Src\Arch\SwTimer.c)(0x5F446C58)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\swtimer.o --omf_browse .\objects\swtimer.crf --depend .\objects\swtimer.d)
 I (..\..\Src\Arch\ArchDef.h)(0x5F48B24B)
@@ -1211,7 +1211,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
 F (..\..\Src\Arch\Utp.c)(0x5F486004)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\utp.o --omf_browse .\objects\utp.crf --depend .\objects\utp.d)
 I (..\..\Src\Arch\ArchDef.h)(0x5F48B24B)
@@ -1255,7 +1255,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\Utp.h)(0x5F486004)
 I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
 I (..\..\Src\Arch\queue.h)(0x5F486004)
@@ -1307,7 +1307,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\Obj.h)(0x5F4878D8)
 F (..\..\Src\Arch\Nvds.c)(0x5F486004)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\nvds.o --omf_browse .\objects\nvds.crf --depend .\objects\nvds.d)
 I (..\..\Src\Arch\ArchDef.h)(0x5F48B24B)
@@ -1351,7 +1351,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\Nvds.h)(0x5F486004)
 I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
 F (..\..\Src\Arch\SectorMgr.c)(0x5F486004)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\sectormgr.o --omf_browse .\objects\sectormgr.crf --depend .\objects\sectormgr.d)
@@ -1396,7 +1396,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
 F (..\..\Src\Arch\Dbg.c)(0x5F486004)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\dbg.o --omf_browse .\objects\dbg.crf --depend .\objects\dbg.d)
 I (..\..\Src\Arch\ArchDef.h)(0x5F48B24B)
@@ -1440,7 +1440,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 F (..\..\Src\Arch\Log.c)(0x5F486004)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\log.o --omf_browse .\objects\log.crf --depend .\objects\log.d)
 I (..\..\Src\Arch\ArchDef.h)(0x5F48B24B)
 I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
@@ -1483,7 +1483,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\Log.h)(0x5F486004)
 I (..\..\Src\source\user\common.h)(0x5F4878C1)
 I (..\..\Src\Arch\Obj.h)(0x5F4878D8)
@@ -1494,7 +1494,7 @@ I (..\..\Src\Arch\message.h)(0x5F446C58)
 I (..\..\Src\source\rtc\datatime.h)(0x5F34E28E)
 I (..\..\Src\source\rtc\Rtc.h)(0x5F3A1607)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
@@ -1503,7 +1503,7 @@ I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
 I (..\..\Src\source\drivers\board.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\time.h)(0x599ECD2E)
 I (..\..\Src\source\user\McuFlashMap.h)(0x5F486004)
-I (..\..\Src\source\user\ExternFlashMap.h)(0x5F486004)
+I (..\..\Src\source\user\ExternFlashMap.h)(0x5F4CBE89)
 I (..\..\Src\source\nvds\NvdsUser.h)(0x5F486004)
 I (..\..\Src\Arch\Nvds.h)(0x5F486004)
 I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
@@ -1551,7 +1551,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\Record.h)(0x5F486004)
 I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
 I (..\..\Src\Arch\DateTime.h)(0x5F486004)
@@ -1560,7 +1560,7 @@ F (..\..\src\source\drivers\board.c)(0x5F35EA3F)(--c99 -c --cpu Cortex-M4.fp -g 
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
 I (..\..\Src\rt-thread\include\rthw.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -1600,7 +1600,7 @@ I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F
 I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
 F (..\..\src\source\drivers\drv_usart.c)(0x5F489FE3)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\drv_usart.o --omf_browse .\objects\drv_usart.crf --depend .\objects\drv_usart.d)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -1679,7 +1679,7 @@ I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5
 I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
 I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -1721,15 +1721,23 @@ I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F
 I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
 I (..\..\Src\source\drivers\drv_hwtimer.h)(0x5F34E28E)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
 I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
-F (..\..\Src\source\drivers\drv_spi.c)(0x5F34E28E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\drv_spi.o --omf_browse .\objects\drv_spi.crf --depend .\objects\drv_spi.d)
-I (..\..\Src\source\drivers\drv_spi.h)(0x5F34E28E)
+F (..\..\Src\source\drivers\drv_spi.c)(0x5F4CD26A)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\drv_spi.o --omf_browse .\objects\drv_spi.crf --depend .\objects\drv_spi.d)
+I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
+I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
+I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
+I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
+I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
+I (..\..\Src\source\drivers\drv_spi.h)(0x5F4CD26A)
 I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
 I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
@@ -1805,7 +1813,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\Obj.h)(0x5F4878D8)
 I (..\..\Src\Arch\Utp.h)(0x5F486004)
 I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
@@ -1814,7 +1822,7 @@ I (..\..\Src\Arch\message.h)(0x5F446C58)
 I (..\..\Src\source\rtc\datatime.h)(0x5F34E28E)
 I (..\..\Src\source\rtc\Rtc.h)(0x5F3A1607)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
@@ -1826,7 +1834,7 @@ I (..\..\Src\Arch\Log.h)(0x5F486004)
 I (..\..\Src\Arch\Record.h)(0x5F486004)
 I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
 I (..\..\Src\source\user\McuFlashMap.h)(0x5F486004)
-I (..\..\Src\source\user\ExternFlashMap.h)(0x5F486004)
+I (..\..\Src\source\user\ExternFlashMap.h)(0x5F4CBE89)
 I (..\..\Src\source\nvds\NvdsUser.h)(0x5F486004)
 I (..\..\Src\Arch\Nvds.h)(0x5F486004)
 I (..\..\Src\source\drivers\RcuMap.h)(0x5DBA4A4C)
@@ -1873,7 +1881,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\Obj.h)(0x5F4878D8)
 I (..\..\Src\Arch\Utp.h)(0x5F486004)
 I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
@@ -1882,7 +1890,7 @@ I (..\..\Src\Arch\message.h)(0x5F446C58)
 I (..\..\Src\source\rtc\datatime.h)(0x5F34E28E)
 I (..\..\Src\source\rtc\Rtc.h)(0x5F3A1607)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
@@ -1894,7 +1902,7 @@ I (..\..\Src\Arch\Log.h)(0x5F486004)
 I (..\..\Src\Arch\Record.h)(0x5F486004)
 I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
 I (..\..\Src\source\user\McuFlashMap.h)(0x5F486004)
-I (..\..\Src\source\user\ExternFlashMap.h)(0x5F486004)
+I (..\..\Src\source\user\ExternFlashMap.h)(0x5F4CBE89)
 I (..\..\Src\source\nvds\NvdsUser.h)(0x5F486004)
 I (..\..\Src\Arch\Nvds.h)(0x5F486004)
 I (..\..\Src\source\drivers\drv_gpio.h)(0x5F48A780)
@@ -1934,11 +1942,11 @@ I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5
 I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
 I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
 I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
-F (..\..\src\source\user\main.c)(0x5F48FC9C)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
+F (..\..\src\source\user\main.c)(0x5F4CBE1F)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
 I (..\..\Src\source\rtc\rtc.h)(0x5F3A1607)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -1986,8 +1994,6 @@ I (..\..\Src\source\Pms\BmsReg.h)(0x5F446C58)
 I (..\..\Src\Arch\queue.h)(0x5F486004)
 I (..\..\Src\Arch\Message.h)(0x5F446C58)
 I (..\..\Src\source\nfc\NfcCardReader.h)(0x5F45C921)
-I (..\..\Src\Arch\nvds.h)(0x5F486004)
-I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
 I (..\..\src\source\user\Common.h)(0x5F4878C1)
 I (..\..\Src\Arch\ArchDef.h)(0x5F48B24B)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
@@ -1995,23 +2001,24 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\Obj.h)(0x5F4878D8)
 I (..\..\Src\Arch\Utp.h)(0x5F486004)
 I (..\..\Src\source\rtc\datatime.h)(0x5F34E28E)
 I (C:\Keil_v5\ARM\ARMCC\include\time.h)(0x599ECD2E)
 I (..\..\Src\Arch\Log.h)(0x5F486004)
 I (..\..\Src\Arch\Record.h)(0x5F486004)
+I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
 I (..\..\src\source\user\McuFlashMap.h)(0x5F486004)
-I (..\..\src\source\user\ExternFlashMap.h)(0x5F486004)
+I (..\..\src\source\user\ExternFlashMap.h)(0x5F4CBE89)
 I (..\..\Src\source\nvds\NvdsUser.h)(0x5F486004)
+I (..\..\Src\Arch\Nvds.h)(0x5F486004)
 I (..\..\src\source\user\led.h)(0x5F486004)
 I (..\..\Src\source\JT808\JT808.h)(0x5F486004)
 I (..\..\Src\Arch\HwFwVer.h)(0x5F35EA70)
 I (..\..\Src\source\CmBacktrace\cm_backtrace.h)(0x5F35EA3F)
 I (..\..\Src\source\CmBacktrace\cmb_def.h)(0x5F35EA3F)
 I (..\..\Src\source\CmBacktrace\cmb_cfg.h)(0x5F3A213F)
-F (..\..\Src\source\user\Common.h)(0x5F4878C1)()
 F (..\..\Src\source\user\Led.c)(0x5F48A823)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\led.o --omf_browse .\objects\led.crf --depend .\objects\led.d)
 I (..\..\Src\source\user\Common.h)(0x5F4878C1)
 I (..\..\Src\Arch\ArchDef.h)(0x5F48B24B)
@@ -2055,7 +2062,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\Obj.h)(0x5F4878D8)
 I (..\..\Src\Arch\Utp.h)(0x5F486004)
 I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
@@ -2064,7 +2071,7 @@ I (..\..\Src\Arch\message.h)(0x5F446C58)
 I (..\..\Src\source\rtc\datatime.h)(0x5F34E28E)
 I (..\..\Src\source\rtc\Rtc.h)(0x5F3A1607)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
@@ -2076,7 +2083,7 @@ I (..\..\Src\Arch\Log.h)(0x5F486004)
 I (..\..\Src\Arch\Record.h)(0x5F486004)
 I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
 I (..\..\Src\source\user\McuFlashMap.h)(0x5F486004)
-I (..\..\Src\source\user\ExternFlashMap.h)(0x5F486004)
+I (..\..\Src\source\user\ExternFlashMap.h)(0x5F4CBE89)
 I (..\..\Src\source\nvds\NvdsUser.h)(0x5F486004)
 I (..\..\Src\Arch\Nvds.h)(0x5F486004)
 I (..\..\Src\source\user\led.h)(0x5F486004)
@@ -2092,7 +2099,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x599ECD2E)
 I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -2100,7 +2107,7 @@ I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
 F (..\..\Src\source\CmBacktrace\cmb_fault.S)(0x5F35EA3F)(--cpu Cortex-M4.fp -g --apcs=interwork -I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include--pd "__UVISION_VERSION SETA 525" --pd "USE_STDPERIPH_DRIVER SETA 1"--list .\listings\cmb_fault.lst --xref -o .\objects\cmb_fault.o --depend .\objects\cmb_fault.d)
-F (..\..\src\source\debug\smart_shell.c)(0x5F486B46)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\smart_shell.o --omf_browse .\objects\smart_shell.crf --depend .\objects\smart_shell.d)
+F (..\..\src\source\debug\smart_shell.c)(0x5F4CA224)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\smart_shell.o --omf_browse .\objects\smart_shell.crf --depend .\objects\smart_shell.d)
 I (..\..\Src\source\user\common.h)(0x5F4878C1)
 I (..\..\Src\Arch\ArchDef.h)(0x5F48B24B)
 I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
@@ -2143,7 +2150,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\Obj.h)(0x5F4878D8)
 I (..\..\Src\Arch\Utp.h)(0x5F486004)
 I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
@@ -2152,7 +2159,7 @@ I (..\..\Src\Arch\message.h)(0x5F446C58)
 I (..\..\Src\source\rtc\datatime.h)(0x5F34E28E)
 I (..\..\Src\source\rtc\Rtc.h)(0x5F3A1607)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
@@ -2164,7 +2171,7 @@ I (..\..\Src\Arch\Log.h)(0x5F486004)
 I (..\..\Src\Arch\Record.h)(0x5F486004)
 I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
 I (..\..\Src\source\user\McuFlashMap.h)(0x5F486004)
-I (..\..\Src\source\user\ExternFlashMap.h)(0x5F486004)
+I (..\..\Src\source\user\ExternFlashMap.h)(0x5F4CBE89)
 I (..\..\Src\source\nvds\NvdsUser.h)(0x5F486004)
 I (..\..\Src\Arch\Nvds.h)(0x5F486004)
 F (..\..\Src\source\Modbus\Modbus.c)(0x5F48B5C9)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\modbus.o --omf_browse .\objects\modbus.crf --depend .\objects\modbus.d)
@@ -2210,7 +2217,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\Obj.h)(0x5F4878D8)
 I (..\..\Src\Arch\Utp.h)(0x5F486004)
 I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
@@ -2219,7 +2226,7 @@ I (..\..\Src\Arch\message.h)(0x5F446C58)
 I (..\..\Src\source\rtc\datatime.h)(0x5F34E28E)
 I (..\..\Src\source\rtc\Rtc.h)(0x5F3A1607)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
@@ -2231,7 +2238,7 @@ I (..\..\Src\Arch\Log.h)(0x5F486004)
 I (..\..\Src\Arch\Record.h)(0x5F486004)
 I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
 I (..\..\Src\source\user\McuFlashMap.h)(0x5F486004)
-I (..\..\Src\source\user\ExternFlashMap.h)(0x5F486004)
+I (..\..\Src\source\user\ExternFlashMap.h)(0x5F4CBE89)
 I (..\..\Src\source\nvds\NvdsUser.h)(0x5F486004)
 I (..\..\Src\Arch\Nvds.h)(0x5F486004)
 I (..\..\Src\source\Modbus\Modbus.h)(0x5F4723CA)
@@ -2278,7 +2285,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\Obj.h)(0x5F4878D8)
 I (..\..\Src\Arch\Utp.h)(0x5F486004)
 I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
@@ -2287,7 +2294,7 @@ I (..\..\Src\Arch\message.h)(0x5F446C58)
 I (..\..\Src\source\rtc\datatime.h)(0x5F34E28E)
 I (..\..\Src\source\rtc\Rtc.h)(0x5F3A1607)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
@@ -2299,7 +2306,7 @@ I (..\..\Src\Arch\Log.h)(0x5F486004)
 I (..\..\Src\Arch\Record.h)(0x5F486004)
 I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
 I (..\..\Src\source\user\McuFlashMap.h)(0x5F486004)
-I (..\..\Src\source\user\ExternFlashMap.h)(0x5F486004)
+I (..\..\Src\source\user\ExternFlashMap.h)(0x5F4CBE89)
 I (..\..\Src\source\nvds\NvdsUser.h)(0x5F486004)
 I (..\..\Src\Arch\Nvds.h)(0x5F486004)
 I (..\..\Src\source\nfc\NfcCardReader.h)(0x5F45C921)
@@ -2341,7 +2348,7 @@ I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5
 I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
 I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -2387,7 +2394,7 @@ I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5
 I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
 I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
 I (..\..\Src\source\nfc\type_a.h)(0x5F446C58)
-F (..\..\Src\source\Pms\Battery.c)(0x5F4C8E73)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\battery.o --omf_browse .\objects\battery.crf --depend .\objects\battery.d)
+F (..\..\Src\source\Pms\Battery.c)(0x5F4C9CAE)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\battery.o --omf_browse .\objects\battery.crf --depend .\objects\battery.d)
 I (..\..\Src\source\user\Common.h)(0x5F4878C1)
 I (..\..\Src\Arch\ArchDef.h)(0x5F48B24B)
 I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
@@ -2430,7 +2437,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\Obj.h)(0x5F4878D8)
 I (..\..\Src\Arch\Utp.h)(0x5F486004)
 I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
@@ -2439,7 +2446,7 @@ I (..\..\Src\Arch\message.h)(0x5F446C58)
 I (..\..\Src\source\rtc\datatime.h)(0x5F34E28E)
 I (..\..\Src\source\rtc\Rtc.h)(0x5F3A1607)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
@@ -2451,10 +2458,10 @@ I (..\..\Src\Arch\Log.h)(0x5F486004)
 I (..\..\Src\Arch\Record.h)(0x5F486004)
 I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
 I (..\..\Src\source\user\McuFlashMap.h)(0x5F486004)
-I (..\..\Src\source\user\ExternFlashMap.h)(0x5F486004)
+I (..\..\Src\source\user\ExternFlashMap.h)(0x5F4CBE89)
 I (..\..\Src\source\nvds\NvdsUser.h)(0x5F486004)
 I (..\..\Src\Arch\Nvds.h)(0x5F486004)
-I (..\..\Src\source\Pms\Battery.h)(0x5F446C58)
+I (..\..\Src\source\Pms\Battery.h)(0x5F4C9441)
 I (..\..\Src\source\Pms\BmsReg.h)(0x5F446C58)
 I (..\..\Src\source\Modbus\ModBus.h)(0x5F4723CA)
 F (..\..\Src\source\Pms\BmsReg.c)(0x5F446C58)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\bmsreg.o --omf_browse .\objects\bmsreg.crf --depend .\objects\bmsreg.d)
@@ -2462,7 +2469,7 @@ I (..\..\Src\source\Pms\BmsReg.h)(0x5F446C58)
 I (..\..\Src\Arch\typedef.h)(0x5F3A1C32)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x599ECD2E)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
-F (..\..\Src\source\Pms\Pms.c)(0x5F4C8F57)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\pms.o --omf_browse .\objects\pms.crf --depend .\objects\pms.d)
+F (..\..\Src\source\Pms\Pms.c)(0x5F4CB666)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\pms.o --omf_browse .\objects\pms.crf --depend .\objects\pms.d)
 I (..\..\Src\source\user\Common.h)(0x5F4878C1)
 I (..\..\Src\Arch\ArchDef.h)(0x5F48B24B)
 I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
@@ -2505,7 +2512,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\Obj.h)(0x5F4878D8)
 I (..\..\Src\Arch\Utp.h)(0x5F486004)
 I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
@@ -2514,7 +2521,7 @@ I (..\..\Src\Arch\message.h)(0x5F446C58)
 I (..\..\Src\source\rtc\datatime.h)(0x5F34E28E)
 I (..\..\Src\source\rtc\Rtc.h)(0x5F3A1607)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
@@ -2526,14 +2533,14 @@ I (..\..\Src\Arch\Log.h)(0x5F486004)
 I (..\..\Src\Arch\Record.h)(0x5F486004)
 I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
 I (..\..\Src\source\user\McuFlashMap.h)(0x5F486004)
-I (..\..\Src\source\user\ExternFlashMap.h)(0x5F486004)
+I (..\..\Src\source\user\ExternFlashMap.h)(0x5F4CBE89)
 I (..\..\Src\source\nvds\NvdsUser.h)(0x5F486004)
 I (..\..\Src\Arch\Nvds.h)(0x5F486004)
 I (..\..\Src\source\Pms\Pms.h)(0x5F48F851)
 I (..\..\Src\source\Modbus\ModBus.h)(0x5F4723CA)
 I (..\..\Src\source\Pms\BmsReg.h)(0x5F446C58)
 I (..\..\Src\source\nfc\NfcCardReader.h)(0x5F45C921)
-I (..\..\Src\source\Pms\Battery.h)(0x5F446C58)
+I (..\..\Src\source\Pms\Battery.h)(0x5F4C9441)
 I (..\..\Src\source\JT808\JT808.h)(0x5F486004)
 I (..\..\Src\Arch\HwFwVer.h)(0x5F35EA70)
 F (..\..\Src\source\JT808\JT808.c)(0x5F4894C0)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\jt808.o --omf_browse .\objects\jt808.crf --depend .\objects\jt808.d)
@@ -2579,7 +2586,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\Obj.h)(0x5F4878D8)
 I (..\..\Src\Arch\Utp.h)(0x5F486004)
 I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
@@ -2588,7 +2595,7 @@ I (..\..\Src\Arch\message.h)(0x5F446C58)
 I (..\..\Src\source\rtc\datatime.h)(0x5F34E28E)
 I (..\..\Src\source\rtc\Rtc.h)(0x5F3A1607)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
@@ -2600,7 +2607,7 @@ I (..\..\Src\Arch\Log.h)(0x5F486004)
 I (..\..\Src\Arch\Record.h)(0x5F486004)
 I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
 I (..\..\Src\source\user\McuFlashMap.h)(0x5F486004)
-I (..\..\Src\source\user\ExternFlashMap.h)(0x5F486004)
+I (..\..\Src\source\user\ExternFlashMap.h)(0x5F4CBE89)
 I (..\..\Src\source\nvds\NvdsUser.h)(0x5F486004)
 I (..\..\Src\Arch\Nvds.h)(0x5F486004)
 I (..\..\Src\source\JT808\JT808.h)(0x5F486004)
@@ -2650,7 +2657,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\Obj.h)(0x5F4878D8)
 I (..\..\Src\Arch\Utp.h)(0x5F486004)
 I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
@@ -2659,7 +2666,7 @@ I (..\..\Src\Arch\message.h)(0x5F446C58)
 I (..\..\Src\source\rtc\datatime.h)(0x5F34E28E)
 I (..\..\Src\source\rtc\Rtc.h)(0x5F3A1607)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
@@ -2671,12 +2678,12 @@ I (..\..\Src\Arch\Log.h)(0x5F486004)
 I (..\..\Src\Arch\Record.h)(0x5F486004)
 I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
 I (..\..\Src\source\user\McuFlashMap.h)(0x5F486004)
-I (..\..\Src\source\user\ExternFlashMap.h)(0x5F486004)
+I (..\..\Src\source\user\ExternFlashMap.h)(0x5F4CBE89)
 I (..\..\Src\source\nvds\NvdsUser.h)(0x5F486004)
 I (..\..\Src\Arch\Nvds.h)(0x5F486004)
 I (..\..\Src\source\JT808\JtUtp.h)(0x5F39DF29)
 I (..\..\Src\Arch\CheckSum.h)(0x5F35EA70)
-F (..\..\Src\source\nvds\datarom.c)(0x5F486D89)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\datarom.o --omf_browse .\objects\datarom.crf --depend .\objects\datarom.d)
+F (..\..\Src\source\nvds\NvdsUser.c)(0x5F4CD297)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\nvdsuser.o --omf_browse .\objects\nvdsuser.crf --depend .\objects\nvdsuser.d)
 I (..\..\Src\source\user\Common.h)(0x5F4878C1)
 I (..\..\Src\Arch\ArchDef.h)(0x5F48B24B)
 I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
@@ -2719,7 +2726,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\Obj.h)(0x5F4878D8)
 I (..\..\Src\Arch\Utp.h)(0x5F486004)
 I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
@@ -2728,7 +2735,7 @@ I (..\..\Src\Arch\message.h)(0x5F446C58)
 I (..\..\Src\source\rtc\datatime.h)(0x5F34E28E)
 I (..\..\Src\source\rtc\Rtc.h)(0x5F3A1607)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
@@ -2740,151 +2747,15 @@ I (..\..\Src\Arch\Log.h)(0x5F486004)
 I (..\..\Src\Arch\Record.h)(0x5F486004)
 I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
 I (..\..\Src\source\user\McuFlashMap.h)(0x5F486004)
-I (..\..\Src\source\user\ExternFlashMap.h)(0x5F486004)
+I (..\..\Src\source\user\ExternFlashMap.h)(0x5F4CBE89)
 I (..\..\Src\source\nvds\NvdsUser.h)(0x5F486004)
 I (..\..\Src\Arch\Nvds.h)(0x5F486004)
-I (..\..\Src\source\nvds\datarom.h)(0x5F34E28E)
-F (..\..\Src\source\nvds\mx25_cmd.c)(0x5F447BEC)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\mx25_cmd.o --omf_browse .\objects\mx25_cmd.crf --depend .\objects\mx25_cmd.d)
-I (..\..\Src\source\user\common.h)(0x5F4878C1)
-I (..\..\Src\Arch\ArchDef.h)(0x5F48B24B)
-I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
-I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
-I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
-I (..\..\Src\Arch\typedef.h)(0x5F3A1C32)
-I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x599ECD2E)
-I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
-I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
-I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
-I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
-I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
-I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
-I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
-I (..\..\Src\Arch\Obj.h)(0x5F4878D8)
-I (..\..\Src\Arch\Utp.h)(0x5F486004)
-I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
-I (..\..\Src\Arch\queue.h)(0x5F486004)
-I (..\..\Src\Arch\message.h)(0x5F446C58)
-I (..\..\Src\source\rtc\datatime.h)(0x5F34E28E)
-I (..\..\Src\source\rtc\Rtc.h)(0x5F3A1607)
-I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
-I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
-I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
-I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
-I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
-I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
-I (..\..\Src\source\drivers\board.h)(0x5F35EA3F)
-I (C:\Keil_v5\ARM\ARMCC\include\time.h)(0x599ECD2E)
-I (..\..\Src\Arch\Log.h)(0x5F486004)
-I (..\..\Src\Arch\Record.h)(0x5F486004)
-I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
-I (..\..\Src\source\user\McuFlashMap.h)(0x5F486004)
-I (..\..\Src\source\user\ExternFlashMap.h)(0x5F486004)
-I (..\..\Src\source\nvds\NvdsUser.h)(0x5F486004)
-I (..\..\Src\Arch\Nvds.h)(0x5F486004)
-I (..\..\Src\source\nvds\mx25_cmd.h)(0x5F3A1C32)
-I (..\..\Src\source\drivers\drv_spi.h)(0x5F34E28E)
-F (..\..\Src\source\nvds\NvdsUser.c)(0x5F486004)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\nvdsuser.o --omf_browse .\objects\nvdsuser.crf --depend .\objects\nvdsuser.d)
-I (..\..\Src\source\user\Common.h)(0x5F4878C1)
-I (..\..\Src\Arch\ArchDef.h)(0x5F48B24B)
-I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\CMSIS\core_cm4.h)(0x5F35EA3E)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x599ECD2E)
-I (..\..\Src\Firmware\CMSIS\core_cmInstr.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\CMSIS\core_cmFunc.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\CMSIS\core_cm4_simd.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\system_gd32f403.h)(0x5F35EA3E)
-I (..\..\Src\source\user\gd32f403_libopt.h)(0x5F35EA3F)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rcu.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_adc.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_can.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_crc.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_ctc.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dac.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dbg.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_dma.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exti.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fmc.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_fwdgt.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_gpio.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_i2c.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_pmu.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_bkp.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_rtc.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_sdio.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_spi.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_timer.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_usart.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_wwdgt.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h)(0x5F35EA3E)
-I (..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h)(0x5F35EA3E)
-I (..\..\Src\Arch\typedef.h)(0x5F3A1C32)
-I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x599ECD2E)
-I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
-I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x599ECD2C)
-I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
-I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
-I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
-I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
-I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
-I (..\..\Src\Arch\Obj.h)(0x5F4878D8)
-I (..\..\Src\Arch\Utp.h)(0x5F486004)
-I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
-I (..\..\Src\Arch\queue.h)(0x5F486004)
-I (..\..\Src\Arch\message.h)(0x5F446C58)
-I (..\..\Src\source\rtc\datatime.h)(0x5F34E28E)
-I (..\..\Src\source\rtc\Rtc.h)(0x5F3A1607)
-I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
-I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
-I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
-I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
-I (..\..\Src\rt-thread\include\rtm.h)(0x5F35EA3F)
-I (..\..\Src\rt-thread\components\finsh\finsh_api.h)(0x5F35EA3E)
-I (..\..\Src\source\drivers\board.h)(0x5F35EA3F)
-I (C:\Keil_v5\ARM\ARMCC\include\time.h)(0x599ECD2E)
-I (..\..\Src\Arch\Log.h)(0x5F486004)
-I (..\..\Src\Arch\Record.h)(0x5F486004)
-I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
-I (..\..\Src\source\user\McuFlashMap.h)(0x5F486004)
-I (..\..\Src\source\user\ExternFlashMap.h)(0x5F486004)
-I (..\..\Src\source\nvds\NvdsUser.h)(0x5F486004)
-I (..\..\Src\Arch\Nvds.h)(0x5F486004)
+I (..\..\Src\source\drivers\drv_spi.h)(0x5F4CD26A)
 F (..\..\Src\source\rtc\rtc.c)(0x5F487262)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\rtc.o --omf_browse .\objects\rtc.crf --depend .\objects\rtc.d)
 I (..\..\Src\source\rtc\rtc.h)(0x5F3A1607)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x599ECD2C)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (C:\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x599ECD2A)
@@ -2933,7 +2804,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\Obj.h)(0x5F4878D8)
 I (..\..\Src\Arch\Utp.h)(0x5F486004)
 I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
@@ -2945,7 +2816,7 @@ I (..\..\Src\Arch\Log.h)(0x5F486004)
 I (..\..\Src\Arch\Record.h)(0x5F486004)
 I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
 I (..\..\Src\source\user\McuFlashMap.h)(0x5F486004)
-I (..\..\Src\source\user\ExternFlashMap.h)(0x5F486004)
+I (..\..\Src\source\user\ExternFlashMap.h)(0x5F4CBE89)
 I (..\..\Src\source\nvds\NvdsUser.h)(0x5F486004)
 I (..\..\Src\Arch\Nvds.h)(0x5F486004)
 F (..\..\Src\source\rtc\date.c)(0x5F34E28E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\date.o --omf_browse .\objects\date.crf --depend .\objects\date.d)
@@ -2994,7 +2865,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\Obj.h)(0x5F4878D8)
 I (..\..\Src\Arch\Utp.h)(0x5F486004)
 I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
@@ -3003,7 +2874,7 @@ I (..\..\Src\Arch\message.h)(0x5F446C58)
 I (..\..\Src\source\rtc\datatime.h)(0x5F34E28E)
 I (..\..\Src\source\rtc\Rtc.h)(0x5F3A1607)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
@@ -3015,7 +2886,7 @@ I (..\..\Src\Arch\Log.h)(0x5F486004)
 I (..\..\Src\Arch\Record.h)(0x5F486004)
 I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
 I (..\..\Src\source\user\McuFlashMap.h)(0x5F486004)
-I (..\..\Src\source\user\ExternFlashMap.h)(0x5F486004)
+I (..\..\Src\source\user\ExternFlashMap.h)(0x5F4CBE89)
 I (..\..\Src\source\nvds\NvdsUser.h)(0x5F486004)
 I (..\..\Src\Arch\Nvds.h)(0x5F486004)
 F (..\..\Src\source\nvc\nvc.c)(0x5F487332)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\nvc.o --omf_browse .\objects\nvc.crf --depend .\objects\nvc.d)
@@ -3061,7 +2932,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\Obj.h)(0x5F4878D8)
 I (..\..\Src\Arch\Utp.h)(0x5F486004)
 I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
@@ -3070,7 +2941,7 @@ I (..\..\Src\Arch\message.h)(0x5F446C58)
 I (..\..\Src\source\rtc\datatime.h)(0x5F34E28E)
 I (..\..\Src\source\rtc\Rtc.h)(0x5F3A1607)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
@@ -3082,7 +2953,7 @@ I (..\..\Src\Arch\Log.h)(0x5F486004)
 I (..\..\Src\Arch\Record.h)(0x5F486004)
 I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
 I (..\..\Src\source\user\McuFlashMap.h)(0x5F486004)
-I (..\..\Src\source\user\ExternFlashMap.h)(0x5F486004)
+I (..\..\Src\source\user\ExternFlashMap.h)(0x5F4CBE89)
 I (..\..\Src\source\nvds\NvdsUser.h)(0x5F486004)
 I (..\..\Src\Arch\Nvds.h)(0x5F486004)
 I (..\..\Src\source\nvc\Nvc.h)(0x5F34E28E)
@@ -3132,7 +3003,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\Obj.h)(0x5F4878D8)
 I (..\..\Src\Arch\Utp.h)(0x5F486004)
 I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
@@ -3141,7 +3012,7 @@ I (..\..\Src\Arch\message.h)(0x5F446C58)
 I (..\..\Src\source\rtc\datatime.h)(0x5F34E28E)
 I (..\..\Src\source\rtc\Rtc.h)(0x5F3A1607)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
@@ -3153,12 +3024,12 @@ I (..\..\Src\Arch\Log.h)(0x5F486004)
 I (..\..\Src\Arch\Record.h)(0x5F486004)
 I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
 I (..\..\Src\source\user\McuFlashMap.h)(0x5F486004)
-I (..\..\Src\source\user\ExternFlashMap.h)(0x5F486004)
+I (..\..\Src\source\user\ExternFlashMap.h)(0x5F4CBE89)
 I (..\..\Src\source\nvds\NvdsUser.h)(0x5F486004)
 I (..\..\Src\Arch\Nvds.h)(0x5F486004)
 I (..\..\Src\source\nvc\Sif.h)(0x5F34E28E)
 I (..\..\Src\source\nvc\nvc.h)(0x5F34E28E)
-F (..\..\Src\source\Log\LogUser.c)(0x5F486004)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\loguser_1.o --omf_browse .\objects\loguser_1.crf --depend .\objects\loguser_1.d)
+F (..\..\Src\source\Log\LogUser.c)(0x5F4CBECD)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms --diag_suppress=1295,188-I.\RTE\_C7Pms-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG-o .\objects\loguser_1.o --omf_browse .\objects\loguser_1.crf --depend .\objects\loguser_1.d)
 I (..\..\Src\source\user\Common.h)(0x5F4878C1)
 I (..\..\Src\Arch\ArchDef.h)(0x5F48B24B)
 I (..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h)(0x5F35EA3E)
@@ -3201,7 +3072,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\Obj.h)(0x5F4878D8)
 I (..\..\Src\Arch\Utp.h)(0x5F486004)
 I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
@@ -3210,7 +3081,7 @@ I (..\..\Src\Arch\message.h)(0x5F446C58)
 I (..\..\Src\source\rtc\datatime.h)(0x5F34E28E)
 I (..\..\Src\source\rtc\Rtc.h)(0x5F3A1607)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
@@ -3222,7 +3093,7 @@ I (..\..\Src\Arch\Log.h)(0x5F486004)
 I (..\..\Src\Arch\Record.h)(0x5F486004)
 I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
 I (..\..\Src\source\user\McuFlashMap.h)(0x5F486004)
-I (..\..\Src\source\user\ExternFlashMap.h)(0x5F486004)
+I (..\..\Src\source\user\ExternFlashMap.h)(0x5F4CBE89)
 I (..\..\Src\source\nvds\NvdsUser.h)(0x5F486004)
 I (..\..\Src\Arch\Nvds.h)(0x5F486004)
 I (..\..\Src\source\Log\LogUser.h)(0x5F486004)
@@ -3270,7 +3141,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
 I (..\..\Src\Arch\Dump.h)(0x5F35EA70)
 I (..\..\Src\Arch\_Macro.h)(0x5F35EA70)
 I (..\..\Src\Arch\Dbg.h)(0x5F489FD0)
-I (..\..\Src\Arch\Bit.h)(0x5F35EA70)
+I (..\..\Src\Arch\Bit.h)(0x5F4CB4B9)
 I (..\..\Src\Arch\Obj.h)(0x5F4878D8)
 I (..\..\Src\Arch\Utp.h)(0x5F486004)
 I (..\..\Src\Arch\SwTimer.h)(0x5F35EA70)
@@ -3279,7 +3150,7 @@ I (..\..\Src\Arch\message.h)(0x5F446C58)
 I (..\..\Src\source\rtc\datatime.h)(0x5F34E28E)
 I (..\..\Src\source\rtc\Rtc.h)(0x5F3A1607)
 I (..\..\Src\rt-thread\include\rtthread.h)(0x5F35EA3F)
-I (..\..\Src\source\user\rtconfig.h)(0x5F4C5C90)
+I (..\..\Src\source\user\rtconfig.h)(0x5F4CB193)
 I (..\..\Src\rt-thread\include\rtdebug.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtdef.h)(0x5F35EA3F)
 I (..\..\Src\rt-thread\include\rtservice.h)(0x5F35EA3F)
@@ -3291,7 +3162,7 @@ I (..\..\Src\Arch\Log.h)(0x5F486004)
 I (..\..\Src\Arch\Record.h)(0x5F486004)
 I (..\..\Src\Arch\SectorMgr.h)(0x5F486004)
 I (..\..\Src\source\user\McuFlashMap.h)(0x5F486004)
-I (..\..\Src\source\user\ExternFlashMap.h)(0x5F486004)
+I (..\..\Src\source\user\ExternFlashMap.h)(0x5F4CBE89)
 I (..\..\Src\source\nvds\NvdsUser.h)(0x5F486004)
 I (..\..\Src\Arch\Nvds.h)(0x5F486004)
 I (..\..\Src\source\Log\SysLog.h)(0x5F486004)

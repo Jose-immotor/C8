@@ -79,6 +79,35 @@ const static ModFrameCfg g_frameCfg =
 	.sendCmdIntervalMs = 100,
 };
 
+//打印电池信息
+void BatteryDescDump(const Battery* desc)
+{
+	const uint8_t* pByte = (uint8_t*)&(desc->bmsID.sn34);
+	Printf("\tPort[%d][%02X%02X%02X%02X%02X%02X]:\n"
+		,desc->port, pByte[0], pByte[1], pByte[2], pByte[3], pByte[4], pByte[5]);
+	Printf("\t\tsoc(0.1%)=%d\r\n",bigendian16_get((uint8*)(&desc->bmsInfo.soc)));
+	Printf("\t\tvolt(0.01V)=%d\r\n",bigendian16_get((uint8*)(&desc->bmsInfo.tvolt)));
+	Printf("\t\tcurr(0.01A)=%d\r\n",bigendian16_get((uint8*)(&desc->bmsInfo.tcurr)));
+	Printf("\t\tstate=0x%04X\r\n",bigendian16_get((uint8*)(&desc->bmsInfo.state)));
+}
+
+void BatteryDump(void)
+{
+	int i = 0;
+	Battery* pPkt = Null;
+
+	Printf("Battery info:\n");
+//	BAT_DUMP(batteryCount);
+	for(i = 0; i < 2; i++)
+	{
+		pPkt = &g_Bat[i];
+		if(pPkt->presentStatus)
+		{
+			BatteryDescDump(pPkt);
+		}
+	}
+}
+
 /********************************************************************/
 
 static Pms_FsmFn Pms_findStatusProcFun(PmsOpStatus status);
@@ -133,16 +162,10 @@ void Pms_SwitchPort()
 
 	if (!Mod_isIdle(g_pModBus)) return;
 
-	if (!Bat_isReadyFroInquery(g_pActiveBat))
-	{
-		if (Bat_isReadyFroInquery(pBat))
-		{
-			Bat_msg(g_pActiveBat, BmsMsg_deactive, 0, 0);
-			Mod_SwitchCfg(g_pModBus, (g_pActiveBat->port == 0) ? &g_Bat1Cfg : &g_Bat0Cfg);
-			Bat_msg(pBat, BmsMsg_active, *((uint32*)& g_regCtrl), 0);
-			g_pActiveBat = pBat;
-		}
-	}
+	Bat_msg(g_pActiveBat, BmsMsg_deactive, 0, 0);
+	Mod_SwitchCfg(g_pModBus, (g_pActiveBat->port == 0) ? &g_Bat1Cfg : &g_Bat0Cfg);
+	Bat_msg(pBat, BmsMsg_active, *((uint32*)& g_regCtrl), 0);
+	g_pActiveBat = pBat;
 }
 
 static void Pms_switchStatus(PmsOpStatus newStatus)
@@ -303,6 +326,8 @@ void Pms_start()
 	//启动NFC驱动
 	NfcCardReader_start(&g_pms.cardReader);
 	Pms_switchStatus(PMS_ACC_OFF);
+	//查询电池设备信息
+	Bat_msg(g_pActiveBat, BmsMsg_active, *((uint32*)& g_regCtrl), 0);
 }
 
 void Pms_init()

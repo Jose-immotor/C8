@@ -52,8 +52,6 @@
 .\objects\main.o: ..\..\Src\Arch\queue.h
 .\objects\main.o: ..\..\Src\Arch\Message.h
 .\objects\main.o: ..\..\Src\source\nfc\NfcCardReader.h
-.\objects\main.o: ..\..\Src\Arch\nvds.h
-.\objects\main.o: ..\..\Src\Arch\SectorMgr.h
 .\objects\main.o: ..\..\src\source\user\Common.h
 .\objects\main.o: ..\..\Src\Arch\ArchDef.h
 .\objects\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
@@ -69,9 +67,11 @@
 .\objects\main.o: ..\..\Src\Arch\Log.h
 .\objects\main.o: ..\..\Src\source\user\common.h
 .\objects\main.o: ..\..\Src\Arch\Record.h
+.\objects\main.o: ..\..\Src\Arch\SectorMgr.h
 .\objects\main.o: ..\..\src\source\user\McuFlashMap.h
 .\objects\main.o: ..\..\src\source\user\ExternFlashMap.h
 .\objects\main.o: ..\..\Src\source\nvds\NvdsUser.h
+.\objects\main.o: ..\..\Src\Arch\Nvds.h
 .\objects\main.o: ..\..\src\source\user\led.h
 .\objects\main.o: ..\..\Src\source\JT808\JT808.h
 .\objects\main.o: ..\..\Src\Arch\HwFwVer.h

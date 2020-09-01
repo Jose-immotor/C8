@@ -1,4 +1,13 @@
 .\objects\drv_spi.o: ..\..\Src\source\drivers\drv_spi.c
+.\objects\drv_spi.o: ..\..\Src\rt-thread\include\rtthread.h
+.\objects\drv_spi.o: ..\..\Src\source\user\rtconfig.h
+.\objects\drv_spi.o: ..\..\Src\rt-thread\include\rtdebug.h
+.\objects\drv_spi.o: ..\..\Src\rt-thread\include\rtdef.h
+.\objects\drv_spi.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+.\objects\drv_spi.o: ..\..\Src\rt-thread\include\rtservice.h
+.\objects\drv_spi.o: ..\..\Src\rt-thread\include\rtm.h
+.\objects\drv_spi.o: ..\..\Src\rt-thread\include\rtthread.h
+.\objects\drv_spi.o: ..\..\Src\rt-thread\components\finsh\finsh_api.h
 .\objects\drv_spi.o: ..\..\Src\source\drivers\drv_spi.h
 .\objects\drv_spi.o: ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include\gd32f403.h
 .\objects\drv_spi.o: ..\..\Src\Firmware\CMSIS\core_cm4.h

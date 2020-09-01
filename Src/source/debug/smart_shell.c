@@ -22,7 +22,7 @@
 static void Dump(int argc, char**argv)
 {
 	int ind = 0;
-////	extern void Sign_Dump();
+	extern void BatteryDump(void);
 ////	extern void power_dump();
 ////	extern int g_MaxGpsCount;
 //	extern uint32 g_ActiveFlag;
@@ -34,7 +34,7 @@ static void Dump(int argc, char**argv)
 ////	if(4 == ind || 0 == ind) Gprs_Dump();
 ////	if(5 == ind || 0 == ind) AtCmdCtrl_Dump(g_pSimAtCmdCtrl);
 ////	if(6 == ind || 0 == ind) AtCmdCtrl_Dump(g_pBleAtCmdCtrl);
-//	if(7 == ind || 0 == ind) BatteryDump(Null);
+	if(7 == ind || 0 == ind) BatteryDump();
 ////	if(8 == ind || 0 == ind) Ble_Dump();
 	if(9 == ind || 0 == ind) DateTime_dump(Null);
 //	if(10 == ind) 			 NvdsMap_Dump();

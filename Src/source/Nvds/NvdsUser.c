@@ -1,6 +1,7 @@
 
 #include "Common.h"
 #include "NvdsUser.h"
+#include "drv_spi.h"
 
 #define NVDS_ITEM_COUNT 3
 
@@ -11,6 +12,31 @@ static DbgInfo	g_degInfo;
 //上面多个存储变量的公用的交换缓冲区，长度取最大值
 static uint8_t		g_exchBuf[sizeof(PdoInfo)];
 static SectorMgr    g_nvdsSecMgr[NVDS_ITEM_COUNT];
+
+//从Flsah读取数据
+Bool Nvde_Read(uint32 addr, void* buf, int len)
+{
+	spi_flash_buffer_read(addr,buf,len);
+	return True;
+}
+
+//写数据到Flsah
+Bool Nvds_Write(uint32 addr, const void* pData, int len)
+{
+	spi_flash_buffer_write(addr,(uint8_t*)pData,len);
+	return True;
+}
+
+//Flsah擦除
+void Nvds_Erase(uint32 addr, int len)
+{
+	spi_flash_sector_erase(addr);
+}
+
+Bool Nvds_Verify(const LogItem* pItem)
+{
+	return True;
+}
 
 static Bool CfgInfo_Event(CfgInfo* p, NvdsEventID eventId)
 {
@@ -57,12 +83,18 @@ static Bool DbgInfo_Event(DbgInfo* p, NvdsEventID eventId)
 	return True;
 }
 
-//配置每个存储结构存放在FLASH的位置
+//配置每个存储结构存放在FLASH的位置EX_FLASH_SECTOR_SIZE
 const NvdsItem g_NvdsItems[NVDS_ITEM_COUNT] =
 {
-	{NVDS_CFG_INFO, {CFG_INFO_ADDR, MCU_FLASH_SECTOR_SIZE, &g_cfgInfo , sizeof(g_cfgInfo), g_exchBuf, sizeof(g_exchBuf)}, &g_nvdsSecMgr[0], (NvdsEventFn)CfgInfo_Event},
-	{NVDS_PDO_INFO, {PDO_INFO_ADDR, MCU_FLASH_SECTOR_SIZE, &g_pdoInfo , sizeof(g_pdoInfo), g_exchBuf, sizeof(g_exchBuf)}, &g_nvdsSecMgr[1], (NvdsEventFn)PdoInfo_Event},
-	{NVDS_DBG_INFO, {DBG_INFO_ADDR, MCU_FLASH_SECTOR_SIZE, &g_degInfo , sizeof(g_degInfo), g_exchBuf, sizeof(g_exchBuf)}, &g_nvdsSecMgr[2], (NvdsEventFn)DbgInfo_Event},
+	{NVDS_CFG_INFO, {EX_FLASH_CFG_INFO_ADDR, EX_FLASH_SECTOR_SIZE, &g_cfgInfo , sizeof(g_cfgInfo), 
+		g_exchBuf, sizeof(g_exchBuf),(ItemVerifyFn)Nvds_Verify, Nvde_Read, Nvds_Write, Nvds_Erase}, 
+		&g_nvdsSecMgr[0], (NvdsEventFn)CfgInfo_Event},
+	{NVDS_PDO_INFO, {EX_FLASH_CFG_PDO_INFO_ADDR, EX_FLASH_SECTOR_SIZE, &g_pdoInfo , sizeof(g_pdoInfo), 
+		g_exchBuf, sizeof(g_exchBuf),(ItemVerifyFn)Nvds_Verify, Nvde_Read, Nvds_Write, Nvds_Erase},
+		&g_nvdsSecMgr[1], (NvdsEventFn)PdoInfo_Event},
+	{NVDS_DBG_INFO, {EX_FLASH_CFG_DBG_INFO_ADDR, EX_FLASH_SECTOR_SIZE, &g_degInfo , sizeof(g_degInfo), 
+		g_exchBuf, sizeof(g_exchBuf),(ItemVerifyFn)Nvds_Verify, Nvde_Read, Nvds_Write, Nvds_Erase},
+		&g_nvdsSecMgr[2], (NvdsEventFn)DbgInfo_Event},
 };
 
 //写入指定的NvdsID
@@ -74,5 +106,9 @@ void NvdsUser_Write(NvdsID id)
 //Nvds初始化函数，使用改模块的任何功能之前，必须先调用该函数
 void NvdsUser_Init()
 {
+//	uint32_t flash_id;
+//	
+//	flash_id = spi_flash_read_id();
+//	Printf("The Flash_ID:0x%X\n\r",flash_id);
 	Nvds_Init(g_NvdsItems, GET_ELEMENT_COUNT(g_NvdsItems));
 }

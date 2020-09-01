@@ -114,8 +114,6 @@ extern "C" {
 
 	//电池信息有效
 	Bool Bat_isReady(Battery* pBat);
-	//是否准备好查询电池信息
-	Bool Bat_isReadyFroInquery(Battery* pBat);
 
 	//消息函数，
 	void Bat_msg(Battery* pBat, uint8_t msgId, uint32_t param1, uint32_t param2);

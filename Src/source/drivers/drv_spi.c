@@ -9,6 +9,7 @@
     2017-05-19, V1.0.0, demo for GD32F30x
 */
 
+#include <rtthread.h>
 #include "drv_spi.h"
 #include "gd32f403.h"
 #include <string.h>
@@ -25,45 +26,6 @@
 
 #define WIP_FLAG         0x01     /* write in progress(wip)flag */
 #define DUMMY_BYTE       0xA5
-
-/*!
-    \brief      initialize SPI0 GPIO and parameter
-    \param[in]  none
-    \param[out] none
-    \retval     none
-*/
-void spi_flash_init(void)
-{
-    spi_parameter_struct spi_init_struct;
-
-    rcu_periph_clock_enable(RCU_GPIOA);
-    rcu_periph_clock_enable(RCU_GPIOE);
-    rcu_periph_clock_enable(RCU_SPI0);
-
-    /* SPI0_SCK(PA5), SPI0_MISO(PA6) and SPI0_MOSI(PA7) GPIO pin configuration */
-    gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_5 | GPIO_PIN_7);
-    gpio_init(GPIOA, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, GPIO_PIN_6);
-    /* SPI0_CS(PE3) GPIO pin configuration */
-    gpio_init(GPIOA, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_4);
-
-    /* chip select invalid*/
-    SPI_FLASH_CS_HIGH();
-
-    /* SPI0 parameter config */
-    spi_init_struct.trans_mode           = SPI_TRANSMODE_FULLDUPLEX;
-    spi_init_struct.device_mode          = SPI_MASTER;;
-    spi_init_struct.frame_size           = SPI_FRAMESIZE_8BIT;;
-    spi_init_struct.clock_polarity_phase = SPI_CK_PL_LOW_PH_1EDGE;
-    spi_init_struct.nss                  = SPI_NSS_SOFT;
-    spi_init_struct.prescale             = SPI_PSC_8 ;
-    spi_init_struct.endian               = SPI_ENDIAN_MSB;;
-    spi_init(SPI0, &spi_init_struct);
-
-    /* set crc polynomial */
-    spi_crc_polynomial_set(SPI0,7);
-    /* enable SPI0 */
-    spi_enable(SPI0);
-}
 
 /*!
     \brief      erase the specified flash sector
@@ -165,7 +127,7 @@ void spi_flash_page_write(uint8_t* pbuffer, uint32_t write_addr, uint16_t num_by
     \param[out] none
     \retval     none
 */
-void spi_flash_buffer_write(uint8_t* pbuffer, uint32_t write_addr, uint16_t num_byte_to_write)
+void spi_flash_buffer_write(uint32_t write_addr, uint8_t* pbuffer, uint16_t num_byte_to_write)
 {
     uint8_t num_of_page = 0, num_of_single = 0, addr = 0, count = 0, temp = 0;
 
@@ -230,7 +192,7 @@ void spi_flash_buffer_write(uint8_t* pbuffer, uint32_t write_addr, uint16_t num_
     \param[out] none
     \retval     none
 */
-void spi_flash_buffer_read(uint8_t* pbuffer, uint32_t read_addr, uint16_t num_byte_to_read)
+void spi_flash_buffer_read(uint32_t read_addr, uint8_t* pbuffer, uint16_t num_byte_to_read)
 {
     /* select the flash: chip slect low */
     SPI_FLASH_CS_LOW();
@@ -410,3 +372,45 @@ void spi_flash_wait_for_write_end(void)
     /* deselect the flash: chip select high */
     SPI_FLASH_CS_HIGH();
 }
+
+/*!
+    \brief      initialize SPI0 GPIO and parameter
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+int spi_flash_init(void)
+{
+    spi_parameter_struct spi_init_struct;
+
+    rcu_periph_clock_enable(RCU_GPIOA);
+    rcu_periph_clock_enable(RCU_GPIOE);
+    rcu_periph_clock_enable(RCU_SPI0);
+
+    /* SPI0_SCK(PA5), SPI0_MISO(PA6) and SPI0_MOSI(PA7) GPIO pin configuration */
+    gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_5 | GPIO_PIN_7);
+    gpio_init(GPIOA, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, GPIO_PIN_6);
+    /* SPI0_CS(PE3) GPIO pin configuration */
+    gpio_init(GPIOA, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_4);
+
+    /* chip select invalid*/
+    SPI_FLASH_CS_HIGH();
+
+    /* SPI0 parameter config */
+    spi_init_struct.trans_mode           = SPI_TRANSMODE_FULLDUPLEX;
+    spi_init_struct.device_mode          = SPI_MASTER;;
+    spi_init_struct.frame_size           = SPI_FRAMESIZE_8BIT;;
+    spi_init_struct.clock_polarity_phase = SPI_CK_PL_LOW_PH_1EDGE;
+    spi_init_struct.nss                  = SPI_NSS_SOFT;
+    spi_init_struct.prescale             = SPI_PSC_8 ;
+    spi_init_struct.endian               = SPI_ENDIAN_MSB;;
+    spi_init(SPI0, &spi_init_struct);
+
+    /* set crc polynomial */
+    spi_crc_polynomial_set(SPI0,7);
+    /* enable SPI0 */
+    spi_enable(SPI0);
+	
+	return 0;
+}
+INIT_BOARD_EXPORT(spi_flash_init);

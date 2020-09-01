@@ -18,8 +18,8 @@
 #define  SPI_FLASH_CS_LOW()        gpio_bit_reset(GPIOA, GPIO_PIN_4)
 #define  SPI_FLASH_CS_HIGH()       gpio_bit_set(GPIOA, GPIO_PIN_4)
 
-/* initialize SPI0 GPIO and parameter */
-void spi_flash_init(void);
+///* initialize SPI0 GPIO and parameter */
+//void spi_flash_init(void);
 /* erase the specified flash sector */
 void spi_flash_sector_erase(uint32_t sector_addr);
 /* erase the entire flash */
@@ -27,9 +27,9 @@ void spi_flash_bulk_erase(void);
 /* write more than one byte to the flash */
 void spi_flash_page_write(uint8_t* pbuffer,uint32_t write_addr,uint16_t num_byte_to_write);
 /* write block of data to the flash */
-void spi_flash_buffer_write(uint8_t* pbuffer,uint32_t write_addr,uint16_t num_byte_to_write);
+void spi_flash_buffer_write(uint32_t write_addr, uint8_t* pbuffer, uint16_t num_byte_to_write);
 /* read a block of data from the flash */
-void spi_flash_buffer_read(uint8_t* pbuffer,uint32_t read_addr,uint16_t num_byte_to_read);
+void spi_flash_buffer_read(uint32_t read_addr, uint8_t* pbuffer, uint16_t num_byte_to_read);
 /* read flash identification */
 uint32_t spi_flash_read_id(void);
 /* initiate a read data byte (read) sequence from the flash */
