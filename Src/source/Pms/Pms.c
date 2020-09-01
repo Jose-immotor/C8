@@ -5,7 +5,7 @@
 #include "Modbus.h"
 #include "JT808.h"
 
-static Battery g_Bat[2];
+Battery g_Bat[MAX_BAT_COUNT];
 static Pms g_pms;
 Mod* g_pModBus = &g_pms.modBus;
 

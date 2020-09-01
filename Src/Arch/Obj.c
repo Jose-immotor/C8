@@ -3,7 +3,7 @@
 #include "Obj.h"
 
 const Obj* g_ObjList[20] = { 0 };
-void ObjList_Add(const Obj* pObj)
+void ObjList_add(const Obj* pObj)
 {
 	Printf("Init %s\n", pObj->name);
 
@@ -19,7 +19,7 @@ void ObjList_Add(const Obj* pObj)
 	Printf("Obj array is full.\n");
 }
 
-void ObjList_Start()
+void ObjList_start()
 {
 	const Obj* pObj = g_ObjList[0];
 	for (int i = 0; i < GET_ELEMENT_COUNT(g_ObjList) && pObj; i++, pObj = g_ObjList[i])
@@ -28,7 +28,7 @@ void ObjList_Start()
 	}
 }
 
-void ObjList_Stop()
+void ObjList_stop()
 {
 	const Obj* pObj = g_ObjList[0];
 	for (int i = 0; i < GET_ELEMENT_COUNT(g_ObjList) && pObj; i++, pObj = g_ObjList[i])
@@ -37,7 +37,7 @@ void ObjList_Stop()
 	}
 }
 
-void ObjList_Run()
+void ObjList_run()
 {
 	const Obj* pObj = g_ObjList[0];
 	for (int i = 0; i < GET_ELEMENT_COUNT(g_ObjList) && pObj; i++, pObj = g_ObjList[i])

@@ -9,4 +9,5 @@ const LogEvt g_SysLogEvts[SYS_LOG_EVT_COUNT] =
 };
 
 //Sample£º add a log
+//LOG_TRACE1(SYS_CATID_COMMON, 0, SysEvtID_McuReset, reason);
 //LOG_TRACE3(SYS_CATID_COMMON, 0, SysEvtID_HighTempAlarm, ntc, alarmBit);

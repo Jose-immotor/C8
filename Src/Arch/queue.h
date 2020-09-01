@@ -25,7 +25,7 @@ typedef struct _Queue
 void Queue_Dump(Queue* queue);
 
 inline Bool   Queue_isEmpty(Queue* queue){return queue->writeInd == queue->readInd;}
-inline Bool   Queue_isFull(Queue* queue){return queue->writeInd >= queue->elementSize;}
+inline Bool   Queue_isFull(Queue* queue){return queue->writeInd >= queue->bufSize;}
 inline int Queue_GetElements(Queue* queue){return queue->writeInd - queue->readInd;}
 
 void* Queue_getNew(Queue* queue);

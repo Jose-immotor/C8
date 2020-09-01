@@ -9,8 +9,8 @@
 	2）如果pReq!=Null,仅检验接收的数据帧是否和Req匹配。
 参数说明：
 	pUtp：UTP对象指针。
-	rxFrame：要检验的数据帧。
-	frameLen：帧长度。
+	rxFrame：要检验的数据帧,不包含帧头和帧尾字节。
+	frameLen：pFrame的长度。
 	req：请求帧，如果req=Null，表示不需要检验Req
 返回值：校验结果。
 ***********************************/

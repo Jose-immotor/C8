@@ -190,12 +190,24 @@ Bool NfcCardReader_Send(NfcCardReader* pReader, uint8_t port, const void* data, 
 
 void NfcCardReader_run(NfcCardReader* pReader)
 {
-	NfcCardReader_fsm(pReader, CARD_READER_MSG_RUN, 0);
+	//NfcCardReader_fsm(pReader, CARD_READER_MSG_RUN, 0);
+}
+
+void NfcCardReader_thread_entry(NfcCardReader* pReader)
+{
+	NfcCardReader_switchStatus(pReader, NfcCardReaderStatus_sleep);
+	while (1)
+	{
+		NfcCardReader_fsm(pReader, CARD_READER_MSG_RUN, 0);
+		rt_thread_mdelay(1);
+	}
 }
 
 void NfcCardReader_start(NfcCardReader* pReader)
 {
-	NfcCardReader_switchStatus(pReader, NfcCardReaderStatus_sleep);
+	rt_thread_t led_task_tid = rt_thread_create("NfcCardReader",/* Ïß³ÌÃû³Æ */
+		NfcCardReader_thread_entry, pReader,
+		1024, 3, 10); //
 }
 
 void NfcCardReader_init(NfcCardReader* pReader, NfcCardReader_EventFn Event, void* cbObj)
