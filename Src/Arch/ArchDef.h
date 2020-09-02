@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2016-2020, Immotor
+ *
+ * Change Logs:
+ * Date           Author       Notes
+ * 2020-08-27     Allen      first version
+ * Head file of Arch
+ */
+
 #ifndef __ARCH_CFG_H_
 #define __ARCH_CFG_H_
 

@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2016-2020, Immotor
+ *
+ * Change Logs:
+ * Date           Author       Notes
+ * 2020-08-27     Allen      first version
+ */
+
 #ifndef __TYPEDEF__H_
 #define __TYPEDEF__H_
 

@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2016-2020, Immotor
+ *
+ * Change Logs:
+ * Date           Author       Notes
+ * 2020-08-27     Allen      first version
+ */
 
 #include "ArchDef.h"
 #include "TlvOut.h"
@@ -108,6 +115,7 @@ void TlvOutMgr_updateMirror(TlvOutMgr* mgr, const uint8* pTlvBuf, int bufSize)
 		p = TlvOutMgr_find(mgr->itemArray, mgr->itemCount, tag);
 		if(p == Null) break;
 
+		//如果idLen有效，则比较ID信息是否匹配。
 		if (p->idLen)
 		{
 			uint8_t* storage = (uint8*)p->storage;

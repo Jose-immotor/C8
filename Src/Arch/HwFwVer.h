@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2016-2020, Immotor
+ *
+ * Change Logs:
+ * Date           Author       Notes
+ * 2020-08-27     Allen      first version
+ */
+
 #ifndef __HW_FW_VER_H_
 #define __HW_FW_VER_H_
 
