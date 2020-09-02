@@ -95,7 +95,7 @@ void Dbg_SetBit(uint32_t nIndex, Bool isEnable)
 void Dbg_Init(DebugWriteFn writeFn, const DbgSwitch* debSwhArray, int count)
 {
 	g_dwDebugLevel = 0;
-	Dbg_writeFn = Dbg_writeFn;
+	Dbg_writeFn = writeFn;
 
 	g_gDbgSwh = debSwhArray;
 	g_gDbgSwhCount = count;
