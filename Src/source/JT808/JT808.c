@@ -82,7 +82,7 @@ UTP_EVENT_RC JT808_event_rcvSvrData(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVEN
 {
 	if (ev == UTP_GET_RSP)
 	{
-		JtTlv8900_proc(pCmd->pStorage, pCmd->storageLen);
+		JtTlv8900_proc(pCmd->pExt->transferData, pCmd->pExt->transferLen);
 	}
 	return UTP_EVENT_RC_SUCCESS;
 }
@@ -97,7 +97,7 @@ UTP_EVENT_RC JT808_utpEventCb(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 
 	if (pCmd->cmd == JTCMD_MCU_HB)
 	{
-		if (ev == UTP_REQ_SUCCESS || ev == UTP_REQ_FAILED)
+		if (ev == UTP_REQ_SUCCESS)
 		{
 			Utp_DelaySendCmd(&g_JtUtp, JTCMD_MCU_HB, 2000);
 		}
@@ -169,7 +169,7 @@ static JT808fsmFn JT808_findFsm(JT_state state)
 	};
 	for (int i = 0; i < GET_ELEMENT_COUNT(fsmDispatch); i++)
 	{
-		if (g_Jt.opState == fsmDispatch[i].state)
+		if (state == fsmDispatch[i].state)
 		{
 			return fsmDispatch[i].fsm;
 		}
@@ -249,8 +249,8 @@ void JT808_init()
 		{&g_JtCmdEx[4],UTP_WRITE, JTCMD_SET_OP_STATE, "SetOpState"	, (uint8_t*)& g_Jt.bleEnCtrl, 2, (uint8_t*)&g_bleEnCtrl, 2},
 
 		{&g_JtCmdEx[6],UTP_EVENT, JTCMD_EVENT_DEV_STATE_CHANGED, "DevStateChanged", (uint8_t*)& g_Jt.devState, sizeof(JT_devState), Null, 0, (UtpEventFn)JT808_event_devStateChanged},
-		{&g_JtCmdEx[7],UTP_EVENT, JTCMD_EVT_RCV_SVR_DATA, "RcvSvrData", (uint8_t*)g_rxBuf, sizeof(g_rxBuf), Null, 0, (UtpEventFn)JT808_event_rcvSvrData},
 
+		{&g_JtCmdEx[7],UTP_EVENT, JTCMD_EVT_RCV_SVR_DATA, "RcvSvrData", (uint8_t*)g_rxBuf, sizeof(g_rxBuf), Null, 0, (UtpEventFn)JT808_event_rcvSvrData},
 		{&g_JtCmdEx[8],UTP_WRITE, JTCMD_CMD_SEND_TO_SVR, "SendDataToSvr", (uint8_t*)g_txBuf, sizeof(g_txBuf)},
 	};
 

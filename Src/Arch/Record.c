@@ -214,7 +214,7 @@ void Record_Init(Record* pRecord, const RecordCfg* cfg)
 	int i = 0;
 	int writeSecInd = -1;
 	SectorCfg* secCfg = &pRecord->sectorCfg;
-	
+
 	memset(pRecord, 0, sizeof(Record));
 	pRecord->cfg = cfg;
 	memcpy(secCfg, &cfg->base, sizeof(SectorCfg));
@@ -263,7 +263,7 @@ void Record_Init(Record* pRecord, const RecordCfg* cfg)
 	}
 
 	pRecord->writeSectorInd = writeSecInd;
-	secCfg->startAddr = secCfg->startAddr + pRecord->writeSectorInd * secCfg->sectorSize;
+	secCfg->startAddr = pRecord->cfg->base.startAddr + pRecord->writeSectorInd * secCfg->sectorSize;
 	SectorMgr_init(&pRecord->sector, &pRecord->sectorCfg);
 	Record_CalcuReadSecAddr(pRecord, 0, &pRecord->readStartSectorInd, Null);
 }

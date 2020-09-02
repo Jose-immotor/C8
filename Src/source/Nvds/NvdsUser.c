@@ -3,7 +3,7 @@
 #include "NvdsUser.h"
 #include "drv_spi.h"
 
-#define NVDS_ITEM_COUNT 3
+
 
 CfgInfo	g_cfgInfo;
 PdoInfo	g_pdoInfo;
@@ -73,7 +73,7 @@ static Bool DbgInfo_Event(DbgInfo* p, NvdsEventID eventId)
 		memset(p, 0, sizeof(DbgInfo));
 
 		//不能再这里打印输出，如果UART没初始化，会导致程序堵塞
-		g_dwDebugLevel = 0xF;
+		g_dwDebugLevel = 0xFF;
 	}
 	else if (eventId == BE_DATA_OK)
 	{
@@ -110,7 +110,7 @@ void NvdsUser_Write(NvdsID id)
 //Nvds初始化函数，使用改模块的任何功能之前，必须先调用该函数
 void NvdsUser_Init()
 {
-//	uint32_t flash_id;
+//	uint32_t flash_id = 0;
 //	
 //	flash_id = spi_flash_read_id();
 //	Printf("The Flash_ID:0x%X\n\r",flash_id);

@@ -1,0 +1,6 @@
+--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ..\..\Src\Firmware\GD32F403_standard_peripheral\Include -I ..\..\Src\Firmware\CMSIS\GD\GD32F403\Include -I ..\..\Src\Firmware\CMSIS -I ..\..\Src\rt-thread\include -I ..\..\Src\rt-thread\components\finsh -I ..\..\Src\Arch -I ..\..\Src\source\drivers -I ..\..\Src\source\user -I ..\..\Src\source\common -I ..\..\Src\source\nfc -I ..\..\Src\source\debug -I ..\..\Src\source\utp -I ..\..\Src\source\JT808 -I ..\..\Src\source\fsm -I ..\..\Src\source\nvc -I ..\..\Src\source\nvds -I ..\..\Src\source\rtc -I ..\..\Src\source\CmBacktrace -I ..\..\Src\source\Modbus -I ..\..\Src\source\Pms -I ..\..\Src\source\Log --diag_suppress=1295,188
+-I.\RTE\_C7Pms
+-IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F4xx_DFP\1.0.3\Device\F403\Include
+-IC:\Keil_v5\ARM\CMSIS\Include
+-D__UVISION_VERSION="525" -DUSE_STDPERIPH_DRIVER -DUSE_STDPERIPH_DRIVER -DXDEBUG
+-o .\objects\thread.o --omf_browse .\objects\thread.crf --depend .\objects\thread.d --feedback ".\Objects\C7Pms.fed" "..\..\Src\rt-thread\src\thread.c"

@@ -175,10 +175,7 @@ void EXTI10_15_IRQHandler(void)
     \param[out] none
     \retval     none
 */
-extern void usart0_isr(void);
 void USART0_IRQHandler(void)
 {
-	usart0_isr();
+
 }
-
-

@@ -1,0 +1,16 @@
+.\objects\tlvout.o: ..\..\Src\Arch\TlvOut.c
+.\objects\tlvout.o: ..\..\Src\Arch\ArchDef.h
+.\objects\tlvout.o: ..\..\Src\Arch\typedef.h
+.\objects\tlvout.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+.\objects\tlvout.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\tlvout.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+.\objects\tlvout.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\tlvout.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\tlvout.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\objects\tlvout.o: ..\..\Src\Arch\Dump.h
+.\objects\tlvout.o: ..\..\Src\Arch\_Macro.h
+.\objects\tlvout.o: ..\..\Src\Arch\Dbg.h
+.\objects\tlvout.o: ..\..\Src\Arch\Bit.h
+.\objects\tlvout.o: ..\..\Src\Arch\TlvOut.h
+.\objects\tlvout.o: ..\..\Src\Arch\Tlv.h
+.\objects\tlvout.o: ..\..\Src\Arch\SwTimer.h

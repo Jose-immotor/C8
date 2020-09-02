@@ -11,7 +11,6 @@
  */
  
 #include "common.h"
-#include "datatime.h"
 
 /*!
  * \brief ´òÓ¡×´Ì¬ÐÅÏ¢
@@ -39,8 +38,8 @@ static void Dump(int argc, char**argv)
 	if(7 == ind || 0 == ind) BatteryDump();
 ////	if(8 == ind || 0 == ind) Ble_Dump();
 	if(9 == ind || 0 == ind) DateTime_dump(Null);
-//	if(10 == ind) 			 NvdsMap_Dump();
-//	if(11 == ind || 0 == ind)SysCfg_Dump();
+	if(10 == ind) 			 SectorMgr_Dump(g_NvdsItems[2].sectorMgr);
+	if(11 == ind)			 SectorMgr_Dump(&g_plogMgr->record.sector);
 ////	if(12 == ind || 0 == ind)power_dump();
 ////	if(13 == ind || 0 == ind)adc_dump();
 
@@ -78,20 +77,14 @@ MSH_CMD_EXPORT(Dump, Dump sample: Dump <uint8_t ind>);
  */
 static void Set(int argc, char**argv)
 {
-//	extern void Fsm_StateKeyOff(uint8 msgID);
-//	extern uint8_t g_ForceBatSoc;
-//	extern uint8_t g_ForcePmsDischarge;
-//	#define SET_VAR(_field) _field = value; Printf("%s=%d\n", #_field, value); break
-//	#define SET(_field) _field = value; Printf("%s=%d\n", #_field, value)
-//	
-//	int ind = 0;
-//	uint32 value;
-//	
-//	sscanf(&(*argv[1]), "%d", &ind);
-//	sscanf(&(*argv[2]), "%d", &value);
-//	switch(ind)
-//	{
-////		case 0: SET_VAR(g_TestFlag);
+	int ind = 0;
+	uint32 value;
+
+	sscanf(&(*argv[1]), "%d", &ind);
+	sscanf(&(*argv[2]), "%d", &value);
+	switch(ind)
+	{
+		case 0: LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_McuReset, value);break;
 ////		case 1: SetActive(value); Nvds_Write_Setting(); break;
 ////		case 2: SetForbidDischarge(value); Nvds_Write_Setting(); break;
 ////		case 3: SetSignEn(value); Nvds_Write_Setting(); break;
@@ -105,7 +98,7 @@ static void Set(int argc, char**argv)
 ////		case 11: Nvc_SetVol(value); break;
 ////		case 12: Fsm_StateKeyOff(MSG_FORCE_POWERDOWN); break;
 //		case 13: RTC_TimerStart(value); break;
-//	}
+	}
 //		
 	//Nvds_Write_Setting();
 }
@@ -148,7 +141,7 @@ MSH_CMD_EXPORT(SelfTest , SelfTest board);
  */
 static void Reset(void)
 {
-//    Boot(False);
+    Boot();
 }
 MSH_CMD_EXPORT(Reset, Reboot System);
 
@@ -159,6 +152,7 @@ static void Debug_SetL(int argc, char**argv)
 	sscanf(&(*argv[1]), "%d", &value);
 	g_dwDebugLevel = value;
 	Dbg_SetLevel(value);
+	NvdsUser_Write(NVDS_DBG_INFO);
 }
 MSH_CMD_EXPORT(Debug_SetL, Debug_SetL sample: Debug_SetL <uint32_t ind>);
 
@@ -170,6 +164,27 @@ static void Debug_SetB (int argc, char**argv)
 	sscanf(&(*argv[1]), "%d", &nIndex);
 	sscanf(&(*argv[2]), "%d", &isEnable);
 	Dbg_SetBit(nIndex, isEnable);
+	NvdsUser_Write(NVDS_DBG_INFO);
 }
 MSH_CMD_EXPORT(Debug_SetB, Debug_SetL sample: Debug_SetL <uint32_t ind>);
 
+
+//static void LogDumpCount(int argc, char**argv)
+//{
+//	int count;
+
+//	sscanf(&(*argv[1]), "%d", &count);
+////	Log_DumpByCount(g_plogMgr, count);
+//}
+//MSH_CMD_EXPORT(LogDumpCount, LogUser_DumpByCount);
+
+static void LogDumpInd(int argc, char**argv)
+{
+	int ind = 0;
+	int count;
+
+	sscanf(&(*argv[1]), "%d", &ind);
+	sscanf(&(*argv[2]), "%d", &count);
+	Log_DumpByInd(g_plogMgr, ind, count);
+}
+MSH_CMD_EXPORT(LogDumpInd, LogUser_DumpByInd);

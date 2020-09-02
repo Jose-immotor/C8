@@ -10,7 +10,7 @@ extern "C"{
 //#define XDEBUG
 #endif
 
-#define CFG_LOG
+//#define CFG_LOG
 
 #include "ArchDef.h"
 #include "Obj.h"
@@ -19,7 +19,7 @@ extern "C"{
 #include "SwTimer.h"
 #include "message.h"
 #include "queue.h"
-#include "datatime.h"
+#include "datetime.h"
 #include "Log.h"
 #include "McuFlashMap.h"
 #include "ExternFlashMap.h"
@@ -27,6 +27,10 @@ extern "C"{
 #include "rtthread.h"
 #include "gd32f403.h"
 #include "LogUser.h"
+#include "SysLog.h"
+#include "debug.h"
+#include "drv_pm.h"
+
 
 #ifdef __cplusplus
 }

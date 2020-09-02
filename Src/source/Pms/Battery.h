@@ -97,6 +97,8 @@ extern "C" {
 		BatPresentStatus presentStatus;	//电池在位状态
 		BmsOpStatus 	 opStatus;	//电池操作状态
 
+		//static data
+
 		BmsReg_info 		bmsID;		//信息寄存器
 		BmsReg_deviceInfo 	bmsInfo;	//只读寄存器
 		BmsReg_ctrl 		bmsCtrl;	//控制寄存器
@@ -111,7 +113,7 @@ extern "C" {
 
 	void Bat_init(Battery* pBat, int port, const ModCfg* cfg);
 	void Bat_run(Battery* pBat);
-	uint8* Bat_getBID(Battery* pBat);
+	const uint8* Bat_getBID(Battery* pBat);
 
 	//电池信息有效
 	Bool Bat_isReady(Battery* pBat);

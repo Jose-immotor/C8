@@ -41,8 +41,3 @@
 .\objects\drv_usart.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_misc.h
 .\objects\drv_usart.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h
 .\objects\drv_usart.o: ..\..\src\source\drivers\drv_usart.h
-.\objects\drv_usart.o: ..\..\Src\Arch\queue.h
-.\objects\drv_usart.o: ..\..\Src\Arch\typedef.h
-.\objects\drv_usart.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
-.\objects\drv_usart.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
-.\objects\drv_usart.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h

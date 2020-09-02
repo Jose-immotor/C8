@@ -1,0 +1,14 @@
+.\objects\tlv.o: ..\..\Src\Arch\Tlv.c
+.\objects\tlv.o: ..\..\Src\Arch\ArchDef.h
+.\objects\tlv.o: ..\..\Src\Arch\typedef.h
+.\objects\tlv.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+.\objects\tlv.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\tlv.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+.\objects\tlv.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\tlv.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\tlv.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\objects\tlv.o: ..\..\Src\Arch\Dump.h
+.\objects\tlv.o: ..\..\Src\Arch\_Macro.h
+.\objects\tlv.o: ..\..\Src\Arch\Dbg.h
+.\objects\tlv.o: ..\..\Src\Arch\Bit.h
+.\objects\tlv.o: ..\..\Src\Arch\Tlv.h

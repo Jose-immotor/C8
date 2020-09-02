@@ -15,6 +15,7 @@
 #include "JT808.h"
 #include <cm_backtrace.h>
 #include "Debug.h"
+#include "drv_rtc.h"
 
 volatile bool g_isPowerDown = False;//休眠标志，False-没有休眠，True-休眠
 
@@ -56,19 +57,6 @@ void ResetStop()
 ////		Fsm_SetActiveFlag(AF_MCU_RESET, True);
 //	}
 //}
-void Boot(Bool isFromAppRom)
-{
-	Printf("Mcu reset\n");
-
-	//复位之前保存
-//	Nvds_Write_Setting();
-//	Nvds_Write_SysCfg();
-	
-	rt_thread_mdelay(100);
-	
-	__set_FAULTMASK(1);      //关闭所有中断
-	NVIC_SystemReset();
-}
 
 /*!
  * \brief 设置休眠时IO电平，配置唤醒中断
@@ -187,17 +175,16 @@ int main(void)
 
 	//所有对象初始化
 	cm_backtrace_init("C7Pms", "1.0", "1.0");
-//	LocalTimeInit();
+	LocalTimeInit();
 	Debug_Init();
 	NvdsUser_Init();
 	LogUser_init();
-//	LOG_TRACE1(SYS_CATID_COMMON, 0, SysEvtID_McuReset, 0);
 	Led_init();
 //	JT808_init();
 	Pms_init();
 	//对象启动
 	ObjList_start();
-
+	LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_McuReset, 1);
     while(1)
 	{
 		//对象运行

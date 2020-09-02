@@ -15,22 +15,9 @@
 #ifndef __USART_H__
 #define __USART_H__
 
-#include "queue.h"
+#include <stdint.h>
 
 #define SHELL_USART0
-
-//485发送数组buff长度
-#define TX_BUFF_SIZE          256
-//485接收数组buff长度
-#define RX_BUFF_SIZE          256
-
-typedef struct
-{
-	uint8_t rx_buf[RX_BUFF_SIZE];
-	Queue rx_fifo;
-}usart_t;
-
-extern usart_t __g_usart0;
 
 uint32_t usart0_get_byte(uint8_t *data);
 uint32_t usart0_put_byte(uint8_t data);

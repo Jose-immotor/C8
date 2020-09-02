@@ -4,6 +4,21 @@
 #include "SysLog.h"
 #include "drv_spi.h"
 
+LogMgr* g_plogMgr;
+
+Bool LogUserEvent(struct _LogMgr* p, const LogItem * pItem, LOG_EVENT ev)
+{
+	if(ev ==LOG_WRITE_AFTER)
+	{
+		if (g_dwDebugLevel & DL_LOG)
+		{
+			Printf("%04d:", p->record.sector.itemCount);
+			Log_Dump(p, (LogItem *)pItem, Null, Null);
+		}
+	}
+	return True;
+}
+
 //从Flsah读取数据
 Bool LogItem_FmcRead(uint32 addr, void* buf, int len)
 {
@@ -44,8 +59,8 @@ void LogUser_init()
 		.logVersion = 1,
 		.moduleArray = g_logModules,
 		.moduleCount = GET_ELEMENT_COUNT(g_logModules),
-		.Event = Null,
-		.GetCurSec = Null,
+		.Event = LogUserEvent,
+		.GetCurSec = DateTime_GetSeconds,
 	};
 
 	static LogItem g_logItem;
