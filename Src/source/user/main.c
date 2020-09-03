@@ -23,10 +23,10 @@ int main(void)
 	Led_init();
 	JT808_init();
 	Pms_init();
+	//LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_McuReset, 1);
 	
 	//对象启动
 	ObjList_start();
-	LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_McuReset, 1);
     while(1)
 	{
 		//对象运行

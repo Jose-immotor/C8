@@ -23,7 +23,6 @@ void DumpByte(const uint8_t* pData, uint16_t len, uint8_t cols)
 			pData++;
 			if (++counter >= len) break;
 		}
-		Printf("\n");
 	}
 }
 
@@ -41,7 +40,6 @@ void DumpDword(const uint32_t * pData, uint16_t len, uint8_t cols)
 
 			if (++counter >= len) break;
 		}
-		Printf("\n");
 	}
 }
 /*

@@ -17,6 +17,8 @@ BIT_0 - BIT_3
 #define DL_IO		BIT_5
 #define DL_ADC		BIT_6
 
+#define DL_JT808	BIT_12
+
 #ifdef __cplusplus
 }
 #endif	//#ifdef __cplusplus

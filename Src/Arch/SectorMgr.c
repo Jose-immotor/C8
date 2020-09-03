@@ -307,11 +307,9 @@ Bool SectorMgr_init(SectorMgr* pSector, const SectorCfg* cfg)
 				return False;
 			}
 			memcpy(cfg->storage, cfg->exchangeBuf, cfg->storageSize);
-			return True;
 		}
 	}
 
-	//¼ìÑé
-	return (pSector->itemCount > 0);
+	return True;
 }
 

@@ -49,7 +49,7 @@ extern "C"{
 ***************/
 typedef enum
 {
-	UTP_TX_START,		//发送命令开始, 可在该事件中配置通信参数：waitRspMs, maxTxCount
+	UTP_TX_START,		//发送命令开始, 可在该事件中配置通信参数：waitRspMs, maxTxCount，transferData, transferLen
 
 	UTP_CHANGED_BEFORE,	//pStorage值改变之前
 	UTP_CHANGED_AFTER,	//pStorage值改变之后

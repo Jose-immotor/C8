@@ -27,9 +27,9 @@ void JtTlv0900_updateMirror(const uint8* data, int len)
 	TlvOutMgr_updateMirror(&g_jtTlvMgr_0900, data, len);
 }
 
-int JtTlv0900_getChangedTlv(uint8* buf, int len)
+int JtTlv0900_getChangedTlv(uint8* buf, int len, uint8* tlvCount)
 {
-	return TlvOutMgr_getChanged(&g_jtTlvMgr_0900, buf, len);
+	return TlvOutMgr_getChanged(&g_jtTlvMgr_0900, buf, len, tlvCount);
 }
 
 void JtTlv0900_init()
@@ -38,9 +38,9 @@ void JtTlv0900_init()
 	static TlvOutEx g_tlvBuf_0900Ex[TLV_OUT_COUNT];
 	const TlvOut g_tlv_0900[TLV_OUT_COUNT] =
 	{
-		{"BAT_ID"	, &g_tlvBuf_0900Ex[0], TAG_BAT_ID   , 1, &g_tlvBatInfo[0]	 , &g_tlvBatInfo_mirror[0]	  , Null, 0, 6},
-		{"BAT_INFO"	, &g_tlvBuf_0900Ex[1], TAG_BAT_INFO , 1, &g_tlvBatWorkInfo[0], &g_tlvBatWorkInfo_mirror[0], Null, 0, 6},
+		{"BAT_INFO"	, &g_tlvBuf_0900Ex[0], TAG_BAT_INFO		  , sizeof(TlvBatInfo), &g_tlvBatInfo[0]    , DT_STRUCT, &g_tlvBatInfo_mirror[0]	, Null, 0, 6},
+		{"BAT_WORK"	, &g_tlvBuf_0900Ex[1], TAG_BAT_WORK_PARAM , sizeof(TlvBatInfo), &g_tlvBatWorkInfo[0], DT_STRUCT, &g_tlvBatWorkInfo_mirror[0], Null, 0, 6},
 	};
 
-	TlvOutMgr_init(&g_jtTlvMgr_0900, g_tlv_0900, GET_ELEMENT_COUNT(g_tlv_0900), 1);
+	TlvOutMgr_init(&g_jtTlvMgr_0900, g_tlv_0900, GET_ELEMENT_COUNT(g_tlv_0900), 1, True);
 }

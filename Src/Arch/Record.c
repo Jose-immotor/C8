@@ -234,9 +234,10 @@ void Record_Init(Record* pRecord, const RecordCfg* cfg)
 	SectorMgr* pMgr = &pRecord->sector;
 	for(i = 0; i < cfg->sectorCount; i++)
 	{
-		uint32 addr = cfg->base.startAddr + i * secCfg->sectorSize;
+		uint32 addr = secCfg->startAddr + i * secCfg->sectorSize;
 		secCfg->startAddr = addr;
-		if (!SectorMgr_init(&pRecord->sector, secCfg))
+
+		if (!SectorMgr_init(pMgr, secCfg))
 		{
 			//ºÏ—È¥ÌŒÛ
 			writeSecInd = -1;

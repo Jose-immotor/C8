@@ -23,11 +23,13 @@ TlvInEventRc JtTlv8900_Event(TlvInMgr* mgr, const TlvIn* pItem, TlvInEvent ev)
 
 		NvdsUser_Write(NVDS_PDO_INFO);
 	}
+	
+	return UTP_EVENT_RC_SUCCESS;
 }
 
 UTP_EVENT_RC JtTlv8900_proc(const uint8* data, int len)
 {
-	TlvInMgr_updateStroage(&g_jtTlvInMgr_8900, data, len);
+	TlvInMgr_updateStorage(&g_jtTlvInMgr_8900, data, len);
 
 	return UTP_EVENT_RC_SUCCESS;
 }
@@ -43,5 +45,5 @@ void JtTlv8900_init()
 		{"SET_WHELL_LOCK"	, TAG_SET_WHELL_LOCK, 1, &g_tlvInBuf_8900[2]},
 		{"SET_CABIN_LOCK"	, TAG_SET_CABIN_LOCK, 1, &g_tlvInBuf_8900[3]},
 	};
-	TlvInMgr_init(&g_jtTlvInMgr_8900, g_tlvIn_8900, GET_ELEMENT_COUNT(g_tlvIn_8900), 1, JtTlv8900_Event);
+	TlvInMgr_init(&g_jtTlvInMgr_8900, g_tlvIn_8900, GET_ELEMENT_COUNT(g_tlvIn_8900), 1, JtTlv8900_Event, True);
 }

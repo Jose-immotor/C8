@@ -77,6 +77,7 @@ typedef double 			float64;
 	#endif
 #endif
 
+
 #ifdef __cplusplus
 }
 #endif

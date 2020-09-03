@@ -5,8 +5,9 @@
 #include "JtUtp.h"
 #include "JtTlv0900.h"
 #include "JtTlv8900.h"
+#include "JtTlv8103.h"
 
-static JT808 g_Jt;
+JT808 g_Jt;
 JT808* g_pJt = &g_Jt;
 static Utp g_JtUtp;
 static uint32_t g_hbIntervalMs = 2000;	//MCU心跳时间间隔，单位Ms
@@ -16,11 +17,76 @@ void JT808_fsm(uint8_t msgID, uint32_t param1, uint32_t param2);
 
 static JT808fsmFn JT808_findFsm(JT_state state);
 
+UTP_EVENT_RC JT808_cmd_getSimID(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
+{
+	int headSize = sizeof(JtDevProperty) - JT_DEV_HW_VER_SIZE - JT_DEV_FW_VER_SIZE;
+	if (ev == UTP_REQ_SUCCESS)
+	{
+		uint8 ver[JT_DEV_HW_VER_SIZE + JT_DEV_FW_VER_SIZE];
+
+		//接收到数据和property定义的结构不匹配，需要重新赋值HwVer和FwVer
+
+		memcpy(ver, &g_Jt.property.hwVer, pCmd->pExt->transferLen - headSize - 1);
+		memset(&g_Jt.property.hwVer, 0, JT_DEV_HW_VER_SIZE + JT_DEV_FW_VER_SIZE);
+
+		if (ver[0] < JT_DEV_HW_VER_SIZE)
+		{
+			memcpy(&g_Jt.property.hwVer, &ver[1], ver[0]);
+		}
+		else
+		{
+			PFL(DL_JT808, "Jt808 hwVer size(%d) error.\n", ver[0]);
+		}
+		int offset = ver[0] + 1;
+
+		if (ver[offset] < JT_DEV_HW_VER_SIZE)
+		{
+			memcpy(&g_Jt.property.fwVer, &ver[offset + 1], ver[offset]);
+		}
+		else
+		{
+			PFL(DL_JT808, "Jt808 fwVer size(%d) error.\n", ver[offset]);
+		}
+	}
+
+	return UTP_EVENT_RC_SUCCESS;
+}
+
 UTP_EVENT_RC JT808_cmd_getSimCfg(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
+	static int readParamOffset = 0;
+	static int i = 0;
+	uint16* paramIDs = (uint16*)pCmd->pExt->transferData;
+
 	if (ev == UTP_TX_START)
 	{
+		const TlvIn* p = &g_jtTlvInMgr_8103.itemArray[readParamOffset];
+		//配置读取参数
+		for (i = 0; (i + readParamOffset) < g_jtTlvInMgr_8103.itemCount && i < 5; i++, p++)
+		{
+			paramIDs[i] = p->tag;
+		}
+		pCmd->pExt->transferLen = i * 4;
 	}
+	else if (ev == UTP_REQ_SUCCESS)	//读取成功
+	{
+		readParamOffset += i;
+		JtTlv8103_updateStorage(&pCmd->pExt->transferData[1], pCmd->pExt->transferLen - 1);
+		if (readParamOffset < g_jtTlvInMgr_8103.itemCount)
+		{
+			Utp_SendCmd(&g_JtUtp, JTCMD_CMD_GET_SIM_CFG);
+		}
+		else //全部读取完毕
+		{
+			i = 0;
+			readParamOffset = 0;
+		}
+	}
+	else if (ev == UTP_REQ_FAILED)	//读取失败，重新读取
+	{
+		PFL_WARNING("Read sim param failed.\n");
+	}
+
 	return UTP_EVENT_RC_SUCCESS;
 }
 
@@ -106,7 +172,7 @@ UTP_EVENT_RC JT808_utpEventCb(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 	{
 		if (ev == UTP_REQ_SUCCESS)
 		{
-			JtTlv0900_updateMirror(pCmd->pExt->transferData, pCmd->pExt->transferLen);
+			JtTlv0900_updateMirror(&pCmd->pExt->transferData[1], pCmd->pExt->transferLen - 1);
 		}
 	}
 
@@ -136,7 +202,7 @@ void JT808_fsm_operation(uint8_t msgID, uint32_t param1, uint32_t param2)
 	{
 		if (Utp_isIdle(&g_JtUtp))
 		{
-			int len = JtTlv0900_getChangedTlv(g_txBuf, sizeof(g_txBuf));
+			int len = JtTlv0900_getChangedTlv(g_txBuf, sizeof(g_txBuf), Null);
 			if (len) Utp_SendCmd(&g_JtUtp, JTCMD_CMD_SEND_TO_SVR);
 		}
 	}
@@ -239,19 +305,18 @@ void JT808_init()
 	static const UtpCmd g_JtCmd[JT_CMD_SIZE] =
 	{
 		//位置越靠前，发送优先级越高
-		{&g_JtCmdEx[0],UTP_NOTIFY, JTCMD_MCU_HB, "McuHb"		, (uint8_t*)& g_hbIntervalMs, 4},
-		{&g_JtCmdEx[5],UTP_NOTIFY, JTCMD_SIM_HB, "SimHb"		, (uint8_t*)& g_Jt.opState, 1, Null, 0, (UtpEventFn)JT808_event_simHb},
+		{&g_JtCmdEx[0],UTP_NOTIFY, JTCMD_MCU_HB, "McuHb", (uint8_t*)& g_hbIntervalMs, 4},
+		{&g_JtCmdEx[1],UTP_NOTIFY, JTCMD_SIM_HB, "SimHb", (uint8_t*)& g_Jt.opState, 1, Null, 0, (UtpEventFn)JT808_event_simHb},
 
-		{&g_JtCmdEx[1],UTP_WRITE , JTCMD_SET_OP_STATE, "SetOpState"	, (uint8_t*)& g_Jt.setToOpState, 1},
+		{&g_JtCmdEx[2],UTP_READ , JTCMD_CMD_GET_SIM_ID, "GetSimID"	, (uint8_t*)& g_Jt.property, sizeof(JtDevProperty), &g_protocolVer, 1, (UtpEventFn)JT808_cmd_getSimID},
+		{&g_JtCmdEx[3],UTP_READ , JTCMD_CMD_GET_SIM_CFG, "GetSimCfg", (uint8_t*)& g_rxBuf, sizeof(g_rxBuf), (uint8_t*)& g_txBuf, sizeof(g_txBuf), (UtpEventFn)JT808_cmd_getSimCfg},
 
-		{&g_JtCmdEx[2],UTP_READ , JTCMD_CMD_GET_SIM_ID, "GetSimID"	, (uint8_t*)& g_Jt.simID, sizeof(SimID), &g_protocolVer, 1},
-		{&g_JtCmdEx[3],UTP_READ , JTCMD_CMD_GET_SIM_CFG, "GetSimCfg", Null, 0, Null, 0, (UtpEventFn)JT808_cmd_getSimCfg},
-		{&g_JtCmdEx[4],UTP_WRITE, JTCMD_SET_OP_STATE, "SetOpState"	, (uint8_t*)& g_Jt.bleEnCtrl, 2, (uint8_t*)&g_bleEnCtrl, 2},
+		{&g_JtCmdEx[4],UTP_WRITE , JTCMD_SET_OP_STATE, "SetOpState"	, (uint8_t*)& g_Jt.setToOpState, 1},
 
-		{&g_JtCmdEx[6],UTP_EVENT, JTCMD_EVENT_DEV_STATE_CHANGED, "DevStateChanged", (uint8_t*)& g_Jt.devState, sizeof(JT_devState), Null, 0, (UtpEventFn)JT808_event_devStateChanged},
+		{&g_JtCmdEx[5],UTP_EVENT, JTCMD_EVENT_DEV_STATE_CHANGED, "DevStateChanged", (uint8_t*)& g_Jt.devState, sizeof(JT_devState), Null, 0, (UtpEventFn)JT808_event_devStateChanged},
 
-		{&g_JtCmdEx[7],UTP_EVENT, JTCMD_EVT_RCV_SVR_DATA, "RcvSvrData", (uint8_t*)g_rxBuf, sizeof(g_rxBuf), Null, 0, (UtpEventFn)JT808_event_rcvSvrData},
-		{&g_JtCmdEx[8],UTP_WRITE, JTCMD_CMD_SEND_TO_SVR, "SendDataToSvr", (uint8_t*)g_txBuf, sizeof(g_txBuf)},
+		{&g_JtCmdEx[6],UTP_EVENT, JTCMD_EVT_RCV_SVR_DATA, "RcvSvrData", (uint8_t*)g_rxBuf, sizeof(g_rxBuf), Null, 0, (UtpEventFn)JT808_event_rcvSvrData},
+		{&g_JtCmdEx[7],UTP_WRITE, JTCMD_CMD_SEND_TO_SVR, "SendDataToSvr", (uint8_t*)g_txBuf, sizeof(g_txBuf)},
 	};
 
 	static const UtpCfg g_cfg =
@@ -271,4 +336,5 @@ void JT808_init()
 
 	JtTlv8900_init();
 	JtTlv0900_init();
+	JtTlv8103_init();
 }

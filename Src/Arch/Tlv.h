@@ -14,8 +14,10 @@ extern "C"{
 #endif
 
 #include "typedef.h"
+#include "DataType.h"
 
-	void Tlvs_dump(const uint8* tlvs, int tlvsLen, int tagLen);
+	void Tlv_dump(uint32 tag, uint8 tagLen, int len, const uint8* val, DType dt);
+	void Tlvs_dump(const uint8* tlvs, uint8 tlvsLen, int tagLen);
 
 #ifdef __cplusplus
 }

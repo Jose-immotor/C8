@@ -1,5 +1,4 @@
 
-#include "Common.h"
 #include "ArchDef.h"
 #include "Modbus.h"
 #include "Bit.h"

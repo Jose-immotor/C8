@@ -340,27 +340,30 @@ void Utp_RcvFrameHandler(Utp* pUtp, const uint8* pFrame, int frameLen)
 	return;
 }
 
-static Bool Utp_SendReq(Utp* pUtp, uint8_t cmd, const void* pData, int len, uint32_t waitMs, uint8_t maxReTxCount)
+static Bool Utp_SendReq(Utp* pUtp, const UtpCmd* pCmd)
 {
 	if(pUtp->state != UTP_FSM_INIT) 
 	{
 		//Printf("Utp is busy.\n");
 		return False;
 	}
+	//设置默认的发送参数
+	pUtp->waitRspMs = pUtp->frameCfg->waitRspMsDefault;	//默认等待响应的时间为1秒
+	pUtp->maxTxCount = 3;		//默认的重发次数为3
+	if (UTP_EVENT_RC_SUCCESS != Utp_Event(pUtp, pCmd, UTP_TX_START)) return False;
 
 	Utp_ResetTxBuf(pUtp);
 	//Utp_ResetRxBuf(pUtp);
 
-	pUtp->txBufLen = pUtp->frameCfg->FrameBuild(pUtp, cmd, pData, len, Null, pUtp->frameCfg->txBuf);
+	pUtp->txBufLen = pUtp->frameCfg->FrameBuild(pUtp, pCmd->cmd, pCmd->pExt->transferData, pCmd->pExt->transferLen, Null, pUtp->frameCfg->txBuf);
 
 	pUtp->reTxCount = 1;
-	pUtp->maxTxCount = maxReTxCount;	
 	Utp_SendFrame(pUtp, pUtp->frameCfg->txBuf, pUtp->txBufLen);
 	
-	if(waitMs)
+	if(pUtp->waitRspMs)
 	{
 		pUtp->state = UTP_FSM_WAIT_RSP;
-		SwTimer_Start(&pUtp->waitRspTimer, waitMs, 0);
+		SwTimer_Start(&pUtp->waitRspTimer, pUtp->waitRspMs, 0);
 	}
 	else
 	{
@@ -464,32 +467,30 @@ static void Utp_CheckReq(Utp* pUtp)
 		//帧间隔是否超时，
 		if(!SwTimer_isTimerOutEx(pUtp->rxRspTicks, pUtp->frameCfg->sendCmdIntervalMs)) break;
 
-		//设置默认的发送参数
-		pUtp->waitRspMs = pUtp->frameCfg->waitRspMsDefault;	//默认等待响应的时间为1秒
-		pUtp->maxTxCount = 3;		//默认的重发次数为3
-		Utp_Event(pUtp, pCmd, UTP_TX_START);
 
 		//是否有待发的READ/WRITE命令(pExt->sendDelayMs > 0)
 		if(pExt->sendDelayMs && SwTimer_isTimerOutEx(pExt->rxRspTicks, pExt->sendDelayMs))
 		{
+			if (pCmd->type == UTP_READ)
+			{
+				pExt->transferData = pCmd->pData;
+				pExt->transferLen  = pCmd->dataLen;
+			}
+			else
+			{
+				pExt->transferData = pCmd->pStorage;
+				pExt->transferLen  = pCmd->storageLen;
+			}
+
+			Utp_SendReq(pUtp, pCmd);
+
 			if (pCmd->type == UTP_NOTIFY)
 			{
-				Utp_SendReq(pUtp, pCmd->cmd, pCmd->pStorage, pCmd->storageLen, 0, 0);
 				pCmd->pExt->rxRspTicks = GET_TICKS();
-				Utp_Event(pUtp, pCmd, UTP_REQ_SUCCESS);
 				Utp_ResetTxBuf(pUtp);
 			}
 			else
 			{
-				if(pCmd->type == UTP_READ)
-				{
-					Utp_SendReq(pUtp, pCmd->cmd, pCmd->pData, pCmd->dataLen, pUtp->waitRspMs, pUtp->maxTxCount);
-				}
-				else
-				{
-					//WRITE
-					Utp_SendReq(pUtp, pCmd->cmd, pCmd->pStorage, pCmd->storageLen, pUtp->waitRspMs, pUtp->maxTxCount);
-				}
 				pUtp->pWaitRspCmd = pCmd;
 			}
 			//清除发送标志
@@ -502,7 +503,11 @@ static void Utp_CheckReq(Utp* pUtp)
 		{
 			if(memcmp(pCmd->pStorage, pCmd->pData, pCmd->storageLen) != 0)
 			{
-				Utp_SendReq(pUtp, pCmd->cmd, pCmd->pStorage, pCmd->storageLen, pUtp->waitRspMs, pUtp->maxTxCount);
+				pExt->transferData = pCmd->pStorage;
+				pExt->transferLen  = pCmd->storageLen;
+
+				Utp_SendReq(pUtp, pCmd);
+
 				pExt->sendDelayMs = 0;
 				pUtp->pWaitRspCmd = pCmd;
 				break;
