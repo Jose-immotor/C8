@@ -36,6 +36,7 @@ void JtTlv8103_updateStorage(const uint8* data, int len)
 int JtTlv8103_getChanged(uint8* buf, int len, uint8* tlvCount)
 {
 	//return TlvOutMgr_getChanged(&g_jtTlvOutMgr_8103, buf, len, tlvCount);
+	return 0;
 }
 
 void JtTlv8103_init()

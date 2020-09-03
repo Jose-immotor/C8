@@ -32,6 +32,7 @@ extern "C"{
 		uint16_t vendor;
 		uint8_t  devType;
 		uint8_t  cmd;
+		uint8_t  len;
 		uint8_t  data[1];
 	}JtUtp;
 

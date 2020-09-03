@@ -16,23 +16,17 @@ void Tlv_dump(uint32 tag, uint8 tagLen, int len, const uint8* val, DType dt)
 	{
 		DType dt;
 		const char* fmt;
-		DtConvertFn Convert;
 	}
 	static const disp[] =
 	{
-		{DT_UINT8 , "0x%02X(%d)", (DtConvertFn)Dt_convertToU8 },
-		{DT_UINT16, "0x%04X(%d)", (DtConvertFn)Dt_convertToU16},
-		{DT_UINT32, "0x%08X(%d)", (DtConvertFn)Dt_convertToU32},
-		{DT_INT8  , "0x%02X(%d)", (DtConvertFn)Dt_convertToU8 },
-		{DT_INT16 , "0x%02X(%d)", (DtConvertFn)Dt_convertToU16},
-		{DT_INT32 , "0x%02X(%d)", (DtConvertFn)Dt_convertToU32},
+		{DT_UINT8 , "0x%02X(%d)"},
+		{DT_UINT16, "0x%04X(%d)"},
+		{DT_UINT32, "0x%08X(%d)"},
+		{DT_INT8  , "0x%02X(%d)"},
+		{DT_INT16 , "0x%04X(%d)"},
+		{DT_INT32 , "0x%08X(%d)"},
 
-		{DT_UINT16 , "0x%04X(%d)", (DtConvertFn)Dt_convertToU16},
-		{DT_UINT32 , "0x%08X(%d)", (DtConvertFn)Dt_convertToU32},
-		{DT_INT16  , "0x%04X(%d)", (DtConvertFn)Dt_convertToU16},
-		{DT_INT32  , "0x%08X(%d)", (DtConvertFn)Dt_convertToU32},
-
-		{DT_FLOAT32, "%.2f", (DtConvertFn)Dt_convertToU32},
+		{DT_FLOAT32, "%.2f"},
 	};
 
 	const char* fmt = Null;
@@ -50,19 +44,17 @@ void Tlv_dump(uint32 tag, uint8 tagLen, int len, const uint8* val, DType dt)
 	Printf(fmt, tag, len);
 	fmt = Null;
 
-	DtConvertFn convet;
 	for (int i = 0; i < GET_ELEMENT_COUNT(disp); i++)
 	{
 		if (dt == disp[i].dt)
 		{
 			fmt = disp[i].fmt;
-			convet = disp[i].Convert;
 		}
 	}
 
 	if (fmt)
 	{
-		Printf(fmt, convet(val, dt));
+		Printf(fmt, *val);
 	}
 	else if (dt == DT_STRING)
 	{

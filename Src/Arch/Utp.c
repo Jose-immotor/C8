@@ -145,7 +145,7 @@ End:
 }
 
 //每次发送一帧字节
-static uint16_t Utp_SendFrame(Utp* pUtp, const void* pData, uint16_t len)
+static uint16_t Utp_SendFrame(Utp* pUtp, uint8_t cmd, const void* pData, uint16_t len)
 {
 	#define BUF_SIZE 64
 	int i = 0;
@@ -156,7 +156,7 @@ static uint16_t Utp_SendFrame(Utp* pUtp, const void* pData, uint16_t len)
 	{
 		j = sizeof(byte);
 		Utp_FramePkt(pUtp->frameCfg, (uint8_t*)pData, len, &i, byte, &j);
-		pUtp->cfg->TxFn(byte, j);
+		pUtp->cfg->TxFn(cmd, byte, j);
 	}
 	
 	return len;
@@ -315,7 +315,7 @@ static void Utp_ReqProc(Utp* pUtp, const uint8_t* pReq, int frameLen)
 			, pReq
 			, txBuf);
 
-		Utp_SendFrame(pUtp, txBuf, frameLen);
+		Utp_SendFrame(pUtp, pReq[frameCfg->cmdByteInd], txBuf, frameLen);
 	}
 
 	Utp_ResetTxBuf(pUtp);
@@ -358,7 +358,7 @@ static Bool Utp_SendReq(Utp* pUtp, const UtpCmd* pCmd)
 	pUtp->txBufLen = pUtp->frameCfg->FrameBuild(pUtp, pCmd->cmd, pCmd->pExt->transferData, pCmd->pExt->transferLen, Null, pUtp->frameCfg->txBuf);
 
 	pUtp->reTxCount = 1;
-	Utp_SendFrame(pUtp, pUtp->frameCfg->txBuf, pUtp->txBufLen);
+	Utp_SendFrame(pUtp, pCmd->cmd, pUtp->frameCfg->txBuf, pUtp->txBufLen);
 	
 	if(pUtp->waitRspMs)
 	{
@@ -610,7 +610,7 @@ void Utp_Run(Utp* pUtp)
 			}
 			else
 			{
-				Utp_SendFrame(pUtp, pUtp->frameCfg->txBuf, pUtp->txBufLen);
+				Utp_SendFrame(pUtp, pUtp->pWaitRspCmd->cmd, pUtp->frameCfg->txBuf, pUtp->txBufLen);
 				
 				pUtp->reTxCount++;
 				SwTimer_ReStart(&pUtp->waitRspTimer);

@@ -103,7 +103,7 @@ typedef enum _FRAME_STATE
 struct _UtpCmd;
 struct _Utp;
 typedef UTP_EVENT_RC(*UtpEventFn)(void* pOwnerObj, const struct _UtpCmd* pCmd, UTP_TXF_EVENT ev);
-typedef int (*UtpTxFn)(const uint8_t* pData, int len);
+typedef int (*UtpTxFn)(uint8_t cmd, const uint8_t* pData, int len);
 
 /*********************************
 函数功能：帧校验，实现2个功能；

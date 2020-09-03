@@ -252,9 +252,14 @@ void JT808_fsm(uint8_t msgID, uint32_t param1, uint32_t param2)
 }
 
 //发送数据到总线
-int JT808_txData(const uint8_t* pData, int len)
+int JT808_txData(uint8_t cmd, const uint8_t* pData, int len)
 {
 	//transfer data to bus.
+	//uint8_t cmdType = 0;
+	//if(cmd <= 0x03)  cmdType = 0x10
+	//else if(cmd < 0x80)  cmdType = 0x20
+	//else cmdType = 0x30
+
 	return len;
 }
 
@@ -296,7 +301,7 @@ void JT808_start()
 ************************************************/
 void JT808_init()
 {
-	#define JT_CMD_SIZE 9
+	#define JT_CMD_SIZE 10
 	static UtpCmdEx g_JtCmdEx[JT_CMD_SIZE];
 	//static uint8_t g_JtState = JT_STATE_INIT;
 	static uint16_t g_bleEnCtrl = 0;
@@ -317,6 +322,10 @@ void JT808_init()
 
 		{&g_JtCmdEx[6],UTP_EVENT, JTCMD_EVT_RCV_SVR_DATA, "RcvSvrData", (uint8_t*)g_rxBuf, sizeof(g_rxBuf), Null, 0, (UtpEventFn)JT808_event_rcvSvrData},
 		{&g_JtCmdEx[7],UTP_WRITE, JTCMD_CMD_SEND_TO_SVR, "SendDataToSvr", (uint8_t*)g_txBuf, sizeof(g_txBuf)},
+
+		{&g_JtCmdEx[8],UTP_WRITE, JTCMD_CMD_SEND_TO_SVR, "SendDataToSvr", (uint8_t*)g_txBuf, sizeof(g_txBuf)},
+
+		{&g_JtCmdEx[9],UTP_EVENT, JTCMD_BLE_EVT_CNT, "BleCnt", (uint8_t*)g_rxBuf, sizeof(g_rxBuf)},
 	};
 
 	static const UtpCfg g_cfg =

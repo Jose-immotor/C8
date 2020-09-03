@@ -79,6 +79,7 @@ static int Utp_BuildFrame(Utp* pUtp, uint8_t cmd, const void* pData, int len, co
 		frame->vendor = 0;
 		frame->devType = 0;
 		frame->cmd = cmd;
+		frame->len = len;
 	}
 	memcpy(frame->data, pData, len);
 
