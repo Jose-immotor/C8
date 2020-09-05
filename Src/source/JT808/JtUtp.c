@@ -101,7 +101,7 @@ const UtpFrameCfg g_jtFrameCfg =
 	.transcodeTail = 0x02,
 	.transcodeShift = 0x01,
 	.cmdByteInd  = 5,
-	.dataByteInd = 6,
+	.dataByteInd = 7,
 
 	//分配协议缓冲区
 	.txBufLen = sizeof(g_JtUtp_txBuff),

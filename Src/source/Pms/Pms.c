@@ -253,6 +253,7 @@ static Pms_FsmFn Pms_findStatusProcFun(PmsOpStatus status)
 	return Null;
 }
 
+
 static void Pms_fsm(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
 	Pms_SwitchPort();

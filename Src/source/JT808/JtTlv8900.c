@@ -45,5 +45,5 @@ void JtTlv8900_init()
 		{"SET_WHELL_LOCK"	, TAG_SET_WHELL_LOCK, 1, &g_tlvInBuf_8900[2]},
 		{"SET_CABIN_LOCK"	, TAG_SET_CABIN_LOCK, 1, &g_tlvInBuf_8900[3]},
 	};
-	TlvInMgr_init(&g_jtTlvInMgr_8900, g_tlvIn_8900, GET_ELEMENT_COUNT(g_tlvIn_8900), 1, JtTlv8900_Event, True);
+	TlvInMgr_init(&g_jtTlvInMgr_8900, g_tlvIn_8900, GET_ELEMENT_COUNT(g_tlvIn_8900), 1, (TlvInEventFn)JtTlv8900_Event, True);
 }

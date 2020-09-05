@@ -286,18 +286,15 @@ static void Utp_ReqProc(Utp* pUtp, const uint8_t* pReq, int frameLen)
 				}
 			}
 		}
-
-		if (pCmd->pData)
-		{
-			pCmd->pExt->transferData = pCmd->pData;
-			pCmd->pExt->transferLen = pCmd->dataLen;
-		}
+		//预置默认的应答数据指针
+		pCmd->pExt->transferData = pCmd->pData;
+		pCmd->pExt->transferLen = pCmd->dataLen;
 		rc = Utp_Event(pUtp, pCmd, UTP_GET_RSP);
 		if (rc == frameCfg->result_SUCCESS && pCmd->pExt->transferData)
 		{
 			memcpy(&txBuf[frameCfg->dataByteInd + 1], pCmd->pExt->transferData, pCmd->pExt->transferLen);
+			dlc += pCmd->pExt->transferLen;
 		}
-		dlc += pCmd->pExt->transferLen;
 
 		Utp_Event(pUtp, pCmd, UTP_REQ_SUCCESS);
 	}

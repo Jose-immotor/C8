@@ -6,6 +6,7 @@
 #include "JtTlv0900.h"
 #include "JtTlv8900.h"
 #include "JtTlv8103.h"
+#include "Ble.h"
 
 JT808 g_Jt;
 JT808* g_pJt = &g_Jt;
@@ -153,6 +154,21 @@ UTP_EVENT_RC JT808_event_rcvSvrData(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVEN
 	return UTP_EVENT_RC_SUCCESS;
 }
 
+UTP_EVENT_RC JT808_event_rcvBleData(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
+{
+	if (ev == UTP_GET_RSP)
+	{
+		uint8 rspLen = 0;
+		pCmd->pExt->transferData = Ble_ReqProc(pCmd->pStorage, pCmd->storageLen, &rspLen);
+		pCmd->pExt->transferLen = rspLen;
+		if (pCmd->pExt->transferData == Null)
+		{
+			return UTP_EVENT_RC_FAILED;
+		}
+	}
+	return UTP_EVENT_RC_SUCCESS;
+}
+
 //所有的命令，有传输事件发生，都会调用该回调函数
 UTP_EVENT_RC JT808_utpEventCb(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
@@ -259,7 +275,7 @@ int JT808_txData(uint8_t cmd, const uint8_t* pData, int len)
 	//if(cmd <= 0x03)  cmdType = 0x10
 	//else if(cmd < 0x80)  cmdType = 0x20
 	//else cmdType = 0x30
-
+	//CanSend(cmdType, pData, len);
 	return len;
 }
 
@@ -301,7 +317,7 @@ void JT808_start()
 ************************************************/
 void JT808_init()
 {
-	#define JT_CMD_SIZE 10
+	#define JT_CMD_SIZE 11
 	static UtpCmdEx g_JtCmdEx[JT_CMD_SIZE];
 	//static uint8_t g_JtState = JT_STATE_INIT;
 	static uint16_t g_bleEnCtrl = 0;
@@ -311,7 +327,7 @@ void JT808_init()
 	{
 		//位置越靠前，发送优先级越高
 		{&g_JtCmdEx[0],UTP_NOTIFY, JTCMD_MCU_HB, "McuHb", (uint8_t*)& g_hbIntervalMs, 4},
-		{&g_JtCmdEx[1],UTP_NOTIFY, JTCMD_SIM_HB, "SimHb", (uint8_t*)& g_Jt.opState, 1, Null, 0, (UtpEventFn)JT808_event_simHb},
+		{&g_JtCmdEx[1],UTP_EVENT_NOTIFY, JTCMD_SIM_HB, "SimHb", (uint8_t*)& g_Jt.opState, 1, Null, 0, (UtpEventFn)JT808_event_simHb},
 
 		{&g_JtCmdEx[2],UTP_READ , JTCMD_CMD_GET_SIM_ID, "GetSimID"	, (uint8_t*)& g_Jt.property, sizeof(JtDevProperty), &g_protocolVer, 1, (UtpEventFn)JT808_cmd_getSimID},
 		{&g_JtCmdEx[3],UTP_READ , JTCMD_CMD_GET_SIM_CFG, "GetSimCfg", (uint8_t*)& g_rxBuf, sizeof(g_rxBuf), (uint8_t*)& g_txBuf, sizeof(g_txBuf), (UtpEventFn)JT808_cmd_getSimCfg},
@@ -326,6 +342,7 @@ void JT808_init()
 		{&g_JtCmdEx[8],UTP_WRITE, JTCMD_CMD_SEND_TO_SVR, "SendDataToSvr", (uint8_t*)g_txBuf, sizeof(g_txBuf)},
 
 		{&g_JtCmdEx[9],UTP_EVENT, JTCMD_BLE_EVT_CNT, "BleCnt", (uint8_t*)g_rxBuf, sizeof(g_rxBuf)},
+		{&g_JtCmdEx[9],UTP_EVENT, JTCMD_BLE_RCV_DAT, "BleRcvDat", (uint8_t*)g_rxBuf, sizeof(g_rxBuf), Null, 0, (UtpEventFn)JT808_event_rcvBleData},
 	};
 
 	static const UtpCfg g_cfg =
