@@ -5,7 +5,7 @@
 #include "Led.h"
 #include "RcuMap.h"
 
-//static Bool g_isIoStart = False;
+static Bool g_isIoStart = False;
 //uint8 g_ToggleValue = 0;
 
 //DrvIo* g_pPumpCtrl = Null;
@@ -15,11 +15,11 @@
 //DrvIo* g_pLcdResetCtrl = Null;
 
 //所有命名包含“ON”表示高电平有效, 包含“OFF”表示低电平有效
-static DrvIo g_InIOs[1];
-//static DrvIo g_InIOs[1] =
-//{
-
-//};
+static DrvIo g_InIOs[1] =
+{
+	{IO_NFC_IRQ_A, "NFC_IRQ_A", GPIOE, GPIO_PIN_15, GPIO_MODE_IN_FLOATING}//, EXTI_15, 
+		//GPIO_PORT_SOURCE_GPIOE, GPIO_PIN_SOURCE_15, EXTI_TRIG_RISING}
+};
 
 //所有命名包含“ON”表示高电平有效, 包含“OFF”表示低电平有效
 static DrvIo g_OutputIOs[] =
@@ -527,21 +527,21 @@ void PortPin_Set(uint32 port, uint32 pin, uint8 value)
 ////	}
 ////}
 
-//void IO_IRQEnable(Bool isEnable)
-//{
-//	DrvIo* pDrvIo = g_InIOs;
-//	for (int i = 0; i < GET_ELEMENT_COUNT(g_InIOs); i++, pDrvIo++)
-//	{
-//		if (pDrvIo->mode == GPIO_MODE_IN_FLOATING && pDrvIo->line)
-//		{
-//			if(isEnable)
-//				exti_interrupt_enable(pDrvIo->line);
-//			else
-//				exti_interrupt_disable(pDrvIo->line);
-//		}
-//	}
+void IO_IRQEnable(Bool isEnable)
+{
+	DrvIo* pDrvIo = g_InIOs;
+	for (int i = 0; i < GET_ELEMENT_COUNT(g_InIOs); i++, pDrvIo++)
+	{
+		if (pDrvIo->mode == GPIO_MODE_IN_FLOATING && pDrvIo->line)
+		{
+			if(isEnable)
+				exti_interrupt_enable(pDrvIo->line);
+			else
+				exti_interrupt_disable(pDrvIo->line);
+		}
+	}
 
-//}
+}
 
 ////获取拨码开关值
 //void IO_ReadSwitchValue()
@@ -556,11 +556,11 @@ void PortPin_Set(uint32 port, uint32 pin, uint8 value)
 
 //}
 
-//void IO_Stop()
-//{
-//	g_isIoStart = False;
-//	IO_IRQEnable(False);
-//}
+void IO_Stop()
+{
+	g_isIoStart = False;
+	IO_IRQEnable(False);
+}
 
 ////所有IO对象触发一次状态改变	
 //void IO_AllStateChanged()
@@ -586,11 +586,11 @@ void PortPin_Set(uint32 port, uint32 pin, uint8 value)
 //	IO_IRQHandler(p);
 //}
 
-//void IO_Start()
-//{
-//	g_isIoStart = True;
-//	IO_IRQEnable(True);
-//}
+void IO_Start()
+{
+	g_isIoStart = True;
+	IO_IRQEnable(True);
+}
 
 ////检查IO状态，是否发生改变
 //void IO_CheckIOState()
@@ -653,18 +653,18 @@ void PortPin_Set(uint32 port, uint32 pin, uint8 value)
 //	}
 //}
 
-//void IO_Run()
-//{
+void IO_Run()
+{
 //	if(!g_isIoStart) return;
 
 //	IO_CheckIOState();
-//}
+}
 
 int IO_Init(void)
 {
-//	static Obj g_IoObj;
-//	Obj_Register(&g_IoObj, "IODriver", IO_Start, IO_Stop, IO_Run);
-
+	static const Obj obj = {"IODriver", IO_Start, IO_Stop, IO_Run};
+	ObjList_add(&obj);
+	
 	for (int i = 0; i < GET_ELEMENT_COUNT(g_InIOs); i++)
 	{
 		IO_PinInit(&g_InIOs[i]);
@@ -677,4 +677,4 @@ int IO_Init(void)
 	}
 	return 0;
 }
-INIT_BOARD_EXPORT(IO_Init);
+//INIT_BOARD_EXPORT(IO_Init);

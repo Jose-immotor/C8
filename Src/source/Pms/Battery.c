@@ -1,3 +1,4 @@
+
 #include "Common.h"
 #include "Battery.h"
 #include "Modbus.h"
@@ -23,7 +24,7 @@ void Bat_msg(Battery* pBat, uint8_t msgId, uint32_t param1, uint32_t param2)
 static void Bat_onPlugOut(Battery* pBat)
 {
 	pBat->presentStatus = BAT_NOT_IN;
-
+	PFL(DL_PMS,"Battery out!\n");
 	if (pBat->isActive)
 	{
 		Mod_Reset(g_pModBus);
@@ -50,7 +51,7 @@ static void Bat_switchStatus(Battery* pBat, BmsOpStatus opStatus)
 	}
 	else if (BmsStatus_readInfo == opStatus)
 	{
-		pBat->presentStatus = BAT_IN;
+//		pBat->presentStatus = BAT_IN;
 		Bat_sendCmd(pBat, BMS_READ_INFO_1);
 		Bat_sendCmd(pBat, BMS_READ_INFO_2);
 	}
@@ -73,6 +74,7 @@ MOD_EVENT_RC Bat_event(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev)
 {
 	if (ev == MOD_REQ_SUCCESS)
 	{
+		PFL(DL_NFC,"modbus cmd[%d] req success!\n",pCmd->cmd);
 		Bat_fsm(pBat, BmsMsg_cmdDone, pCmd->cmd, ev);
 		if (BMS_WRITE_CTRL == pCmd->cmd)
 		{
@@ -94,15 +96,20 @@ MOD_EVENT_RC Bat_event(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev)
 	}
 	else if (ev == MOD_REQ_FAILED)
 	{
-		if (BMS_READ_ID == pCmd->cmd)
-		{
-			if (pCmd->pExt->rcvRspErr == MOD_RSP_TIMEOUT)
-			{
+		PFL(DL_NFC,"modbus cmd[%d] req failed!rsp code:%d\n",pCmd->cmd,pCmd->pExt->rcvRspErr);
+		
+//		if (BMS_READ_ID == pCmd->cmd)
+//		{
+//			if (pCmd->pExt->rcvRspErr == MOD_RSP_TIMEOUT)
+//			{
 				Bat_fsm(pBat, BmsMsg_batPlugout, 0, 0);
-			}
-		}
+//			}
+//		}
 	}
-
+	else if (ev == MOD_TX_START)
+	{
+		PFL(DL_NFC,"modbus cmd[%d] start!\n",pCmd->cmd);
+	}
 	return MOD_EVENT_RC_SUCCESS;
 }
 
@@ -111,6 +118,8 @@ MOD_EVENT_RC Bat_event_readBmsInfo(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EV
 {
 	if (ev == MOD_REQ_SUCCESS)
 	{
+		if(pBat->presentStatus != BAT_IN)
+			PFL(DL_PMS,"Battery in!\n");		
 		pBat->presentStatus = BAT_IN;
 	}
 	if (ev == MOD_CHANGED_BEFORE)

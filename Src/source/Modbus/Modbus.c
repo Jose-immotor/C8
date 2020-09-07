@@ -351,7 +351,7 @@ static Bool Mod_SendReq(Mod * pMod, const ModCmd * pCmd, uint32_t waitMs, uint8_
 {
 	if (pMod->state != MOD_FSM_INIT)
 	{
-		//Printf("Mod is busy.\n");
+		Printf("Mod is busy.\n");
 		return False;
 	}
 

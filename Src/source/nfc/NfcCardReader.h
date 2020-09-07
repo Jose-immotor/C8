@@ -81,7 +81,8 @@ extern "C" {
 	void NfcCardReader_init(NfcCardReader* pReader, NfcCardReader_EventFn Event, void* cbObj);
 	Bool NfcCardReader_isIdle(NfcCardReader* pReader);
 	Bool NfcCardReader_Send(NfcCardReader* pReader, uint8_t port, const void* data, int len);
-
+//	void NfcCardReader_read_fifo(NfcCardReader* pReader);
+	
 #ifdef __cplusplus
 }
 #endif

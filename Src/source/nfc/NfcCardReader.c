@@ -21,7 +21,7 @@ static void NfcCardReader_switchStatus(NfcCardReader* pReader, NfcCardReaderStat
 	else if (status == NfcCardReaderStatus_trans)
 	{
 	}
-
+	PFL(DL_NFC,"NFC status from %d to %d!\n",pReader->status,status);
 	pReader->status = status;
 
 	//修改状态机函数指针
@@ -35,11 +35,14 @@ static Bool NfcCardReader_searchPort(NfcCardReader* pReader, int port)
 	pReader->searchTicks = (pReader->port != port) ? 0 : GET_TICKS();
 	pReader->searchCounter = (pReader->port != port) ? 0 : (pReader->searchCounter + 1);
 
-	pReader->port = port;
+//	pReader->port = port;
 
-	//清除电池在线标志
+	
 	FM175XX_switchPort(port);
 	FM175XX_SoftReset();
+	Write_Reg(WaterLevelReg,0x20);//设置FIFOLevel=32字节  
+	Write_Reg(DivIEnReg,0x80);//引脚IRQ按照标准CMOS输出pad工作
+	Write_Reg(ComIEnReg,0x2c);//允许RxIEn,HiAlerlEn,LoAlertlEn
 	if (pReader->port)
 	{
 		Set_Rf(1);
@@ -49,7 +52,7 @@ static Bool NfcCardReader_searchPort(NfcCardReader* pReader, int port)
 		Set_Rf(2);
 	}
 	Pcd_ConfigISOType(0);
-
+	PFL(DL_NFC,"NFC port[%d] search start!\n",pReader->port);
 	pReader->latestErr = TypeA_CardActivate(PICC_ATQA, PICC_UID, PICC_SAK);
 
 	if (pReader->latestErr == OK)
@@ -63,6 +66,7 @@ static Bool NfcCardReader_searchPort(NfcCardReader* pReader, int port)
 	}
 	else
 	{
+		pReader->port = (pReader->port == 0) ? 1 : 0;
 		//保持最低低功耗
 		FM175XX_SoftPowerdown();
 	}
@@ -79,8 +83,9 @@ static void NfcCardReader_fsm_trans(NfcCardReader* pReader, uint8 msgId, uint32_
 			//设定超时事件
 			Pcd_SetTimer(300);
 			//发送数据
+			PFL(DL_NFC,"NFC send data length:%d!\n",pReader->txLen);
 			pReader->latestErr = Pcd_Comm(Transceive, pReader->txBuf, pReader->txLen, pReader->rxBuf, &pReader->rxLen);
-
+			PFL(DL_NFC,"NFC send data error:%d(0-ok,1-err)!\n",pReader->latestErr);
 			if (pReader->latestErr != OK)
 			{
 				pReader->Event(pReader->cbObj, CARD_EVENT_TX_DATA_FAILED);
@@ -97,12 +102,17 @@ static void NfcCardReader_fsm_trans(NfcCardReader* pReader, uint8 msgId, uint32_
 	}
 	else if (msgId == CARD_READER_MSG_SEARCH_PORT)
 	{
-		if (pReader->port != (uint8_t)param)
-		{
-			NfcCardReader_searchPort(pReader, (uint8_t)param);
-		}
+//		if (pReader->port != (uint8_t)param)
+//		{
+//			NfcCardReader_searchPort(pReader, (uint8_t)param);
+//		}
 	}
 }
+
+//void NfcCardReader_read_fifo(NfcCardReader* pReader)
+//{
+//	nfc_intisr_cb(pReader->txBuf, pReader->txLen, pReader->rxBuf, &pReader->rxLen);
+//}
 
 static void NfcCardReader_fsm_sleep(NfcCardReader* pReader, uint8 msgId, uint32_t param)
 {
@@ -208,7 +218,7 @@ void NfcCardReader_start(NfcCardReader* pReader)
 {
 	rt_thread_t nfc_task_tid = rt_thread_create("NfcCardReader",/* 线程名称 */
 		NfcCardReader_thread_entry, pReader,
-		1024, 3, 10); //
+		2048, 3, 10); //
 	rt_thread_startup(nfc_task_tid);
 	
 }

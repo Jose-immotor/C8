@@ -82,3 +82,5 @@
 .\objects\main.o: ..\..\Src\source\CmBacktrace\cmb_cfg.h
 .\objects\main.o: ..\..\Src\source\drivers\drv_rtc.h
 .\objects\main.o: ..\..\Src\source\drivers\board.h
+.\objects\main.o: ..\..\Src\source\drivers\drv_gpio.h
+.\objects\main.o: ..\..\Src\source\user\MsgDef.h

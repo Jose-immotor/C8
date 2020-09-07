@@ -99,6 +99,9 @@ unsigned char Clear_FIFO(void);
 unsigned char Set_BitMask(unsigned char reg_addr, unsigned char mask);
 unsigned char Clear_BitMask(unsigned char reg_addr, unsigned char mask);
 unsigned char Set_Rf(unsigned char mode);
+//void nfc_intisr_cb(unsigned char *pInData, unsigned char InLenByte,
+//					unsigned char *pOutData, unsigned int *pOutLenBit);
+unsigned char nfc_frame_tx(unsigned char *pInData, unsigned char InLenByte);
 unsigned char Pcd_Comm(unsigned char Command, unsigned char *pInData, unsigned char InLenByte, unsigned char *pOutData, unsigned int *pOutLenBit);
 unsigned char Pcd_SetTimer(unsigned long delaytime);
 unsigned char Pcd_ConfigISOType(unsigned char type);

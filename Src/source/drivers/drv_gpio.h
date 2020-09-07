@@ -72,6 +72,7 @@ typedef enum
 {
 	CTRL_MCU_LED=0x01,		//PE11, MCU‘À––µ∆
 	IO_NFC_NPD_A,
+	IO_NFC_IRQ_A,
 	
 	
 }IO_ID;
@@ -189,7 +190,7 @@ char* PortPinToPxx(uint32 port, uint32 pin);
 
 void IO_SetRunLed(uint16 onMs, uint16 offMs);
 char* PortPinToPxx(uint32 port, uint32 pin);
-
+int IO_Init(void);
 #ifdef __cplusplus
 }
 #endif

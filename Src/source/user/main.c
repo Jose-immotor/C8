@@ -16,6 +16,8 @@
 #include <cm_backtrace.h>
 #include "Debug.h"
 #include "drv_rtc.h"
+#include "drv_gpio.h"
+
 
 volatile bool g_isPowerDown = False;//休眠标志，False-没有休眠，True-休眠
 
@@ -175,6 +177,7 @@ int main(void)
 
 	//所有对象初始化
 	cm_backtrace_init("C7Pms", "1.0", "1.0");
+	IO_Init();
 	LocalTimeInit();
 	Debug_Init();
 	NvdsUser_Init();

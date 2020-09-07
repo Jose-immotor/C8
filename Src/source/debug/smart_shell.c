@@ -22,10 +22,10 @@
 static void Dump(int argc, char**argv)
 {
 	int ind = 0;
-	extern void BatteryDump(void);
+	extern void BatteryInfoDump(void);
 	extern void DateTime_dump(S_RTC_TIME_DATA_T* dt);
-////	extern void power_dump();
-////	extern int g_MaxGpsCount;
+	extern void BatteryDump(void);
+	extern void NfcCardReaderDump(void);
 //	extern uint32 g_ActiveFlag;
 
 	sscanf(&(*argv[1]), "%d", &ind);
@@ -35,15 +35,15 @@ static void Dump(int argc, char**argv)
 ////	if(4 == ind || 0 == ind) Gprs_Dump();
 ////	if(5 == ind || 0 == ind) AtCmdCtrl_Dump(g_pSimAtCmdCtrl);
 ////	if(6 == ind || 0 == ind) AtCmdCtrl_Dump(g_pBleAtCmdCtrl);
-	if(7 == ind || 0 == ind) BatteryDump();
+	if(7 == ind || 0 == ind) BatteryInfoDump();
 ////	if(8 == ind || 0 == ind) Ble_Dump();
 	if(9 == ind || 0 == ind) DateTime_dump(Null);
 	if(10 == ind) 			 SectorMgr_Dump(g_NvdsItems[2].sectorMgr);
 	if(11 == ind)			 SectorMgr_Dump(&g_plogMgr->record.sector);
-////	if(12 == ind || 0 == ind)power_dump();
-////	if(13 == ind || 0 == ind)adc_dump();
-
-////	Printf("g_MaxGpsCount=%d\n", g_MaxGpsCount);
+	
+	if(20 == ind)			 BatteryDump();
+	if(21 == ind)			 NfcCardReaderDump();
+	
 //	Printf("g_ActiveFlag=0x%x\n", g_ActiveFlag);
 	Printf("g_dwDebugLevel = 0x%04x\n", g_dwDebugLevel);
 }

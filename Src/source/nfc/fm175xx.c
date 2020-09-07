@@ -466,6 +466,71 @@ unsigned char Pcd_Comm(unsigned char Command,
     return result;
 }
 
+//static uint16_t RX_POINT = 0,TX_POINT=0;
+
+//void nfc_intisr_cb(unsigned char *pInData, unsigned char InLenByte,
+//					unsigned char *pOutData, unsigned int *pOutLenBit)
+//{
+//    unsigned char irq;
+//    uint16_t cnt = 0;
+//	unsigned char rx_temp;//临时数据字节长度
+//    unsigned char rx_len;//接收数据字节长度
+//    
+//	irq = Read_Reg(ComIrqReg);//查询中断标志
+
+//	if((irq & 0x04)&&(InLenByte > TX_POINT))//渐空LoAlert&&有发送请求
+//	{
+//		cnt = InLenByte-TX_POINT;
+//		if (cnt > 32)
+//		{
+//			Write_FIFO(32,pInData+TX_POINT);
+//			TX_POINT += 32;
+//		}
+//		else
+//		{
+//			Write_FIFO(InLenByte,pInData+TX_POINT);
+//			TX_POINT = TX_POINT + InLenByte;
+//		}
+//		Set_BitMask(BitFramingReg,0x80);//启动发送
+//		Write_Reg(ComIrqReg,0x04);//清除LoAlertIrq
+//	}
+//	else if(irq & 0x08)//渐满HiAlert
+//	{
+//	    rx_temp = Read_Reg(FIFOLevelReg);
+//		Read_FIFO(rx_temp, pOutData + RX_POINT); //读出FIFO内容
+//		RX_POINT = RX_POINT + rx_temp;
+//		Write_Reg(ComIrqReg,0x08);	//清除 HiAlertIRq
+//	}
+//	else if(irq & 0x20)//RxIRq
+//	{
+//	    rx_temp = Read_Reg(FIFOLevelReg);
+//		Read_FIFO(rx_temp, pOutData + RX_POINT); //读出FIFO内容
+//		RX_POINT = RX_POINT + rx_temp;
+//		Write_Reg(ComIrqReg,0x08);	//清除 HiAlertIRq
+////		*pOutLenBit = RX_POINT;
+//	}        
+//}
+
+//unsigned char nfc_frame_tx(unsigned char *pInData, unsigned char InLenByte)
+//{
+//	TX_POINT = 0;
+//	Write_Reg(ComIrqReg,0x7F);//清除IRQ标志
+//	Clear_FIFO();
+//    if(InLenByte>=32)
+//    {
+//        Write_FIFO(32,pInData);
+//        TX_POINT+=32;
+//    }
+//    else
+//    {
+//        Write_FIFO(InLenByte,pInData);
+//        TX_POINT+=InLenByte;
+//    }
+//    Set_BitMask(BitFramingReg,0x80);//启动发送
+//    return OK;
+//}
+
+
 /*********************************************/
 /*函数名：	    Pcd_SetTimer    */
 /*功能：	    设置接收延时    */

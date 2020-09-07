@@ -161,11 +161,15 @@ void EXTI5_9_IRQHandler(void)
 //		}
     }
 }
-
+//extern void Pms_cardReaderReadFifo(void);
 void EXTI10_15_IRQHandler(void)
 {
     if(SET == exti_interrupt_flag_get(EXTI_13)){
         exti_interrupt_flag_clear(EXTI_13);
+    }
+	if(SET == exti_interrupt_flag_get(EXTI_15)){
+        exti_interrupt_flag_clear(EXTI_15);
+		//Pms_cardReaderReadFifo();
     }
 }
 

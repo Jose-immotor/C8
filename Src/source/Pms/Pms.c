@@ -1,4 +1,11 @@
 
+/*
+
+电池在位置位：读取电池只读数据(BMS_READ_INFO_1)，接收数据完成；
+电池在位清除：读取电池数据失败（以后再完善增加失败次数）
+
+*/
+
 #include "Common.h"
 #include "Pms.h"
 #include "Battery.h"
@@ -22,7 +29,8 @@ const static uint8_t g_bmsCtrl_writeParam[] = { 0x02, 0x00};
 static int Pms_Tx(const uint8_t* pData, int len);
 
 #define BMS_CMD_COUNT 5
-static ModCmdEx g_BmsCmdEx[BMS_CMD_COUNT];
+//static ModCmdEx g_BmsCmdEx[BMS_CMD_COUNT];
+ModCmdEx g_BmsCmdEx[BMS_CMD_COUNT];
 /*电池槽位0的命令配置表*******************************************************************/
 const static ModCmd g_Bms0Cmds[BMS_CMD_COUNT] =
 {
@@ -31,7 +39,7 @@ const static ModCmd g_Bms0Cmds[BMS_CMD_COUNT] =
 	{&g_BmsCmdEx[2], BMS_READ_INFO_2,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms0Info2", &g_Bat[0].bmsInfo.cmost, BMS_REG_INFO_SIZE_2, (void*)g_bmsInfo2_readParam, 4},
 	{&g_BmsCmdEx[3], BMS_READ_CTRL  ,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms0Ctrl" , &g_Bat[0].bmsCtrl	     , BMS_REG_CTRL_SIZE  , (void*)g_bmsCtrl_readParam, 4},
 
-	{&g_BmsCmdEx[4], BMS_WRITE_CTRL, MOD_WRITE,MOD_WEITE_SINGLE_REG,"WriteReg0-Ctrl", &g_Bat[0].bmsCtrl.ctrl, 2, (void*)g_bmsCtrl_writeParam, 2,  &g_Bat[0].bmsCtrl_mirror.ctrl},
+	{&g_BmsCmdEx[4], BMS_WRITE_CTRL, MOD_WRITE,MOD_WEITE_SINGLE_REG,"WriteReg0-Ctrl", &g_Bat[0].bmsCtrl.ctrl, 2, (void*)g_bmsCtrl_writeParam, 2}//,  &g_Bat[0].bmsCtrl_mirror.ctrl},
 };
 
 const static ModCfg g_Bat0Cfg =
@@ -47,8 +55,8 @@ const static ModCfg g_Bat0Cfg =
 /*电池槽位1的命令配置表*******************************************************************/
 const static ModCmd g_Bms1Cmds[BMS_CMD_COUNT] =
 {
-	{&g_BmsCmdEx[0], BMS_READ_ID    ,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms1ID"   , &g_Bat[1].bmsID		 , BMS_REG_ID_SIZE    , (void*)g_bmsID_readParam, 	4, Null, (ModEventFn)Bat_event_readBmsInfo},
-	{&g_BmsCmdEx[1], BMS_READ_INFO_1,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms1Info1", &g_Bat[1].bmsInfo	     , BMS_REG_INFO_SIZE_1, (void*)g_bmsInfo1_readParam,4},
+	{&g_BmsCmdEx[0], BMS_READ_ID    ,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms1ID"   , &g_Bat[1].bmsID		 , BMS_REG_ID_SIZE    , (void*)g_bmsID_readParam, 4},
+	{&g_BmsCmdEx[1], BMS_READ_INFO_1,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms1Info1", &g_Bat[1].bmsInfo	     , BMS_REG_INFO_SIZE_1, (void*)g_bmsInfo1_readParam, 4, Null, (ModEventFn)Bat_event_readBmsInfo},
 	{&g_BmsCmdEx[2], BMS_READ_INFO_2,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms1Info2", &g_Bat[1].bmsInfo.cmost, BMS_REG_INFO_SIZE_2, (void*)g_bmsInfo2_readParam,4},
 	{&g_BmsCmdEx[3], BMS_READ_CTRL  ,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms1Ctrl" , &g_Bat[1].bmsCtrl	     , BMS_REG_CTRL_SIZE  , (void*)g_bmsCtrl_readParam, 4},
 																							 
@@ -85,13 +93,13 @@ void BatteryDescDump(const Battery* desc)
 	const uint8_t* pByte = (uint8_t*)&(desc->bmsID.sn34);
 	Printf("\tPort[%d][%02X%02X%02X%02X%02X%02X]:\n"
 		,desc->port, pByte[0], pByte[1], pByte[2], pByte[3], pByte[4], pByte[5]);
-	Printf("\t\tsoc(0.1%)=%d\r\n",bigendian16_get((uint8*)(&desc->bmsInfo.soc)));
+	Printf("\t\tsoc(0.1)=%d\r\n",bigendian16_get((uint8*)(&desc->bmsInfo.soc)));
 	Printf("\t\tvolt(0.01V)=%d\r\n",bigendian16_get((uint8*)(&desc->bmsInfo.tvolt)));
 	Printf("\t\tcurr(0.01A)=%d\r\n",bigendian16_get((uint8*)(&desc->bmsInfo.tcurr)));
 	Printf("\t\tstate=0x%04X\r\n",bigendian16_get((uint8*)(&desc->bmsInfo.state)));
 }
 
-void BatteryDump(void)
+void BatteryInfoDump(void)
 {
 	int i = 0;
 	Battery* pPkt = Null;
@@ -101,11 +109,36 @@ void BatteryDump(void)
 	for(i = 0; i < 2; i++)
 	{
 		pPkt = &g_Bat[i];
-		if(pPkt->presentStatus)
+		if(pPkt->presentStatus == BAT_IN)
 		{
 			BatteryDescDump(pPkt);
 		}
 	}
+}
+
+void BatteryDump(void)
+{
+	int i = 0;
+	Battery* pPkt = Null;
+
+	for(i = 0; i < 2; i++)
+	{
+		pPkt = &g_Bat[i];
+		Printf("g_Bat[%d]:\n",i);
+		Printf("\t port=%d.\n"	, pPkt->port);
+		Printf("\t presentStatus(1=NOTIN;2-IN)=%d.\n"	, pPkt->presentStatus);
+		Printf("\t opStatus=%d.\n"	, pPkt->opStatus);
+	}
+}
+
+void NfcCardReaderDump(void)
+{
+	NfcCardReader* pPkt = &g_pms.cardReader;
+
+	Printf("g_pms.cardReader:\n");
+	Printf("\t port=%d.\n"	, pPkt->port);
+	Printf("\t status=%d.\n", pPkt->status);
+//	Printf("\t Fsm=%d.\n"	, pPkt->Fsm);
 }
 
 /********************************************************************/
@@ -129,7 +162,7 @@ static int Pms_Tx(const uint8_t* pData, int len)
 void Pms_Rx(int nfcPort, const uint8_t* pData, int len)
 {
 	//从NFC驱动接收数据
-	if (g_pActiveBat->port != nfcPort) return;
+//	if (g_pActiveBat->port != nfcPort) return;
 
 	Mod_RxData(g_pModBus, pData, len);
 }
@@ -158,14 +191,19 @@ void Pms_plugOut(uint8_t port)
 
 void Pms_SwitchPort()
 {
-	Battery* pBat = (g_pActiveBat->port == 0) ? &g_Bat[1] : &g_Bat[0];
+//	Battery* pBat = (g_pActiveBat->port == 0) ? &g_Bat[1] : &g_Bat[0];
 
 	if (!Mod_isIdle(g_pModBus)) return;
 
 	Bat_msg(g_pActiveBat, BmsMsg_deactive, 0, 0);
-	Mod_SwitchCfg(g_pModBus, (g_pActiveBat->port == 0) ? &g_Bat1Cfg : &g_Bat0Cfg);
-	Bat_msg(pBat, BmsMsg_active, *((uint32*)& g_regCtrl), 0);
-	g_pActiveBat = pBat;
+	
+	//先不跳转到BAT1
+//	Mod_SwitchCfg(g_pModBus, (g_pActiveBat->port == 0) ? &g_Bat1Cfg : &g_Bat0Cfg);
+	Mod_SwitchCfg(g_pModBus, &g_Bat0Cfg);
+//	Bat_msg(pBat, BmsMsg_active, *((uint32*)& g_regCtrl), 0);
+	Bat_msg(g_pActiveBat, BmsMsg_active, *((uint32*)& g_regCtrl), 0);
+	
+//	g_pActiveBat = pBat;
 }
 
 static void Pms_switchStatus(PmsOpStatus newStatus)
@@ -289,23 +327,35 @@ static void Pms_fsm(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	g_pms.Fsm(msgId, param1, param2);
 }
 
+//void Pms_cardReaderReadFifo(void)
+//{
+//	rt_interrupt_enter();
+//	NfcCardReader_read_fifo(&g_pms.cardReader);
+//	PFL(DL_NFC,"NFC IRQ haddle!\n");
+//	rt_interrupt_leave();
+//}
+
 NfcCardReaderEventRc Pms_cardReaderEventCb(Pms* pms, NfcCardReaderEvent ev)
 {
 	if (ev == CARD_EVENT_SEARCH_SUCCESS)
 	{
 		Pms_postMsg(PmsMsg_batPlugIn, g_pms.cardReader.port, 0);
+		PFL(DL_NFC,"NFC port[%d] search success!\n",g_pms.cardReader.port);
 	}
 	else if (ev == CARD_EVENT_SEARCH_FAILED)
 	{
 		Pms_postMsg(PmsMsg_batPlugOut, g_pms.cardReader.port, 0);
+		PFL(DL_NFC,"NFC port[%d] search failed!\n",g_pms.cardReader.port);
 	}
 	else if (ev == CARD_EVENT_RX_DATA_SUCCESS)
 	{
 		Pms_Rx(g_pms.cardReader.port, g_pms.cardReader.rxBuf, g_pms.cardReader.rxLen);
+		PFL(DL_NFC,"NFC port[%d] rx date success!\n",g_pms.cardReader.port);
 	}
 	else if (ev == CARD_EVENT_RX_DATA_FAILED)
 	{
 		Mod_busErr(g_pModBus, BUS_ERR_RX_FAILED);
+		PFL(DL_NFC,"NFC port[%d] rx date failed!\n",g_pms.cardReader.port);
 	}
 
 	return CARD_EVENT_RC_SUCCESS;
@@ -316,7 +366,7 @@ void Pms_run()
 //	NfcCardReader_run(&g_pms.cardReader);
 	Mod_Run(g_pModBus);
 	Bat_run(&g_Bat[0]);
-	Bat_run(&g_Bat[1]);
+//	Bat_run(&g_Bat[1]);
 
 	Pms_fsm(PmsMsg_run, 0, 0);
 }
