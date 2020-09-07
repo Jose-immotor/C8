@@ -216,5 +216,5 @@ void Bat_init(Battery* pBat, int port, const ModCfg* cfg)
 	pBat->presentStatus = BAT_UNKNOWN;
 	pBat->opStatus = BmsStatus_init;
 	pBat->cfg = cfg;
-	pBat->pBmsReg_Ctrl = (BmsRegCtrl*)& pBat->bmsCtrl.ctrl;
+	pBat->pBmsReg_Ctrl = (BmsRegCtrl*)& pBat->writeBmsCtrl;
 }
