@@ -49,7 +49,7 @@ uint8_t* Mod_getRspData(const ModCmd* pCmd, const uint8_t* pRsp, int len, uint8_
 	{
 		{MOD_READ_COIL_STATUS, 5 , 6},
 		{MOD_READ_HOLDING_REG, 5 , 6},
-		{MOD_WEITE_SINGLE_REG, -1, 4, 5},
+		{MOD_WEITE_SINGLE_REG, -1, 7, 2},
 	};
 
 	if (pRsp[4] > 0x80)
@@ -94,6 +94,7 @@ static int Mod_frameBuild(Mod* pMod, const ModCmd* pCmd, uint8_t* rspFrame)
 	{
 		if (pCmd->pStorage)
 		{
+//			bigendian16_put(&rspFrame[ind],(uint16_t)*((uint16_t*)(pCmd->pStorage)));
 			memcpy(&rspFrame[ind], pCmd->pStorage, pCmd->storageLen);
 			ind += pCmd->storageLen;
 		}

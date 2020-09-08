@@ -39,7 +39,7 @@ const static ModCmd g_Bms0Cmds[BMS_CMD_COUNT] =
 	{&g_BmsCmdEx[2], BMS_READ_INFO_2,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms0Info2", &g_Bat[0].bmsInfo.cmost, BMS_REG_INFO_SIZE_2, (void*)g_bmsInfo2_readParam, 4},
 	{&g_BmsCmdEx[3], BMS_READ_CTRL  ,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms0Ctrl" , &g_Bat[0].bmsCtrl	     , BMS_REG_CTRL_SIZE  , (void*)g_bmsCtrl_readParam, 4},
 
-	{&g_BmsCmdEx[4], BMS_WRITE_CTRL, MOD_WRITE,MOD_WEITE_SINGLE_REG,"WriteReg0-Ctrl", &g_Bat[0].bmsCtrl.ctrl, 2, (void*)g_bmsCtrl_writeParam, 2}//,  &g_Bat[0].bmsCtrl_mirror.ctrl},
+	{&g_BmsCmdEx[4], BMS_WRITE_CTRL ,MOD_WRITE,MOD_WEITE_SINGLE_REG,"WriteReg0-Ctrl", &g_Bat[0].writeBmsCtrl , 2				  , (void*)g_bmsCtrl_writeParam, 2,  &g_Bat[0].writeBmsCtrl_mirror},
 };
 
 const static ModCfg g_Bat0Cfg =
@@ -60,7 +60,7 @@ const static ModCmd g_Bms1Cmds[BMS_CMD_COUNT] =
 	{&g_BmsCmdEx[2], BMS_READ_INFO_2,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms1Info2", &g_Bat[1].bmsInfo.cmost, BMS_REG_INFO_SIZE_2, (void*)g_bmsInfo2_readParam,4},
 	{&g_BmsCmdEx[3], BMS_READ_CTRL  ,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms1Ctrl" , &g_Bat[1].bmsCtrl	     , BMS_REG_CTRL_SIZE  , (void*)g_bmsCtrl_readParam, 4},
 																							 
-	{&g_BmsCmdEx[4], BMS_WRITE_CTRL, MOD_WRITE,MOD_WEITE_SINGLE_REG,"WriteReg1-Ctrl", &g_Bat[1].bmsCtrl.ctrl, 2, (void*)g_bmsCtrl_writeParam, 2,  &g_Bat[1].bmsCtrl_mirror.ctrl},
+	{&g_BmsCmdEx[4], BMS_WRITE_CTRL, MOD_WRITE,MOD_WEITE_SINGLE_REG,"WriteReg1-Ctrl", &g_Bat[1].writeBmsCtrl, 2, (void*)g_bmsCtrl_writeParam, 2,  &g_Bat[1].writeBmsCtrl_mirror},
 };
 const static ModCfg g_Bat1Cfg =
 {
@@ -215,6 +215,7 @@ static void Pms_switchStatus(PmsOpStatus newStatus)
 	if (newStatus == PMS_ACC_OFF)
 	{
 		Pms_setDischg(True);
+		Pms_setChg(True);
 	}
 	else if (newStatus == PMS_ACC_ON)
 	{
@@ -290,7 +291,21 @@ static void Pms_fsm_deepSleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
 //在任何状态下都要处理的消息函数
 static void Pms_fsm_anyStatusDo(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
+	int i = 0;
+//	Battery* pPkt = Null;
 
+//	for(i = 0; i < 2; i++)
+//	{
+//		pPkt = &g_Bat[i];
+//		
+//		if(Bat_isReady(pPkt))
+//		{
+//			if((pPkt->bmsInfo.state&0x01)!= ())
+//			{
+//			
+//			}
+//		}
+//	}
 }
 
 //查找状态响应的处理函数

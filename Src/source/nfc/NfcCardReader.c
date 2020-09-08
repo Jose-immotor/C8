@@ -40,9 +40,9 @@ static Bool NfcCardReader_searchPort(NfcCardReader* pReader, int port)
 	
 	FM175XX_switchPort(port);
 	FM175XX_SoftReset();
-	Write_Reg(WaterLevelReg,0x20);//设置FIFOLevel=32字节  
-	Write_Reg(DivIEnReg,0x80);//引脚IRQ按照标准CMOS输出pad工作
-	Write_Reg(ComIEnReg,0x2c);//允许RxIEn,HiAlerlEn,LoAlertlEn
+//	Write_Reg(WaterLevelReg,0x20);//设置FIFOLevel=32字节  
+//	Write_Reg(DivIEnReg,0x80);//引脚IRQ按照标准CMOS输出pad工作
+//	Write_Reg(ComIEnReg,0x2c);//允许RxIEn,HiAlerlEn,LoAlertlEn
 	if (pReader->port)
 	{
 		Set_Rf(1);
@@ -66,7 +66,9 @@ static Bool NfcCardReader_searchPort(NfcCardReader* pReader, int port)
 	}
 	else
 	{
+		pReader->Event(pReader->cbObj, CARD_EVENT_SEARCH_FAILED);
 		pReader->port = (pReader->port == 0) ? 1 : 0;
+		FM17522_Delayms(10);//程序延迟，不加延时会把程序跑死lane20200907
 		//保持最低低功耗
 		FM175XX_SoftPowerdown();
 	}
@@ -84,6 +86,7 @@ static void NfcCardReader_fsm_trans(NfcCardReader* pReader, uint8 msgId, uint32_
 			Pcd_SetTimer(300);
 			//发送数据
 			PFL(DL_NFC,"NFC send data length:%d!\n",pReader->txLen);
+			FM17522_Delayms(10);//程序延迟
 			pReader->latestErr = Pcd_Comm(Transceive, pReader->txBuf, pReader->txLen, pReader->rxBuf, &pReader->rxLen);
 			PFL(DL_NFC,"NFC send data error:%d(0-ok,1-err)!\n",pReader->latestErr);
 			if (pReader->latestErr != OK)
@@ -197,6 +200,11 @@ Bool NfcCardReader_Send(NfcCardReader* pReader, uint8_t port, const void* data, 
 	NfcCardReader_fsm(pReader, CARD_READER_MSG_SEARCH_PORT, port);
 
 	return True;
+}
+
+void NfcCardReader_reset(NfcCardReader* pReader)
+{
+	
 }
 
 void NfcCardReader_run(NfcCardReader* pReader)

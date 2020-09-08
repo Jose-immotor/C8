@@ -24,14 +24,15 @@
 
 typedef struct _BmsRegCtrl
 {
-	uint16_t reserved0 : 6;  //BIT[8-15]:保留
-	uint16_t chgrIn : 1;  //BIT[7]:充电器插入
-	uint16_t deepSleepEn : 1; //BIT[6]:深睡眠使能
-	uint16_t sleepEn : 1;  //BIT[5]:浅随眠使能
-	uint16_t reserved1 : 2;  //BIT[3-4]:保留
-	uint16_t preDischg : 1;  //BIT[2]:预防电使能
-	uint16_t dischgEn : 1;  //BIT[1]:放电使能
+	uint16_t reserved0 : 8;  //BIT[8-15]:保留
 	uint16_t chgEn : 1;  //BIT[0]:充电使能
+	uint16_t dischgEn : 1;  //BIT[1]:放电使能
+	uint16_t preDischg : 1;  //BIT[2]:预防电使能
+	uint16_t reserved1 : 2;  //BIT[3-4]:保留
+	uint16_t sleepEn : 1;  //BIT[5]:浅随眠使能
+	uint16_t deepSleepEn : 1; //BIT[6]:深睡眠使能
+	uint16_t chgrIn : 1;  //BIT[7]:充电器插入
+	
 }BmsRegCtrl;
 
 // 1字节对齐

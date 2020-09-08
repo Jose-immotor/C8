@@ -103,11 +103,14 @@ extern "C" {
 		BmsReg_deviceInfo 	bmsInfo;	//只读寄存器
 		BmsReg_ctrl 		bmsCtrl;	//控制寄存器
 
+		//需要写到BMS寄存器BmsRegCtrl的值
+		uint16_t   			writeBmsCtrl;
+
 		//bmsCtrl镜像变量,记录WIRTE成功时的值。
 		//仅供Modbos传输协议使用，其他模块不能修改
-		BmsReg_ctrl 		bmsCtrl_mirror;
-
-		BmsRegCtrl* pBmsReg_Ctrl;	//初始化指向 bmsCtrl.ctrl;
+		uint16_t 			writeBmsCtrl_mirror;
+		
+		BmsRegCtrl* 		pBmsReg_Ctrl;	//初始化指向 writeBmsCtrl;
 		const ModCfg* cfg;
 	}Battery;
 

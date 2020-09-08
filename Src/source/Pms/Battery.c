@@ -25,11 +25,11 @@ static void Bat_onPlugOut(Battery* pBat)
 {
 	pBat->presentStatus = BAT_NOT_IN;
 	PFL(DL_PMS,"Battery out!\n");
-	if (pBat->isActive)
-	{
-		Mod_Reset(g_pModBus);
-	}
-	else
+//	if (pBat->isActive)
+//	{
+//		Mod_Reset(g_pModBus);
+//	}
+//	else
 	{
 		Mod_ResetCmds(pBat->cfg);
 	}
@@ -89,8 +89,8 @@ MOD_EVENT_RC Bat_event(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev)
 			}
 			else
 			{
-				//设置完CTRL寄存器必须重新读取BMS_INFO
-				Bat_sendCmd(pBat, BMS_READ_INFO_1);
+				//设置完CTRL寄存器必须重新读取BMS_CTRL
+				Bat_sendCmd(pBat, BMS_READ_CTRL);
 			}
 		}
 	}
@@ -226,5 +226,5 @@ void Bat_init(Battery* pBat, int port, const ModCfg* cfg)
 	pBat->presentStatus = BAT_UNKNOWN;
 	pBat->opStatus = BmsStatus_init;
 	pBat->cfg = cfg;
-	pBat->pBmsReg_Ctrl = (BmsRegCtrl*)& pBat->bmsCtrl.ctrl;
+	pBat->pBmsReg_Ctrl = (BmsRegCtrl*)& pBat->writeBmsCtrl;
 }

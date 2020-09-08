@@ -4,6 +4,9 @@
  * Copyright (C) 2020 by IMMOTOR
  *
  * 和内核shell.c冲突，所以命名smart_shell.c
+ * Dump 7 :打印电池信息；Dump 9：打印时间信息；Dump 10：打印g_degInfo的Sector信息
+ * Dump 11：打印log的Sector信息；Dump 20：打印电池信息；Dump 21：打印NFC信息
+ *
  *
  * Change Logs:
  * Date           Author       Notes
@@ -36,7 +39,6 @@ static void Dump(int argc, char**argv)
 ////	if(5 == ind || 0 == ind) AtCmdCtrl_Dump(g_pSimAtCmdCtrl);
 ////	if(6 == ind || 0 == ind) AtCmdCtrl_Dump(g_pBleAtCmdCtrl);
 	if(7 == ind || 0 == ind) BatteryInfoDump();
-////	if(8 == ind || 0 == ind) Ble_Dump();
 	if(9 == ind || 0 == ind) DateTime_dump(Null);
 	if(10 == ind) 			 SectorMgr_Dump(g_NvdsItems[2].sectorMgr);
 	if(11 == ind)			 SectorMgr_Dump(&g_plogMgr->record.sector);

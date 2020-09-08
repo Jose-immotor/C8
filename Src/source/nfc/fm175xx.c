@@ -630,12 +630,12 @@ unsigned char FM175XX_HardReset(void)
 
 unsigned char FM175XX_switchPort(uint8_t port)
 {
-	g_iicPortAddr = port;
+	g_iicPortAddr = 0;//port;
 	if (port == 0)
 	{
 		//拉低NPD脚
 		FM17522_NPD_LOW;
-		FM17522_Delayms(1);
+		FM17522_Delayms(10);
 		//拉高NPD脚
 		FM17522_NPD_HIGHT;
 		FM17522_Delayms(10);
@@ -645,7 +645,7 @@ unsigned char FM175XX_switchPort(uint8_t port)
 	{
 		//拉低NPD脚
 		FM17522_NPD_LOW;
-		FM17522_Delayms(1);
+		FM17522_Delayms(10);
 		//拉高NPD脚
 		FM17522_NPD_HIGHT;
 		FM17522_Delayms(10);

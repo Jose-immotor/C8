@@ -137,8 +137,8 @@ void Resume_IIC(uint32_t Timeout, uint32_t i2c_periph)
 }
 int gd32_i2c_read(uint32_t i2c_periph, uint8_t slave_address, uint8_t* p_buffer,uint8_t read_address,uint8_t data_byte)
 {
-//    rt_uint32_t vl_delay_cnt;
-	uint32_t I2C_Timeout = I2C_SHORT_TIMEOUT; 
+    uint32_t I2C_Timeout = I2C_SHORT_TIMEOUT; 
+	uint32_t I2CReceiveTimeout = I2C_LONG_TIMEOUT; 
 
     /* wait until I2C bus is idle */
     while((i2c_flag_get(i2c_periph, I2C_FLAG_I2CBSY)))
@@ -245,7 +245,7 @@ int gd32_i2c_read(uint32_t i2c_periph, uint8_t slave_address, uint8_t* p_buffer,
     {
         i2c_stop_on_bus(i2c_periph);
     }
-    
+    I2CReceiveTimeout = I2C_SHORT_TIMEOUT;
     /* while there is data to be read */
     while(data_byte){
         if(3 == data_byte)
@@ -303,7 +303,16 @@ int gd32_i2c_read(uint32_t i2c_periph, uint8_t slave_address, uint8_t* p_buffer,
             
             /* decrement the read bytes counter */
             data_byte--;
-        } 
+			
+			I2CReceiveTimeout = I2C_LONG_TIMEOUT;
+        }
+
+		if((I2CReceiveTimeout--) == 0) 
+		{ 
+			Resume_IIC(I2C_LONG_TIMEOUT,i2c_periph); 
+			return RT_ERROR; 
+		} 
+
     }
     
     I2C_Timeout = I2C_SHORT_TIMEOUT;
@@ -435,7 +444,8 @@ int rt_hw_i2c_init(uint32_t i2c_periph)
 
 		/* connect PB10 to I2C1_SCL, PB11 to I2C1_SDA */
 		gpio_init(GPIOB, GPIO_MODE_AF_OD, GPIO_OSPEED_50MHZ, GPIO_PIN_10 | GPIO_PIN_11);
-
+		
+		i2c_deinit(I2C1);
 		/* enable I2C clock */
 		rcu_periph_clock_enable(RCU_I2C1);
 		/* configure I2C clock */

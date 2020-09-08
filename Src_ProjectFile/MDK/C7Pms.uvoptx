@@ -152,9 +152,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>353</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134233314</Address>
+          <LineNumber>368</LineNumber>
+          <EnabledFlag>0</EnabledFlag>
+          <Address>134233282</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -163,39 +163,23 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\..\Src\source\Pms\Pms.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\C7Pms\../../Src/source/Pms/Pms.c\353</Expression>
+          <Expression>\\C7Pms\../../Src/source/Pms/Pms.c\368</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>107</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134230614</Address>
+          <LineNumber>424</LineNumber>
+          <EnabledFlag>0</EnabledFlag>
+          <Address>134232630</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\Src\source\nfc\NfcCardReader.c</Filename>
+          <Filename>..\..\Src\source\nfc\fm175xx.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\C7Pms\../../Src/source/nfc/NfcCardReader.c\107</Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>161</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134228802</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\Src\source\Modbus\Modbus.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\C7Pms\../../Src/source/Modbus/Modbus.c\161</Expression>
+          <Expression>\\C7Pms\../../Src/source/nfc/fm175xx.c\424</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -373,6 +357,46 @@
           <count>34</count>
           <WinNumber>1</WinNumber>
           <ItemText>g_pActiveBat</ItemText>
+        </Ww>
+        <Ww>
+          <count>35</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>rspFrame</ItemText>
+        </Ww>
+        <Ww>
+          <count>36</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>pCmd</ItemText>
+        </Ww>
+        <Ww>
+          <count>37</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>pMod</ItemText>
+        </Ww>
+        <Ww>
+          <count>38</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>pMod-&gt;frameCfg-&gt;txBuf</ItemText>
+        </Ww>
+        <Ww>
+          <count>39</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>pBat</ItemText>
+        </Ww>
+        <Ww>
+          <count>40</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>pCmd</ItemText>
+        </Ww>
+        <Ww>
+          <count>41</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>pMod</ItemText>
+        </Ww>
+        <Ww>
+          <count>42</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>pCmd</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
@@ -1018,7 +1042,7 @@
 
   <Group>
     <GroupName>Arch</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
