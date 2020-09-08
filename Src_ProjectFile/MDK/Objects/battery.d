@@ -12,6 +12,7 @@
 .\objects\battery.o: ..\..\Src\Arch\_Macro.h
 .\objects\battery.o: ..\..\Src\Arch\Dbg.h
 .\objects\battery.o: ..\..\Src\Arch\Bit.h
+.\objects\battery.o: ..\..\Src\Arch\DataType.h
 .\objects\battery.o: ..\..\Src\Arch\Obj.h
 .\objects\battery.o: ..\..\Src\Arch\Utp.h
 .\objects\battery.o: ..\..\Src\Arch\SwTimer.h
@@ -67,8 +68,8 @@
 .\objects\battery.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h
 .\objects\battery.o: ..\..\Src\source\Log\LogUser.h
 .\objects\battery.o: ..\..\Src\source\Log\SysLog.h
-.\objects\battery.o: ..\..\Src\source\debug\debug.h
 .\objects\battery.o: ..\..\Src\source\drivers\drv_pm.h
+.\objects\battery.o: ..\..\Src\source\debug\Debug.h
 .\objects\battery.o: ..\..\Src\source\Pms\Battery.h
 .\objects\battery.o: ..\..\Src\source\Pms\BmsReg.h
 .\objects\battery.o: ..\..\Src\source\Modbus\ModBus.h

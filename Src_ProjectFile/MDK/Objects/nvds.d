@@ -11,5 +11,6 @@
 .\objects\nvds.o: ..\..\Src\Arch\_Macro.h
 .\objects\nvds.o: ..\..\Src\Arch\Dbg.h
 .\objects\nvds.o: ..\..\Src\Arch\Bit.h
+.\objects\nvds.o: ..\..\Src\Arch\DataType.h
 .\objects\nvds.o: ..\..\Src\Arch\Nvds.h
 .\objects\nvds.o: ..\..\Src\Arch\SectorMgr.h

@@ -13,6 +13,7 @@
 .\objects\drv_pm.o: ..\..\Src\Arch\_Macro.h
 .\objects\drv_pm.o: ..\..\Src\Arch\Dbg.h
 .\objects\drv_pm.o: ..\..\Src\Arch\Bit.h
+.\objects\drv_pm.o: ..\..\Src\Arch\DataType.h
 .\objects\drv_pm.o: ..\..\Src\Arch\Obj.h
 .\objects\drv_pm.o: ..\..\Src\Arch\Utp.h
 .\objects\drv_pm.o: ..\..\Src\Arch\SwTimer.h
@@ -68,4 +69,4 @@
 .\objects\drv_pm.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h
 .\objects\drv_pm.o: ..\..\Src\source\Log\LogUser.h
 .\objects\drv_pm.o: ..\..\Src\source\Log\SysLog.h
-.\objects\drv_pm.o: ..\..\Src\source\debug\debug.h
+.\objects\drv_pm.o: ..\..\Src\source\debug\Debug.h

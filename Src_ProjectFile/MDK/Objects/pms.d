@@ -12,6 +12,7 @@
 .\objects\pms.o: ..\..\Src\Arch\_Macro.h
 .\objects\pms.o: ..\..\Src\Arch\Dbg.h
 .\objects\pms.o: ..\..\Src\Arch\Bit.h
+.\objects\pms.o: ..\..\Src\Arch\DataType.h
 .\objects\pms.o: ..\..\Src\Arch\Obj.h
 .\objects\pms.o: ..\..\Src\Arch\Utp.h
 .\objects\pms.o: ..\..\Src\Arch\SwTimer.h
@@ -67,8 +68,8 @@
 .\objects\pms.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h
 .\objects\pms.o: ..\..\Src\source\Log\LogUser.h
 .\objects\pms.o: ..\..\Src\source\Log\SysLog.h
-.\objects\pms.o: ..\..\Src\source\debug\debug.h
 .\objects\pms.o: ..\..\Src\source\drivers\drv_pm.h
+.\objects\pms.o: ..\..\Src\source\debug\Debug.h
 .\objects\pms.o: ..\..\Src\source\Pms\Pms.h
 .\objects\pms.o: ..\..\Src\source\Modbus\ModBus.h
 .\objects\pms.o: ..\..\Src\source\Pms\BmsReg.h
@@ -76,3 +77,7 @@
 .\objects\pms.o: ..\..\Src\source\Pms\Battery.h
 .\objects\pms.o: ..\..\Src\source\JT808\JT808.h
 .\objects\pms.o: ..\..\Src\Arch\HwFwVer.h
+.\objects\pms.o: ..\..\Src\source\JT808\JtTlv8103.h
+.\objects\pms.o: ..\..\Src\Arch\TlvIn.h
+.\objects\pms.o: ..\..\Src\Arch\Tlv.h
+.\objects\pms.o: ..\..\Src\Arch\TlvOut.h

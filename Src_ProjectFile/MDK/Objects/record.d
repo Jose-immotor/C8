@@ -11,6 +11,7 @@
 .\objects\record.o: ..\..\Src\Arch\_Macro.h
 .\objects\record.o: ..\..\Src\Arch\Dbg.h
 .\objects\record.o: ..\..\Src\Arch\Bit.h
+.\objects\record.o: ..\..\Src\Arch\DataType.h
 .\objects\record.o: ..\..\Src\Arch\Record.h
 .\objects\record.o: ..\..\Src\Arch\SectorMgr.h
 .\objects\record.o: ..\..\Src\Arch\DateTime.h

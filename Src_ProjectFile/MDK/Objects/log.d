@@ -11,6 +11,7 @@
 .\objects\log.o: ..\..\Src\Arch\_Macro.h
 .\objects\log.o: ..\..\Src\Arch\Dbg.h
 .\objects\log.o: ..\..\Src\Arch\Bit.h
+.\objects\log.o: ..\..\Src\Arch\DataType.h
 .\objects\log.o: ..\..\Src\Arch\Log.h
 .\objects\log.o: ..\..\Src\Arch\Record.h
 .\objects\log.o: ..\..\Src\Arch\SectorMgr.h

@@ -1,4 +1,12 @@
-/******************************************************
+/*
+ * Copyright (c) 2016-2020, Immotor
+ *
+ * Change Logs:
+ * Date           Author       Notes
+ * 2020-08-27     Allen      first version
+ */
+ 
+ /******************************************************
 UTP：串口传输协议，实现“车载终端与外接设备通讯协议”或者类型功能的协议。
 
 本协议适合以下格式的传输协议
@@ -41,20 +49,20 @@ extern "C"{
 ***************/
 typedef enum
 {
-	UTP_TX_START,		//发送命令开始, 可在该事件中配置通信参数：waitRspMs, maxTxCount
+	UTP_TX_START,		//发送命令开始, 可在该事件中配置通信参数：waitRspMs, maxTxCount，transferData, transferLen
 
 	UTP_CHANGED_BEFORE,	//pStorage值改变之前
 	UTP_CHANGED_AFTER,	//pStorage值改变之后
-	UTP_GET_RSP,		//接收到请求,获取响应，响应数据在transferData, transferLen中
+	UTP_GET_RSP,		//接收到请求,获取响应，请求的数据在pStorage中，应该在改事件中配置transferData指针，作为RSP
 
 	UTP_REQ_FAILED,		//请求结束，失败，原因：可能传输超时，或者响应返回失败码。
-	UTP_REQ_SUCCESS,	//请求结束，成功，传输成功并且响应返回成功码
+	UTP_REQ_SUCCESS,	//传输结束，成功，传输成功并且响应返回成功码
 }UTP_TXF_EVENT;
 
 typedef enum
 {
 	UTP_EVENT_RC_SUCCESS = 0,	//事件处理成功
-	UTP_EVENT_RC_FAILED,	//事件处理失败
+	UTP_EVENT_RC_FAILED,		//事件处理失败
 	UTP_EVENT_RC_DO_NOTHING,	//事件没有处理
 }UTP_EVENT_RC;
 
@@ -70,8 +78,10 @@ typedef enum
 {
 	UTP_READ = 0	//读命令类型，需要应答
 	, UTP_WRITE		//写命令类型，需要应答
-	, UTP_EVENT		//事件类型  ，需要应答
-	, UTP_NOTIFY	//通知类型  ，不需要应答
+	, UTP_NOTIFY	//通知类型  ，发送给对方的通知，不需要应答
+
+	, UTP_EVENT			//事件类型，对方发送给本方的请求，需要应答
+	, UTP_EVENT_NOTIFY	//事件通知类型，对方发送给本方的通知，不需要应答
 }UTP_CMD_TYPE;
 
 typedef enum _UTP_RCV_RSP_RC
@@ -95,7 +105,7 @@ typedef enum _FRAME_STATE
 struct _UtpCmd;
 struct _Utp;
 typedef UTP_EVENT_RC(*UtpEventFn)(void* pOwnerObj, const struct _UtpCmd* pCmd, UTP_TXF_EVENT ev);
-typedef int (*UtpTxFn)(const uint8_t* pData, int len);
+typedef int (*UtpTxFn)(uint8_t cmd, const uint8_t* pData, int len);
 
 /*********************************
 函数功能：帧校验，实现2个功能；
@@ -158,7 +168,6 @@ typedef struct _UtpFrameCfg
 //Utp其他配置项
 typedef struct _UtpCfg
 {
-
 	int					  cmdCount;	//命令数组总数
 	const struct _UtpCmd* cmdArray;	//命令数组
 
@@ -176,13 +185,14 @@ typedef struct _UtpCmdEx
 			在事件函数中修改，指向要应答的数据指针，由上层程序决定
 	如果是READ/WRITE,指向应答数据
 	*/
-	const uint8_t* transferData;	//传输数据指针
+	const uint8_t* transferData;	//传输数据协议包的数据域指针，
 	uint8_t transferLen;		//传输数据长度
 
 	/*****************
 	发送请求或接收响应时的时间戳Ticks.
 	对于UTP_READ/UTP_WRITE类型：保存接收响应时的Ticks：
-	对于UTP_EVENT类型：无效
+	对于UTP_EVENT类型：不使用
+	对于UTP_EVENT_NOTIFY类型：不使用
 	对于UTP_NOTIFY类型：发送请求时的Ticks。
 	******************/
 	uint32_t rxRspTicks;
@@ -208,6 +218,7 @@ typedef struct _UtpCmd
 	//如果是READ，保存读回来的数据
 	//如果是WRITE，保存要发送的写命令参数
 	//如果是EVENT，保存Event传回来的数据
+	//如果是UTP_EVENT_NOTIFY，保存Event传回来的数据
 	//如果是NOTIFY，表示发送参数
 	//如果值为Null,表示该值无意义
 	uint8_t* pStorage;
@@ -216,7 +227,8 @@ typedef struct _UtpCmd
 	//如果是READ，pData指向要发送的读命令参数
 	//如果是WRITE，pData指向已经发送成功的数据，用于和pStorage比较是否发生变化，确定是否需要发送新的写命令
 	//如果是EVENT，pData指向事件响应参数数据指针
-	//如果是NOTIFY类型,pData=Null
+	//如果是UTP_EVENT_NOTIFY，不需要应答，pData=Null
+	//如果是NOTIFY类型,不需要应答，pData=Null
 	//如果值为Null,表示该值无意义
 	uint8_t* pData;
 	int dataLen;

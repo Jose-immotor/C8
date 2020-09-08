@@ -12,6 +12,7 @@
 .\objects\jttlv8900.o: ..\..\Src\Arch\_Macro.h
 .\objects\jttlv8900.o: ..\..\Src\Arch\Dbg.h
 .\objects\jttlv8900.o: ..\..\Src\Arch\Bit.h
+.\objects\jttlv8900.o: ..\..\Src\Arch\DataType.h
 .\objects\jttlv8900.o: ..\..\Src\Arch\Obj.h
 .\objects\jttlv8900.o: ..\..\Src\Arch\Utp.h
 .\objects\jttlv8900.o: ..\..\Src\Arch\SwTimer.h
@@ -67,8 +68,8 @@
 .\objects\jttlv8900.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h
 .\objects\jttlv8900.o: ..\..\Src\source\Log\LogUser.h
 .\objects\jttlv8900.o: ..\..\Src\source\Log\SysLog.h
-.\objects\jttlv8900.o: ..\..\Src\source\debug\debug.h
 .\objects\jttlv8900.o: ..\..\Src\source\drivers\drv_pm.h
+.\objects\jttlv8900.o: ..\..\Src\source\debug\Debug.h
 .\objects\jttlv8900.o: ..\..\Src\source\JT808\JtTlv8900.h
 .\objects\jttlv8900.o: ..\..\Src\Arch\TlvIn.h
 .\objects\jttlv8900.o: ..\..\Src\Arch\Tlv.h

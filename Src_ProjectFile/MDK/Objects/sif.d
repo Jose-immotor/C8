@@ -12,6 +12,7 @@
 .\objects\sif.o: ..\..\Src\Arch\_Macro.h
 .\objects\sif.o: ..\..\Src\Arch\Dbg.h
 .\objects\sif.o: ..\..\Src\Arch\Bit.h
+.\objects\sif.o: ..\..\Src\Arch\DataType.h
 .\objects\sif.o: ..\..\Src\Arch\Obj.h
 .\objects\sif.o: ..\..\Src\Arch\Utp.h
 .\objects\sif.o: ..\..\Src\Arch\SwTimer.h
@@ -67,7 +68,7 @@
 .\objects\sif.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h
 .\objects\sif.o: ..\..\Src\source\Log\LogUser.h
 .\objects\sif.o: ..\..\Src\source\Log\SysLog.h
-.\objects\sif.o: ..\..\Src\source\debug\debug.h
 .\objects\sif.o: ..\..\Src\source\drivers\drv_pm.h
+.\objects\sif.o: ..\..\Src\source\debug\Debug.h
 .\objects\sif.o: ..\..\Src\source\nvc\Sif.h
 .\objects\sif.o: ..\..\Src\source\nvc\nvc.h

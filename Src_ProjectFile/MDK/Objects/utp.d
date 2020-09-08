@@ -11,6 +11,7 @@
 .\objects\utp.o: ..\..\Src\Arch\_Macro.h
 .\objects\utp.o: ..\..\Src\Arch\Dbg.h
 .\objects\utp.o: ..\..\Src\Arch\Bit.h
+.\objects\utp.o: ..\..\Src\Arch\DataType.h
 .\objects\utp.o: ..\..\Src\Arch\Utp.h
 .\objects\utp.o: ..\..\Src\Arch\SwTimer.h
 .\objects\utp.o: ..\..\Src\Arch\queue.h

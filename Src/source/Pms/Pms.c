@@ -29,8 +29,8 @@ const static uint8_t g_bmsCtrl_writeParam[] = { 0x02, 0x00};
 static int Pms_Tx(const uint8_t* pData, int len);
 
 #define BMS_CMD_COUNT 5
-//static ModCmdEx g_BmsCmdEx[BMS_CMD_COUNT];
-ModCmdEx g_BmsCmdEx[BMS_CMD_COUNT];
+static ModCmdEx g_BmsCmdEx[BMS_CMD_COUNT];
+//ModCmdEx g_BmsCmdEx[BMS_CMD_COUNT];
 /*电池槽位0的命令配置表*******************************************************************/
 const static ModCmd g_Bms0Cmds[BMS_CMD_COUNT] =
 {
@@ -38,7 +38,6 @@ const static ModCmd g_Bms0Cmds[BMS_CMD_COUNT] =
 	{&g_BmsCmdEx[1], BMS_READ_INFO_1,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms0Info1", &g_Bat[0].bmsInfo	     , BMS_REG_INFO_SIZE_1, (void*)g_bmsInfo1_readParam, 4, Null, (ModEventFn)Bat_event_readBmsInfo},
 	{&g_BmsCmdEx[2], BMS_READ_INFO_2,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms0Info2", &g_Bat[0].bmsInfo.cmost, BMS_REG_INFO_SIZE_2, (void*)g_bmsInfo2_readParam, 4},
 	{&g_BmsCmdEx[3], BMS_READ_CTRL  ,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms0Ctrl" , &g_Bat[0].bmsCtrl	     , BMS_REG_CTRL_SIZE  , (void*)g_bmsCtrl_readParam, 4},
-
 	{&g_BmsCmdEx[4], BMS_WRITE_CTRL ,MOD_WRITE,MOD_WEITE_SINGLE_REG,"WriteReg0-Ctrl", &g_Bat[0].writeBmsCtrl , 2				  , (void*)g_bmsCtrl_writeParam, 2,  &g_Bat[0].writeBmsCtrl_mirror},
 };
 
@@ -59,7 +58,6 @@ const static ModCmd g_Bms1Cmds[BMS_CMD_COUNT] =
 	{&g_BmsCmdEx[1], BMS_READ_INFO_1,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms1Info1", &g_Bat[1].bmsInfo	     , BMS_REG_INFO_SIZE_1, (void*)g_bmsInfo1_readParam, 4, Null, (ModEventFn)Bat_event_readBmsInfo},
 	{&g_BmsCmdEx[2], BMS_READ_INFO_2,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms1Info2", &g_Bat[1].bmsInfo.cmost, BMS_REG_INFO_SIZE_2, (void*)g_bmsInfo2_readParam,4},
 	{&g_BmsCmdEx[3], BMS_READ_CTRL  ,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms1Ctrl" , &g_Bat[1].bmsCtrl	     , BMS_REG_CTRL_SIZE  , (void*)g_bmsCtrl_readParam, 4},
-																							 
 	{&g_BmsCmdEx[4], BMS_WRITE_CTRL, MOD_WRITE,MOD_WEITE_SINGLE_REG,"WriteReg1-Ctrl", &g_Bat[1].writeBmsCtrl, 2, (void*)g_bmsCtrl_writeParam, 2,  &g_Bat[1].writeBmsCtrl_mirror},
 };
 const static ModCfg g_Bat1Cfg =
@@ -334,6 +332,7 @@ static Pms_FsmFn Pms_findStatusProcFun(PmsOpStatus status)
 	Assert(False);
 	return Null;
 }
+
 
 static void Pms_fsm(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {

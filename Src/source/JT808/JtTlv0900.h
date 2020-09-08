@@ -10,8 +10,8 @@ extern "C"{
 
 	typedef enum
 	{
-		TAG_BAT_ID = 1,
-		TAG_BAT_INFO = 2,
+		TAG_BAT_INFO		= 0x20,	//电池基本信息
+		TAG_BAT_WORK_PARAM	= 0x21,	//电池工作参数
 	}CMD0900_TLV;
 
 	typedef struct _TlvBatInfo
@@ -41,7 +41,7 @@ extern "C"{
 	}TlvBatWorkInfo;
 
 	void JtTlv0900_init();
-	int JtTlv0900_getChangedTlv(uint8* buf, int len);
+	int JtTlv0900_getChangedTlv(uint8* buf, int len, uint8* tlvCount);
 	void JtTlv0900_updateMirror(const uint8* data, int len);
 	void JtTlv0900_updateBatInfo(uint8 port);
 

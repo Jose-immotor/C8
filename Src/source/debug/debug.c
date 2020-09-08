@@ -1,7 +1,8 @@
 
-#ifdef XDEBUG
 #include "Common.h"
 #include "Debug.h"
+
+#ifdef XDEBUG
 
 //定义本系统的调试开关表
 static const DbgSwitch g_defDbgSwh[] =
@@ -13,6 +14,7 @@ static const DbgSwitch g_defDbgSwh[] =
 	DBG_LEV_DEF(DL_PMS),
 	DBG_LEV_DEF(DL_MDB),
 	DBG_LEV_DEF(DL_NFC),
+	DBG_LEV_DEF(DL_JT808),
 };
 
 void Debug_Init()

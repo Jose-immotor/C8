@@ -11,4 +11,5 @@
 .\objects\obj.o: ..\..\Src\Arch\_Macro.h
 .\objects\obj.o: ..\..\Src\Arch\Dbg.h
 .\objects\obj.o: ..\..\Src\Arch\Bit.h
+.\objects\obj.o: ..\..\Src\Arch\DataType.h
 .\objects\obj.o: ..\..\Src\Arch\Obj.h

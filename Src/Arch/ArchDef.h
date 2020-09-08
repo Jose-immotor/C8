@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2016-2020, Immotor
+ *
+ * Change Logs:
+ * Date           Author       Notes
+ * 2020-08-27     Allen      first version
+ * Head file of Arch
+ */
+
 #ifndef __ARCH_CFG_H_
 #define __ARCH_CFG_H_
 
@@ -25,7 +34,6 @@ extern "C"{
 #endif
 
 //#define CFG_LOG
-//#define XDEBUG
 
 #include "typedef.h"	
 #include <stdarg.h>
@@ -35,6 +43,7 @@ extern "C"{
 #include "Dump.h"
 #include "_Macro.h"
 #include "Dbg.h"
+#include "DataType.h"
 
 	//ms ticks of system, 
 	extern volatile unsigned int system_ms_tick;

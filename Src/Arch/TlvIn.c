@@ -1,16 +1,24 @@
+/*
+ * Copyright (c) 2016-2020, Immotor
+ *
+ * Change Logs:
+ * Date           Author       Notes
+ * 2020-08-27     Allen      first version
+ */
 
 #include "ArchDef.h"
 #include "Tlv.h"
 #include "TlvIn.h"
 
 
-void TlvInMgr_dump(const TlvIn* pItem)
+void TlvInMgr_dump(const TlvIn* pItem, int tagLen, DType dt)
 {
-	Printf("%s[0x%X-%d]:\n", pItem->name, pItem->tag, pItem->len);
-	Printf("\t"); DUMP_BYTE(pItem->storage, pItem->len);
+	Printf("%s ", pItem->name);
+	Tlv_dump(pItem->tag, tagLen, pItem->len, pItem->storage, dt);
+	Printf("\n");
 }
 
-const TlvIn* TlvInMgr_find(const TlvIn* pItems, int count, uint8 tag)
+const TlvIn* TlvInMgr_find(const TlvIn* pItems, int count, uint32 tag)
 {
 	for(int i = 0; i < count; i++, pItems++)
 	{
@@ -43,23 +51,39 @@ TlvInEventRc TlvInMgr_event(TlvInMgr* mgr, const TlvIn* p, TlvInEvent ev)
 }
 
 //更新存储指针值
-void TlvInMgr_updateStroage(TlvInMgr* mgr, const uint8* pTlvBuf, int bufSize)
+void TlvInMgr_updateStorage(TlvInMgr* mgr, const uint8* pTlvBuf, int bufSize)
 {
+	uint8 buf[8];
 	const TlvIn* p = Null;
-
+	const uint8* pVal = Null;
 	uint32 tag = 0;
 	for (int i = 0; i < bufSize; )
 	{
 		memcpy(&tag, pTlvBuf, mgr->tagLen);
+
 		p = TlvInMgr_find(mgr->itemArray, mgr->itemCount, tag);
 		if (p)
 		{
-			if (memcmp(p->storage, &pTlvBuf[mgr->tagLen + 1], pTlvBuf[mgr->tagLen]) != 0)
+			int len = MIN(p->len, pTlvBuf[mgr->tagLen]);
+			if (memcmp(p->storage, &pTlvBuf[mgr->tagLen + 1], len) != 0)
 			{
+				if (p->len > pTlvBuf[mgr->tagLen]) memset(p->storage, 0, p->len);
+
 				if (TERC_SUCCESS == TlvInMgr_event(mgr, p, TE_CHANGED_BEFORE))
 				{
-					memcpy(p->storage, &pTlvBuf[mgr->tagLen + 1], p->len);
+					pVal = &pTlvBuf[mgr->tagLen + 1];
+					//大小端转换
+					if (mgr->isSwap && p->len <= 8)
+					{
+						memcpy(buf, pVal, len);
+						pVal = Dt_swap(buf, p->dt);
+					}
+
+					memcpy(p->storage, pVal, len);
+
 					TlvInMgr_event(mgr, p, TE_CHANGED_AFTER);
+					if(p->mirror)
+						memcpy(p->mirror, p->storage, p->len);
 				}
 			}
 			TlvInMgr_event(mgr, p, TE_UPDATE_DONE);
@@ -69,10 +93,11 @@ void TlvInMgr_updateStroage(TlvInMgr* mgr, const uint8* pTlvBuf, int bufSize)
 	}
 }
 
-void TlvInMgr_init(TlvInMgr* mgr, const TlvIn* items, int itemCount, uint8 tagLen, TlvInEventFn Event)
+void TlvInMgr_init(TlvInMgr* mgr, const TlvIn* items, int itemCount, uint8 tagLen, TlvInEventFn Event, Bool isSwap)
 {
 	mgr->itemArray = items;
 	mgr->itemCount = itemCount;
 	mgr->Event = Event;
 	mgr->tagLen = tagLen;
+	mgr->isSwap = isSwap;
 }

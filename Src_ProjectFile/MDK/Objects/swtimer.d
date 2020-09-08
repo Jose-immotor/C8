@@ -11,4 +11,5 @@
 .\objects\swtimer.o: ..\..\Src\Arch\_Macro.h
 .\objects\swtimer.o: ..\..\Src\Arch\Dbg.h
 .\objects\swtimer.o: ..\..\Src\Arch\Bit.h
+.\objects\swtimer.o: ..\..\Src\Arch\DataType.h
 .\objects\swtimer.o: ..\..\Src\Arch\SwTimer.h

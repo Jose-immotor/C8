@@ -11,3 +11,4 @@
 .\objects\dump.o: ..\..\Src\Arch\_Macro.h
 .\objects\dump.o: ..\..\Src\Arch\Dbg.h
 .\objects\dump.o: ..\..\Src\Arch\Bit.h
+.\objects\dump.o: ..\..\Src\Arch\DataType.h

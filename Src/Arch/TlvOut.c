@@ -1,18 +1,34 @@
+/*
+ * Copyright (c) 2016-2020, Immotor
+ *
+ * Change Logs:
+ * Date           Author       Notes
+ * 2020-08-27     Allen      first version
+ */
 
 #include "ArchDef.h"
 #include "TlvOut.h"
 #include "SwTimer.h"
 
-void TlvOut_dump(const TlvOut* pItem)
+void TlvOut_dump(const TlvOut* pItem, int tagLen, DType dt)
 {
-	Printf("%s[0x%X-%d]:\n", pItem->name, pItem->tag, pItem->len);
-	Printf("\t"); DUMP_BYTE(pItem->storage, pItem->len);
-	Printf("\t"); DUMP_BYTE(pItem->mirror   , pItem->len);
+	Printf("%s ", pItem->name);
+	Tlv_dump(pItem->tag, tagLen, pItem->len, pItem->storage, dt);
+	Printf("\n");
 }
 
-void TlvOutMgr_setFlag(const TlvOut* pItem, TlvOutFlag flag)
+void TlvOut_setFlag(const TlvOut* pItem, TlvOutFlag flag)
 {
 	pItem->pEx->flag |= flag;
+}
+
+void TlvOutMgr_setFlag(TlvOutMgr* mgr, uint32 tag, TlvOutFlag flag)
+{
+	const TlvOut* p = TlvOutMgr_find(mgr->itemArray, mgr->itemCount, tag);
+	if (p)
+	{
+		TlvOut_setFlag(p, flag);
+	}
 }
 
 Bool TlvOutMgr_isChanged(TlvOutMgr* mgr, const TlvOut* pItem)
@@ -49,7 +65,7 @@ Bool TlvOutMgr_isChanged(TlvOutMgr* mgr, const TlvOut* pItem)
 	return isChanged;
 }
 
-const TlvOut* TlvOutMgr_find(const TlvOut* pItems, int count, uint8 tag)
+const TlvOut* TlvOutMgr_find(const TlvOut* pItems, int count, uint32 tag)
 {
 	for(int i = 0; i < count; i++, pItems++)
 	{
@@ -69,29 +85,61 @@ void TlvOutMgr_resetAll(TlvOutMgr* mgr)
 	}
 }
 
-int TlvOutMgr_getChanged(TlvOutMgr* mgr, uint8* pBuf, int bufSize)
+/******************************************
+函数功能：获取发生变化的TLV，
+函数参数：
+	mgr：Tlv管理对象指针。
+	pBuf：输出缓冲区。
+	bufSize：输出缓冲区大小。
+	tlvCount：输入输出参数，
+		作为输入参数：> 0,表示获取指定数量的TLV，=0表示不指定TLV的个数。
+		作为输出参数：获取到的TLV的个数。
+返回值：总的有效的TLV数据长度
+******************************************/
+int TlvOutMgr_getChanged(TlvOutMgr* mgr, uint8* pBuf, int bufSize, uint8* tlvCount)
 {
-//	int len = 0;
 	Bool isChanged = False;
 	int offset = 0;
-	const TlvOut* p = mgr->itemArray;
+	uint8 remain = (tlvCount) ? *tlvCount : 0;
+	if (remain == 0)
+	{
+		remain = 0xFF; //赋一个足够大的值，相当于忽略remain条件
+	}
 
-	for(int i = 0; i < mgr->itemCount; i++, p++)
+	int count = 0;
+	const TlvOut* p = mgr->itemArray;
+	uint8 val[8];
+	for(int i = 0; i < mgr->itemCount && remain > 0; i++, p++, remain--)
 	{
 		isChanged = TlvOutMgr_isChanged(mgr, p);
 		if(isChanged)
 		{
 			if((offset + p->len + mgr->tagLen + 1) > bufSize) break;
-			
+
 			memcpy(&pBuf[offset], &p->tag, mgr->tagLen);
 			offset += mgr->tagLen;
 
-			pBuf[offset++] = p->len;			
-			memcpy(&pBuf[offset], p->storage, p->len);
+			pBuf[offset++] = p->len;	
+
+			//只有小于8个字节的数据才可能是整数，需要大小端转换
+			if (mgr->isSwap && p->len <= sizeof(val))
+			{
+				memcpy(val, p->storage, p->len);
+				Dt_swap(val, p->dt);
+				memcpy(&pBuf[offset], val, p->len);
+			}
+			else
+			{
+				memcpy(&pBuf[offset], p->storage, p->len);
+			}
 			offset += p->len;
+
+			count++;
 		}
 	}
 	
+	if (tlvCount) *tlvCount = count;
+
 	return offset;
 }
 
@@ -101,34 +149,50 @@ void TlvOutMgr_updateMirror(TlvOutMgr* mgr, const uint8* pTlvBuf, int bufSize)
 	const TlvOut* p = Null;
 	uint32 tag = 0;
 	const uint8* pVal;
+	int len = 0;
 	for(int i = 0; i < bufSize; )
 	{
 		pVal = &pTlvBuf[mgr->tagLen + 1];
+
 		memcpy(&tag, pTlvBuf, mgr->tagLen);
+
 		p = TlvOutMgr_find(mgr->itemArray, mgr->itemCount, tag);
 		if(p == Null) break;
 
+		len = MIN(pTlvBuf[mgr->tagLen], p->len);
+		//如果idLen有效，则比较ID信息是否匹配。
 		if (p->idLen)
 		{
 			uint8_t* storage = (uint8*)p->storage;
+
+			//是否包含ID信息（一个TAG对应多个TLV）
 			if(memcmp(&storage[p->idInd], &pVal[p->idInd], p->idLen) == 0)
 			{
-				memcpy(p->mirror, pVal, p->len);
+				memcpy(p->mirror, pVal, len);
+				if (mgr->isSwap)
+				{
+					Dt_swap(p->mirror, p->dt);
+				}
 			}
 		}
 		else
 		{
-			memcpy(p->mirror, pVal, p->len);
+			memcpy(p->mirror, pVal, len);
+			if (mgr->isSwap)
+			{
+				Dt_swap(p->mirror, p->dt);
+			}
 		}
 
 		pTlvBuf += mgr->tagLen + 1 + pTlvBuf[mgr->tagLen];
 	}
 }
 
-void TlvOutMgr_init(TlvOutMgr* mgr, const TlvOut* items, int itemCount,  int tagLen)
+void TlvOutMgr_init(TlvOutMgr* mgr, const TlvOut* items, int itemCount,  int tagLen, Bool isSwap)
 {
 	mgr->itemArray = items;
 	mgr->itemCount = itemCount;
 	mgr->tagLen = tagLen;
+	mgr->isSwap = isSwap;
 }
 

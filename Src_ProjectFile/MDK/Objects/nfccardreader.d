@@ -12,6 +12,7 @@
 .\objects\nfccardreader.o: ..\..\Src\Arch\_Macro.h
 .\objects\nfccardreader.o: ..\..\Src\Arch\Dbg.h
 .\objects\nfccardreader.o: ..\..\Src\Arch\Bit.h
+.\objects\nfccardreader.o: ..\..\Src\Arch\DataType.h
 .\objects\nfccardreader.o: ..\..\Src\Arch\Obj.h
 .\objects\nfccardreader.o: ..\..\Src\Arch\Utp.h
 .\objects\nfccardreader.o: ..\..\Src\Arch\SwTimer.h
@@ -67,8 +68,8 @@
 .\objects\nfccardreader.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h
 .\objects\nfccardreader.o: ..\..\Src\source\Log\LogUser.h
 .\objects\nfccardreader.o: ..\..\Src\source\Log\SysLog.h
-.\objects\nfccardreader.o: ..\..\Src\source\debug\debug.h
 .\objects\nfccardreader.o: ..\..\Src\source\drivers\drv_pm.h
+.\objects\nfccardreader.o: ..\..\Src\source\debug\Debug.h
 .\objects\nfccardreader.o: ..\..\Src\source\nfc\NfcCardReader.h
 .\objects\nfccardreader.o: ..\..\Src\source\nfc\fm175xx.h
 .\objects\nfccardreader.o: ..\..\Src\source\drivers\drv_i2c.h

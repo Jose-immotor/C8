@@ -11,4 +11,5 @@
 .\objects\hwfwver.o: ..\..\Src\Arch\_Macro.h
 .\objects\hwfwver.o: ..\..\Src\Arch\Dbg.h
 .\objects\hwfwver.o: ..\..\Src\Arch\Bit.h
+.\objects\hwfwver.o: ..\..\Src\Arch\DataType.h
 .\objects\hwfwver.o: ..\..\Src\Arch\HwFwVer.h

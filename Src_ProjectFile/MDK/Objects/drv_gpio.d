@@ -12,6 +12,7 @@
 .\objects\drv_gpio.o: ..\..\Src\Arch\_Macro.h
 .\objects\drv_gpio.o: ..\..\Src\Arch\Dbg.h
 .\objects\drv_gpio.o: ..\..\Src\Arch\Bit.h
+.\objects\drv_gpio.o: ..\..\Src\Arch\DataType.h
 .\objects\drv_gpio.o: ..\..\Src\Arch\Obj.h
 .\objects\drv_gpio.o: ..\..\Src\Arch\Utp.h
 .\objects\drv_gpio.o: ..\..\Src\Arch\SwTimer.h
@@ -67,8 +68,8 @@
 .\objects\drv_gpio.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h
 .\objects\drv_gpio.o: ..\..\Src\source\Log\LogUser.h
 .\objects\drv_gpio.o: ..\..\Src\source\Log\SysLog.h
-.\objects\drv_gpio.o: ..\..\Src\source\debug\debug.h
 .\objects\drv_gpio.o: ..\..\Src\source\drivers\drv_pm.h
+.\objects\drv_gpio.o: ..\..\Src\source\debug\Debug.h
 .\objects\drv_gpio.o: ..\..\Src\source\drivers\drv_gpio.h
 .\objects\drv_gpio.o: ..\..\Src\source\user\MsgDef.h
 .\objects\drv_gpio.o: ..\..\Src\source\user\Led.h

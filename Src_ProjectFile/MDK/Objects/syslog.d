@@ -12,6 +12,7 @@
 .\objects\syslog.o: ..\..\Src\Arch\_Macro.h
 .\objects\syslog.o: ..\..\Src\Arch\Dbg.h
 .\objects\syslog.o: ..\..\Src\Arch\Bit.h
+.\objects\syslog.o: ..\..\Src\Arch\DataType.h
 .\objects\syslog.o: ..\..\Src\Arch\Obj.h
 .\objects\syslog.o: ..\..\Src\Arch\Utp.h
 .\objects\syslog.o: ..\..\Src\Arch\SwTimer.h
@@ -67,5 +68,5 @@
 .\objects\syslog.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h
 .\objects\syslog.o: ..\..\Src\source\Log\LogUser.h
 .\objects\syslog.o: ..\..\Src\source\Log\SysLog.h
-.\objects\syslog.o: ..\..\Src\source\debug\debug.h
 .\objects\syslog.o: ..\..\Src\source\drivers\drv_pm.h
+.\objects\syslog.o: ..\..\Src\source\debug\Debug.h

@@ -12,6 +12,7 @@
 .\objects\loguser.o: ..\..\Src\Arch\_Macro.h
 .\objects\loguser.o: ..\..\Src\Arch\Dbg.h
 .\objects\loguser.o: ..\..\Src\Arch\Bit.h
+.\objects\loguser.o: ..\..\Src\Arch\DataType.h
 .\objects\loguser.o: ..\..\Src\Arch\Obj.h
 .\objects\loguser.o: ..\..\Src\Arch\Utp.h
 .\objects\loguser.o: ..\..\Src\Arch\SwTimer.h
@@ -67,6 +68,6 @@
 .\objects\loguser.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h
 .\objects\loguser.o: ..\..\Src\source\Log\LogUser.h
 .\objects\loguser.o: ..\..\Src\source\Log\SysLog.h
-.\objects\loguser.o: ..\..\Src\source\debug\debug.h
 .\objects\loguser.o: ..\..\Src\source\drivers\drv_pm.h
+.\objects\loguser.o: ..\..\Src\source\debug\Debug.h
 .\objects\loguser.o: ..\..\Src\source\drivers\drv_spi.h

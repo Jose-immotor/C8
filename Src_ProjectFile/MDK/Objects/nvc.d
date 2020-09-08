@@ -12,6 +12,7 @@
 .\objects\nvc.o: ..\..\Src\Arch\_Macro.h
 .\objects\nvc.o: ..\..\Src\Arch\Dbg.h
 .\objects\nvc.o: ..\..\Src\Arch\Bit.h
+.\objects\nvc.o: ..\..\Src\Arch\DataType.h
 .\objects\nvc.o: ..\..\Src\Arch\Obj.h
 .\objects\nvc.o: ..\..\Src\Arch\Utp.h
 .\objects\nvc.o: ..\..\Src\Arch\SwTimer.h
@@ -67,8 +68,8 @@
 .\objects\nvc.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h
 .\objects\nvc.o: ..\..\Src\source\Log\LogUser.h
 .\objects\nvc.o: ..\..\Src\source\Log\SysLog.h
-.\objects\nvc.o: ..\..\Src\source\debug\debug.h
 .\objects\nvc.o: ..\..\Src\source\drivers\drv_pm.h
+.\objects\nvc.o: ..\..\Src\source\debug\Debug.h
 .\objects\nvc.o: ..\..\Src\source\nvc\Nvc.h
 .\objects\nvc.o: ..\..\Src\source\nvc\Sif.h
 .\objects\nvc.o: ..\..\Src\source\drivers\drv_hwtimer.h

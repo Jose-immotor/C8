@@ -11,4 +11,5 @@
 .\objects\sectormgr.o: ..\..\Src\Arch\_Macro.h
 .\objects\sectormgr.o: ..\..\Src\Arch\Dbg.h
 .\objects\sectormgr.o: ..\..\Src\Arch\Bit.h
+.\objects\sectormgr.o: ..\..\Src\Arch\DataType.h
 .\objects\sectormgr.o: ..\..\Src\Arch\SectorMgr.h

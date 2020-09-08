@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2016-2020, Immotor
+ *
+ * Change Logs:
+ * Date           Author       Notes
+ * 2020-08-27     Allen      first version
+ */
+
 #ifndef __TLV_OUT_H_
 #define __TLV_OUT_H_
 
@@ -37,7 +45,7 @@ typedef struct _TlvOut
 	uint32 tag;			//Tag of TLV
 	uint32 len;			//Len of TLV
 	void* storage;		//storage data of TLV
-
+	DType dt;
 	void* mirror;		//mirror of pStorage, user for compare with storage to confirm if storage is changes.
 	TlvIsChangedFn IsChanged;	//function of changed.
 
@@ -48,7 +56,6 @@ typedef struct _TlvOut
 	uint8 idLen;	//ID信息的长度,如果为0，表示TAG唯一对应一个storage
 }TlvOut;
 
-void TlvOut_dump(const TlvOut* pItem);
 
 //Tlv 管理器
 typedef struct _TlvOutMgr
@@ -57,12 +64,33 @@ typedef struct _TlvOutMgr
 	int itemCount;
 
 	uint8 tagLen;
+
+	//来自初始化函数
+	//如果为True，则在接收和发送TLV时，对于Value的DT为16位整数和32位整数的类型自动进行大小端转换.
+	Bool isSwap;	
 }TlvOutMgr;
 
-void TlvOutMgr_init(TlvOutMgr* mgr, const TlvOut* items, int itemCount, int tagLen);
+void TlvOut_dump(const TlvOut* pItem, int tagLen, DType dt);
+
+void TlvOutMgr_init(TlvOutMgr* mgr, const TlvOut* items, int itemCount, int tagLen, Bool isSwap);
 void TlvOutMgr_updateMirror(TlvOutMgr* mgr, const uint8* pTlvBuf, int bufSize);
-int TlvOutMgr_getChanged(TlvOutMgr* mgr, uint8* pBuf, int bufSize);
+
+/******************************************
+函数功能：获取发生变化的TLV，
+函数参数：
+	mgr：Tlv管理对象指针。
+	pBuf：输出缓冲区。
+	bufSize：输出缓冲区大小。
+	tlvCount：输入输出参数，
+		作为输入参数：> 0,表示获取指定数量的TLV，=0表示不指定TLV的个数。
+		作为输出参数：获取到的TLV的个数。
+返回值：总的有效的TLV数据长度
+******************************************/
+int TlvOutMgr_getChanged(TlvOutMgr* mgr, uint8* pBuf, int bufSize, uint8* tlvCount);
+
 void TlvOutMgr_resetAll(TlvOutMgr* mgr);
+void TlvOutMgr_setFlag(TlvOutMgr* mgr, uint32 tag, TlvOutFlag flag);
+const TlvOut* TlvOutMgr_find(const TlvOut* pItems, int count, uint32 tag);
 
 #ifdef __cplusplus
 }

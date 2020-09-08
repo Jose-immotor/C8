@@ -11,6 +11,7 @@
 .\objects\tlvout.o: ..\..\Src\Arch\_Macro.h
 .\objects\tlvout.o: ..\..\Src\Arch\Dbg.h
 .\objects\tlvout.o: ..\..\Src\Arch\Bit.h
+.\objects\tlvout.o: ..\..\Src\Arch\DataType.h
 .\objects\tlvout.o: ..\..\Src\Arch\TlvOut.h
 .\objects\tlvout.o: ..\..\Src\Arch\Tlv.h
 .\objects\tlvout.o: ..\..\Src\Arch\SwTimer.h

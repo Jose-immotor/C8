@@ -12,6 +12,7 @@
 .\objects\smart_shell.o: ..\..\Src\Arch\_Macro.h
 .\objects\smart_shell.o: ..\..\Src\Arch\Dbg.h
 .\objects\smart_shell.o: ..\..\Src\Arch\Bit.h
+.\objects\smart_shell.o: ..\..\Src\Arch\DataType.h
 .\objects\smart_shell.o: ..\..\Src\Arch\Obj.h
 .\objects\smart_shell.o: ..\..\Src\Arch\Utp.h
 .\objects\smart_shell.o: ..\..\Src\Arch\SwTimer.h
@@ -67,5 +68,5 @@
 .\objects\smart_shell.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h
 .\objects\smart_shell.o: ..\..\Src\source\Log\LogUser.h
 .\objects\smart_shell.o: ..\..\Src\source\Log\SysLog.h
-.\objects\smart_shell.o: ..\..\Src\source\debug\debug.h
 .\objects\smart_shell.o: ..\..\Src\source\drivers\drv_pm.h
+.\objects\smart_shell.o: ..\..\Src\source\debug\Debug.h

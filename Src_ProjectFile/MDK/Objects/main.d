@@ -20,6 +20,7 @@
 .\objects\main.o: ..\..\Src\Arch\_Macro.h
 .\objects\main.o: ..\..\Src\Arch\Dbg.h
 .\objects\main.o: ..\..\Src\Arch\Bit.h
+.\objects\main.o: ..\..\Src\Arch\DataType.h
 .\objects\main.o: ..\..\Src\Arch\Obj.h
 .\objects\main.o: ..\..\Src\Arch\Utp.h
 .\objects\main.o: ..\..\Src\Arch\datetime.h
@@ -72,11 +73,15 @@
 .\objects\main.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h
 .\objects\main.o: ..\..\Src\source\Log\LogUser.h
 .\objects\main.o: ..\..\Src\source\Log\SysLog.h
-.\objects\main.o: ..\..\Src\source\debug\debug.h
 .\objects\main.o: ..\..\Src\source\drivers\drv_pm.h
+.\objects\main.o: ..\..\Src\source\debug\Debug.h
 .\objects\main.o: ..\..\src\source\user\led.h
 .\objects\main.o: ..\..\Src\source\JT808\JT808.h
 .\objects\main.o: ..\..\Src\Arch\HwFwVer.h
+.\objects\main.o: ..\..\Src\source\JT808\JtTlv8103.h
+.\objects\main.o: ..\..\Src\Arch\TlvIn.h
+.\objects\main.o: ..\..\Src\Arch\Tlv.h
+.\objects\main.o: ..\..\Src\Arch\TlvOut.h
 .\objects\main.o: ..\..\Src\source\CmBacktrace\cm_backtrace.h
 .\objects\main.o: ..\..\Src\source\CmBacktrace\cmb_def.h
 .\objects\main.o: ..\..\Src\source\CmBacktrace\cmb_cfg.h

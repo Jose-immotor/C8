@@ -12,6 +12,7 @@
 .\objects\led.o: ..\..\Src\Arch\_Macro.h
 .\objects\led.o: ..\..\Src\Arch\Dbg.h
 .\objects\led.o: ..\..\Src\Arch\Bit.h
+.\objects\led.o: ..\..\Src\Arch\DataType.h
 .\objects\led.o: ..\..\Src\Arch\Obj.h
 .\objects\led.o: ..\..\Src\Arch\Utp.h
 .\objects\led.o: ..\..\Src\Arch\SwTimer.h
@@ -67,8 +68,8 @@
 .\objects\led.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h
 .\objects\led.o: ..\..\Src\source\Log\LogUser.h
 .\objects\led.o: ..\..\Src\source\Log\SysLog.h
-.\objects\led.o: ..\..\Src\source\debug\debug.h
 .\objects\led.o: ..\..\Src\source\drivers\drv_pm.h
+.\objects\led.o: ..\..\Src\source\debug\Debug.h
 .\objects\led.o: ..\..\Src\source\user\led.h
 .\objects\led.o: ..\..\Src\source\drivers\drv_gpio.h
 .\objects\led.o: ..\..\Src\source\user\MsgDef.h

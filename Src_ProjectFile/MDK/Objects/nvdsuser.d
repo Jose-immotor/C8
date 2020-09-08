@@ -12,6 +12,7 @@
 .\objects\nvdsuser.o: ..\..\Src\Arch\_Macro.h
 .\objects\nvdsuser.o: ..\..\Src\Arch\Dbg.h
 .\objects\nvdsuser.o: ..\..\Src\Arch\Bit.h
+.\objects\nvdsuser.o: ..\..\Src\Arch\DataType.h
 .\objects\nvdsuser.o: ..\..\Src\Arch\Obj.h
 .\objects\nvdsuser.o: ..\..\Src\Arch\Utp.h
 .\objects\nvdsuser.o: ..\..\Src\Arch\SwTimer.h
@@ -67,6 +68,6 @@
 .\objects\nvdsuser.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h
 .\objects\nvdsuser.o: ..\..\Src\source\Log\LogUser.h
 .\objects\nvdsuser.o: ..\..\Src\source\Log\SysLog.h
-.\objects\nvdsuser.o: ..\..\Src\source\debug\debug.h
 .\objects\nvdsuser.o: ..\..\Src\source\drivers\drv_pm.h
+.\objects\nvdsuser.o: ..\..\Src\source\debug\Debug.h
 .\objects\nvdsuser.o: ..\..\Src\source\drivers\drv_spi.h

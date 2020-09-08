@@ -11,3 +11,4 @@
 .\objects\cmdline.o: ..\..\Src\Arch\_Macro.h
 .\objects\cmdline.o: ..\..\Src\Arch\Dbg.h
 .\objects\cmdline.o: ..\..\Src\Arch\Bit.h
+.\objects\cmdline.o: ..\..\Src\Arch\DataType.h

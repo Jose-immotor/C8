@@ -12,6 +12,7 @@
 .\objects\rcumap.o: ..\..\Src\Arch\_Macro.h
 .\objects\rcumap.o: ..\..\Src\Arch\Dbg.h
 .\objects\rcumap.o: ..\..\Src\Arch\Bit.h
+.\objects\rcumap.o: ..\..\Src\Arch\DataType.h
 .\objects\rcumap.o: ..\..\Src\Arch\Obj.h
 .\objects\rcumap.o: ..\..\Src\Arch\Utp.h
 .\objects\rcumap.o: ..\..\Src\Arch\SwTimer.h
@@ -67,6 +68,6 @@
 .\objects\rcumap.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h
 .\objects\rcumap.o: ..\..\Src\source\Log\LogUser.h
 .\objects\rcumap.o: ..\..\Src\source\Log\SysLog.h
-.\objects\rcumap.o: ..\..\Src\source\debug\debug.h
 .\objects\rcumap.o: ..\..\Src\source\drivers\drv_pm.h
+.\objects\rcumap.o: ..\..\Src\source\debug\Debug.h
 .\objects\rcumap.o: ..\..\Src\source\drivers\RcuMap.h

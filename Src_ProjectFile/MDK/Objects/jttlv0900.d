@@ -12,6 +12,7 @@
 .\objects\jttlv0900.o: ..\..\Src\Arch\_Macro.h
 .\objects\jttlv0900.o: ..\..\Src\Arch\Dbg.h
 .\objects\jttlv0900.o: ..\..\Src\Arch\Bit.h
+.\objects\jttlv0900.o: ..\..\Src\Arch\DataType.h
 .\objects\jttlv0900.o: ..\..\Src\Arch\Obj.h
 .\objects\jttlv0900.o: ..\..\Src\Arch\Utp.h
 .\objects\jttlv0900.o: ..\..\Src\Arch\SwTimer.h
@@ -67,8 +68,8 @@
 .\objects\jttlv0900.o: ..\..\Src\Firmware\GD32F403_standard_peripheral\Include\gd32f403_exmc.h
 .\objects\jttlv0900.o: ..\..\Src\source\Log\LogUser.h
 .\objects\jttlv0900.o: ..\..\Src\source\Log\SysLog.h
-.\objects\jttlv0900.o: ..\..\Src\source\debug\debug.h
 .\objects\jttlv0900.o: ..\..\Src\source\drivers\drv_pm.h
+.\objects\jttlv0900.o: ..\..\Src\source\debug\Debug.h
 .\objects\jttlv0900.o: ..\..\Src\source\JT808\JtTlv0900.h
 .\objects\jttlv0900.o: ..\..\Src\source\Pms\BmsReg.h
 .\objects\jttlv0900.o: ..\..\Src\Arch\TlvOut.h

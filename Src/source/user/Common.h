@@ -7,7 +7,6 @@ extern "C"{
 	
 #ifdef WIN32
 #else
-//#define XDEBUG
 #endif
 
 //#define CFG_LOG
@@ -28,10 +27,9 @@ extern "C"{
 #include "gd32f403.h"
 #include "LogUser.h"
 #include "SysLog.h"
-#include "debug.h"
 #include "drv_pm.h"
-
-
+#include "Debug.h"
+	
 #ifdef __cplusplus
 }
 #endif

@@ -190,3 +190,4 @@ static void LogDumpInd(int argc, char**argv)
 	Log_DumpByInd(g_plogMgr, ind, count);
 }
 MSH_CMD_EXPORT(LogDumpInd, LogUser_DumpByInd);
+

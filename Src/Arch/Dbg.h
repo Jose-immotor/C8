@@ -1,4 +1,12 @@
-/*********************************************************************
+/*
+ * Copyright (c) 2016-2020, Immotor
+ *
+ * Change Logs:
+ * Date           Author       Notes
+ * 2020-08-27     Allen      first version
+ */
+ 
+ /*********************************************************************
 模块功能：
 	1）支持定义最多32个调试开关位，程序中可以打开或者关闭指定的调试开关位，
 		如果打开，可以看到相应的开关位控制的信息输出。
@@ -13,25 +21,32 @@
 extern "C"{
 #endif	//#ifdef __cplusplus
 
-#ifdef XDEBUG
-
 #include "typedef.h"
 #include "Bit.h"
 
-extern uint32_t g_dwDebugLevel;
+#ifdef XDEBUG
 
-//调试开关位结构定义，用于打印输出开关位的名称
-typedef struct _DbgSwitch
-{
-	uint32_t value;		//开关位置
-	const char* name;	//开关位名称
-}DbgSwitch;
+	//默认的调试输出位开关
+	#define DL_MAIN 		BIT_0
+	#define DL_ERROR		BIT_1
+	#define DL_WARNING		BIT_2
+	//自定义的调试输出位开关必须从BIT_5开始
 
-//开关位定义宏
-#define DBG_LEV_DEF(_x) {_x, #_x}
+	#define DL_DEBUG		0xFFFFFFFF
+	extern uint32_t g_dwDebugLevel;
 
-//写Flash函数指针。
-typedef void (*DebugWriteFn)();
+	//调试开关位结构定义，用于打印输出开关位的名称
+	typedef struct _DbgSwitch
+	{
+		uint32_t value;		//开关位置
+		const char* name;	//开关位名称
+	}DbgSwitch;
+
+	//开关位定义宏
+	#define DBG_LEV_DEF(_x) {_x, #_x}
+
+	//写Flash函数指针。
+	typedef void (*DebugWriteFn)();
 
 	/*********************************************************************
 	函数功能：Debug模块初始化，初始化成功之后，Debug具备保存开关位到Flash和打印开关位功能，
@@ -59,14 +74,6 @@ typedef void (*DebugWriteFn)();
 	返回值：无
 	***********************************************************************/
 	void Dbg_SetLevel(uint32_t value);
-
-	//默认的调试输出位开关
-	#define DL_MAIN 		BIT_0
-	#define DL_ERROR		BIT_1
-	#define DL_WARNING		BIT_2
-	//自定义的调试输出位开关必须从BIT_5开始
-
-	#define DL_DEBUG		0xFFFFFFFF
 	
 	#define Assert(parenExpr) if(!(parenExpr))	\
 			{                                   \

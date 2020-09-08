@@ -1,5 +1,5 @@
 
-#include "Common.h"
+#include "ArchDef.h"
 #include "DateTime.h"
 
 extern void RTC_GetDateAndTime(S_RTC_TIME_DATA_T *sPt);

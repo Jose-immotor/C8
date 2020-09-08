@@ -11,5 +11,6 @@
 .\objects\tlvin.o: ..\..\Src\Arch\_Macro.h
 .\objects\tlvin.o: ..\..\Src\Arch\Dbg.h
 .\objects\tlvin.o: ..\..\Src\Arch\Bit.h
+.\objects\tlvin.o: ..\..\Src\Arch\DataType.h
 .\objects\tlvin.o: ..\..\Src\Arch\Tlv.h
 .\objects\tlvin.o: ..\..\Src\Arch\TlvIn.h

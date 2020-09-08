@@ -11,4 +11,5 @@
 .\objects\queue.o: ..\..\Src\Arch\_Macro.h
 .\objects\queue.o: ..\..\Src\Arch\Dbg.h
 .\objects\queue.o: ..\..\Src\Arch\Bit.h
+.\objects\queue.o: ..\..\Src\Arch\DataType.h
 .\objects\queue.o: ..\..\Src\Arch\queue.h
