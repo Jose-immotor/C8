@@ -7,8 +7,8 @@ void Boot(void)
 	Printf("Mcu reset\n");
 
 	//复位之前保存
-//	Nvds_Write_Setting();
-//	Nvds_Write_SysCfg();
+	NvdsUser_Write(NVDS_PDO_INFO);
+	NvdsUser_Write(NVDS_DBG_INFO);
 	
 	rt_thread_mdelay(100);
 	
@@ -72,27 +72,17 @@ void Enter_PowerDown()
 //	rt_pin_write(FM17522_ON, PIN_LOW);
 //	rt_pin_write(FM17522_ON1, PIN_LOW);
 //	ADC_Ctrl(ADC1, DISABLE);
-//	//SIM模组唤醒MCU
-//	bsp_sim_rx_int_enable();
-//	//设置MPU6500中断唤醒MCU
-//	power_open_acel_int();
-//	rt_pin_irq_enable(ACCEL_INT_PIN, PIN_IRQ_ENABLE);
 //	//失能 SysTick 计数器
 //	//如果这里不失能 SysTick 计数器，那么会不能进入低功耗模式的
 //	SysTick->CTRL = 0x00;//关闭定时器
 //	SysTick->VAL = 0x00;//清空val,清空定时器
 	//待机模式
 	rcu_periph_clock_enable(RCU_PMU);
-	rcu_periph_clock_enable(RCU_GPIOC);
-	gpio_init(GPIOC, GPIO_MODE_IPU, GPIO_OSPEED_50MHZ,GPIO_PIN_8);
-	nvic_irq_enable(EXTI5_9_IRQn, 2U, 0U);
-	gpio_exti_source_select(GPIO_PORT_SOURCE_GPIOC, GPIO_PIN_SOURCE_8);
-	exti_init(EXTI_8, EXTI_INTERRUPT, EXTI_TRIG_BOTH);
-	exti_interrupt_flag_clear(EXTI_8);
 	pmu_to_deepsleepmode(PMU_LDO_LOWPOWER, WFI_CMD);
 	//停止模式唤醒后，需要重新配置系统时钟
 	SystemInit();
-
+	rt_thread_mdelay(200);
+	Pms_switchStatus(PMS_ACC_OFF);
 //	/* Enable SysTick IRQ and SysTick Timer */
 //	SysTick->CTRL  = 	SysTick_CTRL_CLKSOURCE_Msk |
 //						SysTick_CTRL_TICKINT_Msk   |

@@ -15,10 +15,12 @@ static Bool g_isIoStart = False;
 //DrvIo* g_pLcdResetCtrl = Null;
 
 //所有命名包含“ON”表示高电平有效, 包含“OFF”表示低电平有效
-static DrvIo g_InIOs[1] =
+static DrvIo g_InIOs[] =
 {
-	{IO_NFC_IRQ_A, "NFC_IRQ_A", GPIOE, GPIO_PIN_15, GPIO_MODE_IN_FLOATING}//, EXTI_15, 
+	{IO_NFC_IRQ_A, "NFC_IRQ_A", GPIOE, GPIO_PIN_15, GPIO_MODE_IN_FLOATING},//, EXTI_15, 
 		//GPIO_PORT_SOURCE_GPIOE, GPIO_PIN_SOURCE_15, EXTI_TRIG_RISING}
+	{IO_GRYO_IRQ, "GYRO_IRQ", GPIOC, GPIO_PIN_8, GPIO_MODE_IN_FLOATING, EXTI_8, 
+		GPIO_PORT_SOURCE_GPIOC, GPIO_PIN_SOURCE_8, EXTI_TRIG_BOTH}
 };
 
 //所有命名包含“ON”表示高电平有效, 包含“OFF”表示低电平有效

@@ -1,4 +1,5 @@
 
+#include "common.h"
 #include "ArchDef.h"
 #include "Modbus.h"
 #include "Bit.h"
@@ -589,6 +590,11 @@ void Mod_Run(Mod * pMod)
 	}
 
 	Mod_CheckReq(pMod);
+	
+//	if()
+//		Fsm_SetActiveFlag(AF_MDB,True);
+//	else
+		Fsm_SetActiveFlag(AF_MDB,!Mod_isIdle(pMod));
 }
 
 void Mod_Init(Mod * pMod, const ModCfg * cfg, const ModFrameCfg * frameCfg)

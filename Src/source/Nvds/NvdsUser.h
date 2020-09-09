@@ -47,7 +47,17 @@ extern "C" {
 			uint8 isCanbinLock : 1;	//BIT[2]:座舱锁
 			uint8 reserved : 5;		//BIT[3-7]:保留
 		};
-
+		union
+		{
+			uint16 isOKstate;
+			struct
+			{
+				uint16 isFlashOk : 1;//BIT[0]:Flash is OK;
+				uint16 isGyroOk : 1;//BIT[1]:陀螺仪 is OK;
+	//			uint16 isCanbinLock : 1;	//BIT[2]:座舱锁
+				uint16 reserved01 : 5;		//BIT[3-7]:保留
+			};
+		};
 		uint32 resetCounter;	//复位计数器
 		uint32 timeStamp;		//时间戳，1. SM启动时会SM的本地时间同步到该值。2. 系统复位时，要保存该值
 		uint8 Reserved[16];		//保留16个字节

@@ -3,5 +3,6 @@
 #define __DRV_PM_H__
 
 void Boot(void);
+void Mcu_PowerDown();
 
 #endif //__DRV_PM_H__

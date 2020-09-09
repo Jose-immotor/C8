@@ -19,6 +19,8 @@ Mod* g_pModBus = &g_pms.modBus;
 static Battery* g_pActiveBat;	//当前正砸通信的电池
 static BmsRegCtrl g_regCtrl;		//电池控制
 
+uint32 g_ActiveFlag;
+
 //以下是命令参数定义
 const static uint8_t g_bmsID_readParam[]    = { 0x00, 0x00, 0x00, 33 };
 const static uint8_t g_bmsInfo1_readParam[] = { (uint8)(BMS_REG_INFO_ADDR_1 >> 8), (uint8)BMS_REG_INFO_ADDR_1, (uint8)(BMS_REG_INFO_COUNT_1 >> 8), (uint8)BMS_REG_INFO_COUNT_1};
@@ -84,6 +86,18 @@ const static ModFrameCfg g_frameCfg =
 	.rxIntervalMs = 1,
 	.sendCmdIntervalMs = 100,
 };
+
+void Fsm_SetActiveFlag(ActiveFlag af, Bool isActive)
+{
+	if(isActive)
+	{
+		g_ActiveFlag |= af;
+	}
+	else
+	{
+		g_ActiveFlag &= ~af;
+	}
+}
 
 //打印电池信息
 void BatteryDescDump(const Battery* desc)
@@ -204,7 +218,8 @@ void Pms_SwitchPort()
 //	g_pActiveBat = pBat;
 }
 
-static void Pms_switchStatus(PmsOpStatus newStatus)
+//static 
+void Pms_switchStatus(PmsOpStatus newStatus)
 {
 	if (newStatus == g_pms.opStatus) return;
 
@@ -226,8 +241,9 @@ static void Pms_switchStatus(PmsOpStatus newStatus)
 	else if (newStatus == PMS_DEEP_SLEEP)
 	{
 		Pms_setDischg(False);
+		Pms_setChg(False);
 	}
-
+	PFL(DL_PMS,"pms status from %d to %d",g_pms.opStatus,newStatus);
 	g_pms.opStatus = newStatus;
 	g_pms.Fsm = Pms_findStatusProcFun(newStatus);
 }
@@ -236,9 +252,9 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
 	if (msgId == PmsMsg_run)
 	{
-		if (g_pJt->isLocation)
+		if ((g_pJt->isLocation)||(SwTimer_isTimerOutEx(g_pms.statusSwitchTicks,60000)))
 		{
-			Pms_switchStatus(PMS_SLEEP);
+			Pms_switchStatus(PMS_DEEP_SLEEP);
 		}
 	}
 	else if (msgId == PmsMsg_accOn)
@@ -283,7 +299,11 @@ static void Pms_fsm_CANErr(PmsMsg msgId, uint32_t param1, uint32_t param2)
 
 static void Pms_fsm_deepSleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
-
+	if(!g_ActiveFlag)
+	{
+		PFL(DL_PMS,"pms go to sleep mode!\n");
+		Mcu_PowerDown();
+	}
 }
 
 //在任何状态下都要处理的消息函数

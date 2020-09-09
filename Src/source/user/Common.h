@@ -30,7 +30,9 @@ extern "C"{
 #include "SysLog.h"
 #include "drv_pm.h"
 #include "Debug.h"
-	
+#include "pms.h"
+
+
 #ifdef __cplusplus
 }
 #endif

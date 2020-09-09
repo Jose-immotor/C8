@@ -13,8 +13,25 @@ extern "C" {
 #include "Message.h"
 #include "NfcCardReader.h"
 #include "Battery.h"
+#include "Bit.h"
 
 #define MAX_BAT_COUNT 2
+
+	//活动标志定义，当该标志被置位时，设备不能进入睡眠。
+	typedef enum _ActiveFlag
+	{
+		 AF_MDB = BIT_0	//modbus处于工作状态
+	//	,AF_MCU_RESET = BIT_1	//MCU处于延时复位状态
+	//	,AF_NVC = BIT_2			//NVC正在播放语音
+	//	
+	//	,AF_SIM = BIT_8			//SIM模组有命令没有发完
+	//	,AF_CARBIN_LOCK = BIT_9	//正在操作座舱锁
+	//	
+	//	,AF_PMS = BIT_16			//PMS
+	//	,AF_BEACON = BIT_17			//BEACON是否连接状态
+	//	
+	//	,AF_FW_UPGRADE = BIT_24	//正在启动升级操作
+	}ActiveFlag;
 
 	//电池操作状态
 	typedef enum _PmsOpStatus
@@ -71,6 +88,8 @@ extern "C" {
 	void Pms_postMsg(PmsMsg msgId, uint32_t param1, uint32_t param2);
 
 	void Pms_NfcRead_Init(void);
+	void Pms_switchStatus(PmsOpStatus newStatus);
+	void Fsm_SetActiveFlag(ActiveFlag af, Bool isActive);
 #ifdef __cplusplus
 }
 #endif

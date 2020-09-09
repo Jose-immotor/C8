@@ -3,8 +3,6 @@
 #include "NvdsUser.h"
 #include "drv_spi.h"
 
-
-
 CfgInfo	g_cfgInfo;
 PdoInfo	g_pdoInfo;
 DbgInfo	g_degInfo;
@@ -17,6 +15,17 @@ static PdoInfo g_degInfo_mirror;
 //上面多个存储变量的公用的交换缓冲区，长度取最大值
 static uint8_t		g_exchBuf[sizeof(PdoInfo)];
 static SectorMgr    g_nvdsSecMgr[NVDS_ITEM_COUNT];
+
+void g_pdoInfo_Dump(void)
+{
+	#define PRINTF_NVDS(_field) Printf("\t%s=%d\n", #_field, g_pdoInfo._field);
+	
+	Printf("Dump g_pdoInfo:\n");
+	
+	PRINTF_NVDS(isFlashOk);
+	PRINTF_NVDS(isGyroOk);
+}
+
 
 //从Flsah读取数据
 Bool Nvde_Read(uint32 addr, void* buf, int len)
@@ -110,9 +119,10 @@ void NvdsUser_Write(NvdsID id)
 //Nvds初始化函数，使用改模块的任何功能之前，必须先调用该函数
 void NvdsUser_Init()
 {
-//	uint32_t flash_id = 0;
-//	
-//	flash_id = spi_flash_read_id();
-//	Printf("The Flash_ID:0x%X\n\r",flash_id);
+	uint32_t flash_id = 0;
+	
 	Nvds_Init(g_NvdsItems, GET_ELEMENT_COUNT(g_NvdsItems));
+	flash_id = spi_flash_read_id();
+//	Printf("The Flash_ID:0x%X\n\r",flash_id);
+	g_pdoInfo.isFlashOk = (flash_id == 0xC22015)? 1:0;
 }

@@ -73,6 +73,7 @@ typedef enum
 	CTRL_MCU_LED=0x01,		//PE11, MCU‘À––µ∆
 	IO_NFC_NPD_A,
 	IO_NFC_IRQ_A,
+	IO_GRYO_IRQ,
 	
 	
 }IO_ID;

@@ -17,6 +17,7 @@
 #include "Debug.h"
 #include "drv_rtc.h"
 #include "drv_gpio.h"
+#include "Gyro.h"
 
 int main(void)
 {
@@ -34,6 +35,7 @@ int main(void)
 	Led_init();
 	JT808_init();
 	Pms_init();
+	Gyro_Init();
 	LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_McuReset, 1);
 
 	//∂‘œÛ∆Ù∂Ø
