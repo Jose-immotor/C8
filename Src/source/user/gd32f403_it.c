@@ -36,8 +36,8 @@ OF SUCH DAMAGE.
 */
 
 #include "gd32f403_it.h"
-#include "systick.h"
-#include "main.h"
+//#include "systick.h"
+//#include "main.h"
 
 /*!
     \brief      this function handles NMI exception
@@ -161,14 +161,17 @@ void EXTI5_9_IRQHandler(void)
 //		}
     }
 }
-
+//extern void Pms_cardReaderReadFifo(void);
 void EXTI10_15_IRQHandler(void)
 {
     if(SET == exti_interrupt_flag_get(EXTI_13)){
         exti_interrupt_flag_clear(EXTI_13);
     }
+	if(SET == exti_interrupt_flag_get(EXTI_15)){
+        exti_interrupt_flag_clear(EXTI_15);
+		//Pms_cardReaderReadFifo();
+    }
 }
-
 
 /*!
     \brief      this function handles USART RBNE interrupt request and TBE interrupt request
@@ -176,8 +179,7 @@ void EXTI10_15_IRQHandler(void)
     \param[out] none
     \retval     none
 */
-extern void usart0_isr(void);
 void USART0_IRQHandler(void)
 {
-	usart0_isr();
+
 }

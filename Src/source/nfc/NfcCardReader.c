@@ -21,7 +21,7 @@ static void NfcCardReader_switchStatus(NfcCardReader* pReader, NfcCardReaderStat
 	else if (status == NfcCardReaderStatus_trans)
 	{
 	}
-
+	PFL(DL_NFC,"NFC status from %d to %d!\n",pReader->status,status);
 	pReader->status = status;
 
 	//修改状态机函数指针
@@ -35,11 +35,14 @@ static Bool NfcCardReader_searchPort(NfcCardReader* pReader, int port)
 	pReader->searchTicks = (pReader->port != port) ? 0 : GET_TICKS();
 	pReader->searchCounter = (pReader->port != port) ? 0 : (pReader->searchCounter + 1);
 
-	pReader->port = port;
+//	pReader->port = port;
 
-	//清除电池在线标志
+	
 	FM175XX_switchPort(port);
 	FM175XX_SoftReset();
+//	Write_Reg(WaterLevelReg,0x20);//设置FIFOLevel=32字节  
+//	Write_Reg(DivIEnReg,0x80);//引脚IRQ按照标准CMOS输出pad工作
+//	Write_Reg(ComIEnReg,0x2c);//允许RxIEn,HiAlerlEn,LoAlertlEn
 	if (pReader->port)
 	{
 		Set_Rf(1);
@@ -49,7 +52,7 @@ static Bool NfcCardReader_searchPort(NfcCardReader* pReader, int port)
 		Set_Rf(2);
 	}
 	Pcd_ConfigISOType(0);
-
+	PFL(DL_NFC,"NFC port[%d] search start!\n",pReader->port);
 	pReader->latestErr = TypeA_CardActivate(PICC_ATQA, PICC_UID, PICC_SAK);
 
 	if (pReader->latestErr == OK)
@@ -63,6 +66,9 @@ static Bool NfcCardReader_searchPort(NfcCardReader* pReader, int port)
 	}
 	else
 	{
+		pReader->Event(pReader->cbObj, CARD_EVENT_SEARCH_FAILED);
+		pReader->port = (pReader->port == 0) ? 1 : 0;
+		FM17522_Delayms(10);//程序延迟，不加延时会把程序跑死lane20200907
 		//保持最低低功耗
 		FM175XX_SoftPowerdown();
 	}
@@ -79,8 +85,10 @@ static void NfcCardReader_fsm_trans(NfcCardReader* pReader, uint8 msgId, uint32_
 			//设定超时事件
 			Pcd_SetTimer(300);
 			//发送数据
+			PFL(DL_NFC,"NFC send data length:%d!\n",pReader->txLen);
+			FM17522_Delayms(10);//程序延迟
 			pReader->latestErr = Pcd_Comm(Transceive, pReader->txBuf, pReader->txLen, pReader->rxBuf, &pReader->rxLen);
-
+			PFL(DL_NFC,"NFC send data error:%d(0-ok,1-err)!\n",pReader->latestErr);
 			if (pReader->latestErr != OK)
 			{
 				pReader->Event(pReader->cbObj, CARD_EVENT_TX_DATA_FAILED);
@@ -88,6 +96,7 @@ static void NfcCardReader_fsm_trans(NfcCardReader* pReader, uint8 msgId, uint32_
 			}
 			else
 			{
+				pReader->rxLen = (pReader->rxLen +7)/8;
 				pReader->Event(pReader->cbObj, CARD_EVENT_RX_DATA_SUCCESS);
 			}
 			pReader->rxLen = 0;
@@ -96,12 +105,17 @@ static void NfcCardReader_fsm_trans(NfcCardReader* pReader, uint8 msgId, uint32_
 	}
 	else if (msgId == CARD_READER_MSG_SEARCH_PORT)
 	{
-		if (pReader->port != (uint8_t)param)
-		{
-			NfcCardReader_searchPort(pReader, (uint8_t)param);
-		}
+//		if (pReader->port != (uint8_t)param)
+//		{
+//			NfcCardReader_searchPort(pReader, (uint8_t)param);
+//		}
 	}
 }
+
+//void NfcCardReader_read_fifo(NfcCardReader* pReader)
+//{
+//	nfc_intisr_cb(pReader->txBuf, pReader->txLen, pReader->rxBuf, &pReader->rxLen);
+//}
 
 static void NfcCardReader_fsm_sleep(NfcCardReader* pReader, uint8 msgId, uint32_t param)
 {
@@ -188,26 +202,36 @@ Bool NfcCardReader_Send(NfcCardReader* pReader, uint8_t port, const void* data, 
 	return True;
 }
 
-void NfcCardReader_run(NfcCardReader* pReader)
+void NfcCardReader_reset(NfcCardReader* pReader)
 {
-	//NfcCardReader_fsm(pReader, CARD_READER_MSG_RUN, 0);
+	
 }
 
-void NfcCardReader_thread_entry(NfcCardReader* pReader)
+void NfcCardReader_run(NfcCardReader* pReader)
+{
+	NfcCardReader_fsm(pReader, CARD_READER_MSG_RUN, 0);
+}
+
+void NfcCardReader_thread_entry(void* pReader)
 {
 	NfcCardReader_switchStatus(pReader, NfcCardReaderStatus_sleep);
 	while (1)
 	{
 		NfcCardReader_fsm(pReader, CARD_READER_MSG_RUN, 0);
-		rt_thread_mdelay(1);
+		rt_thread_mdelay(100);
 	}
 }
 
 void NfcCardReader_start(NfcCardReader* pReader)
 {
-	rt_thread_t led_task_tid = rt_thread_create("NfcCardReader",/* 线程名称 */
+#ifdef USE_NFC_THREAD
+	rt_thread_t nfc_task_tid = rt_thread_create("NfcCardReader",/* 线程名称 */
 		NfcCardReader_thread_entry, pReader,
-		1024, 3, 10); //
+		2048, 3, 10); //
+	rt_thread_startup(nfc_task_tid);
+#else
+	NfcCardReader_switchStatus(pReader, NfcCardReaderStatus_sleep);
+#endif
 }
 
 void NfcCardReader_init(NfcCardReader* pReader, NfcCardReader_EventFn Event, void* cbObj)
@@ -217,4 +241,6 @@ void NfcCardReader_init(NfcCardReader* pReader, NfcCardReader_EventFn Event, voi
 	pReader->status = NfcCardReaderStatus_unknown;
 	pReader->Event = Event;
 	pReader->cbObj = cbObj;
+	
+	FM17522_Init();
 }

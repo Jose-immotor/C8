@@ -27,7 +27,7 @@
 
 #include "gd32f403.h"
 
-#define I2C_SHORT_TIMEOUT 0x3ffff
+#define I2C_SHORT_TIMEOUT 0x3fff
 #define I2C_LONG_TIMEOUT 0x5fff
 
 int rt_hw_i2c_init(uint32_t i2c_periph);

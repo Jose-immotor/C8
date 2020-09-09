@@ -16,14 +16,22 @@
 /*************************************************************/
 #define FM17522_C
 #include "fm175xx.h"
-#include "ntag_app.h"
 #include "drv_i2c.h"
 #include <rtthread.h>
-
-static unsigned char g_iicPortAddr = 0;
+#include "drv_gpio.h"
 
 #define ERROR		1
 #define	OK			0
+
+#define NPD_ON		1
+#define	NPD_OFF		0
+
+static DrvIo* g_pNfcNpdAIO = Null;
+
+static unsigned char g_iicPortAddr = 0;
+
+#define FM17522_NPD_HIGHT 	PortPin_Set(g_pNfcNpdAIO->periph, g_pNfcNpdAIO->pin, NPD_ON)
+#define FM17522_NPD_LOW		PortPin_Set(g_pNfcNpdAIO->periph, g_pNfcNpdAIO->pin, NPD_OFF)
 
 //改这里的话，FM175XX_HardReset也要跟着对应修改
 const unsigned char gl_FM17522_Slave_Addr[6] = {FM17522_I2C_ADDR, FM17522_I2C_ADDR1, 0x29, 0x0f, 0x32, 0x33};
@@ -85,7 +93,7 @@ unsigned char Read_Reg(unsigned char reg_addr)
 
 rt_err_t i2c_read_fm17522_fifo(rt_uint8_t fifo_reg_addr, rt_uint8_t *fifo_buf, rt_uint8_t fifo_buf_len)
 {    
-    rt_uint8_t vl_buf[255];
+//    rt_uint8_t vl_buf[255];
 	unsigned char dev_addr;
 	
     dev_addr = Fm17522_get_slave_addr();
@@ -458,6 +466,71 @@ unsigned char Pcd_Comm(unsigned char Command,
     return result;
 }
 
+//static uint16_t RX_POINT = 0,TX_POINT=0;
+
+//void nfc_intisr_cb(unsigned char *pInData, unsigned char InLenByte,
+//					unsigned char *pOutData, unsigned int *pOutLenBit)
+//{
+//    unsigned char irq;
+//    uint16_t cnt = 0;
+//	unsigned char rx_temp;//临时数据字节长度
+//    unsigned char rx_len;//接收数据字节长度
+//    
+//	irq = Read_Reg(ComIrqReg);//查询中断标志
+
+//	if((irq & 0x04)&&(InLenByte > TX_POINT))//渐空LoAlert&&有发送请求
+//	{
+//		cnt = InLenByte-TX_POINT;
+//		if (cnt > 32)
+//		{
+//			Write_FIFO(32,pInData+TX_POINT);
+//			TX_POINT += 32;
+//		}
+//		else
+//		{
+//			Write_FIFO(InLenByte,pInData+TX_POINT);
+//			TX_POINT = TX_POINT + InLenByte;
+//		}
+//		Set_BitMask(BitFramingReg,0x80);//启动发送
+//		Write_Reg(ComIrqReg,0x04);//清除LoAlertIrq
+//	}
+//	else if(irq & 0x08)//渐满HiAlert
+//	{
+//	    rx_temp = Read_Reg(FIFOLevelReg);
+//		Read_FIFO(rx_temp, pOutData + RX_POINT); //读出FIFO内容
+//		RX_POINT = RX_POINT + rx_temp;
+//		Write_Reg(ComIrqReg,0x08);	//清除 HiAlertIRq
+//	}
+//	else if(irq & 0x20)//RxIRq
+//	{
+//	    rx_temp = Read_Reg(FIFOLevelReg);
+//		Read_FIFO(rx_temp, pOutData + RX_POINT); //读出FIFO内容
+//		RX_POINT = RX_POINT + rx_temp;
+//		Write_Reg(ComIrqReg,0x08);	//清除 HiAlertIRq
+////		*pOutLenBit = RX_POINT;
+//	}        
+//}
+
+//unsigned char nfc_frame_tx(unsigned char *pInData, unsigned char InLenByte)
+//{
+//	TX_POINT = 0;
+//	Write_Reg(ComIrqReg,0x7F);//清除IRQ标志
+//	Clear_FIFO();
+//    if(InLenByte>=32)
+//    {
+//        Write_FIFO(32,pInData);
+//        TX_POINT+=32;
+//    }
+//    else
+//    {
+//        Write_FIFO(InLenByte,pInData);
+//        TX_POINT+=InLenByte;
+//    }
+//    Set_BitMask(BitFramingReg,0x80);//启动发送
+//    return OK;
+//}
+
+
 /*********************************************/
 /*函数名：	    Pcd_SetTimer    */
 /*功能：	    设置接收延时    */
@@ -536,7 +609,7 @@ unsigned char FM175XX_HardReset(void)
 	{
 		//拉低NPD脚
 		FM17522_NPD_LOW;
-		FM17522_Delayms(1);
+		FM17522_Delayms(10);
 		//拉高NPD脚
 		FM17522_NPD_HIGHT;
 		FM17522_Delayms(10);
@@ -557,12 +630,12 @@ unsigned char FM175XX_HardReset(void)
 
 unsigned char FM175XX_switchPort(uint8_t port)
 {
-	g_iicPortAddr = port;
+	g_iicPortAddr = 0;//port;
 	if (port == 0)
 	{
 		//拉低NPD脚
 		FM17522_NPD_LOW;
-		FM17522_Delayms(1);
+		FM17522_Delayms(10);
 		//拉高NPD脚
 		FM17522_NPD_HIGHT;
 		FM17522_Delayms(10);
@@ -572,7 +645,7 @@ unsigned char FM175XX_switchPort(uint8_t port)
 	{
 		//拉低NPD脚
 		FM17522_NPD_LOW;
-		FM17522_Delayms(1);
+		FM17522_Delayms(10);
 		//拉高NPD脚
 		FM17522_NPD_HIGHT;
 		FM17522_Delayms(10);
@@ -631,40 +704,28 @@ unsigned char FM175XX_HardPowerdown(void)
 	}
 	return ERROR;
 }
-///*********************************************/
-///*函数名：	    Read_Ext_Reg    */
-///*功能：	    读取扩展寄存器    */
-///*输入参数：	reg_add，寄存器地址    */
-///*返回值：	    寄存器数值    */
-///*********************************************/
-//unsigned char Read_Ext_Reg(unsigned char reg_add)
-//{
-//    unsigned char result;
-// 	Write_Reg(0x0F,0x80+reg_add);
-//    
-// 	result = Read_Reg(0x0F);
-//    return result;
-//}
-///*********************************************/
-///*函数名：	    Write_Ext_Reg    */
-///*功能：	    写入扩展寄存器    */
-///*输入参数：	reg_add，寄存器地址；reg_value，寄存器数值    */
-///*返回值：	    OK
-//				ERROR    */
-///*********************************************/
-
-//unsigned char Write_Ext_Reg(unsigned char reg_add, unsigned char reg_value)
-//{
-//	Write_Reg(0x0F,0x40+reg_add);
-//	Write_Reg(0x0F,0xC0+reg_value);
-//	return OK;
-//} 
 
 void FM17522_Delayms(unsigned int delayms)
 {
     rt_thread_mdelay(delayms);
 	return ;
 }
+
+static void nfc_ms_timer_cb(void* parameter)
+{
+	Pcd_Comm_timer_cb();//NFC timeout
+}
+
+rt_timer_t nfc_ms_handler;
+void FM17522_Init(void)
+{
+    rt_hw_i2c_init(NFC_I2C);
+	g_pNfcNpdAIO = IO_Get(IO_NFC_NPD_A);
+	nfc_ms_handler = rt_timer_create("nfc_ms_timer", nfc_ms_timer_cb, RT_NULL, 1, RT_TIMER_FLAG_PERIODIC);
+    if (nfc_ms_handler != RT_NULL) 
+        rt_timer_start(nfc_ms_handler);
+}
+
 
 
 #endif

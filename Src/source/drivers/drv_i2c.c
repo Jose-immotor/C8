@@ -66,20 +66,11 @@ static void GPIO_Configuration_I2C(uint32_t i2c_periph)
 }
 void I2C_init(uint32_t i2c_periph)
 {
-//	rt_pin_mode(41, PIN_MODE_OUTPUT);
-//	rt_pin_mode(71, PIN_MODE_OUTPUT);
-//	rt_pin_write(41, PIN_LOW);
-//	rt_pin_write(71, PIN_LOW);
-//	rt_thread_mdelay(100);
-//	rt_pin_write(41, PIN_HIGH);	
-//	rt_pin_write(71, PIN_HIGH);
-//	rt_thread_mdelay(100);
+
     GPIO_Configuration_I2C(i2c_periph);
-//	i2c_deinit(i2c_periph);
+	i2c_deinit(i2c_periph);
     /* I2C clock configure */
     i2c_clock_config(i2c_periph, 100000, I2C_DTCY_2);
-    /* I2C address configure */
-//    i2c_mode_addr_config(i2c_periph, I2C_I2CMODE_ENABLE, I2C_ADDFORMAT_7BITS, I2C0_OWN_ADDRESS7);
     /* enable i2c_periph */
     i2c_enable(i2c_periph);
     /* enable acknowledge */
@@ -87,6 +78,8 @@ void I2C_init(uint32_t i2c_periph)
 }
 void Delay_I2C(uint32_t i)
 {
+//	rt_thread_delay(i);
+//	rt_thread_mdelay(i);
     while(i--);
 }
 void Resume_IIC(uint32_t Timeout, uint32_t i2c_periph)
@@ -96,18 +89,18 @@ void Resume_IIC(uint32_t Timeout, uint32_t i2c_periph)
     uint32_t GPIO_SCL;
     uint32_t GPIO_Pin_SDA, GPIO_Pin_SCL;
 
-    if(i2c_periph == I2C0)
-    {    
-        /* enable GPIOB clock */
-        rcu_periph_clock_enable(RCU_GPIOB);
-        /* disable i2c_periph clock */
-        rcu_periph_clock_disable(RCU_I2C0);
-        GPIO_SCL = GPIOB;
-        GPIO_Pin_SCL = GPIO_PIN_6;
-        GPIO_SDA = GPIOB;
-        GPIO_Pin_SDA = GPIO_PIN_7;
-    }
-    else if(i2c_periph == I2C1)
+//    if(i2c_periph == I2C0)
+//    {    
+//        /* enable GPIOB clock */
+//        rcu_periph_clock_enable(RCU_GPIOB);
+//        /* disable i2c_periph clock */
+//        rcu_periph_clock_disable(RCU_I2C0);
+//        GPIO_SCL = GPIOB;
+//        GPIO_Pin_SCL = GPIO_PIN_6;
+//        GPIO_SDA = GPIOB;
+//        GPIO_Pin_SDA = GPIO_PIN_7;
+//    }
+//    else if(i2c_periph == I2C1)
     {
         /* enable GPIOB clock */
         rcu_periph_clock_enable(RCU_GPIOB);
@@ -120,16 +113,16 @@ void Resume_IIC(uint32_t Timeout, uint32_t i2c_periph)
     }
     
     do{
-        gpio_init(GPIO_SCL, GPIO_MODE_AF_OD, GPIO_OSPEED_50MHZ, GPIO_Pin_SCL);
-        gpio_init(GPIO_SDA, GPIO_MODE_AF_OD, GPIO_OSPEED_50MHZ, GPIO_Pin_SDA);
+        gpio_init(GPIO_SCL, GPIO_MODE_OUT_OD, GPIO_OSPEED_50MHZ, GPIO_Pin_SCL);
+        gpio_init(GPIO_SDA, GPIO_MODE_OUT_OD, GPIO_OSPEED_50MHZ, GPIO_Pin_SDA);
         gpio_bit_reset(GPIO_SCL, GPIO_Pin_SCL);
-        Delay_I2C(20);
+        rt_thread_delay(20);
         gpio_bit_reset(GPIO_SDA, GPIO_Pin_SDA);
-        Delay_I2C(20);
+        rt_thread_delay(20);
         gpio_bit_set(GPIO_SCL, GPIO_Pin_SCL);
-        Delay_I2C(20);
+        rt_thread_delay(20);
         gpio_bit_set(GPIO_SDA, GPIO_Pin_SDA);
-        Delay_I2C(20);
+        rt_thread_delay(20);
 		Timeout--;
         if( Timeout == 0)
 		{
@@ -144,8 +137,8 @@ void Resume_IIC(uint32_t Timeout, uint32_t i2c_periph)
 }
 int gd32_i2c_read(uint32_t i2c_periph, uint8_t slave_address, uint8_t* p_buffer,uint8_t read_address,uint8_t data_byte)
 {
-//    rt_uint32_t vl_delay_cnt;
-	uint32_t I2C_Timeout = I2C_SHORT_TIMEOUT; 
+    uint32_t I2C_Timeout = I2C_SHORT_TIMEOUT; 
+	uint32_t I2CReceiveTimeout = I2C_LONG_TIMEOUT; 
 
     /* wait until I2C bus is idle */
     while((i2c_flag_get(i2c_periph, I2C_FLAG_I2CBSY)))
@@ -252,7 +245,7 @@ int gd32_i2c_read(uint32_t i2c_periph, uint8_t slave_address, uint8_t* p_buffer,
     {
         i2c_stop_on_bus(i2c_periph);
     }
-    
+    I2CReceiveTimeout = I2C_SHORT_TIMEOUT;
     /* while there is data to be read */
     while(data_byte){
         if(3 == data_byte)
@@ -310,7 +303,16 @@ int gd32_i2c_read(uint32_t i2c_periph, uint8_t slave_address, uint8_t* p_buffer,
             
             /* decrement the read bytes counter */
             data_byte--;
-        } 
+			
+			I2CReceiveTimeout = I2C_LONG_TIMEOUT;
+        }
+
+		if((I2CReceiveTimeout--) == 0) 
+		{ 
+			Resume_IIC(I2C_LONG_TIMEOUT,i2c_periph); 
+			return RT_ERROR; 
+		} 
+
     }
     
     I2C_Timeout = I2C_SHORT_TIMEOUT;
@@ -442,7 +444,8 @@ int rt_hw_i2c_init(uint32_t i2c_periph)
 
 		/* connect PB10 to I2C1_SCL, PB11 to I2C1_SDA */
 		gpio_init(GPIOB, GPIO_MODE_AF_OD, GPIO_OSPEED_50MHZ, GPIO_PIN_10 | GPIO_PIN_11);
-
+		
+		i2c_deinit(I2C1);
 		/* enable I2C clock */
 		rcu_periph_clock_enable(RCU_I2C1);
 		/* configure I2C clock */

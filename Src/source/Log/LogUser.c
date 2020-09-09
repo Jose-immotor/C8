@@ -2,24 +2,41 @@
 #include "Common.h"
 #include "LogUser.h"
 #include "SysLog.h"
+#include "drv_spi.h"
 
 LogMgr* g_plogMgr;
+
+Bool LogUserEvent(struct _LogMgr* p, const LogItem * pItem, LOG_EVENT ev)
+{
+	if(ev ==LOG_WRITE_AFTER)
+	{
+		if (g_dwDebugLevel & DL_LOG)
+		{
+			Printf("%04d:", p->record.sector.itemCount);
+			Log_Dump(p, (LogItem *)pItem, Null, Null);
+		}
+	}
+	return True;
+}
 
 //从Flsah读取数据
 Bool LogItem_FmcRead(uint32 addr, void* buf, int len)
 {
-	return False;
+	spi_flash_buffer_read(addr,buf,len);
+	return True;
 }
 
 //写数据到Flsah
 Bool LogItem_FmcWrite(uint32 addr, const void* pData, int len)
 {
-	return False;
+	spi_flash_buffer_write(addr,(uint8_t*)pData,len);
+	return True;
 }
 
 //Flsah擦除
 void LogItem_FmcErase(uint32 addr, int len)
 {
+	spi_flash_sector_erase(addr);
 }
 
 Bool LogItem_Verify(const LogItem* pItem)
@@ -42,8 +59,8 @@ void LogUser_init()
 		.logVersion = 1,
 		.moduleArray = g_logModules,
 		.moduleCount = GET_ELEMENT_COUNT(g_logModules),
-		.Event = Null,
-		.GetCurSec = Null,
+		.Event = LogUserEvent,
+		.GetCurSec = DateTime_GetSeconds,
 	};
 
 	static LogItem g_logItem;
@@ -51,7 +68,7 @@ void LogUser_init()
 
 	static const RecordCfg recordCfg = 
 	{
-		.base.startAddr = LOG_AREA_ADDR,	//待定，根据实际分配
+		.base.startAddr = EX_FLASH_LOG_AREA_ADDR,	//待定，根据实际分配
 		.base.sectorSize = EX_FLASH_SECTOR_SIZE,	//待定，根据实际定义
 		.base.storage = &g_logItem,
 		.base.storageSize = sizeof(LogItem),
@@ -63,7 +80,7 @@ void LogUser_init()
 		.base.Write = LogItem_FmcWrite,	
 		.base.Erase = LogItem_FmcErase,	
 
-		.sectorCount = 2,	//待定，根据实际分配
+		.sectorCount = 4,	//待定，根据实际分配
 	};
 
 	Log_Init(&g_logMgr, &cfg, &recordCfg);

@@ -12,6 +12,8 @@ extern "C" {
 
 #include "Nvds.h"
 
+	#define NVDS_ITEM_COUNT 3
+
 	typedef enum
 	{
 		NVDS_CFG_INFO = 1,	//配置信息区内容ID
@@ -68,6 +70,8 @@ extern "C" {
 	extern CfgInfo	g_cfgInfo;
 	extern PdoInfo	g_pdoInfo;
 	extern DbgInfo	g_degInfo;
+	
+	extern const NvdsItem g_NvdsItems[NVDS_ITEM_COUNT];
 #ifdef __cplusplus
 }
 #endif

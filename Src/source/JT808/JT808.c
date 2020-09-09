@@ -7,12 +7,15 @@
 #include "JtTlv8900.h"
 #include "JtTlv8103.h"
 #include "Ble.h"
+#include "drv_can.h"
+#include "string.h"
 
 JT808 g_Jt;
 JT808* g_pJt = &g_Jt;
 static Utp g_JtUtp;
 static uint32_t g_hbIntervalMs = 2000;	//MCU心跳时间间隔，单位Ms
 static uint8_t g_txBuf[128];
+static uint8_t g_txlen = 0;
 
 void JT808_fsm(uint8_t msgID, uint32_t param1, uint32_t param2);
 
@@ -267,19 +270,57 @@ void JT808_fsm(uint8_t msgID, uint32_t param1, uint32_t param2)
 	g_pJt->fsm(msgID, param1, param2);
 }
 
-//发送数据到总线
+void JTcmd(int argc, char** argv)
+{
+ int  cmdCode = 0;
+ sscanf(&(*argv[1]), "%d", &cmdCode);
+	switch(cmdCode)
+	{
+		case JTCMD_SIM_HB: printf("receive Utpcmd1!\r\n");rt_thread_mdelay(1); Utp_SendCmd(&g_JtUtp, cmdCode);break;
+		case JTCMD_MCU_HB: printf("receive Utpcmd2!\r\n");rt_thread_mdelay(1);	Utp_SendCmd(&g_JtUtp, cmdCode);break;
+		case JTCMD_SET_OP_STATE: printf("receive Utpcmd3!\r\n");rt_thread_mdelay(1); Utp_SendCmd(&g_JtUtp, cmdCode);break;
+
+		case 11: printf("receive Utpcmd11!\r\n");rt_thread_mdelay(1); Utp_SendCmd(&g_JtUtp, 0x11);break;
+		case 12: printf("receive Utpcmd12!\r\n");rt_thread_mdelay(1); Utp_SendCmd(&g_JtUtp, 0x12);break;
+		//case JTCMD_SET_OP_STATE: printf("receive Utpcmd3!\r\n");rt_thread_mdelay(1); Utp_SendCmd(&g_JtUtp, cmdCode);break;
+		case 80: printf("receive Utpcmd80!\r\n");rt_thread_mdelay(1); Utp_SendCmd(&g_JtUtp, 0x80);break;
+		case 160: printf("receive UtpcmdA0!\r\n");rt_thread_mdelay(1); Utp_SendCmd(&g_JtUtp, 0xA0);break;
+		case 15: printf("receive Utpcmd15!\r\n");rt_thread_mdelay(1); Utp_SendCmd(&g_JtUtp, 0x15);break;
+	}
+ 
+}
+MSH_CMD_EXPORT(JTcmd, JT808_sendCmd<uint8_t ind>);
+
+extern can_trasnmit_message_struct transmit_message;
+extern can_receive_message_struct  receive_message;
+extern FlagStatus can0_receive_flag;
+//xx 发送数据到总线 一次最多发送8个字节 发送时需判断是否到最后一包
 int JT808_txData(uint8_t cmd, const uint8_t* pData, int len)
 {
+	uint8 tx_max;
+	uint8 tx_time = 0;
+	//uint8 tx_num;
+	tx_max = (len - 1)/8 + 1;
+	for(; tx_max - 1 > tx_time; tx_time++)
+	{
+		memcpy( transmit_message.tx_data , pData , 8);	
+		transmit_message.tx_dlen = 8;
+		can_message_transmit(CAN0, &transmit_message);
+		memset( transmit_message.tx_data , 0 , sizeof(transmit_message.tx_data));
+		pData += 8;
+		rt_thread_mdelay(5);
+	}
+	memcpy( transmit_message.tx_data , pData , len-tx_time*8 );
+	transmit_message.tx_dlen = len-tx_time*8;
+	can_message_transmit(CAN0, &transmit_message);
+	memset( transmit_message.tx_data , 0 , 8);
+	rt_thread_mdelay(5);
 	//transfer data to bus.
-	//uint8_t cmdType = 0;
-	//if(cmd <= 0x03)  cmdType = 0x10
-	//else if(cmd < 0x80)  cmdType = 0x20
-	//else cmdType = 0x30
-	//CanSend(cmdType, pData, len);
 	return len;
 }
 
-//从总线上接收数据
+
+//xx 从总线上接收数据
 void JT808_rxDataProc(const uint8_t* pData, int len)
 {
 	Utp_RxData(&g_JtUtp, pData, len);
@@ -287,6 +328,19 @@ void JT808_rxDataProc(const uint8_t* pData, int len)
 
 void JT808_timerProc()
 {
+		if(can0_receive_flag == SET)
+		{
+			can0_receive_flag = RESET;
+			JT808_rxDataProc( receive_message.rx_data , receive_message.rx_dlen );
+			printf("\r\n can0 receive \r\n Data:");
+			for(uint8 vl_rx_cnt=0; vl_rx_cnt < receive_message.rx_dlen;vl_rx_cnt++)
+			{
+				printf("%02hhX ", receive_message.rx_data[vl_rx_cnt]);
+			}
+		}
+		//Utp_SendCmd(&g_JtUtp, JTCMD_MCU_HB);
+		rt_thread_mdelay(1);
+		
 }
 
 void JT808_run()
@@ -363,4 +417,9 @@ void JT808_init()
 	JtTlv8900_init();
 	JtTlv0900_init();
 	JtTlv8103_init();
+	can0_init();
+	g_txBuf[0] = 'O';
+	g_txBuf[1] = 'K';
+
+	g_txlen = 2;
 }

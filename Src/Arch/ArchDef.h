@@ -33,7 +33,7 @@ extern "C"{
 	#define GET_TICKS( ) system_ms_tick
 #endif
 
-#define CFG_LOG
+//#define CFG_LOG
 
 #include "typedef.h"	
 #include <stdarg.h>

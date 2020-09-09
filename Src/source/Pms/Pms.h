@@ -19,7 +19,7 @@ extern "C" {
 	//电池操作状态
 	typedef enum _PmsOpStatus
 	{
-		PMS_ACC_OFF	,		//熄火,初始状态
+		PMS_ACC_OFF = 1,		//熄火,初始状态
 		PMS_ACC_ON	,		//点火
 		PMS_SLEEP	,		//浅休眠
 		PMS_DEEP_SLEEP,		//深度休眠
@@ -68,8 +68,9 @@ extern "C" {
 	//从总线接收到的数据，调用该函数处理
 	void Pms_init();
 	void Pms_Rx(int nfcPort, const uint8_t* pData, int len);
-	void Pms_postMsg(uint8_t msgId, uint32_t param1, uint32_t param2);
+	void Pms_postMsg(PmsMsg msgId, uint32_t param1, uint32_t param2);
 
+	void Pms_NfcRead_Init(void);
 #ifdef __cplusplus
 }
 #endif

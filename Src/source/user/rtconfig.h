@@ -12,7 +12,7 @@
 #define RT_THREAD_PRIORITY_MAX  8
 // <o>OS tick per second
 //  <i>Default: 1000   (1ms)
-#define RT_TICK_PER_SECOND  100
+#define RT_TICK_PER_SECOND  1000
 // <o>Alignment size for CPU architecture data access
 //  <i>Default: 4
 #define RT_ALIGN_SIZE   4
@@ -28,7 +28,7 @@
 
 // <o>the size of main thread<1-4086>
 //  <i>Default: 512
-#define RT_MAIN_THREAD_STACK_SIZE     256
+#define RT_MAIN_THREAD_STACK_SIZE     2048
 
 // </h>
 
@@ -137,7 +137,7 @@
     // <o>the stack of finsh thread <1-4096>
     //  <i>the stack of finsh thread
     //  <i>Default: 4096  (4096Byte)
-    #define FINSH_THREAD_STACK_SIZE     512
+    #define FINSH_THREAD_STACK_SIZE     2048
     // <o>the history lines of finsh thread <1-32>
     //  <i>the history lines of finsh thread
     //  <i>Default: 5

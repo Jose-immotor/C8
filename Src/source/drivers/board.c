@@ -45,10 +45,14 @@ void SystemClock_Config(void)
  */
 void SysTick_Handler(void)
 {
+	//ms ticks of system, 
+	extern volatile unsigned int system_ms_tick;
+	
     /* enter interrupt */
     rt_interrupt_enter();
 
     rt_tick_increase();
+	system_ms_tick++;
 
     /* leave interrupt */
     rt_interrupt_leave();

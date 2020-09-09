@@ -2,10 +2,7 @@
 #include "ArchDef.h"
 #include "DateTime.h"
 
-void RTC_GetDateAndTime(S_RTC_TIME_DATA_T* pTd)
-{
-
-}
+extern void RTC_GetDateAndTime(S_RTC_TIME_DATA_T *sPt);
 
 S_RTC_TIME_DATA_T* DateTime_MakeRtc(int year, int month, int day, int hour, int minute, int sec)
 {

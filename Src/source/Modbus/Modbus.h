@@ -28,9 +28,10 @@ extern "C" {
 	//重发标志，无限次重发
 #define MOD_ENDLESS 0xFF
 
-#define MODBUS_CMD_IND  1
-#define MODBUS_LEN_IND  2
-#define MODBUS_DATA_IND 3
+#define MODBUS_CMD_IND  4
+#define MODBUS_LEN_IND  5
+#define MODBUS_DATA_IND 6
+//#define MODBUS_READDATA_IND 6
 
 	typedef enum
 	{
@@ -41,7 +42,7 @@ extern "C" {
 	//总线错误定义
 	typedef enum
 	{
-		BUS_ERR_OK  = 0X01,	//非法功能
+		BUS_ERR_OK  = 0X00,	//非法功能 lane 0x01->0x00
 		BUS_ERR_TX_FAILED,
 		BUS_ERR_RX_FAILED,
 	}BUS_ERR;

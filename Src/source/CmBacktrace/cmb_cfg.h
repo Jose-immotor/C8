@@ -31,7 +31,7 @@
 
 //#include <rtthread.h>
 /* print line, must config by user */
-#define cmb_println(...)               //rt_kprintf(__VA_ARGS__);rt_kprintf("\r\n")
+#define cmb_println(...)               rt_kprintf(__VA_ARGS__);rt_kprintf("\r\n")
 /* enable bare metal(no OS) platform */
 #define CMB_USING_BARE_METAL_PLATFORM
 /* OS platform type, must config when CMB_USING_OS_PLATFORM is enable */

@@ -34,11 +34,11 @@ extern "C"{
 
 	typedef enum
 	{
-		JT_STATE_INIT			= 0x00,
-		JT_STATE_SLEEP			= 0x01,
-		JT_STATE_WAKEUP			= 0x02,
-		JT_STATE_PREOPERATION	= 0x04,
-		JT_STATE_OPERATION		= 0x05,
+		JT_STATE_INIT			= 0x01,
+		JT_STATE_SLEEP			,//= 0x01,
+		JT_STATE_WAKEUP			,//= 0x02,
+		JT_STATE_PREOPERATION	,//= 0x04,
+		JT_STATE_OPERATION		,//= 0x05,
 
 		JT_STATE_UNKNOWN		= 0xFF,
 	}JT_state;

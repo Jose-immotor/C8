@@ -83,6 +83,8 @@ extern "C"{
 #endif
 
 	int Uint32_t_getMaskBit(uint32_t bitMask);
+	uint16_t bigendian16_get(uint8_t *msg);//在字符串中提取大端模式的16位数据
+	void bigendian16_put(uint8_t *msg, uint16_t data);//向字符串中输出大端模式的16位数据
 
 
 #ifdef __cplusplus

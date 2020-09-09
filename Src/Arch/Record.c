@@ -4,6 +4,8 @@
  * Change Logs:
  * Date           Author       Notes
  * 2020-08-27     Allen      first version
+ * 2020-09-08     Lane       修改Record_Init函数，由uint32 addr = secCfg->startAddr + i * secCfg->sectorSize;
+ *							改为uint32 addr = cfg->base.startAddr + i * secCfg->sectorSize;
  */
 
 #include "ArchDef.h"
@@ -234,7 +236,7 @@ void Record_Init(Record* pRecord, const RecordCfg* cfg)
 	SectorMgr* pMgr = &pRecord->sector;
 	for(i = 0; i < cfg->sectorCount; i++)
 	{
-		uint32 addr = secCfg->startAddr + i * secCfg->sectorSize;
+		uint32 addr = cfg->base.startAddr + i * secCfg->sectorSize;
 		secCfg->startAddr = addr;
 
 		if (!SectorMgr_init(pMgr, secCfg))
@@ -271,7 +273,7 @@ void Record_Init(Record* pRecord, const RecordCfg* cfg)
 	}
 
 	pRecord->writeSectorInd = writeSecInd;
-	secCfg->startAddr = secCfg->startAddr + pRecord->writeSectorInd * secCfg->sectorSize;
+	secCfg->startAddr = pRecord->cfg->base.startAddr + pRecord->writeSectorInd * secCfg->sectorSize;
 	SectorMgr_init(&pRecord->sector, &pRecord->sectorCfg);
 	Record_CalcuReadSecAddr(pRecord, 0, &pRecord->readStartSectorInd, Null);
 }

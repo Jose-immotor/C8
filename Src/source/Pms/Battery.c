@@ -1,3 +1,4 @@
+
 #include "Common.h"
 #include "Battery.h"
 #include "Modbus.h"
@@ -23,12 +24,13 @@ void Bat_msg(Battery* pBat, uint8_t msgId, uint32_t param1, uint32_t param2)
 static void Bat_onPlugOut(Battery* pBat)
 {
 	pBat->presentStatus = BAT_NOT_IN;
-
-	if (pBat->isActive)
-	{
-		Mod_Reset(g_pModBus);
-	}
-	else
+	PFL(DL_PMS,"Battery out!\n");
+	LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_BATOUT,0);
+//	if (pBat->isActive)
+//	{
+//		Mod_Reset(g_pModBus);
+//	}
+//	else
 	{
 		Mod_ResetCmds(pBat->cfg);
 	}
@@ -50,7 +52,7 @@ static void Bat_switchStatus(Battery* pBat, BmsOpStatus opStatus)
 	}
 	else if (BmsStatus_readInfo == opStatus)
 	{
-		pBat->presentStatus = BAT_IN;
+//		pBat->presentStatus = BAT_IN;
 		Bat_sendCmd(pBat, BMS_READ_INFO_1);
 		Bat_sendCmd(pBat, BMS_READ_INFO_2);
 	}
@@ -73,6 +75,7 @@ MOD_EVENT_RC Bat_event(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev)
 {
 	if (ev == MOD_REQ_SUCCESS)
 	{
+		PFL(DL_NFC,"modbus cmd[%d] req success!\n",pCmd->cmd);
 		Bat_fsm(pBat, BmsMsg_cmdDone, pCmd->cmd, ev);
 		if (BMS_WRITE_CTRL == pCmd->cmd)
 		{
@@ -87,22 +90,27 @@ MOD_EVENT_RC Bat_event(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev)
 			}
 			else
 			{
-				//设置完CTRL寄存器必须重新读取BMS_INFO
-				Bat_sendCmd(pBat, BMS_READ_INFO_1);
+				//设置完CTRL寄存器必须重新读取BMS_CTRL
+				Bat_sendCmd(pBat, BMS_READ_CTRL);
 			}
 		}
 	}
 	else if (ev == MOD_REQ_FAILED)
 	{
-		if (BMS_READ_ID == pCmd->cmd)
-		{
-			if (pCmd->pExt->rcvRspErr == MOD_RSP_TIMEOUT)
-			{
+		PFL(DL_NFC,"modbus cmd[%d] req failed!rsp code:%d\n",pCmd->cmd,pCmd->pExt->rcvRspErr);
+		
+//		if (BMS_READ_ID == pCmd->cmd)
+//		{
+//			if (pCmd->pExt->rcvRspErr == MOD_RSP_TIMEOUT)
+//			{
 				Bat_fsm(pBat, BmsMsg_batPlugout, 0, 0);
-			}
-		}
+//			}
+//		}
 	}
-
+	else if (ev == MOD_TX_START)
+	{
+		PFL(DL_NFC,"modbus cmd[%d] start!\n",pCmd->cmd);
+	}
 	return MOD_EVENT_RC_SUCCESS;
 }
 
@@ -111,6 +119,12 @@ MOD_EVENT_RC Bat_event_readBmsInfo(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EV
 {
 	if (ev == MOD_REQ_SUCCESS)
 	{
+		if(pBat->presentStatus != BAT_IN)
+		{
+			PFL(DL_PMS,"Battery in!\n");
+			LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_BATIN,
+								bigendian16_get((uint8*)&pBat->bmsInfo.soc));
+		}			
 		pBat->presentStatus = BAT_IN;
 	}
 	if (ev == MOD_CHANGED_BEFORE)
@@ -139,6 +153,7 @@ static void Bat_fsm_readInfo(Battery* pBat, uint8_t msgId, uint32_t param1, uint
 {
 	if (msgId == BmsMsg_active)
 	{
+		Bat_sendCmd(pBat, BMS_READ_ID);
 		Bat_sendCmd(pBat, BMS_READ_INFO_1);
 		Bat_sendCmd(pBat, BMS_READ_INFO_2);
 	}

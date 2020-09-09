@@ -401,7 +401,7 @@ void Log_Write(LogMgr * logMgr, uint8 moduleId, uint8 catId, uint8 subId, LogTyp
 {
 	LogItem* p = logMgr->recordCfg->base.storage;
 
-	p->dateTime = logMgr->cfg->GetCurSec ? logMgr->cfg->GetCurSec() : 0;
+	p->dateTime = logMgr->cfg->GetCurSec ? logMgr->cfg->GetCurSec(Null) : 0;
 	p->moduleId = moduleId;
 	p->subId = subId;
 	p->logType = logType;

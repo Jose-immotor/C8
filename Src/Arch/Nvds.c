@@ -79,5 +79,6 @@ void Nvds_Init(const NvdsItem* nvdsItemArray, int count)
 	for (int i = 0; i < count; i++)
 	{
 		Nvds_InitItem(p);
+		p++;
 	}
 }

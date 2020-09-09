@@ -9,13 +9,17 @@ extern "C"{
 #else
 #endif
 
-#define CFG_LOG
+//#define CFG_LOG
+#define USE_NFC_THREAD
 
 #include "ArchDef.h"
 #include "Obj.h"
 #include "Utp.h"
 #include "Bit.h"
 #include "SwTimer.h"
+#include "message.h"
+#include "queue.h"
+#include "datetime.h"
 #include "Log.h"
 #include "McuFlashMap.h"
 #include "ExternFlashMap.h"
@@ -24,6 +28,7 @@ extern "C"{
 #include "gd32f403.h"
 #include "LogUser.h"
 #include "SysLog.h"
+#include "drv_pm.h"
 #include "Debug.h"
 	
 #ifdef __cplusplus

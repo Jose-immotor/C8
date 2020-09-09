@@ -10,7 +10,10 @@ static const DbgSwitch g_defDbgSwh[] =
 	DBG_LEV_DEF(DL_CAN),
 	DBG_LEV_DEF(DL_IO),
 	DBG_LEV_DEF(DL_ADC),
-
+	DBG_LEV_DEF(DL_LOG),
+	DBG_LEV_DEF(DL_PMS),
+	DBG_LEV_DEF(DL_MDB),
+	DBG_LEV_DEF(DL_NFC),
 	DBG_LEV_DEF(DL_JT808),
 };
 

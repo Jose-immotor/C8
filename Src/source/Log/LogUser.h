@@ -9,6 +9,11 @@ extern "C" {
 	
 #ifdef CFG_LOG
 
+#define LOG_BUF_TYPE_SIZE			16
+#define LOG_BUF_MODULEID_ID_SIZE	16
+#define LOG_BUF_EVENT_ID_SIZE		32
+#define LOG_BUF_EVENT_VALUE_SIZE	256
+
 #define LOG_TRACE1(moduleId, catId, subId, eventId, __val) 			{ uint32 _val = (__val)					 ; Log_Write(g_plogMgr, moduleId, catId, subId, LT_TRACE , eventId, _val);}
 #define LOG_TRACE2(moduleId, catId, subId, eventId, b1, b0) 		{ uint32 _val = AS_UINT16(b1, b0)		 ; Log_Write(g_plogMgr, moduleId, catId, subId, LT_TRACE , eventId, _val);}
 #define LOG_TRACE3(moduleId, catId, subId, eventId, asU16H, asU16L) { uint32 _val = (asU16H << 16) | asU16L	 ; Log_Write(g_plogMgr, moduleId, catId, subId, LT_TRACE , eventId, _val);}
@@ -30,6 +35,9 @@ extern "C" {
 		LogModuleID_2,
 	}LogModuleID;
 
+//	#define LOG_TRACE1(moduleId, catId, subId, eventId, __val) \
+//		{uint32 _val = (__val);LogUser_Write(moduleId, catId, subId, LT_TRACE , eventId, _val);}
+	
 	void LogUser_init();
 
 	extern LogMgr* g_plogMgr;

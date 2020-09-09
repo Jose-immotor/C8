@@ -3,7 +3,7 @@
 #ifndef FM175XX_H
 #define FM175XX_H
 
-//#include "drv_gpio.h"
+#include "drv_i2c.h"
 
 #define CommandReg	0x01
 #define ComIEnReg	0x02
@@ -88,15 +88,6 @@
 //NFC1
 #define FM17522_I2C_ADDR1 0x29
 
-
-////NFC0
-//#define FM17522_NPD             GET_PIN(E,14)//45//PE14
-//#define FM17522_IRQ             GET_PIN(E,2)//1//46//PE15
-//#define FM17522_ON				GET_PIN(E,10)//41//PE10
-////NFC1
-//#define FM17522_NPD1            GET_PIN(C,6)//63//PC6
-//#define FM17522_ON1             GET_PIN(A,12)//71//PA12
-
 unsigned char Fm17522_get_slave_addr(void);
 void Pcd_Comm_timer_cb(void);
 
@@ -108,6 +99,9 @@ unsigned char Clear_FIFO(void);
 unsigned char Set_BitMask(unsigned char reg_addr, unsigned char mask);
 unsigned char Clear_BitMask(unsigned char reg_addr, unsigned char mask);
 unsigned char Set_Rf(unsigned char mode);
+//void nfc_intisr_cb(unsigned char *pInData, unsigned char InLenByte,
+//					unsigned char *pOutData, unsigned int *pOutLenBit);
+unsigned char nfc_frame_tx(unsigned char *pInData, unsigned char InLenByte);
 unsigned char Pcd_Comm(unsigned char Command, unsigned char *pInData, unsigned char InLenByte, unsigned char *pOutData, unsigned int *pOutLenBit);
 unsigned char Pcd_SetTimer(unsigned long delaytime);
 unsigned char Pcd_ConfigISOType(unsigned char type);
@@ -121,6 +115,7 @@ GLOBAL_FM17522 unsigned char i2c_fm17522_addr_init(void);
 GLOBAL_FM17522 unsigned char FM175XX_HardPowerdown(void);
 
 unsigned char FM175XX_switchPort(unsigned char port);
+void FM17522_Init(void);
 
 #endif
 

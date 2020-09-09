@@ -16,8 +16,14 @@ BIT_0 - BIT_3
 #define DL_CAN 		BIT_4
 #define DL_IO		BIT_5
 #define DL_ADC		BIT_6
-
+#define DL_LOG		BIT_7
+#define DL_PMS		BIT_8
+#define DL_MDB		BIT_9
+#define DL_NFC		BIT_10
 #define DL_JT808	BIT_12
+
+
+void Debug_Init();
 
 #ifdef __cplusplus
 }
