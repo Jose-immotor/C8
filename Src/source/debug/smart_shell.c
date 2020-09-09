@@ -53,4 +53,16 @@ static void SelfTest(void)
 
 }
 MSH_CMD_EXPORT(SelfTest , SelfTest board);
+
+static void SelfTest1(void)
+{
+//	extern void ErrList_Dump(void);
+	__IO uint32_t sn0=*(__IO uint32_t*)(0x1FFFF7E8);
+	__IO uint32_t sn1=*(__IO uint32_t*)(0x1FFFF7EC);
+	__IO uint32_t sn2=*(__IO uint32_t*)(0x1FFFF7F0);
+	
+	Printf("\r\nsID: %X%X%X\r\n",sn2,sn1,sn0);
+
+}
+MSH_CMD_EXPORT(SelfTest1 , SelfTest1 board);
 #endif

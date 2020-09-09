@@ -16,6 +16,8 @@ extern "C"{
 #endif
 
 #include "ArchDef.h"
+#include "CmdLineDef.h"
+
 /*
 //Typedef ============================================
 #ifdef _WINDOWS
@@ -41,6 +43,7 @@ typedef int int32;
 #define False 	0
 #define Null	0
 */
+
 ////////////////////////////////////////////////////////
 #define	KEY_CR		'\n'
 #define	KEY_LF		'\r'
@@ -79,34 +82,45 @@ typedef enum _ArgType
 
 
 #define MAX_ARG_COUNT  5
+typedef struct _CmdFnEx
+{
+	//参数总数
+	uint8 argCount;
+}CmdFnEx;
+
 typedef struct _FnDef
 {
-	void* 			pFn;
-	const char* 	m_Title;
-	int8 			m_ArgCount;
+	void* 			Proc;
+	const char* 	title;
+	CmdFnEx*  ex;
 }FnDef;
 
 typedef void (*OutPutFun)(const char* string);
 #define MAX_CMDLINE_LEN 64
-typedef struct _CmdLine
-{
-	unsigned char m_isEcho:1;
-	unsigned char m_Reserved:7;
-	
-	unsigned char m_CmdLineStrLen;
-	char  m_CmdLineStr[MAX_CMDLINE_LEN + 1];
-	
-	FnDef* m_FnArray;	//Point to a FnDef array
-	unsigned char m_FnCount;	//Nunber of FnDef array
 
+typedef struct _CmdLineCfg
+{
+	char* cmdLineBuf;			//命令长度Buffer
+	const FnDef* cmdHandlerArray;	//命令处理函数数组
+	unsigned char cmdHandlerCount;	//命令处理函数数组长度
 	OutPutFun printf;
+}CmdLineCfg;
+
+typedef struct CmdLine
+{
+	unsigned char isEcho:1;	//是否输入回显
+	unsigned char m_Reserved:7;
+
+	unsigned char cmdLineLen;	//命令行字符串长度
+	const CmdLineCfg* cfg;		//命令行配置结构指针
 }CmdLine;
+
 extern CmdLine g_CmdLine;
 
-void CmdLine_Init(FnDef* pCmdTable, unsigned char cmdTableCount, Bool isEcho, OutPutFun printf);
+void CmdLine_Init(CmdLine* cmdLine, const CmdLineCfg* cfg, Bool isEcho);
 int CmdLine_GetArgCount(const char* str);
-void CmdLine_AddStrEx(const char* str, int len);
-void CmdLine_AddStr(const char* str);
+void CmdLine_AddStrEx(CmdLine* cmdLine, const char* str, int len);
+void CmdLine_AddStr(CmdLine* cmdLine, const char* str);
 
 #ifdef __cplusplus
 }

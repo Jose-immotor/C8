@@ -12,7 +12,39 @@
 #include "CmdLine.h"
 #include <stdarg.h>
 
-extern int str_htoi(const char *s);
+ //函数功能：16进制数字的字符串转换为整数，例如："0x1234" => 0x1234
+ //可以用标准库函数代替：strtol 
+int htoi(const char* s)
+{
+	int n = 0;
+
+	if (!s) return 0;
+
+	if (*s == '0')
+	{
+		s++;
+		if (*s == 'x' || *s == 'X')s++;
+	}
+
+	while (*s != '\0')
+	{
+		if (*s <= '9' && *s >= '0')
+		{
+			n <<= 4;
+			n |= (*s & 0xf);
+		}
+		else if ((*s <= 'F' && *s >= 'A') || (*s <= 'f' && *s >= 'a'))
+		{
+			n <<= 4;
+			n |= ((*s & 0xf) + 9);
+		}
+		else
+			break;
+		s++;
+	}
+	return n;
+}
+
 /*
 支持的命令格式如下:
 Test(1,2,3,4,5) 最多支持输入5个参数
@@ -23,8 +55,6 @@ Test 1 "str"
 支持简写输入
 
 */
-
-static CmdLine g_CmdLine;
 
 #if 0
 #define CmdLine_Strtok strtok
@@ -88,7 +118,7 @@ End:
 #endif
 
 
-int CmdLine_Printf(const char* lpszFormat, ...)
+int CmdLine_Printf(CmdLine* pCmdLine, const char* lpszFormat, ...)
 {
 	int nLen = 0;
 	va_list ptr;
@@ -100,21 +130,21 @@ int CmdLine_Printf(const char* lpszFormat, ...)
 	nLen = vsnprintf(g_Pfbuffer, sizeof(g_Pfbuffer), lpszFormat, ptr);
 	va_end(ptr);
 	
-	if(g_CmdLine.printf) g_CmdLine.printf(g_Pfbuffer);
+	if(pCmdLine->cfg->printf) pCmdLine->cfg->printf(g_Pfbuffer);
 	
 	//UNLOCK();
 
 	return nLen;
 }
 
-void CmdLine_Help()
+void CmdLine_Help(CmdLine* pCmdLine)
 {
 	int i = 0;
-	const FnDef* pFnDef = g_CmdLine.m_FnArray;
+	const FnDef* pFnDef = pCmdLine->cfg->cmdHandlerArray;
 	
-	for(i = 0; i < g_CmdLine.m_FnCount; i++, pFnDef++)
+	for(i = 0; i < pCmdLine->cfg->cmdHandlerCount; i++, pFnDef++)
 	{		
-		CmdLine_Printf("\t %s\n", pFnDef->m_Title);
+		CmdLine_Printf(pCmdLine, "\t %s\n", pFnDef->title);
 	}
 }
 
@@ -145,7 +175,7 @@ ArgType CmdLine_GetArgType(const char* argStr)
 	}
 }
 
-Bool CmdLine_Parse(char* cmdLineStr, char** pFnName, char* pArgs[], int* argCount)
+Bool CmdLine_Parse(CmdLine* pCmdLine, char* cmdLineStr, char** pFnName, char* pArgs[], int* argCount)
 {
 	int maxArgCount = *argCount;
 	char *token;
@@ -164,7 +194,7 @@ Bool CmdLine_Parse(char* cmdLineStr, char** pFnName, char* pArgs[], int* argCoun
 		pArgs[(*argCount)++] = token;
 		if((*argCount) > maxArgCount)
 		{
-			CmdLine_Printf("PF_ERROR: Arg count is too many\n");
+			CmdLine_Printf(pCmdLine, "PF_ERROR: Arg count is too many\n");
 			return False;
 		}
 		token = CmdLine_Strtok( NULL, argSeps);
@@ -173,7 +203,7 @@ Bool CmdLine_Parse(char* cmdLineStr, char** pFnName, char* pArgs[], int* argCoun
 	return True;
 }
 
-Bool CmdLine_ArgConvert(char* pArgs[], int argCount, uint32 arg[])
+Bool CmdLine_ArgConvert(CmdLine* pCmdLine, char* pArgs[], int argCount, uint32 arg[])
 {
 	int i = 0;
 	ArgType at = ARGT_NONE;
@@ -188,7 +218,7 @@ Bool CmdLine_ArgConvert(char* pArgs[], int argCount, uint32 arg[])
 		}
 		else if(ARGT_HEX == at)
 		{
-			arg[i] = str_htoi(pArgs[i]);
+			arg[i] = htoi(pArgs[i]);
 		}
 		else if(ARGT_STR == at)
 		{
@@ -199,75 +229,92 @@ Bool CmdLine_ArgConvert(char* pArgs[], int argCount, uint32 arg[])
 		}
 		else
 		{
-			CmdLine_Printf("\tArg[%d](%s) error. \n", i+1, pArgs[i]);
+			CmdLine_Printf(pCmdLine, "\tArg[%d](%s) error. \n", i+1, pArgs[i]);
 			return False;
 		}
 	}
 	return True;
 }
 
-void CmdLine_Exe(CmdLine* pCmdLine, const char* pFnName, uint32 arg[], int argCount)
+/*****************************************************************
+函数功能：在命令表中查找函数名称，支持模糊查询。
+函数参数：
+	pCmdLine：命令行对象。
+	pFnName：函数名称。
+	pFoundEntry：查找到的第一个匹配项。
+返回值：匹配项数量。
+*****************************************************************/
+static int CmdLine_Find(CmdLine* pCmdLine, const char* pFnName, const FnDef** pFoundEntry)
 {
-	Bool isFind = 0;
-	int i = 0;
-	const FnDef* pFnEntry = pCmdLine->m_FnArray;
-	const FnDef* pFoundEntry = Null;
-	
-	#define FUN(n, funType, args) if(n == pFoundEntry->m_ArgCount)	\
-		{	\
-			((funType)pFoundEntry->pFn) args;	\
-			return;	\
-		}
+	int isFind = 0;
+	const FnDef* pFnEntry = pCmdLine->cfg->cmdHandlerArray;
 
-	for(i = 0; i < pCmdLine->m_FnCount; i++, pFnEntry++)
+	for (int i = 0; i < pCmdLine->cfg->cmdHandlerCount; i++, pFnEntry++)
 	{
-		if(strcmp(pFnName, "?") == 0)
-		{
-			CmdLine_Help();
-			return;
-		}
-
 		//和函数名部分比较
-		if(strstr(pFnEntry->m_Title, pFnName) == pFnEntry->m_Title)
+		if (strstr(pFnEntry->title, pFnName) == pFnEntry->title)
 		{
 			char* str;
-			
+
 			isFind++;
-			
-			if(Null == pFoundEntry)
-				pFoundEntry = pFnEntry;
+
+			if (Null == pFoundEntry)
+			{
+				*pFoundEntry = pFnEntry;
+			}
 
 			//查找函数名
-			str	= strchr(pFnEntry->m_Title, '(');
-			if(Null == str)
-				str	= strchr(pFnEntry->m_Title, ' ');
-			
-			if(Null == str) continue;
+			str = strchr(pFnEntry->title, '(');
+			if (Null == str)
+				str = strchr(pFnEntry->title, ' ');
+
+			if (Null == str) continue;
 
 			//和函数名完全比较
-			if(memcmp(pFnEntry->m_Title, pFnName, str - pFnEntry->m_Title) == 0)
+			if (memcmp(pFnEntry->title, pFnName, str - pFnEntry->title) == 0)
 			{
 				isFind = 1;
-				pFoundEntry = pFnEntry;
+				*pFoundEntry = pFnEntry;
 				break;
 			}
 		}
 	}
+	return isFind;
+}
 
-	if(0 == isFind)
+void CmdLine_Exe(CmdLine* pCmdLine, const char* pFnName, uint32 arg[], int argCount)
+{
+	Bool findCount = 0;
+	const FnDef* pFoundEntry = Null;
+	
+	#define FUN(n, funType, args) if(n == pFoundEntry->ex->argCount)	\
+		{	\
+			((funType)pFoundEntry->Proc) args;	\
+			return;	\
+		}
+
+	if(strcmp(pFnName, "?") == 0)
 	{
-		CmdLine_Printf("Unknown: %s\n", pFnName);
+		CmdLine_Help(pCmdLine);
 		return;
 	}
-	else if(isFind > 1)
+
+	findCount = CmdLine_Find(pCmdLine, pFnName, &pFoundEntry);
+
+	if(0 == findCount)
+	{
+		CmdLine_Printf(pCmdLine, "Unknown: %s\n", pFnName);
+		return;
+	}
+	else if(findCount > 1)
 	{
 		//如果找出的函数名多于一个，则打印所有的部分比较正确的函数名
-		pFnEntry = pCmdLine->m_FnArray;
-		for(i = 0; i < pCmdLine->m_FnCount; i++, pFnEntry++)
+		const FnDef* pFnEntry = pCmdLine->cfg->cmdHandlerArray;
+		for(int i = 0; i < pCmdLine->cfg->cmdHandlerCount; i++, pFnEntry++)
 		{
-			if(strstr(pFnEntry->m_Title, pFnName) == pFnEntry->m_Title)
+			if(strstr(pFnEntry->title, pFnName) == pFnEntry->title)
 			{
-				CmdLine_Printf("%s\n", pFnEntry->m_Title);
+				CmdLine_Printf(pCmdLine, "%s\n", pFnEntry->title);
 			}
 		}
 		return;
@@ -323,39 +370,38 @@ int CmdLine_GetArgCount(const char* str)
 
 void CmdLine_Reset(CmdLine* pCmdLine)
 {
-	if(pCmdLine->m_isEcho)
-		CmdLine_Printf("->");
+	if(pCmdLine->isEcho)
+		CmdLine_Printf(pCmdLine, "->");
 	
-	memset(pCmdLine->m_CmdLineStr, 0, sizeof(pCmdLine->m_CmdLineStr));
-	pCmdLine->m_CmdLineStrLen = 0;
+	memset(pCmdLine->cfg->cmdLineBuf, 0, sizeof(pCmdLine->cfg->cmdLineBuf));
+	pCmdLine->cmdLineLen = 0;
 }
 
-void CmdLine_AddStr(const char* str)
+void CmdLine_AddStr(CmdLine* pCmdLine, const char* str)
 {
-	CmdLine_AddStrEx(str, strlen(str));
+	CmdLine_AddStrEx(pCmdLine, str, strlen(str));
 }
 
-void CmdLine_AddStrEx(const char* str, int len)
+void CmdLine_AddStrEx(CmdLine* pCmdLine, const char* str, int len)
 {
 	int i = 0;
-	CmdLine* pCmdLine = &g_CmdLine;
-	char* pBuf = pCmdLine->m_CmdLineStr;
+	char* pBuf = pCmdLine->cfg->cmdLineBuf;
 
 	for(i = 0; i < len; i++, str++)
 	{
-		if(pCmdLine->m_CmdLineStrLen >= MAX_CMDLINE_LEN)
+		if(pCmdLine->cmdLineLen >= MAX_CMDLINE_LEN)
 		{
 			CmdLine_Reset(pCmdLine);
 		}
 		
-		if(pCmdLine->m_isEcho)
+		if(pCmdLine->isEcho)
 		{
-			CmdLine_Printf("%c", *str);
+			CmdLine_Printf(pCmdLine, "%c", *str);
 		}
 		
 		if(*str != KEY_CR && *str != KEY_LF)
 		{
-			pBuf[pCmdLine->m_CmdLineStrLen++] = *str;
+			pBuf[pCmdLine->cmdLineLen++] = *str;
 		}
 		if(KEY_CR == *str)// || ')' == *str)
 		{
@@ -363,17 +409,17 @@ void CmdLine_AddStrEx(const char* str, int len)
 			char* argStr[MAX_ARG_COUNT] = {0};
 			int argCount = MAX_ARG_COUNT;
 			
-			if(('\r' == pBuf[0] && pCmdLine->m_CmdLineStrLen == 1) || 0 == pCmdLine->m_CmdLineStrLen)
+			if(('\r' == pBuf[0] && pCmdLine->cmdLineLen == 1) || 0 == pCmdLine->cmdLineLen)
 			{
 				CmdLine_Reset(pCmdLine);
 				return;
 			}
 
-			if(CmdLine_Parse(pBuf, &pFnName, argStr, &argCount))
+			if(CmdLine_Parse(pCmdLine, pBuf, &pFnName, argStr, &argCount))
 			{
 				uint32 arg[MAX_ARG_COUNT] = {0};
 
-				if(CmdLine_ArgConvert(argStr, argCount, arg))
+				if(CmdLine_ArgConvert(pCmdLine, argStr, argCount, arg))
 				{
 					CmdLine_Exe(pCmdLine, pFnName, arg, argCount);
 				}
@@ -383,28 +429,24 @@ void CmdLine_AddStrEx(const char* str, int len)
 	}
 }
 
-void CmdLine_Init(FnDef* pCmdTable, uint8 cmdTableCount, Bool isEcho, OutPutFun printf)
+void CmdLine_Init(CmdLine* cmdLine, const CmdLineCfg* cfg, Bool isEcho)
 {
 	int i = 0;
-	FnDef* pFnEntry = pCmdTable;
 	
-	memset(&g_CmdLine, 0, sizeof(CmdLine));
+	memset(cmdLine, 0, sizeof(CmdLine));
 	
-	g_CmdLine.m_isEcho = isEcho;
+	cmdLine->isEcho = isEcho;
 
-	g_CmdLine.m_FnArray = pCmdTable;
-	g_CmdLine.m_FnCount = cmdTableCount;
-	g_CmdLine.printf = printf;
-
-	for(i = 0; i < cmdTableCount; i++, pFnEntry++)
+	const FnDef* fn = cfg->cmdHandlerArray;
+	for(i = 0; i < cfg->cmdHandlerCount; i++, fn++)
 	{
-		int argCount = CmdLine_GetArgCount(pFnEntry->m_Title);
+		int argCount = CmdLine_GetArgCount(fn->title);
 		if(argCount < 0 || argCount > MAX_ARG_COUNT)
 		{
-			CmdLine_Printf("[%s] error, get arg count[%d] error.\n", pFnEntry->m_Title, pFnEntry->m_ArgCount);
+			CmdLine_Printf(cmdLine, "[%s] error, get arg count[%d] error.\n", fn->title, argCount);
 		}
 		
-		pFnEntry->m_ArgCount = (int8)argCount;
+		fn->ex->argCount = (int8)argCount;
 	}
 }
 

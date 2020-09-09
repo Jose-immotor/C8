@@ -23,11 +23,12 @@ Bool BleTpu_verify(BleTpu* pBleTpu, const uint8_t* pReq, int frameLen)
 static UTP_EVENT_RC BleTpu_Event(BleTpu* pBleTpu, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
 	const UtpCfg* cfg = pBleTpu->cfg;
-	UTP_EVENT_RC op = pCmd->Event ? pCmd->Event(cfg->pCbObj, pCmd, ev) : UTP_EVENT_RC_SUCCESS;
 	UTP_EVENT_RC opRc = cfg->TresferEvent ? cfg->TresferEvent(cfg->pCbObj, pCmd, ev) : UTP_EVENT_RC_SUCCESS;
+	if (opRc != UTP_EVENT_RC_SUCCESS) return opRc;
 
-	//2个返回值，只要有一个为非UTP_EVENT_RC_SUCCESS，返回失败值
-	return (op == UTP_EVENT_RC_SUCCESS) ? opRc : op;
+	opRc = pCmd->Event ? pCmd->Event(cfg->pCbObj, pCmd, ev) : UTP_EVENT_RC_SUCCESS;
+
+	return opRc;
 }
 
 uint8* BleTpu_ReqProc(BleTpu* pBleTpu, const uint8_t* pReq, int frameLen, uint8* rspLen)

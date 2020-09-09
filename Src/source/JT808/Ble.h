@@ -8,6 +8,7 @@ extern "C"{
 
 #include "typedef.h"
 #include "Pms.h"
+#include "BleUser.h"
 
 #define BLE_MAC_SIZE		6
 #define SERIAL_NUM_SIZE		6
@@ -65,6 +66,8 @@ extern "C"{
 #define ERR_USERID_LEN_INVALID  0x05
 #define ERR_USERID_INVALID		0x0B
 #define ERR_BAT_NOT_IN_PRESENT	0x0C
+#define ERR_RECORD_INVALID		0x0D	//记录号无效
+#define ERR_CMD_NOT_ALLOW		0x0E	//命令不允许执行
 
 #pragma pack(1)
 
@@ -160,6 +163,7 @@ extern "C"{
 		uint8 isLowpower;
 
 		uint8 mac[6];
+		BleUser user;
 
 		char hwVer[10];
 		char fwVer[30];
