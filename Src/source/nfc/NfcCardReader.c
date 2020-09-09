@@ -209,7 +209,7 @@ void NfcCardReader_reset(NfcCardReader* pReader)
 
 void NfcCardReader_run(NfcCardReader* pReader)
 {
-	//NfcCardReader_fsm(pReader, CARD_READER_MSG_RUN, 0);
+	NfcCardReader_fsm(pReader, CARD_READER_MSG_RUN, 0);
 }
 
 void NfcCardReader_thread_entry(void* pReader)
@@ -224,11 +224,14 @@ void NfcCardReader_thread_entry(void* pReader)
 
 void NfcCardReader_start(NfcCardReader* pReader)
 {
+#ifdef USE_NFC_THREAD
 	rt_thread_t nfc_task_tid = rt_thread_create("NfcCardReader",/* Ïß³ÌÃû³Æ */
 		NfcCardReader_thread_entry, pReader,
 		2048, 3, 10); //
 	rt_thread_startup(nfc_task_tid);
-	
+#else
+	NfcCardReader_switchStatus(pReader, NfcCardReaderStatus_sleep);
+#endif
 }
 
 void NfcCardReader_init(NfcCardReader* pReader, NfcCardReader_EventFn Event, void* cbObj)

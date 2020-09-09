@@ -377,7 +377,9 @@ NfcCardReaderEventRc Pms_cardReaderEventCb(Pms* pms, NfcCardReaderEvent ev)
 
 void Pms_run()
 {
-//	NfcCardReader_run(&g_pms.cardReader);
+#ifndef USE_NFC_THREAD
+	NfcCardReader_run(&g_pms.cardReader);
+#endif
 	Mod_Run(g_pModBus);
 	Bat_run(&g_Bat[0]);
 //	Bat_run(&g_Bat[1]);
