@@ -295,7 +295,7 @@ extern can_trasnmit_message_struct transmit_message;
 extern can_receive_message_struct  receive_message;
 extern FlagStatus can0_receive_flag;
 //xx 发送数据到总线 一次最多发送8个字节 发送时需判断是否到最后一包
-int JT808_txData(const uint8_t* pData, int len)
+int JT808_txData(uint8_t cmd, const uint8_t* pData, int len)
 {
 	uint8 tx_max;
 	uint8 tx_time = 0;
@@ -313,7 +313,7 @@ int JT808_txData(const uint8_t* pData, int len)
 	memcpy( transmit_message.tx_data , pData , len-tx_time*8 );
 	transmit_message.tx_dlen = len-tx_time*8;
 	can_message_transmit(CAN0, &transmit_message);
-	memcpy( transmit_message.tx_data , 0 , 8);
+	memset( transmit_message.tx_data , 0 , 8);
 	rt_thread_mdelay(5);
 	//transfer data to bus.
 	return len;

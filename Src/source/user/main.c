@@ -32,7 +32,7 @@ int main(void)
 	NvdsUser_Init();
 	LogUser_init();
 	Led_init();
-//	JT808_init();
+	JT808_init();
 	Pms_init();
 	LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_McuReset, 1);
 

@@ -86,3 +86,4 @@
 .\objects\jt808.o: ..\..\Src\source\Modbus\ModBus.h
 .\objects\jt808.o: ..\..\Src\source\nfc\NfcCardReader.h
 .\objects\jt808.o: ..\..\Src\source\Pms\Battery.h
+.\objects\jt808.o: ..\..\Src\source\drivers\drv_can.h

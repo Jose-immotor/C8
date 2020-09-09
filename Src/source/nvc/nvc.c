@@ -256,4 +256,4 @@ static int app_nvc_init(void)
 		rt_kprintf("\n!!create thread ble failed!\n");
     return 0;
 }
-INIT_APP_EXPORT(app_nvc_init);
+//INIT_APP_EXPORT(app_nvc_init);

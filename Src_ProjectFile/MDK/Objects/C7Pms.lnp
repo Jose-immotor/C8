@@ -73,6 +73,7 @@
 ".\objects\drv_gpio.o"
 ".\objects\drv_rtc.o"
 ".\objects\drv_pm.o"
+".\objects\drv_can.o"
 ".\objects\gd32f403_it.o"
 ".\objects\main.o"
 ".\objects\led.o"

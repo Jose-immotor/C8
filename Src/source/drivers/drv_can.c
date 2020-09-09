@@ -58,10 +58,10 @@ void can_start()
     /* configure CAN0 NVIC */
     nvic_irq_enable(CAN0_RX0_IRQn,0,0);
     nvic_irq_enable(CAN0_TX_IRQn,1,1);
-    rt_thread_t can_task_tid= rt_thread_create("can_send_rec",/* can收发 */
-                        can_thread_entry, RT_NULL,
-                        1024,2, 10); //
-    rt_thread_startup(can_task_tid);
+//    rt_thread_t can_task_tid= rt_thread_create("can_send_rec",/* can收发 */
+//                        can_thread_entry, RT_NULL,
+//                        1024,2, 10); //
+//    rt_thread_startup(can_task_tid);
 }
 void can_sleep()
 {
