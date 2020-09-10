@@ -455,42 +455,22 @@ int rt_hw_i2c_init(uint32_t i2c_periph)
 		/* enable acknowledge */
 		i2c_ack_config(I2C1,I2C_ACK_ENABLE);   
 	}
+	else if(i2c_periph == I2C0)
+	{
+		#define I2C0_SPEED  100000
+		/* enable GPIOB clock */
+		rcu_periph_clock_enable(RCU_GPIOB);
+		/* connect PB6 to I2C0_SCL, PB7 to I2C0_SDA */
+		gpio_init(GPIOB, GPIO_MODE_AF_OD, GPIO_OSPEED_50MHZ, GPIO_PIN_6 | GPIO_PIN_7);
+		i2c_deinit(I2C0);
+		/* enable I2C clock */
+		rcu_periph_clock_enable(RCU_I2C0);
+		/* configure I2C clock */
+		i2c_clock_config(I2C0,I2C0_SPEED,I2C_DTCY_2);
 
-#ifdef RT_USING_I2C0
-#define I2C0_SPEED  100000
-
-    static struct gd32_i2c_bus gd32_i2c0;
-    /* enable GPIOB clock */
-    rcu_periph_clock_enable(RCU_GPIOB);
-
-    /* connect PB6 to I2C0_SCL, PB7 to I2C0_SDA */
-    gpio_init(GPIOB, GPIO_MODE_AF_OD, GPIO_OSPEED_50MHZ, GPIO_PIN_6 | GPIO_PIN_7);
-
-    /* enable I2C clock */
-    rcu_periph_clock_enable(RCU_I2C0);
-    /* configure I2C clock */
-    i2c_clock_config(I2C0,I2C0_SPEED,I2C_DTCY_2);
-	rt_thread_mdelay(100);
-    i2c_enable(I2C0);
-    /* enable acknowledge */
-    i2c_ack_config(I2C0,I2C_ACK_ENABLE);
-	
-    //IIC0的中断允许; Added by Kim
-//    i2c_interrupt_enable(I2C0, I2C_INT_ERR);
-//	i2c_interrupt_enable(I2C0, I2C_INT_EV);
-//	i2c_interrupt_enable(I2C0, I2C_INT_BUF);
-    //i2c_interrupt_enable(I2C0, I2C_CTL1_ERRIE | I2C_CTL1_BUFIE | I2C_CTL1_EVIE);
-	
-    rt_memset((void *)&gd32_i2c0, 0, sizeof(struct gd32_i2c_bus));
-    gd32_i2c0.parent.ops = &i2c_ops;
-    gd32_i2c0.i2c_periph = I2C0;
-    rt_i2c_bus_device_register(&gd32_i2c0.parent, "i2c0");
-	
-//	//初始化IIC0的信号量; Added by Kim
-//    gd32_i2c_sem_init(&gd32_i2c0, "i2c0_dsem");
-//    //保存总线变量; Added by Kim
-//    gd32_i2c_save_bus_param(&gd32_i2c0);
-	
-#endif
+		i2c_enable(I2C0);
+		/* enable acknowledge */
+		i2c_ack_config(I2C0,I2C_ACK_ENABLE);
+	}
     return 0;
 }

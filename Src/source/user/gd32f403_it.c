@@ -145,20 +145,13 @@ void DebugMon_Handler(void)
     \param[out] none
     \retval     none
 */
+extern void Gyro_Isr();
 void EXTI5_9_IRQHandler(void)
 {
-    static uint8_t cnt=0;
+
 	if(SET == exti_interrupt_flag_get(EXTI_8)){
         exti_interrupt_flag_clear(EXTI_8);
-		cnt++;
-//		if(cnt%2)
-//		{
-//			gpio_bit_reset(GPIOE, GPIO_PIN_11);
-//		}
-//		else
-//		{
-//			gpio_bit_set(GPIOE, GPIO_PIN_11);
-//		}
+		Gyro_Isr();
     }
 }
 //extern void Pms_cardReaderReadFifo(void);
