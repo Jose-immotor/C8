@@ -1,0 +1,384 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Arch">
+      <UniqueIdentifier>{db9479ad-dc9b-4076-857b-06637557aee1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{580c5843-f2bd-4f6d-8f14-e330770ba353}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JT808">
+      <UniqueIdentifier>{0affb8cd-7445-480c-9ded-9481170eeaf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modbus">
+      <UniqueIdentifier>{acdcae77-e6e2-4615-94b4-96ca5e51b4cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pms">
+      <UniqueIdentifier>{3e5d4f57-924e-4167-a6fc-a2085cb6fc66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Driver">
+      <UniqueIdentifier>{a6e87f7a-024c-4ee7-b5ec-a45ea6ba5a79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Log">
+      <UniqueIdentifier>{efcf9be0-49c0-4a08-8eeb-19ef01cf9ea3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Nvds">
+      <UniqueIdentifier>{22750ce3-1299-4882-971f-e472d9d637ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Nfc">
+      <UniqueIdentifier>{d35fafa9-67af-4adf-b3ae-088684ead3a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debug">
+      <UniqueIdentifier>{bfc6445b-1710-41b2-8552-3ff677af4d0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FinSH">
+      <UniqueIdentifier>{0b1ad120-e62d-465d-80fc-24e0d145a30b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C7Tester.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Arch\CmdLine.c">
+      <Filter>Arch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Arch\queue.c">
+      <Filter>Arch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Arch\RingQueue.c">
+      <Filter>Arch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Arch\SwTimer.c">
+      <Filter>Arch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Arch\CheckSum.c">
+      <Filter>Arch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Arch\Dump.c">
+      <Filter>Arch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Arch\Obj.c">
+      <Filter>Arch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Arch\Bit.c">
+      <Filter>Arch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Arch\HwFwVer.c">
+      <Filter>Arch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\JT808\JT808.c">
+      <Filter>JT808</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Arch\Utp.c">
+      <Filter>Arch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\JT808\JtUtp.c">
+      <Filter>JT808</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\Modbus\Modbus.c">
+      <Filter>Modbus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\Pms\BmsReg.c">
+      <Filter>Pms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\Pms\Battery.c">
+      <Filter>Pms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\Pms\Pms.c">
+      <Filter>Pms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Arch\Message.c">
+      <Filter>Arch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\drivers\drv_usart.c">
+      <Filter>Driver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\drivers\app_fifo.c">
+      <Filter>Driver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Arch\Log.c">
+      <Filter>Arch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Arch\SectorMgr.c">
+      <Filter>Arch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Arch\Record.c">
+      <Filter>Arch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\user\main.c">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\Log\LogUser.c">
+      <Filter>Log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\Log\SysLog.c">
+      <Filter>Log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Arch\Dbg.c">
+      <Filter>Arch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\Nvds\NvdsUser.c">
+      <Filter>Nvds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Arch\Nvds.c">
+      <Filter>Arch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\user\McuFlashMap.c">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\002nfc\nfc_crc.c">
+      <Filter>Nfc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\002nfc\NfcCardReader.c">
+      <Filter>Nfc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\002nfc\type_a.c">
+      <Filter>Nfc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\user\Led.c">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Arch\Tlv.c">
+      <Filter>Arch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Arch\TlvIn.c">
+      <Filter>Arch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Arch\TlvOut.c">
+      <Filter>Arch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\JT808\JtTlv8900.c">
+      <Filter>JT808</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\JT808\JtTlv0900.c">
+      <Filter>JT808</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\debug\console.c">
+      <Filter>Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\debug\Debug.c">
+      <Filter>Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\debug\printf.c">
+      <Filter>Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\debug\smart_shell.c">
+      <Filter>Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\JT808\JtTlv8103.c">
+      <Filter>JT808</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Arch\DateTime.c">
+      <Filter>Arch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Arch\DataType.c">
+      <Filter>Arch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\JT808\Ble.c">
+      <Filter>JT808</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\JT808\BleTpu.c">
+      <Filter>JT808</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\rt-thread\components\finsh\cmd.c">
+      <Filter>FinSH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\rt-thread\components\finsh\msh.c">
+      <Filter>FinSH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\rt-thread\components\finsh\shell.c">
+      <Filter>FinSH</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\JT808\BleUser.c">
+      <Filter>JT808</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Arch\md5.c">
+      <Filter>Arch</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Src\Arch\ArchDef.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\Bit.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\CmdLine.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\queue.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\RingQueue.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\SwTimer.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\typedef.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\CheckSum.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\Dump.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\_Macro.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\Obj.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\HwFwVer.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\JT808\JT808.h">
+      <Filter>JT808</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\user\MsgDef.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\Utp.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\JT808\JtUtp.h">
+      <Filter>JT808</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\Modbus\Modbus.h">
+      <Filter>Modbus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\Pms\BmsReg.h">
+      <Filter>Pms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\Pms\Battery.h">
+      <Filter>Pms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\Pms\Pms.h">
+      <Filter>Pms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\Message.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\drivers\drv_usart.h">
+      <Filter>Driver</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\drivers\app_fifo.h">
+      <Filter>Driver</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\Log.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\SectorMgr.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\Record.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\Log\LogUser.h">
+      <Filter>Log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\Log\SysLog.h">
+      <Filter>Log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\Dbg.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\Nvds\NvdsUser.h">
+      <Filter>Nvds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\Nvds.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\user\McuFlashMap.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\user\ExternFlashMap.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\002nfc\nfc_crc.h">
+      <Filter>Nfc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\002nfc\NfcCardReader.h">
+      <Filter>Nfc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\002nfc\type_a.h">
+      <Filter>Nfc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\user\Led.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\Tlv.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\TlvIn.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\TlvOut.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\JT808\JtTlv8900.h">
+      <Filter>JT808</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\JT808\JtTlv0900.h">
+      <Filter>JT808</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\debug\console.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\debug\Debug.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\debug\printf.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\debug\smart_shell.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\JT808\JtTlv8103.h">
+      <Filter>JT808</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\DataType.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\JT808\Ble.h">
+      <Filter>JT808</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\JT808\BleTpu.h">
+      <Filter>JT808</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\rt-thread\components\finsh\finsh.h">
+      <Filter>FinSH</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\rt-thread\components\finsh\finsh_api.h">
+      <Filter>FinSH</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\rt-thread\components\finsh\msh.h">
+      <Filter>FinSH</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\rt-thread\components\finsh\shell.h">
+      <Filter>FinSH</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\CmdLineDef.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\JT808\BleUser.h">
+      <Filter>JT808</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\md5.h">
+      <Filter>Arch</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
