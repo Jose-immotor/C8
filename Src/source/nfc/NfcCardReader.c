@@ -9,6 +9,14 @@
 
 static NfcCardReader_FsmFn NfcCardReader_findStatusProcFun(NfcCardReader* pReader, NfcCardReaderStatus status);
 
+void NfcCardReader_dump(const NfcCardReader* pReader)
+{
+	Printf("cardReader:\n");
+	Printf("\t port=%d.\n", pReader->port);
+	Printf("\t status=%d.\n", pReader->status);
+	//	Printf("\t Fsm=%d.\n"	, pPkt->Fsm);
+}
+
 static void NfcCardReader_switchStatus(NfcCardReader* pReader, NfcCardReaderStatus status)
 {
 	if (status == pReader->status) return;
@@ -17,6 +25,7 @@ static void NfcCardReader_switchStatus(NfcCardReader* pReader, NfcCardReaderStat
 	{
 		//进入低功耗
 		FM175XX_SoftPowerdown();
+		pReader->port = 0;
 	}
 	else if (status == NfcCardReaderStatus_trans)
 	{
@@ -58,19 +67,6 @@ static Bool NfcCardReader_searchPort(NfcCardReader* pReader, int port)
 	if (pReader->latestErr == OK)
 	{
 		pReader->latestErr = TypeA_RATS(0x20, pReader->picc_ats);
-		pReader->Event(pReader->cbObj, (pReader->latestErr == OK) ? CARD_EVENT_SEARCH_SUCCESS : CARD_EVENT_SEARCH_FAILED);
-
-//		FM17522_Delayms(10);//因为卡片的程序中加了延迟，这里也相应延迟一下
-		//切换到NfcCardReaderStatus_trans状态
-		NfcCardReader_switchStatus(pReader, NfcCardReaderStatus_trans);
-	}
-	else
-	{
-		pReader->Event(pReader->cbObj, CARD_EVENT_SEARCH_FAILED);
-		pReader->port = (pReader->port == 0) ? 1 : 0;
-		FM17522_Delayms(10);//程序延迟，不加延时会把程序跑死lane20200907
-		//保持最低低功耗
-		FM175XX_SoftPowerdown();
 	}
 
 	return (pReader->latestErr == OK);
@@ -98,27 +94,25 @@ static void NfcCardReader_fsm_trans(NfcCardReader* pReader, uint8 msgId, uint32_
 			{
 				pReader->rxLen = (pReader->rxLen +7)/8;
 				pReader->Event(pReader->cbObj, CARD_EVENT_RX_DATA_SUCCESS);
+
+				//启动定时器
+				SwTimer_Start(&pReader->sleepTimer, 60000, 0);
 			}
 			pReader->rxLen = 0;
 			pReader->txLen = 0;
 		}
-	}
-	else if (msgId == CARD_READER_MSG_SEARCH_PORT)
-	{
-//		if (pReader->port != (uint8_t)param)
-//		{
-//			NfcCardReader_searchPort(pReader, (uint8_t)param);
-//		}
+		else if(SwTimer_isTimerOut(&pReader->sleepTimer))
+		{
+			//如果空闲超时，则切换到Sleep模式
+			pReader->Event(pReader->cbObj, CARD_EVENT_SLEEP);
+			NfcCardReader_switchStatus(pReader, NfcCardReaderStatus_sleep);
+		}
 	}
 }
 
-//void NfcCardReader_read_fifo(NfcCardReader* pReader)
-//{
-//	nfc_intisr_cb(pReader->txBuf, pReader->txLen, pReader->rxBuf, &pReader->rxLen);
-//}
-
 static void NfcCardReader_fsm_sleep(NfcCardReader* pReader, uint8 msgId, uint32_t param)
 {
+	Bool isOk;
 	if (msgId == CARD_READER_MSG_RUN)
 	{
 		if (pReader->txLen )
@@ -127,24 +121,28 @@ static void NfcCardReader_fsm_sleep(NfcCardReader* pReader, uint8 msgId, uint32_
 			if (SwTimer_isTimerOutEx(pReader->searchTicks, 10))
 			{
 				//搜卡
-				if (!NfcCardReader_searchPort(pReader, pReader->port) && pReader->searchCounter > 2)
+				if (!NfcCardReader_searchPort(pReader, pReader->port))
 				{
-					//多次失败，置发送失败
-					pReader->Event(pReader->cbObj, CARD_EVENT_TX_DATA_FAILED);
-					pReader->Event(pReader->cbObj, CARD_EVENT_RX_DATA_FAILED);
-					pReader->rxLen = 0;
-					pReader->txLen = 0;
+					if (pReader->port == 0)
+					{
+						pReader->port = 1;	//搜索第二个Port
+					}
+					else //2个卡都搜索失败
+					{
+						pReader->Event(pReader->cbObj, CARD_EVENT_TX_DATA_FAILED);
+						pReader->Event(pReader->cbObj, CARD_EVENT_RX_DATA_FAILED);
+
+						pReader->port = 0;
+						pReader->rxLen = 0;
+						pReader->txLen = 0;
+					}
+				}
+				else
+				{
+					NfcCardReader_switchStatus(pReader, NfcCardReaderStatus_trans);
 				}
 			}
 		}
-	}
-	else if (msgId == CARD_READER_MSG_WAKEUP)
-	{
-		NfcCardReader_searchPort(pReader, pReader->port);
-	}
-	else if (msgId == CARD_READER_MSG_SEARCH_PORT)
-	{
-		NfcCardReader_searchPort(pReader, (uint8_t)param);
 	}
 }
 
@@ -187,7 +185,7 @@ Bool NfcCardReader_isIdle(NfcCardReader* pReader)
 	return pReader->txLen == 0;
 }
 
-Bool NfcCardReader_Send(NfcCardReader* pReader, uint8_t port, const void* data, int len)
+Bool NfcCardReader_Send(NfcCardReader* pReader, const void* data, int len)
 {
 	//待发数据没有发送完毕
 	if (pReader->txLen) return False;
@@ -196,8 +194,6 @@ Bool NfcCardReader_Send(NfcCardReader* pReader, uint8_t port, const void* data, 
 
 	memcpy(pReader->txBuf, data, len);
 	pReader->txLen = len;
-
-	NfcCardReader_fsm(pReader, CARD_READER_MSG_SEARCH_PORT, port);
 
 	return True;
 }

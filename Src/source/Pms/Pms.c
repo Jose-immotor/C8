@@ -11,6 +11,7 @@
 #include "Battery.h"
 #include "Modbus.h"
 #include "JT808.h"
+#include "NfcCardReader.h"
 
 Battery g_Bat[MAX_BAT_COUNT];
 static Pms g_pms;
@@ -99,18 +100,6 @@ void Fsm_SetActiveFlag(ActiveFlag af, Bool isActive)
 	}
 }
 
-//打印电池信息
-void BatteryDescDump(const Battery* desc)
-{
-	const uint8_t* pByte = (uint8_t*)&(desc->bmsID.sn34);
-	Printf("\tPort[%d][%02X%02X%02X%02X%02X%02X]:\n"
-		,desc->port, pByte[0], pByte[1], pByte[2], pByte[3], pByte[4], pByte[5]);
-	Printf("\t\tsoc(0.1)=%d\r\n",bigendian16_get((uint8*)(&desc->bmsInfo.soc)));
-	Printf("\t\tvolt(0.01V)=%d\r\n",bigendian16_get((uint8*)(&desc->bmsInfo.tvolt)));
-	Printf("\t\tcurr(0.01A)=%d\r\n",bigendian16_get((uint8*)(&desc->bmsInfo.tcurr)));
-	Printf("\t\tstate=0x%04X\r\n",bigendian16_get((uint8*)(&desc->bmsInfo.state)));
-}
-
 void BatteryInfoDump(void)
 {
 	int i = 0;
@@ -123,7 +112,7 @@ void BatteryInfoDump(void)
 		pPkt = &g_Bat[i];
 		if(pPkt->presentStatus == BAT_IN)
 		{
-			BatteryDescDump(pPkt);
+			Bat_bmsInfoDump(pPkt);
 		}
 	}
 }
@@ -131,26 +120,15 @@ void BatteryInfoDump(void)
 void BatteryDump(void)
 {
 	int i = 0;
-	Battery* pPkt = Null;
-
 	for(i = 0; i < 2; i++)
 	{
-		pPkt = &g_Bat[i];
-		Printf("g_Bat[%d]:\n",i);
-		Printf("\t port=%d.\n"	, pPkt->port);
-		Printf("\t presentStatus(1=NOTIN;2-IN)=%d.\n"	, pPkt->presentStatus);
-		Printf("\t opStatus=%d.\n"	, pPkt->opStatus);
+		Bat_dump(&g_Bat[i]);
 	}
 }
 
-void NfcCardReaderDump(void)
+void NfcCardReaderDump()
 {
-	NfcCardReader* pPkt = &g_pms.cardReader;
-
-	Printf("g_pms.cardReader:\n");
-	Printf("\t port=%d.\n"	, pPkt->port);
-	Printf("\t status=%d.\n", pPkt->status);
-//	Printf("\t Fsm=%d.\n"	, pPkt->Fsm);
+	NfcCardReader_dump(&g_Bat[0].cardReader);
 }
 
 /********************************************************************/
@@ -166,12 +144,12 @@ void Pms_setDeepSleep(Bool en)	{ g_regCtrl.deepSleepEn = en; Bat_setDeepSleep(g_
 static int Pms_Tx(const uint8_t* pData, int len)
 {
 	//调用NFC发送数据命令
-	NfcCardReader_Send(&g_pms.cardReader, g_pActiveBat->port, pData, len);
+	NfcCardReader_Send(&g_pActiveBat->cardReader, pData, len);
 	return len;
 }
 
 //从总线接收到的数据，调用该函数处理
-void Pms_Rx(int nfcPort, const uint8_t* pData, int len)
+void Pms_Rx(Battery* pBat, const uint8_t* pData, int len)
 {
 	//从NFC驱动接收数据
 //	if (g_pActiveBat->port != nfcPort) return;
@@ -181,19 +159,29 @@ void Pms_Rx(int nfcPort, const uint8_t* pData, int len)
 
 void Pms_postMsg(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
-
+	Message* msg = Queue_getNew(&g_pms.msgQueue);
+	if (msg)
+	{
+		msg->m_MsgID = msgId;
+		msg->m_Param1 = param1;
+		msg->m_Param2 = param2;
+	}
+	else
+	{
+		PFL_WARNING("Pms msg queue is full.\n");
+	}
 }
 
-void Pms_plugIn(uint8_t port)
+void Pms_plugIn(Battery* pBat)
 {
-	Bat_msg(&g_Bat[port], BmsMsg_batPlugIn, 0, 0);
+	Bat_msg(pBat, BmsMsg_batPlugIn, 0, 0);
 }
 
-void Pms_plugOut(uint8_t port)
+void Pms_plugOut(Battery* pBat)
 {
 	//Battery* pBat = (port == 0) ? &g_Bat[1] : &g_Bat[0];
 
-	Bat_msg(&g_Bat[port], BmsMsg_batPlugout, 0, 0);
+	Bat_msg(pBat, BmsMsg_batPlugout, 0, 0);
 
 	if(g_Bat[0].presentStatus != BAT_NOT_IN && g_Bat[1].presentStatus != BAT_NOT_IN)
 	{
@@ -263,11 +251,11 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	}
 	else if (msgId == PmsMsg_batPlugIn)
 	{
-		Pms_plugIn((uint8_t)param1);
+		Pms_plugIn((Battery*)param1);
 	}
 	else if (msgId == PmsMsg_batPlugOut)
 	{
-		Pms_plugOut((uint8_t)param1);
+		Pms_plugOut((Battery*)param1);
 	}
 }
 
@@ -279,11 +267,11 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	}
 	else if (msgId == PmsMsg_batPlugIn)
 	{
-		Pms_plugIn((uint8_t)param1);
+		Pms_plugIn((Battery*)param1);
 	}
 	else if (msgId == PmsMsg_batPlugOut)
 	{
-		Pms_plugOut((uint8_t)param1);
+		Pms_plugOut((Battery*)param1);
 	}
 }
 
@@ -309,7 +297,7 @@ static void Pms_fsm_deepSleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
 //在任何状态下都要处理的消息函数
 static void Pms_fsm_anyStatusDo(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
-	int i = 0;
+//	int i = 0;
 //	Battery* pPkt = Null;
 
 //	for(i = 0; i < 2; i++)
@@ -369,27 +357,28 @@ static void Pms_fsm(PmsMsg msgId, uint32_t param1, uint32_t param2)
 //	rt_interrupt_leave();
 //}
 
-NfcCardReaderEventRc Pms_cardReaderEventCb(Pms* pms, NfcCardReaderEvent ev)
+NfcCardReaderEventRc Pms_cardReaderEventCb(Battery* pBat, NfcCardReaderEvent ev)
 {
+	NfcCardReader* pReader = &pBat->cardReader;
 	if (ev == CARD_EVENT_SEARCH_SUCCESS)
 	{
-		Pms_postMsg(PmsMsg_batPlugIn, g_pms.cardReader.port, 0);
-		PFL(DL_NFC,"NFC port[%d] search success!\n",g_pms.cardReader.port);
+		Pms_postMsg(PmsMsg_batPlugIn, (uint32)pBat, 0);
+		PFL(DL_NFC,"NFC port[%d] search success!\n",0);
 	}
 	else if (ev == CARD_EVENT_SEARCH_FAILED)
 	{
-		Pms_postMsg(PmsMsg_batPlugOut, g_pms.cardReader.port, 0);
-		PFL(DL_NFC,"NFC port[%d] search failed!\n",g_pms.cardReader.port);
+		Pms_postMsg(PmsMsg_batPlugOut, (uint32)pBat, 0);
+		PFL(DL_NFC,"NFC port[%d] search failed!\n",0);
 	}
 	else if (ev == CARD_EVENT_RX_DATA_SUCCESS)
 	{
-		Pms_Rx(g_pms.cardReader.port, g_pms.cardReader.rxBuf, g_pms.cardReader.rxLen);
-		PFL(DL_NFC,"NFC port[%d] rx date success!\n",g_pms.cardReader.port);
+		Pms_Rx(pBat, pReader->rxBuf, pReader->rxLen);
+		PFL(DL_NFC,"NFC port[%d] rx date success!\n",0);
 	}
 	else if (ev == CARD_EVENT_RX_DATA_FAILED)
 	{
 		Mod_busErr(g_pModBus, BUS_ERR_RX_FAILED);
-		PFL(DL_NFC,"NFC port[%d] rx date failed!\n",g_pms.cardReader.port);
+		PFL(DL_NFC,"NFC port[%d] rx date failed!\n",0);
 	}
 
 	return CARD_EVENT_RC_SUCCESS;
@@ -405,15 +394,22 @@ void Pms_run()
 //	Bat_run(&g_Bat[1]);
 
 	Pms_fsm(PmsMsg_run, 0, 0);
+
+	//消息循环
+	Message* msg = (Message*)Queue_Read(&g_pms.msgQueue);
+	for (; msg != Null; Queue_pop(&g_pms.msgQueue), msg = (Message*)Queue_Read(&g_pms.msgQueue))
+	{
+		Pms_fsm(msg->m_MsgID, msg->m_Param1, msg->m_Param2);
+	}
 }
 
 void Pms_start()
 {
 	//启动NFC驱动
-	NfcCardReader_start(&g_pms.cardReader);
 	Pms_switchStatus(PMS_ACC_OFF);
 	//查询电池设备信息
 	Bat_msg(g_pActiveBat, BmsMsg_active, *((uint32*)& g_regCtrl), 0);
+	Bat_start(&g_Bat[0]);
 }
 
 void Pms_init()
@@ -429,5 +425,4 @@ void Pms_init()
 	g_pActiveBat = &g_Bat[0];
 	Queue_init(&g_pms.msgQueue, g_pms.msgBuf, sizeof(Message), GET_ELEMENT_COUNT(g_pms.msgBuf));
 
-	NfcCardReader_init(&g_pms.cardReader, (NfcCardReader_EventFn)Pms_cardReaderEventCb, &g_pms);
 }

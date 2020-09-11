@@ -2,9 +2,28 @@
 #include "Common.h"
 #include "Battery.h"
 #include "Modbus.h"
+#include "Pms.h"
 
 extern Mod* g_pModBus;
 static void Bat_fsm(Battery* pBat, uint8_t msgId, uint32_t param1, uint32_t param2);
+
+void Bat_dump(const Battery* pBat)
+{
+	Printf("Battery[%d]:\n", pBat->port);
+	Printf("\t presentStatus(1=NOTIN;2-IN)=%d.\n", pBat->presentStatus);
+	Printf("\t opStatus=%d.\n", pBat->opStatus);
+}
+
+void Bat_bmsInfoDump(const Battery* pBat)
+{
+	const uint8_t* pByte = (uint8_t*) & (pBat->bmsID.sn34);
+	Printf("\tPort[%d][%02X%02X%02X%02X%02X%02X]:\n"
+		, pBat->port, pByte[0], pByte[1], pByte[2], pByte[3], pByte[4], pByte[5]);
+	Printf("\t\tsoc(0.1)=%d\r\n", bigendian16_get((uint8*)(&pBat->bmsInfo.soc)));
+	Printf("\t\tvolt(0.01V)=%d\r\n", bigendian16_get((uint8*)(&pBat->bmsInfo.tvolt)));
+	Printf("\t\tcurr(0.01A)=%d\r\n", bigendian16_get((uint8*)(&pBat->bmsInfo.tcurr)));
+	Printf("\t\tstate=0x%04X\r\n", bigendian16_get((uint8*)(&pBat->bmsInfo.state)));
+}
 
 const uint8* Bat_getBID(Battery* pBat)
 {
@@ -223,6 +242,11 @@ void Bat_run(Battery* pBat)
 	Bat_fsm(pBat, BmsMsg_run, 0, 0);
 }
 
+void Bat_start(Battery* pBat)
+{
+	NfcCardReader_start(&pBat->cardReader);
+}
+
 void Bat_init(Battery* pBat, int port, const ModCfg* cfg)
 {
 	memset(pBat, 0, sizeof(Battery));
@@ -232,4 +256,6 @@ void Bat_init(Battery* pBat, int port, const ModCfg* cfg)
 	pBat->opStatus = BmsStatus_init;
 	pBat->cfg = cfg;
 	pBat->pBmsReg_Ctrl = (BmsRegCtrl*)& pBat->writeBmsCtrl;
+
+	NfcCardReader_init(&pBat->cardReader, (NfcCardReader_EventFn)Pms_cardReaderEventCb, pBat);
 }

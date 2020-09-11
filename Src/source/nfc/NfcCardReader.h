@@ -7,7 +7,7 @@ extern "C" {
 
 #include "typedef.h"
 #include "queue.h"
-
+#include "SwTimer.h"
 	//读卡器命令
 	typedef enum _NfcCardReaderMsg
 	{
@@ -55,7 +55,7 @@ extern "C" {
 		uint8_t searchCounter;	//搜索同一端口计数器
 		uint32_t searchTicks;	//搜索端口Ticks,用于计算搜索同一端口的时间间隔
 
-
+		SwTimer sleepTimer;
 		unsigned char picc_ats[14];
 
 		NfcCardReaderStatus status;
@@ -75,14 +75,13 @@ extern "C" {
 		//回调函数对象，被回调函数使用，来自初始化函数
 		void* cbObj;
 	}NfcCardReader;
-	
-	void NfcCardReader_run(NfcCardReader* pReader);
-	void NfcCardReader_start(NfcCardReader* pReader);
+
+	void NfcCardReader_dump(const NfcCardReader* pReader);
 	void NfcCardReader_init(NfcCardReader* pReader, NfcCardReader_EventFn Event, void* cbObj);
 	Bool NfcCardReader_isIdle(NfcCardReader* pReader);
-	Bool NfcCardReader_Send(NfcCardReader* pReader, uint8_t port, const void* data, int len);
-//	void NfcCardReader_read_fifo(NfcCardReader* pReader);
-	
+	Bool NfcCardReader_Send(NfcCardReader* pReader, const void* data, int len);
+	void NfcCardReader_run(NfcCardReader* pReader);
+	void NfcCardReader_start(NfcCardReader* pReader);
 #ifdef __cplusplus
 }
 #endif

@@ -9,6 +9,7 @@ extern "C" {
 #include "typedef.h"
 #include "BmsReg.h"
 #include "ModBus.h"
+#include "NfcCardReader.h"
 
 #define BMS_INQUERY_INTERVAL_MS 1000	//轮询事件间隔
 #define NFC_MAX_TRANS_SIZE 		125		//NFC每次传输的最大包长度
@@ -87,10 +88,12 @@ extern "C" {
 
 	typedef struct _Battery
 	{
-		uint8_t  port;			//电池端口好，从0开始
-		uint32_t idleTicks;		//去激活时间Ticks
+		NfcCardReader cardReader;
+
+		uint8_t  port;					//电池端口好，从0开始
+		uint32_t idleTicks;				//去激活时间Ticks
 		uint32_t statusSwitchTicks;		//状态切换Ticks
-		Bool 	 isActive;			//是否激活
+		Bool 	 isActive;				//是否激活
 
 		Bool 	 isReadyFroInquery;	//是否准备好查询电池
 
@@ -115,8 +118,11 @@ extern "C" {
 	}Battery;
 
 	void Bat_init(Battery* pBat, int port, const ModCfg* cfg);
+	void Bat_start(Battery* pBat);
 	void Bat_run(Battery* pBat);
 	const uint8* Bat_getBID(Battery* pBat);
+	void Bat_dump(const Battery* pBat);
+	void Bat_bmsInfoDump(const Battery* pBat);
 
 	//电池信息有效
 	Bool Bat_isReady(Battery* pBat);

@@ -11,7 +11,6 @@ extern "C" {
 #include "BmsReg.h"
 #include "queue.h"
 #include "Message.h"
-#include "NfcCardReader.h"
 #include "Battery.h"
 #include "Bit.h"
 
@@ -66,8 +65,6 @@ extern "C" {
 	{
 		Mod modBus;
 
-		NfcCardReader cardReader;
-
 		//Pms操作状态
 		PmsOpStatus opStatus;
 		//状态机函数指针，由status决定指向那个状态处理函数
@@ -84,10 +81,10 @@ extern "C" {
 
 	//从总线接收到的数据，调用该函数处理
 	void Pms_init();
-	void Pms_Rx(int nfcPort, const uint8_t* pData, int len);
+	void Pms_Rx(Battery* pBat, const uint8_t* pData, int len);
 	void Pms_postMsg(PmsMsg msgId, uint32_t param1, uint32_t param2);
 
-	void Pms_NfcRead_Init(void);
+	NfcCardReaderEventRc Pms_cardReaderEventCb(Battery* pBat, NfcCardReaderEvent ev);
 	void Pms_switchStatus(PmsOpStatus newStatus);
 	void Fsm_SetActiveFlag(ActiveFlag af, Bool isActive);
 #ifdef __cplusplus
