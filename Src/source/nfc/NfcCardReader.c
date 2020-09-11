@@ -24,6 +24,7 @@ static void NfcCardReader_switchStatus(NfcCardReader* pReader, NfcCardReaderStat
 	if (status == NfcCardReaderStatus_sleep)
 	{
 		//进入低功耗
+		pReader->Event(pReader->cbObj, CARD_EVENT_SLEEP);
 		FM175XX_SoftPowerdown();
 		pReader->port = 0;
 	}
@@ -82,7 +83,7 @@ static void NfcCardReader_fsm_trans(NfcCardReader* pReader, uint8 msgId, uint32_
 			Pcd_SetTimer(300);
 			//发送数据
 			PFL(DL_NFC,"NFC send data length:%d!\n",pReader->txLen);
-			FM17522_Delayms(10);//程序延迟
+			//FM17522_Delayms(10);//程序延迟
 			pReader->latestErr = Pcd_Comm(Transceive, pReader->txBuf, pReader->txLen, pReader->rxBuf, &pReader->rxLen);
 			PFL(DL_NFC,"NFC send data error:%d(0-ok,1-err)!\n",pReader->latestErr);
 			if (pReader->latestErr != OK)
@@ -104,7 +105,6 @@ static void NfcCardReader_fsm_trans(NfcCardReader* pReader, uint8 msgId, uint32_
 		else if(SwTimer_isTimerOut(&pReader->sleepTimer))
 		{
 			//如果空闲超时，则切换到Sleep模式
-			pReader->Event(pReader->cbObj, CARD_EVENT_SLEEP);
 			NfcCardReader_switchStatus(pReader, NfcCardReaderStatus_sleep);
 		}
 	}
