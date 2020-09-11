@@ -1,6 +1,7 @@
 
 #include "drv_pm.h"
 #include "Common.h"
+#include "drv_rtc.h"
 
 void Boot(void)
 {
@@ -108,16 +109,6 @@ void Mcu_PowerDown()
 	g_isPowerDown = False;
 //	LOG2(ET_SYS_WAKEUP, g_Settings.devcfg, GetWakeUpType());
 //	BootWithReason(MCURST_PWR);
-#ifdef CFG_SIM_SLEEP
-	//SIM RX wake up
-//	SIM_UART_RX_PORT->ISRC = SIM_UART_RX_PIN;
-//    GPIO_EnableInt(SIM_UART_RX_PORT, SIM_UART_RX_PIN_IND, GPIO_INT_BOTH_EDGE); 
-//#endif
-//#ifdef CFG_BLE_SLEEP
-//	//BLE RX wake up
-// 	BLE_UART_RX_PORT->ISRC = BLE_UART_RX_PIN;
-//   GPIO_EnableInt(BLE_UART_RX_PORT, BLE_UART_RX_PIN_IND, GPIO_INT_BOTH_EDGE); 
-#endif
 
 //	PMS_WAKEUP_SMART_PORT->ISRC = PMS_WAKEUP_SMART_PIN;
 //	GPIO_EnableInt(PMS_WAKEUP_SMART_PORT, PMS_WAKEUP_SMART_PIN_IND, GPIO_INT_BOTH_EDGE);	

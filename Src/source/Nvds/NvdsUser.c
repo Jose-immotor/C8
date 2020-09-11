@@ -82,7 +82,7 @@ static Bool DbgInfo_Event(DbgInfo* p, NvdsEventID eventId)
 		memset(p, 0, sizeof(DbgInfo));
 
 		//不能再这里打印输出，如果UART没初始化，会导致程序堵塞
-		g_dwDebugLevel = 0xFF;
+		g_dwDebugLevel = 0xF;
 	}
 	else if (eventId == BE_DATA_OK)
 	{

@@ -44,7 +44,7 @@ int main(void)
 	{
 		//对象运行
 		ObjList_run();
-		rt_thread_mdelay(100);
+		rt_thread_mdelay(1);
     }
 }
 

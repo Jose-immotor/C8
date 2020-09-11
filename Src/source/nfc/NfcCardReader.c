@@ -60,7 +60,7 @@ static Bool NfcCardReader_searchPort(NfcCardReader* pReader, int port)
 		pReader->latestErr = TypeA_RATS(0x20, pReader->picc_ats);
 		pReader->Event(pReader->cbObj, (pReader->latestErr == OK) ? CARD_EVENT_SEARCH_SUCCESS : CARD_EVENT_SEARCH_FAILED);
 
-		FM17522_Delayms(10);//因为卡片的程序中加了延迟，这里也相应延迟一下
+//		FM17522_Delayms(10);//因为卡片的程序中加了延迟，这里也相应延迟一下
 		//切换到NfcCardReaderStatus_trans状态
 		NfcCardReader_switchStatus(pReader, NfcCardReaderStatus_trans);
 	}
@@ -218,7 +218,7 @@ void NfcCardReader_thread_entry(void* pReader)
 	while (1)
 	{
 		NfcCardReader_fsm(pReader, CARD_READER_MSG_RUN, 0);
-		rt_thread_mdelay(100);
+		rt_thread_mdelay(1);
 	}
 }
 

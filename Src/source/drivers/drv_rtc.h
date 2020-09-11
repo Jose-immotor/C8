@@ -40,7 +40,8 @@ extern "C"
 void RTC_GetDateAndTime(S_RTC_TIME_DATA_T *sPt);
 void rtc_configuration(void);
 void LocalTimeInit(void);
-	
+void RTC_TimerStart(uint32_t second);
+
 #ifdef  __cplusplus
 }
 #endif

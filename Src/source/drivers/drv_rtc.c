@@ -208,3 +208,23 @@ void LocalTimeInit(void)
 	/* Wait until last write operation on RTC registers has finished */
 	rtc_lwoff_wait();
 }
+
+//RTC¶¨Ê±»½ÐÑ
+void RTC_TimerStart(uint32_t second)
+{
+    rcu_periph_clock_enable(RCU_BKPI);
+    rcu_periph_clock_enable(RCU_PMU);	
+	/* Enable RTC Clock */
+	rcu_periph_clock_enable(RCU_RTC);
+	/* Wait for RTC registers synchronization */
+	rtc_register_sync_wait();
+
+	rtc_lwoff_wait();
+	rtc_alarm_config(rtc_counter_get()+second);
+	/* Wait until last write operation on RTC registers has finished */
+	rtc_lwoff_wait();
+		
+	rtc_interrupt_enable(RTC_INT_ALARM);
+	rtc_lwoff_wait();
+}
+

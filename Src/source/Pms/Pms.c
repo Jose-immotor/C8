@@ -243,7 +243,7 @@ void Pms_switchStatus(PmsOpStatus newStatus)
 		Pms_setDischg(False);
 		Pms_setChg(False);
 	}
-	PFL(DL_PMS,"pms status from %d to %d",g_pms.opStatus,newStatus);
+	PFL(DL_PMS,"pms status from %d to %d\n",g_pms.opStatus,newStatus);
 	g_pms.opStatus = newStatus;
 	g_pms.Fsm = Pms_findStatusProcFun(newStatus);
 }
