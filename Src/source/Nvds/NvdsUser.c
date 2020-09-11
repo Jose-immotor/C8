@@ -8,9 +8,9 @@ PdoInfo	g_pdoInfo;
 DbgInfo	g_degInfo;
 
 //g_pdoInfo的镜像对象，用于和原值作比较，决定是否写入FLASH
+static CfgInfo g_cfgInfo_mirror;
 static PdoInfo g_pdoInfo_mirror;
-static PdoInfo g_cfgInfo_mirror;
-static PdoInfo g_degInfo_mirror;
+static DbgInfo g_dbgInfo_mirror;
 
 //上面多个存储变量的公用的交换缓冲区，长度取最大值
 static uint8_t		g_exchBuf[sizeof(PdoInfo)];
@@ -102,13 +102,13 @@ const NvdsItem g_NvdsItems[NVDS_ITEM_COUNT] =
 {
 	{NVDS_CFG_INFO, {EX_FLASH_CFG_INFO_ADDR, EX_FLASH_SECTOR_SIZE, &g_cfgInfo , sizeof(g_cfgInfo), 
 		g_exchBuf, sizeof(g_exchBuf),(ItemVerifyFn)Nvds_Verify, Nvde_Read, Nvds_Write, Nvds_Erase}, 
-		&g_nvdsSecMgr[0], (NvdsEventFn)CfgInfo_Event},
+		&g_nvdsSecMgr[0], (NvdsEventFn)CfgInfo_Event, & g_cfgInfo_mirror},
 	{NVDS_PDO_INFO, {EX_FLASH_CFG_PDO_INFO_ADDR, EX_FLASH_SECTOR_SIZE, &g_pdoInfo , sizeof(g_pdoInfo), 
 		g_exchBuf, sizeof(g_exchBuf),(ItemVerifyFn)Nvds_Verify, Nvde_Read, Nvds_Write, Nvds_Erase},
-		&g_nvdsSecMgr[1], (NvdsEventFn)PdoInfo_Event},
+		&g_nvdsSecMgr[1], (NvdsEventFn)PdoInfo_Event,& g_pdoInfo_mirror},
 	{NVDS_DBG_INFO, {EX_FLASH_CFG_DBG_INFO_ADDR, EX_FLASH_SECTOR_SIZE, &g_degInfo , sizeof(g_degInfo), 
 		g_exchBuf, sizeof(g_exchBuf),(ItemVerifyFn)Nvds_Verify, Nvde_Read, Nvds_Write, Nvds_Erase},
-		&g_nvdsSecMgr[2], (NvdsEventFn)DbgInfo_Event},
+		&g_nvdsSecMgr[2], (NvdsEventFn)DbgInfo_Event,& g_dbgInfo_mirror},
 };
 
 //写入指定的NvdsID
