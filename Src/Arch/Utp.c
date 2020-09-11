@@ -469,6 +469,9 @@ static void Utp_CheckReq(Utp* pUtp)
 		//是否有待发的READ/WRITE命令(pExt->sendDelayMs > 0)
 		if(pExt->sendDelayMs && SwTimer_isTimerOutEx(pExt->rxRspTicks, pExt->sendDelayMs))
 		{
+			//清除发送标志
+			pExt->sendDelayMs = 0;
+
 			if (pCmd->type == UTP_READ)
 			{
 				pExt->transferData = pCmd->pData;
@@ -486,13 +489,12 @@ static void Utp_CheckReq(Utp* pUtp)
 			{
 				pCmd->pExt->rxRspTicks = GET_TICKS();
 				Utp_ResetTxBuf(pUtp);
+				Utp_Event(pUtp, pCmd, UTP_REQ_SUCCESS);
 			}
 			else
 			{
 				pUtp->pWaitRspCmd = pCmd;
 			}
-			//清除发送标志
-			pExt->sendDelayMs = 0;
 			break;
 		}
 
