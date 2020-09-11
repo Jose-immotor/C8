@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{C31FA990-9805-4DEA-AB18-79F84324FDF2}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>C7Tester</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>CONFIG_CMDLINE;RT_USING_FINSH;FINSH_USING_MSH;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>..\..\Src\Arch;..\..\Src\Common;..\..\Src\Source\Utp;..\..\Src\Source\Jt808;..\..\Src\Source\User;..\..\Src\Source\Debug;..\..\Src\Source\Modbus;..\..\Src\Source\Pms;..\..\Src\Source\002Nfc;..\..\Src\Source\Drivers;..\..\Src\Source\Nvds;..\..\Src\Source\Ble</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Src\Arch\Bit.c" />
+    <ClCompile Include="..\..\Src\Arch\CheckSum.c" />
+    <ClCompile Include="..\..\Src\Arch\CmdLine.c" />
+    <ClCompile Include="..\..\Src\Arch\DataType.c" />
+    <ClCompile Include="..\..\Src\Arch\DateTime.c" />
+    <ClCompile Include="..\..\Src\Arch\Dbg.c" />
+    <ClCompile Include="..\..\Src\Arch\Dump.c" />
+    <ClCompile Include="..\..\Src\Arch\HwFwVer.c" />
+    <ClCompile Include="..\..\Src\Arch\Log.c" />
+    <ClCompile Include="..\..\Src\Arch\md5.c" />
+    <ClCompile Include="..\..\Src\Arch\Message.c" />
+    <ClCompile Include="..\..\Src\Arch\Nvds.c" />
+    <ClCompile Include="..\..\Src\Arch\Obj.c" />
+    <ClCompile Include="..\..\Src\Arch\queue.c" />
+    <ClCompile Include="..\..\Src\Arch\Record.c" />
+    <ClCompile Include="..\..\Src\Arch\RingQueue.c" />
+    <ClCompile Include="..\..\Src\Arch\TlvIn.c" />
+    <ClCompile Include="..\..\Src\Arch\SectorMgr.c" />
+    <ClCompile Include="..\..\Src\Arch\SwTimer.c" />
+    <ClCompile Include="..\..\Src\Arch\Tlv.c" />
+    <ClCompile Include="..\..\Src\Arch\TlvOut.c" />
+    <ClCompile Include="..\..\Src\Arch\Utp.c" />
+    <ClCompile Include="..\..\Src\rt-thread\components\finsh\cmd.c" />
+    <ClCompile Include="..\..\Src\rt-thread\components\finsh\msh.c" />
+    <ClCompile Include="..\..\Src\rt-thread\components\finsh\shell.c" />
+    <ClCompile Include="..\..\Src\source\002nfc\NfcCardReader.c" />
+    <ClCompile Include="..\..\Src\source\002nfc\nfc_crc.c" />
+    <ClCompile Include="..\..\Src\source\002nfc\type_a.c" />
+    <ClCompile Include="..\..\Src\source\debug\console.c" />
+    <ClCompile Include="..\..\Src\source\debug\Debug.c" />
+    <ClCompile Include="..\..\Src\source\debug\printf.c" />
+    <ClCompile Include="..\..\Src\source\debug\smart_shell.c" />
+    <ClCompile Include="..\..\Src\source\drivers\app_fifo.c" />
+    <ClCompile Include="..\..\Src\source\drivers\drv_usart.c" />
+    <ClCompile Include="..\..\Src\source\JT808\Ble.c" />
+    <ClCompile Include="..\..\Src\source\JT808\BleTpu.c" />
+    <ClCompile Include="..\..\Src\source\JT808\BleUser.c" />
+    <ClCompile Include="..\..\Src\source\JT808\JT808.c" />
+    <ClCompile Include="..\..\Src\source\JT808\JtTlv8103.c" />
+    <ClCompile Include="..\..\Src\source\JT808\JtTlv8900.c" />
+    <ClCompile Include="..\..\Src\source\JT808\JtTlv0900.c" />
+    <ClCompile Include="..\..\Src\source\JT808\JtUtp.c" />
+    <ClCompile Include="..\..\Src\source\Log\LogUser.c" />
+    <ClCompile Include="..\..\Src\source\Log\SysLog.c" />
+    <ClCompile Include="..\..\Src\source\Modbus\Modbus.c" />
+    <ClCompile Include="..\..\Src\source\Nvds\NvdsUser.c" />
+    <ClCompile Include="..\..\Src\source\Pms\Pms.c" />
+    <ClCompile Include="..\..\Src\source\Pms\Battery.c" />
+    <ClCompile Include="..\..\Src\source\Pms\BmsReg.c" />
+    <ClCompile Include="..\..\Src\source\user\Led.c" />
+    <ClCompile Include="..\..\Src\source\user\McuFlashMap.c" />
+    <ClCompile Include="..\..\Src\source\user\main.c" />
+    <ClCompile Include="C7Tester.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Src\Arch\ArchDef.h" />
+    <ClInclude Include="..\..\Src\Arch\Bit.h" />
+    <ClInclude Include="..\..\Src\Arch\CheckSum.h" />
+    <ClInclude Include="..\..\Src\Arch\CmdLine.h" />
+    <ClInclude Include="..\..\Src\Arch\CmdLineDef.h" />
+    <ClInclude Include="..\..\Src\Arch\DataType.h" />
+    <ClInclude Include="..\..\Src\Arch\Dbg.h" />
+    <ClInclude Include="..\..\Src\Arch\Dump.h" />
+    <ClInclude Include="..\..\Src\Arch\HwFwVer.h" />
+    <ClInclude Include="..\..\Src\Arch\Log.h" />
+    <ClInclude Include="..\..\Src\Arch\md5.h" />
+    <ClInclude Include="..\..\Src\Arch\Message.h" />
+    <ClInclude Include="..\..\Src\Arch\Nvds.h" />
+    <ClInclude Include="..\..\Src\Arch\Obj.h" />
+    <ClInclude Include="..\..\Src\Arch\Record.h" />
+    <ClInclude Include="..\..\Src\Arch\TlvIn.h" />
+    <ClInclude Include="..\..\Src\Arch\SectorMgr.h" />
+    <ClInclude Include="..\..\Src\Arch\Tlv.h" />
+    <ClInclude Include="..\..\Src\Arch\TlvOut.h" />
+    <ClInclude Include="..\..\Src\Arch\Utp.h" />
+    <ClInclude Include="..\..\Src\Arch\_Macro.h" />
+    <ClInclude Include="..\..\Src\Arch\queue.h" />
+    <ClInclude Include="..\..\Src\Arch\RingQueue.h" />
+    <ClInclude Include="..\..\Src\Arch\SwTimer.h" />
+    <ClInclude Include="..\..\Src\Arch\typedef.h" />
+    <ClInclude Include="..\..\Src\rt-thread\components\finsh\finsh.h" />
+    <ClInclude Include="..\..\Src\rt-thread\components\finsh\finsh_api.h" />
+    <ClInclude Include="..\..\Src\rt-thread\components\finsh\msh.h" />
+    <ClInclude Include="..\..\Src\rt-thread\components\finsh\shell.h" />
+    <ClInclude Include="..\..\Src\source\002nfc\NfcCardReader.h" />
+    <ClInclude Include="..\..\Src\source\002nfc\nfc_crc.h" />
+    <ClInclude Include="..\..\Src\source\002nfc\type_a.h" />
+    <ClInclude Include="..\..\Src\source\debug\console.h" />
+    <ClInclude Include="..\..\Src\source\debug\Debug.h" />
+    <ClInclude Include="..\..\Src\source\debug\printf.h" />
+    <ClInclude Include="..\..\Src\source\debug\smart_shell.h" />
+    <ClInclude Include="..\..\Src\source\drivers\app_fifo.h" />
+    <ClInclude Include="..\..\Src\source\drivers\drv_usart.h" />
+    <ClInclude Include="..\..\Src\source\JT808\Ble.h" />
+    <ClInclude Include="..\..\Src\source\JT808\BleTpu.h" />
+    <ClInclude Include="..\..\Src\source\JT808\BleUser.h" />
+    <ClInclude Include="..\..\Src\source\JT808\JT808.h" />
+    <ClInclude Include="..\..\Src\source\JT808\JtTlv8103.h" />
+    <ClInclude Include="..\..\Src\source\JT808\JtTlv8900.h" />
+    <ClInclude Include="..\..\Src\source\JT808\JtTlv0900.h" />
+    <ClInclude Include="..\..\Src\source\JT808\JtUtp.h" />
+    <ClInclude Include="..\..\Src\source\Log\LogUser.h" />
+    <ClInclude Include="..\..\Src\source\Log\SysLog.h" />
+    <ClInclude Include="..\..\Src\source\Modbus\Modbus.h" />
+    <ClInclude Include="..\..\Src\source\Nvds\NvdsUser.h" />
+    <ClInclude Include="..\..\Src\source\Pms\Pms.h" />
+    <ClInclude Include="..\..\Src\source\Pms\Battery.h" />
+    <ClInclude Include="..\..\Src\source\Pms\BmsReg.h" />
+    <ClInclude Include="..\..\Src\source\user\ExternFlashMap.h" />
+    <ClInclude Include="..\..\Src\source\user\Led.h" />
+    <ClInclude Include="..\..\Src\source\user\McuFlashMap.h" />
+    <ClInclude Include="..\..\Src\source\user\MsgDef.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

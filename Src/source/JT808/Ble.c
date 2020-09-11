@@ -17,7 +17,7 @@
 Ble g_Ble;
 static BleTpu g_BleTpu;
 
-UTP_EVENT_RC Ble_getSelfTestResult(Ble* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
+UTP_EVENT_RC Ble_getSelfTestResult(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
 	if (ev == UTP_GET_RSP)
 	{
@@ -29,7 +29,20 @@ UTP_EVENT_RC Ble_getSelfTestResult(Ble* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT e
 	return UTP_EVENT_RC_SUCCESS;
 }
 
-UTP_EVENT_RC Ble_setNvds(Ble* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
+UTP_EVENT_RC Ble_authent(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
+{
+	if (ev == UTP_GET_RSP)
+	{
+		if (BLE_USER_INVALID == BleUser_login(&pBle->user, pCmd->pStorage))
+		{
+			return ERR_USERID_INVALID;
+		}
+	}
+
+	return UTP_EVENT_RC_SUCCESS;
+}
+
+UTP_EVENT_RC Ble_setNvds(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
 	if (ev == UTP_GET_RSP)
 	{
@@ -53,10 +66,42 @@ UTP_EVENT_RC Ble_setNvds(Ble* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 	return UTP_EVENT_RC_SUCCESS;
 }
 
-UTP_EVENT_RC Ble_utpEventCb(Ble* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
+//检验命令是否允许执行
+static Bool Ble_cmdIsAllow(Ble* pBle, uint8 cmd)
+{
+	//定义需要用户身份认证的命令码
+	struct
+	{
+		BLE_USER_ROLE role;
+		uint8 cmd;
+	}
+	static const cmdRoleMatch[] = 
+	{
+		{BLE_USER_ADMIN, REQ_ID_SET_NVDS},
+		{BLE_USER_ADMIN, REQ_ID_ACTIVE_REQ},
+		{BLE_USER_ADMIN, REQ_ID_BAT_VERIFY},
+		{BLE_USER_ADMIN, REQ_ID_SET_ALARM_MODE},
+	};
+
+	for (int i = 0; i < GET_ELEMENT_COUNT(cmdRoleMatch); i++)
+	{
+		if (cmdRoleMatch[i].cmd == cmd)
+		{
+			return cmdRoleMatch[i].role & pBle->user.role;
+		}
+	}
+
+	//默认允许
+	return True;
+}
+
+UTP_EVENT_RC Ble_utpEventCb(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
 	if (ev == UTP_GET_RSP)
 	{
+		//判断命令是否允许
+		if (!Ble_cmdIsAllow(pBle, pCmd->cmd)) return ERR_CMD_NOT_ALLOW;
+
 		if (pCmd->cmd == REQ_ID_GET_PORT_STATE)
 		{
 			uint8 port = *pCmd->pStorage;
@@ -84,7 +129,7 @@ int Ble_txData(uint8_t cmd, const uint8_t* pData, int len)
 	return len;
 }
 
-void Ble_init()
+void Ble_init(uint8* mac)
 {
 #define BLE_CMD_SIZE 13
 	static UtpCmdEx g_JtCmdEx[BLE_CMD_SIZE];
@@ -92,6 +137,7 @@ void Ble_init()
 	static uint8 txBuf[64];
 	static const UtpCmd g_UtpCmds[BLE_CMD_SIZE] =
 	{
+		{&g_JtCmdEx[0],UTP_EVENT, REQ_ID_AUTHR			 , "Authr"       , Null, 0, rxBuf  , sizeof(rxBuf),(UtpEventFn)Ble_authent},
 		{&g_JtCmdEx[0],UTP_EVENT, REQ_ID_GET_DEVICEID    , "GetDevID"    , Null, 0, (uint8*)& g_Ble.devIdPkt  , sizeof(BleGetDevIDPkt)},
 		{&g_JtCmdEx[1],UTP_EVENT, REQ_ID_GET_PORT_STATE  , "GetPortState",Null, 0, (uint8*)& g_Ble.portState , sizeof(PmsPortStatePkt)},
 		{&g_JtCmdEx[2],UTP_EVENT, REQ_ID_GET_BATTERYINFO , "GetBatInfo"  , rxBuf, 1},
@@ -101,10 +147,10 @@ void Ble_init()
 		{&g_JtCmdEx[6],UTP_EVENT, REQ_ID_RESET	  ,"DevReset"},
 		{&g_JtCmdEx[7],UTP_EVENT, REQ_ID_SET_NVDS ,"SetNvds", (uint8*)& rxBuf, sizeof(rxBuf), Null, 0, (UtpEventFn)Ble_setNvds},
 		//{&g_JtCmdEx[8],UTP_EVENT, REQ_ID_SET_FACTORY_SETTINGS ,"RecoverFactoryCfg", Null, 0, (uint8*)& g_Ble.pmsPkt, sizeof(PmsPkt)},
-		//{&g_JtCmdEx[9],UTP_EVENT, REQ_ID_GET_NVDS		,"GetNvds", Null, 0, (uint8*)& g_Ble.pmsPkt, sizeof(PmsPkt)},
-		//{&g_JtCmdEx[10],UTP_EVENT, REQ_ID_ACTIVE_REQ	,"GetNvds", Null, 0, (uint8*)& g_Ble.pmsPkt, sizeof(PmsPkt)},
-		//{&g_JtCmdEx[11],UTP_EVENT, REQ_ID_BAT_VERIFY	,"GetNvds", Null, 0, (uint8*)& g_Ble.pmsPkt, sizeof(PmsPkt)},
-		//{&g_JtCmdEx[12],UTP_EVENT, REQ_ID_SET_ALARM_MODE,"GetNvds", Null, 0, (uint8*)& g_Ble.pmsPkt, sizeof(PmsPkt)},
+		//{&g_JtCmdEx[9],UTP_EVENT, REQ_ID_GET_NVDS		  ,"GetNvds"     , Null, 0, (uint8*)& g_Ble.pmsPkt, sizeof(PmsPkt)},
+		//{&g_JtCmdEx[10],UTP_EVENT, REQ_ID_ACTIVE_REQ	  ,"DevActive"   , Null, 0, (uint8*)& g_Ble.pmsPkt, sizeof(PmsPkt)},
+		//{&g_JtCmdEx[11],UTP_EVENT, REQ_ID_BAT_VERIFY	  ,"BatVerify"   , Null, 0, (uint8*)& g_Ble.pmsPkt, sizeof(PmsPkt)},
+		//{&g_JtCmdEx[12],UTP_EVENT, REQ_ID_SET_ALARM_MODE,"SetAlarmMode", Null, 0, (uint8*)& g_Ble.pmsPkt, sizeof(PmsPkt)},
 	};
 	static const UtpCfg cfg =
 	{
@@ -140,5 +186,6 @@ void Ble_init()
 	g_Ble.portState.property[1].portNum = 1;
 
 	BleTpu_Init(&g_BleTpu, &cfg, &g_BleFrameCfg);
+	BleUser_init(&g_Ble.user, mac);
 }
 

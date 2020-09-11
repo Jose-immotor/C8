@@ -225,11 +225,12 @@ void Utp_Reset(Utp* pUtp)
 static UTP_EVENT_RC Utp_Event(Utp* pUtp, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
 	const UtpCfg* cfg = pUtp->cfg;
-	UTP_EVENT_RC op   = pCmd->Event ? pCmd->Event(cfg->pCbObj, pCmd, ev) : UTP_EVENT_RC_SUCCESS;
 	UTP_EVENT_RC opRc = cfg->TresferEvent ? cfg->TresferEvent(cfg->pCbObj, pCmd, ev) : UTP_EVENT_RC_SUCCESS;
+	if (opRc != UTP_EVENT_RC_SUCCESS) return opRc;
+	
+	opRc = pCmd->Event ? pCmd->Event(cfg->pCbObj, pCmd, ev) : UTP_EVENT_RC_SUCCESS;
 
-	//2个返回值，只要有一个为非UTP_EVENT_RC_SUCCESS，返回失败值
-	return (op == UTP_EVENT_RC_SUCCESS) ? opRc : op;
+	return opRc;
 }
 
 
@@ -271,7 +272,7 @@ static void Utp_ReqProc(Utp* pUtp, const uint8_t* pReq, int frameLen)
 		frameLen -= frameCfg->dataByteInd;
 
 		//传输数据
-		pCmd->pExt->transferData = pData;
+		pCmd->pExt->transferData = (uint8*)pData;
 		pCmd->pExt->transferLen = frameLen;
 
 		if (pCmd->pStorage && pCmd->storageLen)
