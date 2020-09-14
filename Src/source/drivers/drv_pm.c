@@ -8,6 +8,8 @@ void Boot(void)
 	Printf("Mcu reset\n");
 
 	//复位之前保存
+	
+//	g_pdoInfo.resetCounter = DateTime_GetSeconds(Null);
 	NvdsUser_Write(NVDS_PDO_INFO);
 	NvdsUser_Write(NVDS_DBG_INFO);
 	
@@ -18,19 +20,19 @@ void Boot(void)
 }
 volatile bool g_isPowerDown = False;//休眠标志，False-没有休眠，True-休眠
 
-//WakeupType g_WakeupType;
-//WakeupType GetWakeUpType()
-//{
-//	return g_WakeupType;
-//}
-//void SetWakeUpType(WakeupType type)
-//{
-//	g_WakeupType = type;
-//}
+WakeupType g_WakeupType;
+WakeupType GetWakeUpType()
+{
+	return g_WakeupType;
+}
+void SetWakeUpType(WakeupType type)
+{
+	g_WakeupType = type;
+}
 
 //处理延时复位功能，主要用于响应一些外部命令，执行后需要应答，然后执行MCU复位操作
-uint32 g_ResetMs = 0;
-static uint32_t g_ResetInitMs = 0;
+//uint32 g_ResetMs = 0;
+//static uint32_t g_ResetInitMs = 0;
 //static Bool g_isPowerOff = False;
 //void ResetDelay(MCURST reason, uint32 ms);
 void DelayPowerOff(uint32 ms)
@@ -40,7 +42,7 @@ void DelayPowerOff(uint32 ms)
 }
 void ResetStop()
 {
-	g_ResetMs = 0;
+//	g_ResetMs = 0;
 //	Fsm_SetActiveFlag(AF_MCU_RESET, False);
 }
 //void ResetDelay(MCURST reason, uint32 ms)
@@ -66,28 +68,20 @@ void ResetStop()
  */
 void Enter_PowerDown()
 {	
-//	RTC_TimerStart(24*60*60);
+	RTC_TimerStart(60*60);//(24*60*60);
 //	//485 power
 //	POWER_3V3_485_OFF;
 //	//NFC power
 //	rt_pin_write(FM17522_ON, PIN_LOW);
 //	rt_pin_write(FM17522_ON1, PIN_LOW);
 //	ADC_Ctrl(ADC1, DISABLE);
-//	//失能 SysTick 计数器
-//	//如果这里不失能 SysTick 计数器，那么会不能进入低功耗模式的
-//	SysTick->CTRL = 0x00;//关闭定时器
-//	SysTick->VAL = 0x00;//清空val,清空定时器
+
 	//待机模式
 	rcu_periph_clock_enable(RCU_PMU);
 	pmu_to_deepsleepmode(PMU_LDO_LOWPOWER, WFI_CMD);
 	//停止模式唤醒后，需要重新配置系统时钟
 	SystemInit();
 	rt_thread_mdelay(200);
-	Pms_switchStatus(PMS_ACC_OFF);
-//	/* Enable SysTick IRQ and SysTick Timer */
-//	SysTick->CTRL  = 	SysTick_CTRL_CLKSOURCE_Msk |
-//						SysTick_CTRL_TICKINT_Msk   |
-//						SysTick_CTRL_ENABLE_Msk;
 }
 
 /*!
@@ -99,27 +93,17 @@ void Enter_PowerDown()
  */
 void Mcu_PowerDown()
 {
-	int remainMin = 0;//Sign_GetRemainMin();
-//	
-//	g_isRtcTimeOut = False;
-//	LOG2(ET_SYS_SLEEP, (uint8)remainMin, 0);//Mcu_GetRound5V());
+//	int remainMin = 0;//Sign_GetRemainMin();
+
+	LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_SysSleep, 0);
 	Printf("power down.\n");
 	g_isPowerDown = True;
 	Enter_PowerDown();
+	
 	g_isPowerDown = False;
-//	LOG2(ET_SYS_WAKEUP, g_Settings.devcfg, GetWakeUpType());
-//	BootWithReason(MCURST_PWR);
-
-//	PMS_WAKEUP_SMART_PORT->ISRC = PMS_WAKEUP_SMART_PIN;
-//	GPIO_EnableInt(PMS_WAKEUP_SMART_PORT, PMS_WAKEUP_SMART_PIN_IND, GPIO_INT_BOTH_EDGE);	
-//	
-//	g_isPowerDown = True;
-//	CLK_PowerDown();
-//	g_isPowerDown = False;
-//	Sim_SetTxDataTime(GPRS_SENDDATA_TIME_SHORT);
-//	
  	Printf("\nPower up.\n");	
-//	LOG2(ET_SYS_WAKEUP, g_Settings.devcfg, g_WakeupType);
+	LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_WakeUp, GetWakeUpType());
+	Pms_switchStatus(PMS_ACC_OFF);
 //	env_nvds_init();
 //	Fsm_Init();
 //	Fsm_Start();

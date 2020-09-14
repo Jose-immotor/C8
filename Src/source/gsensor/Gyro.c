@@ -13,10 +13,10 @@ void Gyro_Isr()
 {
 	rt_interrupt_enter();
 
-//	if(g_isPowerDown)
-//	{
-//		SetWakeUpType(WAKEUP_GYRO);
-//	}
+	if(g_isPowerDown)
+	{
+		SetWakeUpType(WAKEUP_GYRO);
+	}
 	
 	g_GyroIsrTicks = GET_TICKS();
 
@@ -27,7 +27,7 @@ void Gyro_Isr()
 	g_pdoInfo.isGyroOk  = True;
 //	g_Settings.isGyroAssert = True;
 	
-	PFL(DL_GYRO,"gyro interrupt!\n");
+//	PFL(DL_GYRO,"gyro interrupt!\n");
 	
 	rt_interrupt_leave();
 }

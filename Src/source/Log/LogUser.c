@@ -46,6 +46,8 @@ Bool LogItem_Verify(const LogItem* pItem)
 
 void LogUser_init()
 {
+	extern time_t DateTime_GetCurrentSeconds();
+	
 	static LogMgr g_logMgr;
 	g_plogMgr = &g_logMgr;
 
@@ -60,7 +62,7 @@ void LogUser_init()
 		.moduleArray = g_logModules,
 		.moduleCount = GET_ELEMENT_COUNT(g_logModules),
 		.Event = LogUserEvent,
-		.GetCurSec = DateTime_GetSeconds,
+		.GetCurSec = DateTime_GetCurrentSeconds,
 	};
 
 	static LogItem g_logItem;

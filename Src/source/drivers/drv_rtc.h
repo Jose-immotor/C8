@@ -41,6 +41,7 @@ void RTC_GetDateAndTime(S_RTC_TIME_DATA_T *sPt);
 void rtc_configuration(void);
 void LocalTimeInit(void);
 void RTC_TimerStart(uint32_t second);
+void LocalTimeSync(S_RTC_TIME_DATA_T* time );
 
 #ifdef  __cplusplus
 }

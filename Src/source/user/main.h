@@ -4,18 +4,14 @@
 #define MAIN_H
 
 #include "typedef.h"
-#include "gd32f403.h"
-#include "common.h"
-#include <stdbool.h>
 
-extern uint32 g_ResetMs;
-extern volatile bool g_isPowerDown;//休眠标志，False-没有休眠，True-休眠
-//extern WakeupType g_WakeupType;
+#define FW_VER_MAIN 1
+#define FW_VER_S1 0
+#define FW_VER_S2 0
+#define FW_VER_BUILD 1
+#define DES_HW_VER_MAIN 5
+#define DES_HW_VER_SUB 0
 
-/* led spark function */
-void led_spark(void);
-void DelayPowerOff(uint32 ms);
-void ResetStop();
-//void SetWakeUpType(WakeupType type);
-void Boot(Bool isFromAppRom);
+
+
 #endif

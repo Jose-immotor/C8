@@ -30,25 +30,30 @@ static void Dump(int argc, char**argv)
 	extern void BatteryDump(void);
 	extern void NfcCardReaderDump(void);
 	extern void g_pdoInfo_Dump(void);
+	extern void g_degInfo_Dump(void);
 	extern uint32 g_ActiveFlag;
-
+	extern const HwFwVer AppInfo;
+	
 	sscanf(&(*argv[1]), "%d", &ind);
-//	if(1 == ind || 0 == ind) DaraRom_Dump();
+	if(1 == ind || 0 == ind) HwFwVer_Dump(Null,&AppInfo,Null);
 ////	if(2 == ind || 0 == ind) Sign_Dump();
 ////	if(3 == ind || 0 == ind) Gps_Dump();
 ////	if(4 == ind || 0 == ind) Gprs_Dump();
 	if(7 == ind || 0 == ind) BatteryInfoDump();
 	if(9 == ind || 0 == ind) DateTime_dump(Null);
-	if(10 == ind) 			 SectorMgr_Dump(g_NvdsItems[2].sectorMgr);
-	if(11 == ind)			 SectorMgr_Dump(&g_plogMgr->record.sector);
+	if(10 == ind) 			 SectorMgr_Dump(g_NvdsItems[0].sectorMgr);
+	if(11 == ind) 			 SectorMgr_Dump(g_NvdsItems[1].sectorMgr);
+	if(12 == ind) 			 SectorMgr_Dump(g_NvdsItems[2].sectorMgr);
+	if(13 == ind)			 SectorMgr_Dump(&g_plogMgr->record.sector);
 	
-	if(15 == ind)			 g_pdoInfo_Dump();
+	if(21 == ind)			 g_pdoInfo_Dump();
+	if(22 == ind)			 g_degInfo_Dump();
 	
-	if(20 == ind)			 BatteryDump();
-	if(21 == ind)			 NfcCardReaderDump();
+	if(30 == ind)			 BatteryDump();
+	if(31 == ind)			 NfcCardReaderDump();
 	
 	Printf("g_ActiveFlag=0x%x\n", g_ActiveFlag);
-	Printf("g_dwDebugLevel = 0x%04x\n", g_dwDebugLevel);
+	Printf("g_dwDebugLevel = 0x%08x\n", g_dwDebugLevel);
 }
 MSH_CMD_EXPORT(Dump, Dump sample: Dump <uint8_t ind>);
 
@@ -82,14 +87,15 @@ static void Set(int argc, char**argv)
 {
 	int ind = 0;
 	uint32 value;
+	void LocalTimeReset(void);
 
 	sscanf(&(*argv[1]), "%d", &ind);
 	sscanf(&(*argv[2]), "%d", &value);
 	switch(ind)
 	{
 		case 0: LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_McuReset, value);break;
-////		case 1: SetActive(value); Nvds_Write_Setting(); break;
-////		case 2: SetForbidDischarge(value); Nvds_Write_Setting(); break;
+		case 1: if(value>0&&value<4) NvdsUser_Write(value);break;
+		case 2: LocalTimeReset(); break;
 ////		case 3: SetSignEn(value); Nvds_Write_Setting(); break;
 ////		case 4: Sign_SetMaxTime(value); break;
 ////		case 5: Sign_DisableTimerReset(value); break;

@@ -31,7 +31,9 @@ extern "C"{
 #include "drv_pm.h"
 #include "Debug.h"
 #include "pms.h"
-
+#include "drv_rtc.h"
+#include "main.h"
+#include "HwFwVer.h"
 
 #ifdef __cplusplus
 }

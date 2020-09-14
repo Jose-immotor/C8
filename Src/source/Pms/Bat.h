@@ -1,6 +1,6 @@
 
-#ifndef __BATTERY__H_
-#define __BATTERY__H_
+#ifndef __BAT__H_
+#define __BAT__H_
 
 #ifdef __cplusplus
 extern "C" {

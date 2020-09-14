@@ -8,6 +8,8 @@ const LogEvt g_SysLogEvts[SYS_LOG_EVT_COUNT] =
 	 {SYS_CATID_COMMON ,0 ,SysEvtID_HighTempAlarm, "HighTempAlarm"  , "Ntc:%16-31B{3-LcdNtc|4-ChgrNtc|5-PmsOnBoard|6-PmsOutside}; AlarmBit[%15-0BX]"},
 	 {SYS_CATID_COMMON ,0 ,SysEvtID_BATIN,  "BAT-IN"	 , "SOC(0.1):%0-16B"},
 	 {SYS_CATID_COMMON ,0 ,SysEvtID_BATOUT, "BAT-OUT"	 },
+	 {SYS_CATID_COMMON ,0 ,SysEvtID_SysSleep, "SYS-SLEEP"	 },
+	 {SYS_CATID_COMMON ,0 ,SysEvtID_WakeUp, "SYS-WAKEUP"	 },
 };
 
 //Sample£º add a log

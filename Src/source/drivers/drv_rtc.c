@@ -8,10 +8,11 @@
  * 2020-02-25     lane      first implementation
  */
 #include "drv_rtc.h"
-//#include "main.h"
+#include "Common.h"
 #include "date.h"
 #include <string.h>
 #include "DateTime.h"
+#include "drv_pm.h"
 
 S_RTC_TIME_DATA_T sInitTime;
 
@@ -30,8 +31,8 @@ void rtc_configuration(void)
     pmu_backup_write_enable();
     /* reset backup domain */
     bkp_deinit();
-//	nvic_irq_enable(RTC_ALARM_IRQn, 1U, 0U);
-	nvic_irq_enable(RTC_IRQn, 0U, 0U);
+	nvic_irq_enable(RTC_ALARM_IRQn, 1U, 0U);
+//	nvic_irq_enable(RTC_IRQn, 0U, 0U);
 	exti_init(EXTI_17, EXTI_INTERRUPT, EXTI_TRIG_RISING);
 	
 #ifdef USE_RTC_LXTAL	
@@ -71,20 +72,18 @@ void RTC_Alarm_IRQHandler(void)
 	rt_interrupt_enter();
 	if(rtc_flag_get(RTC_FLAG_ALARM) != RESET)
 	{
-//		rtc_flag_clear(RTC_FLAG_ALARM);        ///<Clear EXTI line17 pending bit
-//		if(pmu_flag_get(PMU_FLAG_WAKEUP) != RESET) ///<Check if the Wake-Up flag is set
-//		{
-//			pmu_flag_clear(PMU_FLAG_WAKEUP);             ///<Clear Wake Up flag
-//		}
-//		rtc_lwoff_wait();		                       ///<Wait until last write operation on RTC registers has finished
-		rtc_flag_clear(RTC_FLAG_ALARM);        	///<Clear RTC Alarm interrupt pending bit
-		rtc_lwoff_wait();		                       ///<Wait until last write operation on RTC registers has finished
+		rtc_lwoff_wait();		        //<Wait until last write operation on RTC registers has finished
+		rtc_flag_clear(RTC_FLAG_ALARM); //<Clear RTC Alarm interrupt pending bit
+		rtc_lwoff_wait();		        //<Wait until last write operation on RTC registers has finished
 		
-//		PostMsg(MSG_RTC_TIMEOUT);
-//		if(g_isPowerDown)	
+		if(g_isPowerDown)	
 		{
-//			SetWakeUpType(WAKEUP_RTC);
+			SetWakeUpType(WAKEUP_RTC);
 		}
+	}
+	if(SET == exti_interrupt_flag_get(EXTI_17))
+	{
+		exti_interrupt_flag_clear(EXTI_17);
 	}
 	rt_interrupt_leave();
 }
@@ -212,8 +211,8 @@ void LocalTimeInit(void)
 //RTC¶¨Ê±»½ÐÑ
 void RTC_TimerStart(uint32_t second)
 {
-    rcu_periph_clock_enable(RCU_BKPI);
-    rcu_periph_clock_enable(RCU_PMU);	
+//    rcu_periph_clock_enable(RCU_BKPI);
+//    rcu_periph_clock_enable(RCU_PMU);	
 	/* Enable RTC Clock */
 	rcu_periph_clock_enable(RCU_RTC);
 	/* Wait for RTC registers synchronization */
@@ -228,3 +227,61 @@ void RTC_TimerStart(uint32_t second)
 	rtc_lwoff_wait();
 }
 
+void LocalTimeSync(S_RTC_TIME_DATA_T* time )
+{
+	extern void DateTime_dump(S_RTC_TIME_DATA_T* dt);
+	
+	struct rtc_time systime;
+	/* Time Setting */
+	Printf("DataTime sync:");
+	DateTime_dump(time);
+	
+	sInitTime.u32Year       = time->u32Year;
+	sInitTime.u32Month      = time->u32Month;
+	sInitTime.u32Day        = time->u32Day;
+	sInitTime.u32Hour       = time->u32Hour;
+	sInitTime.u32Minute     = time->u32Minute;
+	sInitTime.u32Second     = time->u32Second;
+	
+//	memcpy(&systime,&sInitTime,sizeof(struct rtc_time));
+	systime.tm_sec = sInitTime.u32Second;
+	systime.tm_min = sInitTime.u32Minute;
+	systime.tm_hour = sInitTime.u32Hour;
+	systime.tm_mday = sInitTime.u32Day;
+	systime.tm_mon = sInitTime.u32Month;
+	systime.tm_year = sInitTime.u32Year;
+	systime.tm_wday = sInitTime.u32DayOfWeek;
+	
+    /* change the current time */
+    rtc_counter_set(mktimev(&systime));
+    rtc_lwoff_wait();	
+}
+
+void LocalTimeReset(void)
+{
+    static struct rtc_time systime;
+	/* Time Setting */
+    sInitTime.u32Year       = 2020;
+    sInitTime.u32Month      = 1;
+    sInitTime.u32Day        = 1;
+    sInitTime.u32Hour       = 12;
+    sInitTime.u32Minute     = 0;
+    sInitTime.u32Second     = 0;
+    sInitTime.u32DayOfWeek  = RTC_WEDNESDAY;
+    sInitTime.u32TimeScale  = RTC_CLOCK_24;
+	sInitTime.u32AmPm       = RTC_AM;
+	
+//	memcpy(&systime,&sInitTime,sizeof(struct rtc_time));
+	systime.tm_sec = sInitTime.u32Second;
+	systime.tm_min = sInitTime.u32Minute;
+	systime.tm_hour = sInitTime.u32Hour;
+	systime.tm_mday = sInitTime.u32Day;
+	systime.tm_mon = sInitTime.u32Month;
+	systime.tm_year = sInitTime.u32Year;
+	systime.tm_wday = sInitTime.u32DayOfWeek;
+
+    /* change the current time */
+    rtc_counter_set(mktimev(&systime));
+	/* Wait until last write operation on RTC registers has finished */
+	rtc_lwoff_wait();
+}

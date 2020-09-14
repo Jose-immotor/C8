@@ -18,16 +18,27 @@
 #include "drv_rtc.h"
 #include "drv_gpio.h"
 #include "Gyro.h"
+#include "drv_adc.h"
+
+const HwFwVer AppInfo={
+FW_VER_MAIN,
+FW_VER_S1,
+FW_VER_S2,
+FW_VER_BUILD,
+DES_HW_VER_MAIN,
+DES_HW_VER_SUB};
+
 
 int main(void)
 {
-	Printf("\n\nPower up.\n");	
+	Printf("\n\nPower up.\n");
 	//MCU硬件初始化
 	//Todo...
-
+	HwFwVer_Dump(Null,&AppInfo,Null);
 	//所有对象初始化
 	cm_backtrace_init("C7Pms", "1.0", "1.0");
 	IO_Init();
+	Adc_init();
 	LocalTimeInit();
 	Debug_Init();
 	NvdsUser_Init();

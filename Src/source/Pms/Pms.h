@@ -15,6 +15,7 @@ extern "C" {
 #include "Bit.h"
 
 #define MAX_BAT_COUNT 2
+#define PMS_ACC_OFF_ACTIVE_TIME 5*60*1000//5分钟
 
 	//活动标志定义，当该标志被置位时，设备不能进入睡眠。
 	typedef enum _ActiveFlag
@@ -35,7 +36,7 @@ extern "C" {
 	//电池操作状态
 	typedef enum _PmsOpStatus
 	{
-		PMS_ACC_OFF = 1,		//熄火,初始状态
+		PMS_ACC_OFF = 1,	//熄火,初始状态
 		PMS_ACC_ON	,		//点火
 		PMS_SLEEP	,		//浅休眠
 		PMS_DEEP_SLEEP,		//深度休眠
