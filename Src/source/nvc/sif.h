@@ -6,7 +6,7 @@ extern "C"{
 #endif
 
 #include "typedef.h"
-#include "gd32f403.h"
+#include "gd32e10x.h"
 
 #define NVC_SIF_PORT	GPIOC
 #define NVC_SIF_PIN		GPIO_PIN_6

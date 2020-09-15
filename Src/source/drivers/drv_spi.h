@@ -12,7 +12,7 @@
 #ifndef GD25QXX_H
 #define GD25QXX_H
 
-#include "gd32f403.h"
+#include "gd32e10x.h"
 
 #define  SPI_FLASH_PAGE_SIZE       0x100
 #define  SPI_FLASH_CS_LOW()        gpio_bit_reset(GPIOA, GPIO_PIN_4)

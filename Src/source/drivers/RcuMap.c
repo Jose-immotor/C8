@@ -15,8 +15,6 @@ static const rcuPortMap[] =
 	{GPIOC, RCU_GPIOC},
 	{GPIOD, RCU_GPIOD},
 	{GPIOE, RCU_GPIOE},
-	{GPIOF, RCU_GPIOF},
-	{GPIOG, RCU_GPIOG},
 	{DMA0 , RCU_DMA0},
 	{DMA1 , RCU_DMA1},
 	{TIMER0 , RCU_TIMER0},

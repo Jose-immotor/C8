@@ -8,7 +8,7 @@ extern "C" {
 
 #include "typedef.h"
 #include "MsgDef.h"
-#include "gd32f403.h"
+#include "gd32e10x.h"
 
 #define IS_OUT_MODE(mode) ((mode & 0xF0) == 0x10)
 #define IS_IN_MODE(mode) ((mode & 0xF0) != 0x10)

@@ -15,7 +15,7 @@
 
 //#include <rthw.h>
 #include <rtthread.h>
-#include "gd32f403.h"
+#include "gd32e10x.h"
 #include "drv_usart.h"
 
 char rt_hw_console_getchar(void)

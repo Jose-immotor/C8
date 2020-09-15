@@ -240,7 +240,7 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
 	if (msgId == PmsMsg_run)
 	{
-		if ((g_pJt->isLocation))//||(SwTimer_isTimerOutEx(g_pms.statusSwitchTicks,PMS_ACC_OFF_ACTIVE_TIME)))
+		if ((g_pJt->isLocation)||(SwTimer_isTimerOutEx(g_pms.statusSwitchTicks,PMS_ACC_OFF_ACTIVE_TIME)))
 		{
 			Pms_switchStatus(PMS_DEEP_SLEEP);
 		}

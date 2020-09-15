@@ -137,7 +137,7 @@ void NvdsUser_Init()
 	
 	Nvds_Init(g_NvdsItems, GET_ELEMENT_COUNT(g_NvdsItems));
 	flash_id = spi_flash_read_id();
-//	Printf("The Flash_ID:0x%X\n\r",flash_id);
+	Printf("The Flash_ID:0x%X\n\r",flash_id);
 	g_pdoInfo.isFlashOk = (flash_id == 0xC22015)? 1:0;
 	if(g_pdoInfo.timeStamp)
 	{

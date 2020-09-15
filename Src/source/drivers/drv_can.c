@@ -6,8 +6,7 @@
  */
 #include "drv_can.h"
 #include <string.h>
-#include "gd32f403_can.h"
-#include "gd32f403_it.h"
+#include "gd32e10x.h"
 #include "Common.h"
 
  FlagStatus can0_receive_flag;
@@ -94,7 +93,7 @@ void can0_init(void)
 	can_init_parameter.time_triggered = DISABLE;
 	can_init_parameter.auto_bus_off_recovery = DISABLE;
 	can_init_parameter.auto_wake_up = DISABLE;
-	can_init_parameter.no_auto_retrans = DISABLE;
+	can_init_parameter.auto_retrans = DISABLE;
 	can_init_parameter.rec_fifo_overwrite = DISABLE;
 	can_init_parameter.trans_fifo_order = DISABLE;
 	can_init_parameter.working_mode = CAN_NORMAL_MODE;

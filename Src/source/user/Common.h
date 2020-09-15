@@ -25,7 +25,7 @@ extern "C"{
 #include "ExternFlashMap.h"
 #include "NvdsUser.h"
 #include "rtthread.h"
-#include "gd32f403.h"
+#include "gd32e10x.h"
 #include "LogUser.h"
 #include "SysLog.h"
 #include "drv_pm.h"

@@ -26,7 +26,7 @@
 
 #include "drv_i2c.h"
 #include <rtthread.h>
-#include "gd32f403.h"
+#include "gd32e10x.h"
 
 static void GPIO_Configuration_I2C(uint32_t i2c_periph)
 {

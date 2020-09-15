@@ -4,7 +4,7 @@
 #define _RESOURCE_MAP_H
 
 #include "typedef.h"
-#include "gd32f403_rcu.h"
+#include "gd32e10x.h"
 
 rcu_periph_enum Rcu_Get(uint32 periph);
 IRQn_Type IRQn_Get(uint32 com);

@@ -25,7 +25,7 @@
 #ifndef __DRV_I2C__
 #define __DRV_I2C__
 
-#include "gd32f403.h"
+#include "gd32e10x.h"
 
 #define I2C_SHORT_TIMEOUT 0x3fff
 #define I2C_LONG_TIMEOUT 0x5fff
