@@ -14,7 +14,7 @@ JT808 g_Jt;
 JT808* g_pJt = &g_Jt;
 static Utp g_JtUtp;
 static uint32_t g_hbIntervalMs = 2000;	//MCU心跳时间间隔，单位Ms
-static uint8_t g_txBuf[128];
+static uint8_t g_txBuf[100];
 static uint8_t g_txlen = 0;
 uint8_t g_hbdata[4] = {0x00, 0x00, 0x07, 0xD0};
 
