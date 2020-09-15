@@ -20,6 +20,9 @@ extern "C"{
 #define MAX(v1, v2) ((v1) < (v2) ? (v2) : (v1))
 #define GET_ELEMENT_COUNT(array) (sizeof(array)/sizeof(array[1]))
 
+#define REG_VALUE(addr) (*(volatile unsigned int*)(addr))
+#define REG_WRITE(addr, val) do{REG_VALUE(addr) = (val);} while (0);
+
 #ifdef __cplusplus
 }
 #endif

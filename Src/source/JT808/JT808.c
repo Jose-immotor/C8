@@ -150,9 +150,12 @@ UTP_EVENT_RC JT808_event_devStateChanged(JT808* pJt, const UtpCmd* pCmd, UTP_TXF
 
 UTP_EVENT_RC JT808_event_rcvSvrData(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
-	if (ev == UTP_GET_RSP)
+	if (ev == UTP_CHANGED_AFTER)
 	{
 		JtTlv8900_proc(pCmd->pExt->transferData, pCmd->pExt->transferLen);
+	}
+	else if (ev == UTP_GET_RSP)
+	{
 	}
 	return UTP_EVENT_RC_SUCCESS;
 }

@@ -13,8 +13,10 @@ extern "C" {
 	{
 		CARD_READER_MSG_RUN = 0X01,		//运行
 		CARD_READER_MSG_TIMEOUT,		//超时
-		CARD_READER_MSG_SEND,			//发送数据
+		CARD_READER_MSG_TX,				//发送数据
+		CARD_READER_MSG_TX_DONE,		//发送数据借宿
 		CARD_READER_MSG_WAKEUP,			//唤醒
+		CARD_READER_MSG_SEARCH_CARD_DONE,		//搜卡结束
 		CARD_READER_MSG_SEARCH_PORT,	//搜索串口,消息参数：CARD_READER_MSG_SEARCH_PORT(port)
 	}NfcCardReaderMsg;
 
@@ -56,7 +58,7 @@ extern "C" {
 		uint32_t searchTicks;	//搜索端口Ticks,用于计算搜索同一端口的时间间隔
 
 		SwTimer sleepTimer;
-		unsigned char picc_ats[14];
+		//unsigned char picc_ats[14];
 
 		NfcCardReaderStatus status;
 
