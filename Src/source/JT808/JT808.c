@@ -16,6 +16,7 @@ static Utp g_JtUtp;
 static uint32_t g_hbIntervalMs = 2000;	//MCU心跳时间间隔，单位Ms
 static uint8_t g_txBuf[128];
 static uint8_t g_txlen = 0;
+uint8_t g_hbdata[4] = {0x00, 0x00, 0x07, 0xD0};
 
 void JT808_fsm(uint8_t msgID, uint32_t param1, uint32_t param2);
 
@@ -70,7 +71,7 @@ UTP_EVENT_RC JT808_cmd_getSimCfg(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT e
 		{
 			paramIDs[i] = p->tag;
 		}
-		pCmd->pExt->transferLen = i * 4;
+		pCmd->pExt->transferLen = i * 2;
 	}
 	else if (ev == UTP_REQ_SUCCESS)	//读取成功
 	{
@@ -150,12 +151,36 @@ UTP_EVENT_RC JT808_event_devStateChanged(JT808* pJt, const UtpCmd* pCmd, UTP_TXF
 
 UTP_EVENT_RC JT808_event_rcvSvrData(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
-	if (ev == UTP_GET_RSP)
+	 if (ev == UTP_CHANGED_AFTER)
+	 {
+	  	JtTlv8900_proc(pCmd->pExt->transferData, pCmd->pExt->transferLen);
+	 }
+	 else if (ev == UTP_GET_RSP)
+	 {
+	 	
+	 }
+	 	return UTP_EVENT_RC_SUCCESS;
+}
+
+UTP_EVENT_RC JT808_event_sendSvrData(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
+{
+	static int readParamOffset = 0;
+	static int i = 0;
+	int len = 0;
+	uint16* paramIDs = (uint16*)pCmd->pExt->transferData;
+
+	if(ev == UTP_TX_START)	
 	{
-		JtTlv8900_proc(pCmd->pExt->transferData, pCmd->pExt->transferLen);
+		pCmd->pExt->transferLen = g_txlen;
 	}
+	else if(ev == UTP_REQ_SUCCESS)
+	{
+		g_txlen = 0;
+	}
+
 	return UTP_EVENT_RC_SUCCESS;
 }
+
 
 UTP_EVENT_RC JT808_event_rcvBleData(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
@@ -211,6 +236,7 @@ void JT808_fsm_preoperation(uint8_t msgID, uint32_t param1, uint32_t param2)
 		if (pCmd->cmd == JTCMD_CMD_GET_FILE_INFO)
 		{
 			g_Jt.setToOpState = JT_STATE_OPERATION;
+			Utp_SendCmd(&g_JtUtp, JTCMD_SET_OP_STATE);
 		}
 	}
 }
@@ -222,7 +248,11 @@ void JT808_fsm_operation(uint8_t msgID, uint32_t param1, uint32_t param2)
 		if (Utp_isIdle(&g_JtUtp))
 		{
 			int len = JtTlv0900_getChangedTlv(g_txBuf, sizeof(g_txBuf), Null);
-			if (len) Utp_SendCmd(&g_JtUtp, JTCMD_CMD_SEND_TO_SVR);
+			if (len) 
+			{
+				g_txlen = len;
+				Utp_SendCmd(&g_JtUtp, JTCMD_CMD_SEND_TO_SVR);
+			}
 		}
 	}
 }
@@ -292,30 +322,38 @@ void JTcmd(int argc, char** argv)
 MSH_CMD_EXPORT(JTcmd, JT808_sendCmd<uint8_t ind>);
 
 extern can_trasnmit_message_struct transmit_message;
-extern can_receive_message_struct  receive_message;
-extern FlagStatus can0_receive_flag;
 //xx 发送数据到总线 一次最多发送8个字节 发送时需判断是否到最后一包
-int JT808_txData(uint8_t cmd, const uint8_t* pData, int len)
+int JT808_txData(uint8_t cmd, const uint8_t* pData, uint32_t len)	//cmd为CAN协议的PF
 {
-	uint8 tx_max;
-	uint8 tx_time = 0;
-	//uint8 tx_num;
-	tx_max = (len - 1)/8 + 1;
-	for(; tx_max - 1 > tx_time; tx_time++)
-	{
-		memcpy( transmit_message.tx_data , pData , 8);	
-		transmit_message.tx_dlen = 8;
-		can_message_transmit(CAN0, &transmit_message);
-		memset( transmit_message.tx_data , 0 , sizeof(transmit_message.tx_data));
-		pData += 8;
-		rt_thread_mdelay(5);
-	}
-	memcpy( transmit_message.tx_data , pData , len-tx_time*8 );
-	transmit_message.tx_dlen = len-tx_time*8;
-	can_message_transmit(CAN0, &transmit_message);
-	memset( transmit_message.tx_data , 0 , 8);
-	rt_thread_mdelay(5);
+	uint32_t send_len = 0;
 	//transfer data to bus.
+	while(len)
+	{
+		if(len > 8)
+		{
+			send_len = 8;
+		}
+		else
+		{
+			send_len = len;
+		}
+		memcpy(transmit_message.tx_data, pData, send_len);	
+		transmit_message.tx_dlen = send_len;
+		can_message_transmit(CAN0, &transmit_message);
+//		rt_thread_mdelay(20);
+		while(CAN_TRANSMIT_PENDING == can_transmit_states(CAN0, CAN_MAILBOX0));
+
+		if(len > 8)
+		{
+			pData = pData + 8;
+			len = len - 8;
+		}
+		else
+		{
+			break;
+		}
+	}
+
 	return len;
 }
 
@@ -328,19 +366,7 @@ void JT808_rxDataProc(const uint8_t* pData, int len)
 
 void JT808_timerProc()
 {
-		if(can0_receive_flag == SET)
-		{
-			can0_receive_flag = RESET;
-			JT808_rxDataProc( receive_message.rx_data , receive_message.rx_dlen );
-			printf("\r\n can0 receive \r\n Data:");
-			for(uint8 vl_rx_cnt=0; vl_rx_cnt < receive_message.rx_dlen;vl_rx_cnt++)
-			{
-				printf("%02hhX ", receive_message.rx_data[vl_rx_cnt]);
-			}
-		}
-		//Utp_SendCmd(&g_JtUtp, JTCMD_MCU_HB);
-		rt_thread_mdelay(1);
-		
+
 }
 
 void JT808_run()
@@ -380,7 +406,7 @@ void JT808_init()
 	static const UtpCmd g_JtCmd[JT_CMD_SIZE] =
 	{
 		//位置越靠前，发送优先级越高
-		{&g_JtCmdEx[0],UTP_NOTIFY, JTCMD_MCU_HB, "McuHb", (uint8_t*)& g_hbIntervalMs, 4},
+		{&g_JtCmdEx[0],UTP_NOTIFY, JTCMD_MCU_HB, "McuHb", g_hbdata, 4},	/*(uint8_t*)& g_hbIntervalMs*/
 		{&g_JtCmdEx[1],UTP_EVENT_NOTIFY, JTCMD_SIM_HB, "SimHb", (uint8_t*)& g_Jt.opState, 1, Null, 0, (UtpEventFn)JT808_event_simHb},
 
 		{&g_JtCmdEx[2],UTP_READ , JTCMD_CMD_GET_SIM_ID , "GetSimID"	, (uint8_t*)& g_Jt.property, sizeof(JtDevProperty), &g_protocolVer, 1, (UtpEventFn)JT808_cmd_getSimID},
@@ -391,7 +417,7 @@ void JT808_init()
 		{&g_JtCmdEx[5],UTP_EVENT, JTCMD_EVENT_DEV_STATE_CHANGED, "DevStateChanged", (uint8_t*)& g_Jt.devState, sizeof(JT_devState), Null, 0, (UtpEventFn)JT808_event_devStateChanged},
 
 		{&g_JtCmdEx[6],UTP_EVENT, JTCMD_EVT_RCV_SVR_DATA, "RcvSvrData", (uint8_t*)g_rxBuf, sizeof(g_rxBuf), Null, 0, (UtpEventFn)JT808_event_rcvSvrData},
-		{&g_JtCmdEx[7],UTP_WRITE, JTCMD_CMD_SEND_TO_SVR, "SendDataToSvr", (uint8_t*)g_txBuf, sizeof(g_txBuf)},
+		{&g_JtCmdEx[7],UTP_WRITE, JTCMD_CMD_SEND_TO_SVR, "SendDataToSvr", (uint8_t*)g_txBuf, sizeof(g_txBuf), Null, 0, (UtpEventFn)JT808_event_sendSvrData},
 
 		{&g_JtCmdEx[8],UTP_WRITE, JTCMD_CMD_SEND_TO_SVR, "SendDataToSvr", (uint8_t*)g_txBuf, sizeof(g_txBuf)},
 
@@ -417,9 +443,4 @@ void JT808_init()
 	JtTlv8900_init();
 	JtTlv0900_init();
 	JtTlv8103_init();
-	can0_init();
-	g_txBuf[0] = 'O';
-	g_txBuf[1] = 'K';
-
-	g_txlen = 2;
 }

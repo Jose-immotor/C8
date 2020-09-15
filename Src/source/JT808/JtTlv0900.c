@@ -36,7 +36,7 @@ void JtTlv0900_init()
 {
 #define TLV_OUT_COUNT 4
 	static TlvOutEx g_tlvBuf_0900Ex[TLV_OUT_COUNT];
-	const TlvOut g_tlv_0900[TLV_OUT_COUNT] =
+	static const TlvOut g_tlv_0900[TLV_OUT_COUNT] =
 	{
 		{"BAT_INFO"	, &g_tlvBuf_0900Ex[0], TAG_BAT_INFO		  , sizeof(TlvBatInfo), &g_tlvBatInfo[0]    , DT_STRUCT, &g_tlvBatInfo_mirror[0]	, Null, 0, 6},
 		{"BAT_WORK"	, &g_tlvBuf_0900Ex[1], TAG_BAT_WORK_PARAM , sizeof(TlvBatInfo), &g_tlvBatWorkInfo[0], DT_STRUCT, &g_tlvBatWorkInfo_mirror[0], Null, 0, 6},

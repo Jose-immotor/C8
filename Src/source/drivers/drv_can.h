@@ -23,6 +23,9 @@
 /* 20kBps */ 
 /* #define CAN_BAUDRATE  20 */
 
+#define CAN_TX_ID 	0x2010
+#define CAN_RX_ID	0x1020
+
 void can0_receive_isr(void);
 void can0_init(void);
 void can_start(void);
