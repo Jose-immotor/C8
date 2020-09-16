@@ -20,7 +20,9 @@ static DrvIo g_InIOs[] =
 	{IO_NFC_IRQ_A, "NFC_IRQ_A", GPIOE, GPIO_PIN_15, GPIO_MODE_IN_FLOATING},//, EXTI_15, 
 		//GPIO_PORT_SOURCE_GPIOE, GPIO_PIN_SOURCE_15, EXTI_TRIG_RISING}
 	{IO_GRYO_IRQ, "GYRO_IRQ", GPIOB, GPIO_PIN_8, GPIO_MODE_IN_FLOATING, EXTI_8, 
-		GPIO_PORT_SOURCE_GPIOB, GPIO_PIN_SOURCE_8, EXTI_TRIG_BOTH}
+		GPIO_PORT_SOURCE_GPIOB, GPIO_PIN_SOURCE_8, EXTI_TRIG_BOTH},
+	{IO_GPRS_INSERT, "GPRS_INSERT", GPIOA, GPIO_PIN_2, GPIO_MODE_IN_FLOATING, EXTI_2, 
+		GPIO_PORT_SOURCE_GPIOA, GPIO_PIN_SOURCE_2, EXTI_TRIG_BOTH},
 };
 
 //所有命名包含“ON”表示高电平有效, 包含“OFF”表示低电平有效
@@ -28,7 +30,9 @@ static DrvIo g_OutputIOs[] =
 {
 	//输出配置	
 	{CTRL_MCU_LED	, "CTRL_MCU_LED"	, GPIOE, GPIO_PIN_2 ,GPIO_MODE_OUT_PP},
-	{IO_NFC_NPD_A	, "NFC_NPD_A"		, GPIOE, GPIO_PIN_14 ,GPIO_MODE_OUT_PP}
+	{IO_NFC_NPD_A	, "NFC_NPD_A"		, GPIOE, GPIO_PIN_14 ,GPIO_MODE_OUT_PP},
+	{IO_BOOST_EN	, "BOOST_EN"		, GPIOE, GPIO_PIN_11 ,GPIO_MODE_OUT_PP},
+	{IO_NFC_PWR_OFF	, "NFC_PWR_OFF"		, GPIOE, GPIO_PIN_0 ,GPIO_MODE_OUT_PP},
 };
 
 ////=============================================
@@ -205,18 +209,18 @@ const char* GPIOxToPx(uint32 port)
 	return "No";
 }
 
-////ch = 'A', 'B', 'C', 'D', 'E', 'F', 'G',
-//uint32 ABCDEFG_ToPort(char ch)
-//{
-//	for (int i = 0; i < GET_ELEMENT_COUNT(g_IOPortName); i++)
-//	{
-//		if (g_IOPortName[i].Name[1] == ch)
-//		{
-//			return g_IOPortName[i].periph;
-//		}
-//	}
-//	return 0;
-//}
+//ch = 'A', 'B', 'C', 'D', 'E', 'F', 'G',
+uint32 ABCDEFG_ToPort(char ch)
+{
+	for (int i = 0; i < GET_ELEMENT_COUNT(g_IOPortName); i++)
+	{
+		if (g_IOPortName[i].Name[1] == ch)
+		{
+			return g_IOPortName[i].periph;
+		}
+	}
+	return 0;
+}
 
 ////根据port和pin参数，转换为字符串，例如 PortNameToStr(GPIOA, GPIO_PIN_3) -> "PA3"
 //返回值："PA0";"PA1"..."PG15"
@@ -238,33 +242,33 @@ char* PortPinToPxx(uint32 port, uint32 pin)
 	return retStr;
 }
 
-////str = "PA1";"PB2";...
-//DrvIo* PxxToPortPin(const char* Pxx, uint32* port, uint32* pin)
-//{
-//	char ch;
-//	if (2 == sscanf(Pxx, "P%c%ud", &ch, pin))
-//	{
-//		*pin = BIT(*pin);
-//		*port = ABCDEFG_ToPort(ch);
-//	}
+//str = "PA1";"PB2";...
+DrvIo* PxxToPortPin(const char* Pxx, uint32* port, uint32* pin)
+{
+	char ch;
+	if (2 == sscanf(Pxx, "P%c%ud", &ch, pin))
+	{
+		*pin = BIT(*pin);
+		*port = ABCDEFG_ToPort(ch);
+	}
 
-//	for (int i = 0; i < GET_ELEMENT_COUNT(g_InIOs); i++)
-//	{
-//		if (g_InIOs[i].periph == *port && g_InIOs[i].pin == *pin) return &g_InIOs[i];
-//	}
+	for (int i = 0; i < GET_ELEMENT_COUNT(g_InIOs); i++)
+	{
+		if (g_InIOs[i].periph == *port && g_InIOs[i].pin == *pin) return &g_InIOs[i];
+	}
 
 //	for (int i = 0; i < GET_ELEMENT_COUNT(g_SwitchIOs); i++)
 //	{
 //		if (g_SwitchIOs[i].periph == *port && g_SwitchIOs[i].pin == *pin) return &g_SwitchIOs[i];
 //	}
 
-//	for (int i = 0; i < GET_ELEMENT_COUNT(g_OutputIOs); i++)
-//	{
-//		if (g_OutputIOs[i].periph == *port && g_OutputIOs[i].pin == *pin) return &g_OutputIOs[i];
-//	}
+	for (int i = 0; i < GET_ELEMENT_COUNT(g_OutputIOs); i++)
+	{
+		if (g_OutputIOs[i].periph == *port && g_OutputIOs[i].pin == *pin) return &g_OutputIOs[i];
+	}
 
-//	return Null;
-//}
+	return Null;
+}
 
 ////根据exti号获取IO对象
 //DrvIo* IO_GetByExti(uint32 exti)
@@ -556,6 +560,24 @@ void IO_IRQEnable(Bool isEnable)
 
 //}
 
+//外置模块插入，拔出处理
+void gprs_insert(void)
+{
+	rt_interrupt_enter();
+
+	if(g_isPowerDown)
+	{
+		SetWakeUpType(WAKEUP_GPRS_INSERT);
+	}
+	
+//	if(GPIO_READ(PB, 14))
+//	{
+//		PostMsg(MSG_GYRO_ASSERT);
+//	}
+	
+	rt_interrupt_leave();
+}
+
 void IO_Stop()
 {
 	g_isIoStart = False;
@@ -659,7 +681,7 @@ void IO_Run()
 
 //	IO_CheckIOState();
 }
-
+static DrvIo* g_pBootEnIO = Null;
 int IO_Init(void)
 {
 	static const Obj obj = {"IODriver", IO_Start, IO_Stop, IO_Run};
@@ -675,6 +697,9 @@ int IO_Init(void)
 	{
 		IO_PinInit(&g_OutputIOs[i]);
 	}
+	
+	g_pBootEnIO = IO_Get(IO_BOOST_EN);
+	PortPin_Set(g_pBootEnIO->periph, g_pBootEnIO->pin, True);
 	return 0;
 }
 //INIT_BOARD_EXPORT(IO_Init);

@@ -3,203 +3,199 @@
 #include "drv_adc.h"
 //#include "Ntc.h"
 #include "RcuMap.h"
-
+#include "drv_gpio.h"
 
 //static Ntc* g_pNtc;
 //ADC转换之后会把数据通过DMA自动保存在该变量中
 #define ADC_VAL_COUNT 7
 
 //配置给Dma使用，保存采样后的RAW值。
-static uint16 g_dmaRawValue[ADC_VAL_COUNT] = { 0 };
+//static 
+uint16 g_dmaRawValue[ADC_VAL_COUNT] = { 0 };
 int adc0Count = 0;
 int adc1Count = 0;
 
 uint16_t OD_18650Voltage;
 
-////18650电池是否在位
-//static Bool g_18650IsPresent = False;
+//18650电池是否在位
+static Bool g_18650IsPresent = False;
 //// ADC_CHANNEL_x(x=0..17)(x=16 and x=17 are only for ADC0): ADC Channelx 
 //Adc* g_pAdc_18650Votage = Null;
-#define ADC_REFV 3.0f
+#define ADC_REFV 3.3f
 static Adc g_Adc[] =
 {
-//	{ADC_18650_CHARGE_I	,"18650_CHG_I" ,GPIOC, GPIO_PIN_5, ADC0, ADC_CHANNEL_15 ,&g_dmaRawValue[0], ADC_REFV, Null, &OD_18650Current},
-	{ADC_18650_VOLTAGE	,"18650_VOL "  ,GPIOC, GPIO_PIN_0, ADC0, ADC_CHANNEL_10  ,&g_dmaRawValue[0], ADC_REFV, Null, &OD_18650Voltage},
-//	{ADC_18650_TEMP		,"18650_TEMP"     ,GPIOB, GPIO_PIN_1, ADC0, ADC_CHANNEL_9  ,&g_dmaRawValue[2], ADC_REFV, Null },
+	{ADC_18650_VOLTAGE	,"18650_VOL " ,GPIOC, GPIO_PIN_0, ADC0, ADC_CHANNEL_10  ,&g_dmaRawValue[0], ADC_REFV, Null, &OD_18650Voltage},
+	{ADC_18650_TEMP		,"18650_TEMP" ,GPIOC, GPIO_PIN_5, ADC0, ADC_CHANNEL_15  ,&g_dmaRawValue[1], ADC_REFV, Null },
+	{ADC_TEMP_LCD  		,"13V_DET" 	  ,GPIOB, GPIO_PIN_1, ADC0, ADC_CHANNEL_9	,&g_dmaRawValue[2], ADC_REFV, Null},
 
-//	{ADC_TEMP_LCD  ,"TEMP_LCD" ,GPIOC, GPIO_PIN_0, ADC0, ADC_CHANNEL_10, &g_dmaRawValue[3], ADC_REFV, &OD_ccuTemp1},
-//	{ADC_TEMP_CHGR ,"TEMP_CHGR" ,GPIOC, GPIO_PIN_1, ADC0, ADC_CHANNEL_11, &g_dmaRawValue[4], ADC_REFV, &OD_ccuTemp2},
-	//{ADC_TEMP_3	,"TEMP_3" ,GPIOC, GPIO_PIN_2, ADC0, ADC_CHANNEL_12, &g_dmaRawValue[5], ADC_REFV, &OD_ccuTemp3},
-	//{ADC_TEMP_4 ,"TEMP_4" ,GPIOC, GPIO_PIN_3, ADC0, ADC_CHANNEL_13, &g_dmaRawValue[6], ADC_REFV, &OD_ccuTemp4},
 };
 
-//Adc* Adc_Get(ADC_ID adcId)
-//{
-//	Adc* pAdc = g_Adc;
-//	for (int i = 0; i < GET_ELEMENT_COUNT(g_Adc); i++, pAdc++)
-//	{
-//		if (pAdc->adcId == adcId)
-//		{
-//			return pAdc;
-//		}
-//	}
-//	return Null;
-//}
+Adc* Adc_Get(ADC_ID adcId)
+{
+	Adc* pAdc = g_Adc;
+	for (int i = 0; i < GET_ELEMENT_COUNT(g_Adc); i++, pAdc++)
+	{
+		if (pAdc->adcId == adcId)
+		{
+			return pAdc;
+		}
+	}
+	return Null;
+}
 
-//void Adc_ItemDump(const Adc* pAdc, const char* pTitle)
-//{
-//	if (pTitle == Null) pTitle = "";
+void Adc_ItemDump(const Adc* pAdc, const char* pTitle)
+{
+	if (pTitle == Null) pTitle = "";
 
-//	PFL(DL_ADC, "%s%s-%s = %d->%d => %d->%d \n", pTitle, PortPinToPxx(pAdc->ioPort, pAdc->ioPin), pAdc->name, pAdc->rawValue, *pAdc->pDmaRawValue, pAdc->oldValue, pAdc->newValue);
-//}
+	PFL(DL_ADC, "%s%s-%s = %d->%d => %d->%d \n", pTitle, PortPinToPxx(pAdc->ioPort, pAdc->ioPin), 
+				pAdc->name, pAdc->rawValue, *pAdc->pDmaRawValue, pAdc->oldValue, pAdc->newValue);
+}
 
-//void Adc_Dump()
-//{
-//	const Adc* pAdc = g_Adc;
+void Adc_Dump()
+{
+	const Adc* pAdc = g_Adc;
 
-//	for (int i = 0; i < GET_ELEMENT_COUNT(g_Adc); i++, pAdc++)
-//	{
-//		if (pAdc->adcId >= ADC_TEMP_LCD && pAdc->adcId <= ADC_TEMP_CHGR)
-//		{
-//			Printf("%s-%s: rawValue=0x%04x(%04d), value=0x%04x(%d), temp=%d"
-//				, PortPinToPxx(pAdc->ioPort, pAdc->ioPin)
-//				, pAdc->name
-//				, pAdc->rawValue, pAdc->rawValue
-//				, pAdc->newValue, pAdc->newValue
-//				, pAdc->newValue - 40);
-//		}
-//		else
-//		{
-//			Printf("%s-%s: rawValue=0x%04x(%04d), value=0x%04x(%d)"
-//				, PortPinToPxx(pAdc->ioPort, pAdc->ioPin)
-//				, pAdc->name
-//				, pAdc->rawValue, pAdc->rawValue
-//				, pAdc->newValue, pAdc->newValue);
-//		}
+	for (int i = 0; i < GET_ELEMENT_COUNT(g_Adc); i++, pAdc++)
+	{
+		if (pAdc->adcId >= ADC_TEMP_LCD && pAdc->adcId <= ADC_TEMP_CHGR)
+		{
+			Printf("%s-%s: rawValue=0x%04x(%04d), value=0x%04x(%d), temp=%d"
+				, PortPinToPxx(pAdc->ioPort, pAdc->ioPin)
+				, pAdc->name
+				, pAdc->rawValue, pAdc->rawValue
+				, pAdc->newValue, pAdc->newValue
+				, pAdc->newValue - 40);
+		}
+		else
+		{
+			Printf("%s-%s: rawValue=0x%04x(%04d), value=0x%04x(%d)"
+				, PortPinToPxx(pAdc->ioPort, pAdc->ioPin)
+				, pAdc->name
+				, pAdc->rawValue, pAdc->rawValue
+				, pAdc->newValue, pAdc->newValue);
+		}
 
-//		Printf("%s\n", !pAdc->isPresent ? " *** FAULT or NOT EXIST **" : "");
-//	}
-//}
+		Printf("%s\n", !pAdc->isPresent ? " *** FAULT or NOT EXIST **" : "");
+	}
+}
 
-//Bool Adc_DevIsPresent(const Adc* pAdc)
-//{
-//	if (pAdc->adcId >= ADC_TEMP_LCD && ADC_TEMP_LCD <= ADC_TEMP_CHGR)
-//	{
-//		return (pAdc->rawValue < 4090);
-//	}
-//	else if (pAdc->adcId >= ADC_18650_VOLTAGE)
-//	{
-//		g_18650IsPresent = (pAdc->rawValue > 10);
-//		g_Adc[0].isPresent = g_18650IsPresent;
-//		g_Adc[1].isPresent = g_18650IsPresent;
-//		g_Adc[2].isPresent = g_18650IsPresent;
-//	}
-//	
-//	return g_18650IsPresent;
-//}
+Bool Adc_DevIsPresent(const Adc* pAdc)
+{
+	if (pAdc->adcId >= ADC_TEMP_LCD && ADC_TEMP_LCD <= ADC_TEMP_CHGR)
+	{
+		return (pAdc->rawValue < 4090);
+	}
+	else if (pAdc->adcId >= ADC_18650_VOLTAGE)
+	{
+		g_18650IsPresent = (pAdc->rawValue > 10);
+		g_Adc[0].isPresent = g_18650IsPresent;
+		g_Adc[1].isPresent = g_18650IsPresent;
+		g_Adc[2].isPresent = g_18650IsPresent;
+	}
+	
+	return g_18650IsPresent;
+}
 
+void Adc_EventRegister(ADC_ID field, ThresholdArea* pThresholdArray, int thresholdSize, void* pObj)
+{
+	Adc* pAdc = Adc_Get(field);
 
-//void Adc_EventRegister(ADC_ID field, ThresholdArea* pThresholdArray, int thresholdSize, void* pObj)
-//{
-//	Adc* pAdc = Adc_Get(field);
+	pAdc->pThresholdArray = pThresholdArray;
+	pAdc->thresholdSize = thresholdSize;
+	pAdc->pObj = pObj;
+}
 
-//	pAdc->pThresholdArray = pThresholdArray;
-//	pAdc->thresholdSize = thresholdSize;
-//	pAdc->pObj = pObj;
-//}
-
-//int Adc_Convert(Adc* pAdc, uint16 rawVal, float refVoltage)
-//{
-//	ADC_ID adcId = pAdc->adcId;
-//	float val = 0.0;
-//	if (adcId >= ADC_TEMP_LCD && adcId <= ADC_TEMP_CHGR)
-//	{
+int Adc_Convert(Adc* pAdc, uint16 rawVal, float refVoltage)
+{
+	ADC_ID adcId = pAdc->adcId;
+	float val = 0.0;
+	if (adcId >= ADC_TEMP_LCD && adcId <= ADC_TEMP_CHGR)
+	{
 //		uint32 rVal = Ntc_VoltageToResistance(10000, rawVal, 4096);
 //		val = Ntc_CalcTemp(g_pNtc, rVal) + 40;
-//	}
-//	else if (adcId == ADC_18650_VOLTAGE)
-//	{
-//		val = (float)rawVal / 4096 * refVoltage ;
-//		val *= 1000 * 2;
-//	}
-//	else
-//	{
-//		val = (float)rawVal / 4096 * refVoltage ;
-//		val *= 1000;
-//	}
+	}
+	else if (adcId == ADC_18650_VOLTAGE)
+	{
+		val = (float)rawVal / 4096 * refVoltage ;
+		val *= 1000 * 5/3;
+	}
+	else
+	{
+		val = (float)rawVal / 4096 * refVoltage ;
+		val *= 1000;
+	}
 
-//	if (pAdc->odValue8)  *pAdc->odValue8   = (uint8)val;
-//	if (pAdc->odValue16) * pAdc->odValue16 = (uint16)val;
-//	return (int)val;
-//}
+	if (pAdc->odValue8)  *pAdc->odValue8   = (uint8)val;
+	if (pAdc->odValue16) * pAdc->odValue16 = (uint16)val;
+	return (int)val;
+}
 
-//void Adc_OnChanged(Adc* pAdc)
-//{
-//	ThresholdArea* p = pAdc->pThresholdArray;
+void Adc_OnChanged(Adc* pAdc)
+{
+	ThresholdArea* p = pAdc->pThresholdArray;
 
-//	if (pAdc->OnChanged)
-//		pAdc->OnChanged(pAdc, pAdc->oldValue, pAdc->newValue);
+	if (pAdc->OnChanged)
+		pAdc->OnChanged(pAdc, pAdc->oldValue, pAdc->newValue);
 
-//	for (int i = 0; i < pAdc->thresholdSize; i++)
-//	{
-//		if (pAdc->newValue > pAdc->oldValue)
-//		{
-//			//从低值变高值，需要从最大阈值开始比较
-//			p = &pAdc->pThresholdArray[i];
-//		}
-//		else
-//		{
-//			//从高值变低值，需要从最小阈值开始比较
-//			p = &pAdc->pThresholdArray[pAdc->thresholdSize - i - 1];
-//		}
+	for (int i = 0; i < pAdc->thresholdSize; i++)
+	{
+		if (pAdc->newValue > pAdc->oldValue)
+		{
+			//从低值变高值，需要从最大阈值开始比较
+			p = &pAdc->pThresholdArray[i];
+		}
+		else
+		{
+			//从高值变低值，需要从最小阈值开始比较
+			p = &pAdc->pThresholdArray[pAdc->thresholdSize - i - 1];
+		}
 
-//		p->oldVal = pAdc->oldValue;
-//		p->newVal = pAdc->newValue;
-//		//如果设定阈值，则只有越过阈值才会触发OnChanged
-//		if (p->thresholdHigh != THRESHOLD_INNVALID || p->thresholdLow != THRESHOLD_INNVALID)
-//		{
-//			THRESHOLD_EVENT event = NOT_OVER_THRESHOLD;
-//			event = Threshold_GetEvent(pAdc->oldValue, pAdc->newValue, p->thresholdHigh, p->thresholdLow, &p->thresholdArea);
-//			if (event != NOT_OVER_THRESHOLD)
-//			{
-//				PFL(DL_ADC, "%s event trigger:%d\n", pAdc->name, event);
-//				p->OnChanged(pAdc->pObj, p, event);
-//				break;
-//			}
-//		}
-//		else
-//		{
-//			//否则只要值改变都会触发OnChanged
-//			p->OnChanged(pAdc->pObj, p, NOT_OVER_THRESHOLD);
-//		}
-//	}
+		p->oldVal = pAdc->oldValue;
+		p->newVal = pAdc->newValue;
+		//如果设定阈值，则只有越过阈值才会触发OnChanged
+		if (p->thresholdHigh != THRESHOLD_INNVALID || p->thresholdLow != THRESHOLD_INNVALID)
+		{
+			THRESHOLD_EVENT event = NOT_OVER_THRESHOLD;
+			event = Threshold_GetEvent(pAdc->oldValue, pAdc->newValue, p->thresholdHigh, p->thresholdLow, &p->thresholdArea);
+			if (event != NOT_OVER_THRESHOLD)
+			{
+				PFL(DL_ADC, "%s event trigger:%d\n", pAdc->name, event);
+				p->OnChanged(pAdc->pObj, p, event);
+				break;
+			}
+		}
+		else
+		{
+			//否则只要值改变都会触发OnChanged
+			p->OnChanged(pAdc->pObj, p, NOT_OVER_THRESHOLD);
+		}
+	}
+}
 
-//}
+void Adc_CheckChanged(Adc* pAdc)
+{
+	int rawVal = *pAdc->pDmaRawValue;
+	if (rawVal != pAdc->rawValue)
+	{
+		pAdc->rawValue = rawVal;
 
-//void Adc_CheckChanged(Adc* pAdc)
-//{
-//	int rawVal = *pAdc->pDmaRawValue;
-//	if (rawVal != pAdc->rawValue)
-//	{
-//		pAdc->rawValue = rawVal;
+		//判定ADC连接的设备是否存在
+		pAdc->isPresent = Adc_DevIsPresent(pAdc);
 
-//		//判定ADC连接的设备是否存在
-//		pAdc->isPresent = Adc_DevIsPresent(pAdc);
+		//值转换
+		pAdc->newValue = Adc_Convert(pAdc, rawVal, pAdc->refVoltage);
 
-//		//值转换
-//		pAdc->newValue = Adc_Convert(pAdc, rawVal, pAdc->refVoltage);
+		//判断值是否改变
+		if (pAdc->newValue != pAdc->oldValue)
+		{
+			Adc_ItemDump(pAdc, "");
 
-//		//判断值是否改变
-//		if (pAdc->newValue != pAdc->oldValue)
-//		{
-//			Adc_ItemDump(pAdc, "");
+			Adc_OnChanged(pAdc);
 
-//			Adc_OnChanged(pAdc);
-
-//			pAdc->oldValue = pAdc->newValue;
-//		}
-//	}
-//}
+			pAdc->oldValue = pAdc->newValue;
+		}
+	}
+}
 
 //void Adc_AllStateChanged()
 //{
@@ -211,14 +207,14 @@ static Adc g_Adc[] =
 //	}
 //}
 
-//void Adc_CheckValue()
-//{
-//	Adc* pAdc = g_Adc;
-//	for (int j = 0; j < GET_ELEMENT_COUNT(g_Adc); j++, pAdc++)
-//	{
-//		Adc_CheckChanged(pAdc);
-//	}
-//}
+void Adc_CheckValue()
+{
+	Adc* pAdc = g_Adc;
+	for (int j = 0; j < GET_ELEMENT_COUNT(g_Adc); j++, pAdc++)
+	{
+		Adc_CheckChanged(pAdc);
+	}
+}
 
 void rcu_config(void)
 {
@@ -231,11 +227,10 @@ void rcu_config(void)
 	}
 	/* enable DMA clock */
 	rcu_periph_clock_enable(RCU_DMA0);
-	/* enable TIMER0 clock */
-	rcu_periph_clock_enable(RCU_TIMER0);
 	/* enable ADC0 clock */
 	rcu_periph_clock_enable(RCU_ADC0);
-
+    /* enable TIMER0 clock */
+    rcu_periph_clock_enable(RCU_TIMER0);
 	if (adc1Count)
 	{
 		/* enable ADC1 clock */
@@ -255,6 +250,45 @@ void gpio_config(void)
 			gpio_init(g_Adc[i].ioPort, GPIO_MODE_AIN, GPIO_OSPEED_MAX, g_Adc[i].ioPin);
 		}
 	}
+}
+
+void timer_config(void)
+{
+    timer_oc_parameter_struct timer_ocintpara;
+    timer_parameter_struct timer_initpara;
+
+	/* -----------------------------------------------------------------------
+	TIMER configuration: generate 3 PWM signals with 3 different duty cycles:
+	TIMERCLK = SystemCoreClock(72000000) / 3600 = 20,000Hz = 50us
+
+	TIMERx channelx duty cycle = (50us * 30000)  = 1.5s
+	----------------------------------------------------------------------- */
+	/* TIMER0 configuration */
+	timer_initpara.prescaler = 3599;
+	timer_initpara.alignedmode = TIMER_COUNTER_EDGE;
+	timer_initpara.counterdirection = TIMER_COUNTER_UP;
+	timer_initpara.period = 29999;
+	timer_initpara.clockdivision = TIMER_CKDIV_DIV1;
+	timer_initpara.repetitioncounter = 0;
+	//(8399+1)*(29999+1) / 168M = 1.5s
+	timer_init(TIMER0, &timer_initpara);
+
+    /* CH0 configuration in PWM mode0 */
+    timer_ocintpara.ocpolarity  = TIMER_OC_POLARITY_HIGH;
+    timer_ocintpara.outputstate = TIMER_CCX_ENABLE;
+    timer_channel_output_config(TIMER0, TIMER_CH_0, &timer_ocintpara);
+
+    timer_channel_output_pulse_value_config(TIMER0, TIMER_CH_0, 3999);
+    timer_channel_output_mode_config(TIMER0, TIMER_CH_0, TIMER_OC_MODE_PWM0);
+    timer_channel_output_shadow_config(TIMER0, TIMER_CH_0, TIMER_OC_SHADOW_DISABLE);
+
+    /* TIMER0 primary output enable */
+    timer_primary_output_config(TIMER0, ENABLE);
+    /* auto-reload preload enable */
+    timer_auto_reload_shadow_enable(TIMER0); 
+    
+    /* enable TIMER0 */
+//    timer_enable(TIMER0);
 }
 
 void dma_config(void)
@@ -348,14 +382,14 @@ void adc_config(void)
 void Adc_Stop()
 {
 	PFL(DL_ADC, "Adc Stop.");
-//	timer_disable(TIMER0);
+	timer_disable(TIMER0);
 }
 
 void Adc_Start()
 {
 	PFL(DL_ADC, "Adc Start.\n");
 	/* enable TIMER0 */
-//	timer_enable(TIMER0);
+	timer_enable(TIMER0);
 }
 
 void Adc_Run()
@@ -366,7 +400,7 @@ void Adc_Run()
 //		PFL(DL_ADC, "Adc Run.\n");
 		ticks = GET_TICKS();
 		//DUMP_BYTE(g_AdcRawValue, sizeof(g_AdcRawValue));
-//		Adc_CheckValue();
+		Adc_CheckValue();
 	}
 }
 
@@ -397,6 +431,8 @@ void Adc_init()
 	rcu_config();
 	/* GPIO configuration */
 	gpio_config();
+	/* TIMER configuration */
+    timer_config();
 	/* DMA configuration */
 	dma_config();
 	/* ADC configuration */

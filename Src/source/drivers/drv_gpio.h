@@ -74,8 +74,9 @@ typedef enum
 	IO_NFC_NPD_A,
 	IO_NFC_IRQ_A,
 	IO_GRYO_IRQ,
-	
-	
+	IO_BOOST_EN,
+	IO_NFC_PWR_OFF,
+	IO_GPRS_INSERT,
 }IO_ID;
 
 #define RM_POWER_FUN DET_12V_3

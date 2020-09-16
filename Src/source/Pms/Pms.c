@@ -131,6 +131,16 @@ void NfcCardReaderDump()
 	NfcCardReader_dump(&g_Bat[0].cardReader);
 }
 
+void PmsDump()
+{
+	#define PRINTF_PMS(_field) Printf("\t%s=%d\n", #_field, g_pms._field);
+	
+	Printf("Pms info:\n");
+	
+	PRINTF_PMS(opStatus);
+	PRINTF_PMS(statusSwitchTicks);
+}
+
 /********************************************************************/
 
 static Pms_FsmFn Pms_findStatusProcFun(PmsOpStatus status);

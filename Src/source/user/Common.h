@@ -29,6 +29,7 @@ extern "C"{
 #include "LogUser.h"
 #include "SysLog.h"
 #include "drv_pm.h"
+#include "drv_gpio.h"
 #include "Debug.h"
 #include "pms.h"
 #include "drv_rtc.h"

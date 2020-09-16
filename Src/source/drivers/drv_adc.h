@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #include "typedef.h"
-
+#include "Threshold.h"
 
 
 	typedef enum
@@ -42,7 +42,7 @@ extern "C" {
 		//指向数据字典的数据指针，来自初始化配置，二者用其一
 		uint8* odValue8;	//如果OD的数据类型是Uint8时 ，使用此指针
 		uint16* odValue16;	//如果OD的数据类型是Uint16时，使用此指针
-
+		
 		//以下内容在运行中可以修改////////////////////////////////////
 		Bool isPresent;	//是否在位
 		int newValue;	//新转换值
@@ -51,7 +51,7 @@ extern "C" {
 
 		void* pObj;
 		int thresholdSize;	//阈值数组元素个数
-//		ThresholdArea* pThresholdArray;	//阈值数组；
+		ThresholdArea* pThresholdArray;	//阈值数组；
 		AdcOnChangedFn OnChanged;
 	}Adc;
 
@@ -69,7 +69,7 @@ extern "C" {
 	void Adc_Start();
 	Adc* Adc_Get(ADC_ID adcId);
 	void Adc_AllStateChanged();
-//	void Adc_EventRegister(ADC_ID field, ThresholdArea* pThresholdArray, int thresholdSize, void* pObj);
+	void Adc_EventRegister(ADC_ID field, ThresholdArea* pThresholdArray, int thresholdSize, void* pObj);
 
 #ifdef __cplusplus
 }

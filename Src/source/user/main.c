@@ -19,6 +19,7 @@
 #include "drv_gpio.h"
 #include "Gyro.h"
 #include "drv_adc.h"
+#include "AdcUser.h"
 
 const HwFwVer AppInfo={
 FW_VER_MAIN,
@@ -38,6 +39,7 @@ int main(void)
 	//所有对象初始化
 	cm_backtrace_init("C7Pms", "1.0", "1.0");
 	IO_Init();
+	AdcUser_Init();
 	Adc_init();
 	LocalTimeInit();
 	Debug_Init();

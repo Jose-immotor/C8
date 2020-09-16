@@ -6,7 +6,7 @@
 #define RUN_LED_ON		0
 #define	RUN_LED_OFF		1
 
-static DrvIo* g_pLedIO = Null;
+DrvIo* g_pLedIO = Null;
 
 //void led_thread_entry(void* pObj)
 //{

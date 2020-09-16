@@ -54,6 +54,7 @@ extern "C" {
 			{
 				uint16 isFlashOk : 1;//BIT[0]:Flash is OK;
 				uint16 isGyroOk : 1;//BIT[1]:ÍÓÂÝÒÇ is OK;
+				uint16 isNfcOk : 1;//BIT[2]:NFCÍ¨Ñ¶ is OK;
 	//			uint16 isCanbinLock : 1;	//BIT[2]:×ù²ÕËø
 				uint16 reserved01 : 5;		//BIT[3-7]:±£Áô
 			};

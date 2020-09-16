@@ -2,14 +2,13 @@
 #include "drv_pm.h"
 #include "Common.h"
 #include "drv_rtc.h"
+#include "drv_gpio.h"
 
 void Boot(void)
 {
 	Printf("Mcu reset\n");
 
 	//复位之前保存
-	
-//	g_pdoInfo.resetCounter = DateTime_GetSeconds(Null);
 	NvdsUser_Write(NVDS_PDO_INFO);
 	NvdsUser_Write(NVDS_DBG_INFO);
 	
@@ -68,6 +67,9 @@ void ResetStop()
  */
 void Enter_PowerDown()
 {	
+	extern DrvIo* g_pLedIO;
+	
+	PortPin_Set(g_pLedIO->periph, g_pLedIO->pin, True);
 	RTC_TimerStart(60*60);//(24*60*60);
 //	//485 power
 //	POWER_3V3_485_OFF;

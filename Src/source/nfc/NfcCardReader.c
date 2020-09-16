@@ -49,7 +49,7 @@ static Bool NfcCardReader_searchPort(NfcCardReader* pReader, int port)
 
 	
 	FM175XX_switchPort(port);
-	FM175XX_SoftReset();
+	g_pdoInfo.isNfcOk = (!FM175XX_SoftReset());
 //	Write_Reg(WaterLevelReg,0x20);//设置FIFOLevel=32字节  
 //	Write_Reg(DivIEnReg,0x80);//引脚IRQ按照标准CMOS输出pad工作
 //	Write_Reg(ComIEnReg,0x2c);//允许RxIEn,HiAlerlEn,LoAlertlEn

@@ -29,6 +29,7 @@ static void Dump(int argc, char**argv)
 	extern void DateTime_dump(S_RTC_TIME_DATA_T* dt);
 	extern void BatteryDump(void);
 	extern void NfcCardReaderDump(void);
+	extern void PmsDump();
 	extern void g_pdoInfo_Dump(void);
 	extern void g_degInfo_Dump(void);
 	extern uint32 g_ActiveFlag;
@@ -36,7 +37,7 @@ static void Dump(int argc, char**argv)
 	
 	sscanf(&(*argv[1]), "%d", &ind);
 	if(1 == ind || 0 == ind) HwFwVer_Dump(Null,&AppInfo,Null);
-////	if(2 == ind || 0 == ind) Sign_Dump();
+	if(2 == ind || 0 == ind) PmsDump();
 ////	if(3 == ind || 0 == ind) Gps_Dump();
 ////	if(4 == ind || 0 == ind) Gprs_Dump();
 	if(7 == ind || 0 == ind) BatteryInfoDump();
@@ -54,27 +55,9 @@ static void Dump(int argc, char**argv)
 	
 	Printf("g_ActiveFlag=0x%x\n", g_ActiveFlag);
 	Printf("g_dwDebugLevel = 0x%08x\n", g_dwDebugLevel);
+	Printf("system_ms_tick = %d\n", GET_TICKS());
 }
 MSH_CMD_EXPORT(Dump, Dump sample: Dump <uint8_t ind>);
-
-//void SetFwVer(uint8_t mainVer, uint8_t SubVer, uint8_t MinorVer, uint32 buildeNum)
-//{
-//	g_pDataRom->m_AppMainVer   = mainVer;
-//	g_pDataRom->m_AppSubVer    = SubVer;
-//	g_pDataRom->m_AppMinorVer  = MinorVer;
-//	g_pDataRom->m_AppBuildeNum = buildeNum;
-//	DataRom_Write();
-//	Printf("OK.\n");
-//}
-
-//void SetHwVer(uint8_t mainVer, uint8_t SubVer)
-//{
-//	g_pDataRom->m_HwMainVer   = mainVer;
-//	g_pDataRom->m_HwSubVer    = SubVer;
-//	
-//	DataRom_Write();
-//	Printf("OK.\n");
-//}
 
 /*!
  * \brief ÉèÖÃ
@@ -96,7 +79,7 @@ static void Set(int argc, char**argv)
 		case 0: LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_McuReset, value);break;
 		case 1: if(value>0&&value<4) NvdsUser_Write(value);break;
 		case 2: LocalTimeReset(); break;
-////		case 3: SetSignEn(value); Nvds_Write_Setting(); break;
+		case 3: if(value>0&&value<5) Pms_switchStatus(value); break;
 ////		case 4: Sign_SetMaxTime(value); break;
 ////		case 5: Sign_DisableTimerReset(value); break;
 ////		case 6: g_Settings.IsBatVerifyEn=value; Sign_Dump(Null); Nvds_Write_Setting(); break;

@@ -149,10 +149,21 @@ void USART0_IRQHandler(void)
 {
 }
 
+extern void gprs_insert(void);
+void EXTI2_IRQHandler(void)
+{
+	if(SET == exti_interrupt_flag_get(EXTI_2)){
+        exti_interrupt_flag_clear(EXTI_2);
+		gprs_insert();
+    }
+}
+
+extern void Gyro_Isr();
 void EXTI5_9_IRQHandler(void)
 {
 	if(SET == exti_interrupt_flag_get(EXTI_8)){
         exti_interrupt_flag_clear(EXTI_8);
+		Gyro_Isr();
     }
 }
 
