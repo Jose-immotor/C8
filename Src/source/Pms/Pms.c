@@ -427,7 +427,7 @@ void Pms_init()
 	ObjList_add(&obj);
 
 	Mod_Init(g_pModBus, &g_Bat0Cfg, &g_frameCfg);
-	fm175Drv_init(&g_pms.fmDrv, FM17522_I2C_ADDR, &fm175DrvCfg, (TransEventFn)Pms_EventCb, &g_pms);
+	fm175Drv_init(&g_pms.fmDrv, FM17522_I2C_ADDR, &fm175DrvCfg, (TransEventFn)Pms_EventCb);
 
 	Bat_init(&g_Bat[0], 0, &g_Bat0Cfg);
 	Bat_init(&g_Bat[1], 1, &g_Bat1Cfg);
