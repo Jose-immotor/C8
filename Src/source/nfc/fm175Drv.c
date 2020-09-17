@@ -618,14 +618,18 @@ void fm175Drv_fsmTransfer(Fm175Drv* pDrv, FM17522_MSG msg, uint32 param)
 			{
 				fm175Drv_event(pDrv, TRANS_FAILED, TRANS_RESULT_FAILED);
 			}
-#if 0
-			//同步发送方式，发完数据等待接收
-			fm175Drv_waitTransDone(pDrv);
-#endif
 		}
 		else if (SwTimer_isTimerOut(&pDrv->sleepWdTimer))
 		{
 			fm175Drv_switchState(pDrv, FM_STATE_SLEEP);
+		}
+	}
+	else if (pDrv->transStatus == TRANSFER_STATUS_TX)
+	{
+		uint8 irq = 0;
+		if (IICReg_readByte(&pDrv->iicReg, ComIrqReg, &irq))//查询中断标志	
+		{
+			fm175Drv_irq(pDrv, irq);
 		}
 	}
 	else if (msg == FM_MSG_SWITCH_NFC)
