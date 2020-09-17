@@ -224,11 +224,11 @@ typedef struct
 #define BMS_REG_USER_ADDR   4096
 
 //¼Ä´æÆ÷µØÖ·¶¨Òå
-extern const BmsReg_info* g_bmsReg_id_addrMap;
-extern const BmsReg_deviceInfo* g_bmsReg_Info_addrMap;
-extern const BmsReg_ctrl* g_bmsReg_ctrl_addrMap;
-extern const BmsReg_cfg* g_bmsReg_cfg_addrMap;
-extern const BmsReg_user* g_bmsReg_info_addrMap;
+extern const BmsReg_info* g_bmsIICReg_id_addrMap;
+extern const BmsReg_deviceInfo* g_bmsIICReg_Info_addrMap;
+extern const BmsReg_ctrl* g_bmsIICReg_ctrl_addrMap;
+extern const BmsReg_cfg* g_bmsIICReg_cfg_addrMap;
+extern const BmsReg_user* g_bmsIICReg_info_addrMap;
 
 #pragma pack()
 #endif

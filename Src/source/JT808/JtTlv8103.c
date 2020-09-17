@@ -67,7 +67,7 @@ void JtTlv8103_init()
 	//TlvOutMgr g_jtTlvOutMgr_8103;
 	//static JtDevCfgParam g_cfgParam_mirror;
 	//static TlvOutEx g_tlvOutEx_8103[TLV_8103_COUNT];
-	//const TlvOut g_tlvOut_8103[TLV_8103_COUNT] =
+	//const static TlvOut g_tlvOut_8103[TLV_8103_COUNT] =
 	//{
 	//	{"HB_INTERVAL"		,Null, TAG_HB_INTERVAL   , 4, (uint8*)& g_Jt.cfgParam.hbIntervalS	 , (uint8*)& g_cfgParam_mirror.hbIntervalS	},
 	//	{"TCP_RSP_TIME"		,Null, TAG_TCP_RSP_TIME  , 4, (uint8*)& g_Jt.cfgParam.tcpWaitRspTime , (uint8*)& g_cfgParam_mirror.tcpWaitRspTime },

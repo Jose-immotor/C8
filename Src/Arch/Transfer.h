@@ -18,16 +18,19 @@ extern "C"{
 	typedef enum _FM_TX_CMD_RESULT
 	{
 		TRANS_RESULT_SUCCESS = 0,
+		TRANS_RESULT_FAILED,
 		TRANS_RESULT_TIMEOUT,
+		TRANS_RESULT_SEARCH_CARD_FAILED,
 		TRANS_RESULT_RX_BUF_SIZE_TOO_SMALL,	//接收缓冲区太小，不够保存一个数据包
 		TRANS_RESULT_TX_BUF_SIZE_TOO_SMALL,	//接收缓冲区太小，不够保存一个数据包
 	}TRANSFER_RESULT;
 
 	typedef enum _TRANSFER_STATUS
 	{
-		TRANSFER_STATUS_IDLE = 0,
-		TRANSFER_STATUS_TX,
-		TRANSFER_STATUS_RX,
+		TRANSFER_STATUS_IDLE = 0,	//空闲
+		TRANSFER_STATUS_PENDING_TX,	//待发送
+		TRANSFER_STATUS_TX,			//正在发送
+		TRANSFER_STATUS_RX,			//正在接收
 	}TRANSFER_STATUS;
 
 	//传输类型定义
@@ -43,7 +46,7 @@ extern "C"{
 		TRANS_EVT_RC_TIMEOUT,
 	}TRANSFER_EVENT_RC;
 
-	typedef enum _FM_EVENT
+	typedef enum _TRANS_EVENT
 	{
 		SEARCH_CARD_DONE,	//搜卡结束
 
@@ -54,11 +57,11 @@ extern "C"{
 
 		TRANS_FAILED,		//传输结束，失败，原因：可能传输超时，或者响应返回失败码。
 		TRANS_SUCCESS,		//传输结束，成功，传输成功并且响应返回成功码
-	}FM_EVENT;
+	}TRANS_EVENT;
 
-	typedef TRANSFER_EVENT_RC (*TransEventFn)(void* obj, FM_EVENT evt);
+	typedef TRANSFER_EVENT_RC (*TransEventFn)(void* obj, TRANS_EVENT evt);
 
-	typedef struct _TransItem
+	typedef struct _TransMgr
 	{
 		//用于发送和接收，发送时必须指明传输数据总长度,接收是可以为0，表示不指定传输数据总长度，实际的传输长度由offset记录
 		int totalLen;		
@@ -80,7 +83,6 @@ extern "C"{
 		uint8 waterLevel;
 		uint8 fifoDeepth;	//Fifo的深度（最大传输字节数）
 
-		TransEventFn Event;
 	}TransProtocolCfg;
 
 #ifdef __cplusplus

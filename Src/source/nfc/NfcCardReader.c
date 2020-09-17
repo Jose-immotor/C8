@@ -219,7 +219,7 @@ void NfcCardReader_postMsg(NfcCardReader* pReader, uint8 msgId, uint8 param1)
 
 }
 
-void NfcCardReader_Fm175Drv_EventCb(NfcCardReader* pReader, FM_EVENT evt)
+void NfcCardReader_Fm175Drv_EventCb(NfcCardReader* pReader, TRANS_EVENT evt)
 {
 	if (evt == TRANS_SUCCESS)
 	{
@@ -241,13 +241,13 @@ void NfcCardReader_Fm175Drv_EventCb(NfcCardReader* pReader, FM_EVENT evt)
 
 void NfcCardReader_init(NfcCardReader* pReader, NfcCardReader_EventFn Event, void* cbObj)
 {
-	memset(pReader, 0, sizeof(NfcCardReader));
+	//memset(pReader, 0, sizeof(NfcCardReader));
 
-	pReader->status = NfcCardReaderStatus_unknown;
-	pReader->Event = Event;
-	pReader->cbObj = cbObj;
-	
-	FM17522_Init();
+	//pReader->status = NfcCardReaderStatus_unknown;
+	//pReader->Event = Event;
+	//pReader->cbObj = cbObj;
+	//
+	//FM17522_Init();
 
 	static const TransProtocolCfg cfg =
 	{

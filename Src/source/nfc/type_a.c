@@ -327,8 +327,8 @@ unsigned char TypeA_CardActivate(unsigned char *pTagType,
 /****************************************************************/
 /*名称: TypeA_RATS 													           */
 /*功能: 该函数实现ISO14443A-4协议中的RATS处理			     */
-/*输入: param byte bit8-bit5：FSDI,bit4-bit0 ：CID     */
-/*       ats 用于保存RATS命令返回的数据                */
+/*输入: param byte bit8-bit5：FSDI,bit4-bit0 ：CID			 */
+/*       ats 用于保存RATS命令返回的数据						 */
 /*输出:															                   */
 /* OK: 应答正确												                 */
 /* ERROR: 应答错误												             */

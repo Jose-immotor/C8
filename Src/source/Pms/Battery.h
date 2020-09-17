@@ -9,7 +9,7 @@ extern "C" {
 #include "typedef.h"
 #include "BmsReg.h"
 #include "ModBus.h"
-#include "NfcCardReader.h"
+#include "fm175Drv.h"
 
 #define BMS_INQUERY_INTERVAL_MS 1000	//轮询事件间隔
 #define NFC_MAX_TRANS_SIZE 		125		//NFC每次传输的最大包长度
@@ -88,7 +88,6 @@ extern "C" {
 
 	typedef struct _Battery
 	{
-		NfcCardReader cardReader;
 
 		uint8_t  port;					//电池端口好，从0开始
 		uint32_t idleTicks;				//去激活时间Ticks
