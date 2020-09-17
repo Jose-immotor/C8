@@ -13,7 +13,6 @@
 /*************************************************************/
 #include "Archdef.h"
 #include "fm175Drv.h"
-#include "fm175xx.h"
 #include "SwTimer.h"
 #include "_Macro.h"
 #include "NfcIso14443.h"
@@ -650,12 +649,11 @@ void fm175Drv_start(Fm175Drv* pDrv)
 	fm175Drv_switchState(pDrv, FM_STATE_SLEEP);
 }
 
-void fm175Drv_init(Fm175Drv* pDrv, uint8 iicAddr, const TransProtocolCfg* cfg, TransEventFn	Event, void* evtObj)
+void fm175Drv_init(Fm175Drv* pDrv, uint8 iicAddr, const TransProtocolCfg* cfg, TransEventFn	Event)
 {
 	memset(pDrv, 0, sizeof(Fm175Drv));
 
 	pDrv->cfg = cfg;
-	pDrv->obj = evtObj;
 	pDrv->transStatus = TRANSFER_STATUS_IDLE;
 	pDrv->antPort = 1;
 	pDrv->Event = Event;

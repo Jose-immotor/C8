@@ -119,7 +119,7 @@ Bool fm175Drv_SyncTransfer(Fm175Drv* pDrv
 
 inline Bool fm175Drv_isIdle(const Fm175Drv* pDrv) { return pDrv->transStatus == TRANSFER_STATUS_IDLE; };
 
-void fm175Drv_init(Fm175Drv* pDrv, uint8 iicAddr, const TransProtocolCfg* cfg, TransEventFn	Event, void* evtObj);
+void fm175Drv_init(Fm175Drv* pDrv, uint8 iicAddr, const TransProtocolCfg* cfg, TransEventFn	Event);
 void fm175Drv_run(Fm175Drv* pDrv);
 void fm175Drv_start(Fm175Drv* pDrv);
 Bool fm175Drv_switchNfc(Fm175Drv* pDrv, uint8 iicAddr);
