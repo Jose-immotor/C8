@@ -33,6 +33,7 @@ int main(void)
 	NvdsUser_Init();
 	LogUser_init();
 	Led_init();
+	can0_init();
 	JT808_init();
 	Pms_init();
 	Gyro_Init();

@@ -16,38 +16,18 @@
  can_trasnmit_message_struct transmit_message;
  can_receive_message_struct receive_message;
  void can0_receive_isr()
- {
+{
 	  /* enter interrupt */
     rt_interrupt_enter();
 	 
-	  can_message_receive(CAN0, CAN_FIFO0, &receive_message);   
-    //if((0x300>>1 == receive_message.rx_sfid)&&(CAN_FF_STANDARD == receive_message.rx_ff)&&(2 == receive_message.rx_dlen))
-    if( (0x1020 == receive_message.rx_efid) && (receive_message.rx_dlen > 0) )
-    can0_receive_flag = SET; 		   
+	can_message_receive(CAN0, CAN_FIFO0, &receive_message);   
+    if((CAN_RX_ID == receive_message.rx_efid) && (receive_message.rx_dlen > 0))
+    {
+    	JT808_rxDataProc( receive_message.rx_data , receive_message.rx_dlen );
+    }
 	 
 	 /* leave interrupt */
     rt_interrupt_leave();
- }
-void can_thread_entry(void* pObj)
-{
-	while(1)
-	{
-		//Printf("\r\n can0 transmit data:%x,%x", transmit_message.tx_data[0], transmit_message.tx_data[1]);
-		/* transmit message */
-		//can_message_transmit(CAN0, &transmit_message);
-
-//		if(can0_receive_flag == SET)
-//		{
-//			can0_receive_flag = RESET;
-//			printf("\r\n can0 receive \r\n Data:");
-//			for(uint8 vl_rx_cnt=0; vl_rx_cnt < receive_message.rx_dlen;vl_rx_cnt++)
-//			{
-//				printf("%x ", receive_message.rx_data[vl_rx_cnt]);
-//			}
-//			
-//		}
-		rt_thread_mdelay(1);		
-	}
 }
 void can_start()
 {
@@ -58,10 +38,6 @@ void can_start()
     /* configure CAN0 NVIC */
     nvic_irq_enable(CAN0_RX0_IRQn,0,0);
     nvic_irq_enable(CAN0_TX_IRQn,1,1);
-//    rt_thread_t can_task_tid= rt_thread_create("can_send_rec",/* can收发 */
-//                        can_thread_entry, RT_NULL,
-//                        1024,2, 10); //
-//    rt_thread_startup(can_task_tid);
 }
 void can_sleep()
 {
@@ -143,8 +119,8 @@ void can0_init(void)
     can_filter_init(&can_filter_parameter);
 
     /* initialize transmit message *///拓展数据帧   tx_efid前8个字节为接受方地址，后8个字节为自己地址
-    transmit_message.tx_sfid = 0x0010;
-    transmit_message.tx_efid = 0x2010;
+ //   transmit_message.tx_sfid = 0x0010;
+    transmit_message.tx_efid = CAN_TX_ID;
     transmit_message.tx_ft = CAN_FT_DATA;
     transmit_message.tx_ff = CAN_FF_EXTENDED;
     //transmit_message.tx_dlen = 2;

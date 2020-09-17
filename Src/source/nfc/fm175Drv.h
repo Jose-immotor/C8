@@ -36,9 +36,9 @@ typedef enum _FM17522_STATE
 	FM_STATE_INIT = 0x01,
 	FM_STATE_NPD_LOW,
 	FM_STATE_NPD_HIGH,
-	FM_STATE_SEARCH_CARD,
+	FM_STATE_SEARCH_CARD,	//ËÑ¿¨×´Ì¬
 	FM_STATE_SLEEP,			//ÐÝÃß£¬µÍ¹¦ºÄ
-	FM_STATE_ACTIVE,		//ËÑ¿¨³É¹¦
+	FM_STATE_TRANSFER,		//ËÑ¿¨³É¹¦,´«Êä×´Ì¬
 }FM17522_STATE;
 
 #define REG_IRQ_MASK_TX			BIT_6

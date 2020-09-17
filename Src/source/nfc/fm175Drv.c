@@ -51,33 +51,6 @@ void fm175Drv_event(Fm175Drv* pDrv, TRANS_EVENT evt, TRANSFER_RESULT res)
 	}
 }	
 
-/*********************************************/
-/*函数名：	    Set_RF  */
-/*功能：	    设置射频输出    */
-				
-/*输入参数：	mode，射频输出模式  
-				0，关闭输出
-				1,仅打开TX1输出
-				2,仅打开TX2输出
-				3，TX1，TX2打开输出，TX2为反向输出  */
-/*返回值：	    OK
-				ERROR   */
-/*********************************************/
-Bool fm175Drv_setRf(Fm175Drv* pDrv, unsigned char mode)
-{
-    unsigned char result;
-    
-	IIC_REG_ERR_RETURN_FALSE(IICReg_readByte(&pDrv->iicReg, TxControlReg, &result));
-	if ((result & 0x03) == mode) return True;
-
-	if (mode == 0) IIC_REG_ERR_RETURN_FALSE(IICReg_clearBitMask(&pDrv->iicReg, TxControlReg, 0x03));	 //关闭TX1，TX2输出
-	if (mode == 1) IIC_REG_ERR_RETURN_FALSE(IICReg_SetBitMask(&pDrv->iicReg, TxControlReg, mode));	 //仅打开TX1输出
-	if (mode == 2) IIC_REG_ERR_RETURN_FALSE(IICReg_SetBitMask(&pDrv->iicReg, TxControlReg, mode));	 //仅打开TX2输出
-	if (mode == 3) IIC_REG_ERR_RETURN_FALSE(IICReg_SetBitMask(&pDrv->iicReg, TxControlReg, mode));	 //打开TX1，TX2输出
-	
-	return True;
-}
-
 void fm175Drv_irq_rxDone(Fm175Drv* pDrv)
 {
 	fm175Drv_event(pDrv, TRANS_SUCCESS, TRANS_RESULT_SUCCESS);
@@ -238,7 +211,7 @@ static void fm175Drv_switchState(Fm175Drv* pDrv, uint8 state)
 	}
 	else if (state == FM_STATE_SEARCH_CARD)
 	{
-		fm175Drv_setRf(pDrv, pDrv->antPort);
+		NfcIso14443_setRf(pDrv, pDrv->antPort);
 
 		//打开TX输出后需要延时等待天线载波信号稳定
 		SwTimer_Start(&pDrv->timer, 1, 0);
@@ -249,7 +222,7 @@ static void fm175Drv_switchState(Fm175Drv* pDrv, uint8 state)
 		NfcIso14443_SoftPowerdown(pDrv);
 		pDrv->antPort = 1;
 	}
-	else if (state == FM_STATE_ACTIVE)
+	else if (state == FM_STATE_TRANSFER)
 	{
 		SwTimer_Start(&pDrv->sleepWdTimer, 60000, 0);
 		fm175Drv_event(pDrv, SEARCH_CARD_DONE, TRANS_RESULT_SUCCESS);
@@ -307,18 +280,15 @@ void fm175Drv_fsmSearchCard(Fm175Drv* pDrv, FM17522_MSG msg, uint32 param)
 	{
 		if (SwTimer_isTimerOut(&pDrv->timer))
 		{
-			NfcIso14443_ConfigISOType(pDrv, NFC_ISO_TYPE_A);
-			uint8 rc = NfcIso14443_CardActivate(pDrv);
+			Bool isOk = NfcIso14443_ConfigISOType(pDrv, NFC_ISO_TYPE_A);
+			if (isOk) isOk = NfcIso14443_CardActivate(pDrv);
+			if (isOk) isOk = NfcIso14443_RATS(pDrv, 0x20);
 
-			if (rc == 0)
-			{
-				rc = NfcIso14443_RATS(pDrv, 0x20);
-			}
-			pDrv->cardIsExist = (rc == 0);
+			pDrv->cardIsExist = isOk;
 
 			if (pDrv->cardIsExist)
 			{
-				fm175Drv_switchState(pDrv, FM_STATE_ACTIVE);
+				fm175Drv_switchState(pDrv, FM_STATE_TRANSFER);
 			}
 			else if (pDrv->antPort == 1)
 			{
@@ -343,7 +313,7 @@ void fm175Drv_fsmSleep(Fm175Drv* pDrv, FM17522_MSG msg, uint32 param)
 {
 	if (msg == FM_MSG_RUN)
 	{
-		if (pDrv->txBufSize && pDrv->transStatus == TRANSFER_STATUS_IDLE)
+		if (pDrv->txBufSize && pDrv->transStatus == TRANSFER_STATUS_PENDING_TX)
 		{
 			fm175Drv_switchState(pDrv, FM_STATE_NPD_LOW);
 		}
@@ -368,7 +338,7 @@ void fm175Drv_waitTransDone(Fm175Drv* pDrv)
 	}
 }
 
-void fm175Drv_fsmActive(Fm175Drv* pDrv, FM17522_MSG msg, uint32 param)
+void fm175Drv_fsmTransfer(Fm175Drv* pDrv, FM17522_MSG msg, uint32 param)
 {
 	//是否发送命令超时，没有接收到响应
 	if (msg == FM_MSG_RUN)
@@ -418,7 +388,7 @@ static FmFsmFn fm175Drv_findFsm(uint8 state)
 		{FM_STATE_NPD_HIGH		, fm175Drv_fsmNpdLHigh},
 		{FM_STATE_SEARCH_CARD	, fm175Drv_fsmSearchCard},
 		{FM_STATE_SLEEP			, fm175Drv_fsmSleep},
-		{FM_STATE_ACTIVE		, fm175Drv_fsmActive},
+		{FM_STATE_TRANSFER		, fm175Drv_fsmTransfer},
 	};
 	for (int i = 0; i < GET_ELEMENT_COUNT(fsmDispatch); i++)
 	{
@@ -570,7 +540,7 @@ Bool fm175Drv_SyncTransfer(Fm175Drv* pDrv
 )
 {
 	//如果设备状态state是激活，
-	if (pDrv->state == FM_STATE_ACTIVE)
+	if (pDrv->state == FM_STATE_TRANSFER)
 	{
 		//传输状态transStatus为非TRANSFER_STATUS_IDLE，返回失败
 		if (pDrv->transStatus != TRANSFER_STATUS_IDLE) return False;

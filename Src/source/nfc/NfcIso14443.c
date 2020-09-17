@@ -240,3 +240,30 @@ Bool NfcIso14443_SoftPowerdown(Fm175Drv* pDrv)
 
 	return IICReg_SetBitMask(&pDrv->iicReg, CommandReg, 0x10);//进入低功耗模式
 }
+
+/*********************************************/
+/*函数名：	    Set_RF  */
+/*功能：	    设置射频输出    */
+
+/*输入参数：	mode，射频输出模式
+				0，关闭输出
+				1,仅打开TX1输出
+				2,仅打开TX2输出
+				3，TX1，TX2打开输出，TX2为反向输出  */
+				/*返回值：	    OK
+								ERROR   */
+/*********************************************/
+Bool NfcIso14443_setRf(Fm175Drv* pDrv, unsigned char mode)
+{
+	unsigned char result;
+
+	IIC_REG_ERR_RETURN_FALSE(IICReg_readByte(&pDrv->iicReg, TxControlReg, &result));
+	if ((result & 0x03) == mode) return True;
+
+	if (mode == 0) IIC_REG_ERR_RETURN_FALSE(IICReg_clearBitMask(&pDrv->iicReg, TxControlReg, 0x03));	 //关闭TX1，TX2输出
+	if (mode == 1) IIC_REG_ERR_RETURN_FALSE(IICReg_SetBitMask(&pDrv->iicReg, TxControlReg, mode));	 //仅打开TX1输出
+	if (mode == 2) IIC_REG_ERR_RETURN_FALSE(IICReg_SetBitMask(&pDrv->iicReg, TxControlReg, mode));	 //仅打开TX2输出
+	if (mode == 3) IIC_REG_ERR_RETURN_FALSE(IICReg_SetBitMask(&pDrv->iicReg, TxControlReg, mode));	 //打开TX1，TX2输出
+
+	return True;
+}

@@ -176,3 +176,11 @@ void USART0_IRQHandler(void)
 {
 
 }
+
+extern void can0_receive_isr(void);
+void CAN0_RX0_IRQHandler(void)
+{
+    /* check the receive message */
+		can0_receive_isr(); 
+}
+

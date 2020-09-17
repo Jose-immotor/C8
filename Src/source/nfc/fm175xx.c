@@ -247,7 +247,7 @@ unsigned char Clear_BitMask(unsigned char reg_addr, unsigned char mask)
     result = OK;
 	return result;
 }
-#if 0
+#if 1
 /*********************************************/
 /*函数名：	    Set_RF  */
 /*功能：	    设置射频输出    */

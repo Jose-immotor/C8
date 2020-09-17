@@ -17,6 +17,7 @@ extern "C" {
 	Bool NfcIso14443_RATS(Fm175Drv* pDrv, unsigned char param);
 	Bool NfcIso14443_ConfigISOType(Fm175Drv* pDrv, NFC_ISO_TYPE type);
 	Bool NfcIso14443_SoftPowerdown(Fm175Drv* pDrv);
+	Bool NfcIso14443_setRf(Fm175Drv* pDrv, unsigned char mode);
 
 #ifdef __cplusplus
 }
