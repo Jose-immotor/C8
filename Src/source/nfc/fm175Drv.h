@@ -9,6 +9,12 @@
 #include "SwTimer.h"
 #include "fm175Reg.h"
 
+typedef enum _NFC_ISO_TYPE
+{
+	NFC_ISO_TYPE_A = 0,	//ISO14443_A
+	NFC_ISO_TYPE_B = 1,	//ISO14443_B
+}NFC_ISO_TYPE;
+
 typedef enum _FM17522_MSG
 {
 	FM_MSG_RUN,
