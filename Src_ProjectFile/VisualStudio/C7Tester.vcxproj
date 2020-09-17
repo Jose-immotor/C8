@@ -197,9 +197,11 @@
     <ClCompile Include="..\..\Src\source\Log\LogUser.c" />
     <ClCompile Include="..\..\Src\source\Log\SysLog.c" />
     <ClCompile Include="..\..\Src\source\Modbus\Modbus.c" />
+    <ClCompile Include="..\..\Src\source\nfc\fm175Reg.c" />
     <ClCompile Include="..\..\Src\source\nfc\fm175xx.c" />
     <ClCompile Include="..\..\Src\source\nfc\fm175Drv.c" />
     <ClCompile Include="..\..\Src\source\nfc\NfcCardReader.c" />
+    <ClCompile Include="..\..\Src\source\nfc\NfcIso14443.c" />
     <ClCompile Include="..\..\Src\source\nfc\type_a.c" />
     <ClCompile Include="..\..\Src\source\Nvds\NvdsUser.c" />
     <ClCompile Include="..\..\Src\source\Pms\Bat.c" />
@@ -260,9 +262,11 @@
     <ClInclude Include="..\..\Src\source\Log\SysLog.h" />
     <ClInclude Include="..\..\Src\source\Modbus\Modbus.h" />
     <ClInclude Include="..\..\Src\source\nfc\bmsfault.h" />
+    <ClInclude Include="..\..\Src\source\nfc\fm175Reg.h" />
     <ClInclude Include="..\..\Src\source\nfc\fm175xx.h" />
     <ClInclude Include="..\..\Src\source\nfc\fm175Drv.h" />
     <ClInclude Include="..\..\Src\source\nfc\NfcCardReader.h" />
+    <ClInclude Include="..\..\Src\source\nfc\NfcIso14443.h" />
     <ClInclude Include="..\..\Src\source\nfc\type_a.h" />
     <ClInclude Include="..\..\Src\source\Nvds\NvdsUser.h" />
     <ClInclude Include="..\..\Src\source\Pms\Bat.h" />

@@ -219,6 +219,12 @@
     <ClCompile Include="..\..\Src\source\nfc\fm175Drv.c">
       <Filter>Nfc</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\source\nfc\NfcIso14443.c">
+      <Filter>Nfc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\nfc\fm175Reg.c">
+      <Filter>Nfc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Arch\ArchDef.h">
@@ -402,6 +408,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\source\nfc\fm175Drv.h">
+      <Filter>Nfc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\nfc\NfcIso14443.h">
+      <Filter>Nfc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\nfc\fm175Reg.h">
       <Filter>Nfc</Filter>
     </ClInclude>
   </ItemGroup>
