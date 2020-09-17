@@ -415,8 +415,14 @@ void Pms_run()
 
 void Pms_start()
 {
-	//启动NFC驱动
-	Pms_switchStatus(PMS_ACC_OFF);
+	if(g_cfgInfo.isAccOn)
+	{
+		Pms_switchStatus(PMS_ACC_ON);
+	}
+	else
+	{
+		Pms_switchStatus(PMS_ACC_OFF);
+	}
 	//查询电池设备信息
 	Bat_msg(g_pActiveBat, BmsMsg_active, *((uint32*)& g_regCtrl), 0);
 	Bat_start(&g_Bat[0]);

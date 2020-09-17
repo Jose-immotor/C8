@@ -121,8 +121,8 @@ int Adc_Convert(Adc* pAdc, uint16 rawVal, float refVoltage)
 	}
 	else
 	{
-		val = (float)rawVal / 4096 * refVoltage ;
-		val *= 1000;
+//		val = (float)rawVal / 4096 * refVoltage ;
+//		val *= 1000;
 	}
 
 	if (pAdc->odValue8)  *pAdc->odValue8   = (uint8)val;

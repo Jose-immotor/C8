@@ -32,6 +32,7 @@ static void Dump(int argc, char**argv)
 	extern void PmsDump();
 	extern void g_pdoInfo_Dump(void);
 	extern void g_degInfo_Dump(void);
+	extern void Adc_Dump();
 	extern uint32 g_ActiveFlag;
 	extern const HwFwVer AppInfo;
 	
@@ -40,6 +41,8 @@ static void Dump(int argc, char**argv)
 	if(2 == ind || 0 == ind) PmsDump();
 ////	if(3 == ind || 0 == ind) Gps_Dump();
 ////	if(4 == ind || 0 == ind) Gprs_Dump();
+	
+	if(6 == ind) 			 Adc_Dump();
 	if(7 == ind || 0 == ind) BatteryInfoDump();
 	if(9 == ind || 0 == ind) DateTime_dump(Null);
 	if(10 == ind) 			 SectorMgr_Dump(g_NvdsItems[0].sectorMgr);
@@ -72,6 +75,9 @@ static void Set(int argc, char**argv)
 	uint32 value;
 	void LocalTimeReset(void);
 
+	extern void Nvc_SetVol(uint8 vol);
+	extern void SetAccOn(uint8 on);
+	
 	sscanf(&(*argv[1]), "%d", &ind);
 	sscanf(&(*argv[2]), "%d", &value);
 	switch(ind)
@@ -80,21 +86,36 @@ static void Set(int argc, char**argv)
 		case 1: if(value>0&&value<4) NvdsUser_Write(value);break;
 		case 2: LocalTimeReset(); break;
 		case 3: if(value>0&&value<5) Pms_switchStatus(value); break;
-////		case 4: Sign_SetMaxTime(value); break;
+		case 4: SetAccOn(value); break;
 ////		case 5: Sign_DisableTimerReset(value); break;
 ////		case 6: g_Settings.IsBatVerifyEn=value; Sign_Dump(Null); Nvds_Write_Setting(); break;
 ////		case 7: g_Settings.IsAlarmMode=value; Sign_Dump(Null); break;
 ////		case 8: SET_VAR(g_ForcePmsDischarge); 
 ////		case 9: SET_VAR(g_ForceBatSoc); 
 ////		case 10: Sim_PowerReset(0); break;
-////		case 11: Nvc_SetVol(value); break;
+		case 11: Nvc_SetVol(value); break;
 ////		case 12: Fsm_StateKeyOff(MSG_FORCE_POWERDOWN); break;
-//		case 13: RTC_TimerStart(value); break;
+//		case 13: Nvc_PlayEx(value); break;
 	}
 //		
 	//Nvds_Write_Setting();
 }
 MSH_CMD_EXPORT(Set, Set sample: Set <uint8_t ind uint32 value>);
+
+static void NvcPlay(int argc, char**argv)
+{
+	int audioInd = 0;
+	int maxRepeat = 0;
+	int vol = 0;
+
+	extern void Nvc_PlayEx(uint8 audioInd, uint8 maxRepeat, uint8 vol);
+	
+	sscanf(&(*argv[1]), "%d", &audioInd);
+	sscanf(&(*argv[2]), "%d", &maxRepeat);
+	sscanf(&(*argv[3]), "%d", &vol);
+	Nvc_PlayEx(audioInd,maxRepeat,vol);
+}
+MSH_CMD_EXPORT(NvcPlay, NvcPlay sample: NvcPlay <audioInd maxRepeatvol>);
 
 /*!
  * \brief 自检，检测电路板硬件
@@ -105,13 +126,14 @@ MSH_CMD_EXPORT(Set, Set sample: Set <uint8_t ind uint32 value>);
  */
 static void SelfTest(void)
 {
-	extern void ErrList_Dump(void);
+	extern void g_pdoOkInfo_Dump(void);
 	__IO uint32_t sn0=*(__IO uint32_t*)(0x1FFFF7E8);
 	__IO uint32_t sn1=*(__IO uint32_t*)(0x1FFFF7EC);
 	__IO uint32_t sn2=*(__IO uint32_t*)(0x1FFFF7F0);
 	
 	Printf("\r\nsID: %X%X%X\r\n",sn2,sn1,sn0);
-
+	g_pdoOkInfo_Dump();	
+	
 //	Printf("\tGprsCSQ:[%d]\n", g_pSimCard->csq);
 ////	if(flag)
 //	{

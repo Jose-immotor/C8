@@ -16,6 +16,39 @@ static DbgInfo g_dbgInfo_mirror;
 static uint8_t		g_exchBuf[sizeof(PdoInfo)];
 static SectorMgr    g_nvdsSecMgr[NVDS_ITEM_COUNT];
 
+void SetAccOn(uint8 on)
+{
+	if(on)
+	{
+		g_cfgInfo.isAccOn = 1;
+		Pms_postMsg(PmsMsg_accOn, 0, 0);
+	}
+	else
+	{
+		g_cfgInfo.isAccOn = 0;
+		Pms_postMsg(PmsMsg_accOff, 0, 0);
+	}
+}
+
+void g_cgfInfo_Dump(void)
+{
+	#define PRINTF_CFG(_field) Printf("\t%s=%d\n", #_field, g_cfgInfo._field);
+	
+	Printf("Dump g_cfgInfo:\n");
+	
+	PRINTF_CFG(vol);
+
+}
+
+void g_pdoOkInfo_Dump(void)
+{
+	#define PRINTF_PDO(_field) Printf("\t%s=%d\n", #_field, g_pdoInfo._field);
+		
+	PRINTF_PDO(isFlashOk);
+	PRINTF_PDO(isGyroOk);
+	PRINTF_PDO(isNfcOk);
+}
+
 void g_pdoInfo_Dump(void)
 {
 	#define PRINTF_PDO(_field) Printf("\t%s=%d\n", #_field, g_pdoInfo._field);

@@ -9,6 +9,7 @@ void Boot(void)
 	Printf("Mcu reset\n");
 
 	//复位之前保存
+	NvdsUser_Write(NVDS_CFG_INFO);
 	NvdsUser_Write(NVDS_PDO_INFO);
 	NvdsUser_Write(NVDS_DBG_INFO);
 	

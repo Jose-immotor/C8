@@ -35,6 +35,8 @@ extern "C"{
 #include "drv_rtc.h"
 #include "main.h"
 #include "HwFwVer.h"
+#include "nvc.h"
+
 
 #ifdef __cplusplus
 }

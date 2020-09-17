@@ -252,103 +252,22 @@
 //    return tim->CNT;
 //}
 
-//static rt_err_t at32_timer_ctrl(rt_hwtimer_t *timer, rt_uint32_t cmd, void *arg)
-//{
-//    RCC_ClockType RCC_ClockStruct;
-//    TMR_Type *tim = RT_NULL;
-//    rt_err_t result = RT_EOK;
+int rt_hw_hwtimer_start(void)
+{
 
-//    RT_ASSERT(timer != RT_NULL);
-//    RT_ASSERT(arg != RT_NULL);
-
-//    tim = (TMR_Type *)timer->parent.user_data;
-//    
-//    switch(cmd)
-//    {
-//        case HWTIMER_CTRL_FREQ_SET:
-//        {
-//            rt_uint32_t freq;
-//            rt_uint16_t val;
-//            
-//            /* set timer frequence */
-//            freq = *((rt_uint32_t *)arg);
-//            
-//            /* time init */
-//            RCC_GetClocksFreq(&RCC_ClockStruct);
-//            
-//            val = RCC_ClockStruct.SYSCLK_Freq / freq;
-//            
-//            TMR_DIVConfig(tim, val - 1, TMR_DIVReloadMode_Immediate);
-//        }
-//        break;
-//        default:
-//        {
-//            result = -RT_ENOSYS;
-//        }
-//        break;
-//    }
-//    
-//    return result;
-//}
-
-//static const struct rt_hwtimer_info _info = TMR_DEV_INFO_CONFIG;
-//static const struct rt_hwtimer_ops _ops =
-//{
-//    .init      = at32_timer_init,
-//    .start     = at32_timer_start,
-//    .stop      = at32_timer_stop,
-//    .count_get = at32_timer_counter_get,
-//    .control   = at32_timer_ctrl,
-//};
-
-//#ifdef BSP_USING_HWTMR2
-//void TMR2_GLOBAL_IRQHandler(void)
-//{
-//    /* enter interrupt */
-//    rt_interrupt_enter();
-//    
-//    if(TMR_GetINTStatus(TMR2, TMR_INT_Overflow) == SET)
-//    {
-//    
-//        rt_device_hwtimer_isr(&at32_hwtimer_obj[TMR2_INDEX].time_device);
-//        TMR_ClearITPendingBit(TMR2, TMR_INT_Overflow);
-//    
-//    }
-//    /* leave interrupt */
-//    rt_interrupt_leave();
-//}
-//#endif
-
-//#ifdef BSP_USING_HWTMR3
-//void TMR3_GLOBAL_IRQHandler(void)
-//{
-//    /* enter interrupt */
-//    rt_interrupt_enter();
-//    
-//    if(TMR_GetINTStatus(TMR3, TMR_INT_Overflow) == SET)
-//    {
-//    
-//        rt_device_hwtimer_isr(&at32_hwtimer_obj[TMR3_INDEX].time_device);
-//        TMR_ClearITPendingBit(TMR3, TMR_INT_Overflow);
-//    
-//    }
-//    /* leave interrupt */
-//    rt_interrupt_leave();
-//}
-//#endif
-
+}
 
 int rt_hw_hwtimer_init(void)
 {
-	static uint32_t prescaler_value = 0;
-    static timer_parameter_struct timer_initpara;
+	uint32_t prescaler_value = 0;
+    timer_parameter_struct timer_initpara;
 
-    rcu_periph_clock_enable(RCU_TIMER2);
+    rcu_periph_clock_enable(RCU_TIMER3);
     timer_deinit(TIMER3);
 	
 	/* Set timer clock is 1Mhz */
 	prescaler_value= rcu_clock_freq_get(CK_SYS);
-	prescaler_value= prescaler_value/100000 -1;
+	prescaler_value= prescaler_value/1000000 -1;
     prescaler_value = prescaler_value;
 
     /* TIMER0 configuration */
@@ -367,6 +286,7 @@ int rt_hw_hwtimer_init(void)
 	nvic_irq_enable(TIMER3_IRQn, 0, 2);
 	timer_interrupt_enable(TIMER3,TIMER_INT_UP);
 	
+	timer_disable(TIMER3);
     return RT_EOK;
 }
 

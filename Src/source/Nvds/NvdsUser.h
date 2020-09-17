@@ -31,7 +31,10 @@ extern "C" {
 			uint8 isActive : 1;		//BIT[0]:车辆是否激活
 			uint8 reserved : 7;		//BIT[1-7]:保留
 		};
-		uint8 Reserved[16];	//保留16个字节
+		uint8 vol;					//音量
+		uint8 isAccOn:1;			//远程控制ACC
+		uint8 reserved0:7;
+		uint8 Reserved[14];	//保留15个字节
 		uint8 latestByte;	//从存储区读出的字节不等于 EEPROM_LATEST_BYTE，说明该存储区被修改，已经失效
 	}CfgInfo;
 

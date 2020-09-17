@@ -159,11 +159,16 @@ void EXTI2_IRQHandler(void)
 }
 
 extern void Gyro_Isr();
+extern void bat_insert(void);
 void EXTI5_9_IRQHandler(void)
 {
 	if(SET == exti_interrupt_flag_get(EXTI_8)){
         exti_interrupt_flag_clear(EXTI_8);
 		Gyro_Isr();
+    }
+	if(SET == exti_interrupt_flag_get(EXTI_9)){
+        exti_interrupt_flag_clear(EXTI_9);
+		bat_insert();
     }
 }
 

@@ -53,6 +53,7 @@ void Nvc_SetVol(uint8 vol);
 void Nvc_Reset(void);
 void SIF_ISR_ENABLE(void);
 void SIF_ISR_DISABLE(void);
+void Nvc_Init();
 #ifdef __cplusplus
 }
 #endif

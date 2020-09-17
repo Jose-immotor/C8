@@ -20,6 +20,7 @@
 #include "Gyro.h"
 #include "drv_adc.h"
 #include "AdcUser.h"
+#include "nvc.h"
 
 const HwFwVer AppInfo={
 FW_VER_MAIN,
@@ -49,6 +50,7 @@ int main(void)
 //	JT808_init();
 	Pms_init();
 	Gyro_Init();
+	Nvc_Init();
 	LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_McuReset, 1);
 
 	//∂‘œÛ∆Ù∂Ø

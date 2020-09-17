@@ -45,6 +45,7 @@ static void Bat_onPlugOut(Battery* pBat)
 	pBat->presentStatus = BAT_NOT_IN;
 	PFL(DL_PMS,"Battery out!\n");
 	LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_BATOUT,0);
+	NVC_PLAY(NVC_BAT_PLUG_OUT);
 //	if (pBat->isActive)
 //	{
 //		Mod_Reset(g_pModBus);
@@ -143,6 +144,7 @@ MOD_EVENT_RC Bat_event_readBmsInfo(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EV
 			PFL(DL_PMS,"Battery in!\n");
 			LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_BATIN,
 								bigendian16_get((uint8*)&pBat->bmsInfo.soc));
+			NVC_PLAY(NVC_BAT_PLUG_IN);
 		}			
 		pBat->presentStatus = BAT_IN;
 	}

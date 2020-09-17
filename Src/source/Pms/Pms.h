@@ -20,10 +20,10 @@ extern "C" {
 	//活动标志定义，当该标志被置位时，设备不能进入睡眠。
 	typedef enum _ActiveFlag
 	{
-		 AF_MDB = BIT_0	//modbus处于工作状态
+		 AF_MDB = BIT_0			//modbus处于工作状态
+		,AF_NVC = BIT_1			//NVC正在播放语音
 	//	,AF_MCU_RESET = BIT_1	//MCU处于延时复位状态
-	//	,AF_NVC = BIT_2			//NVC正在播放语音
-	//	
+		
 	//	,AF_SIM = BIT_8			//SIM模组有命令没有发完
 	//	,AF_CARBIN_LOCK = BIT_9	//正在操作座舱锁
 	//	
