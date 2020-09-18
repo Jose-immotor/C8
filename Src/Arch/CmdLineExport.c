@@ -8,6 +8,7 @@
 
 #ifdef CONFIG_CMDLINE
 
+#include "ArchDef.h"
 #include "CmdLineExport.h"
 
 static const CmdItem* g_shellFn;
@@ -116,6 +117,12 @@ void Shell_run(const char* str)
 		g_cmdLineLen = 0;
 	}
 
+}
+
+void Shell_Init()
+{
+	static Obj obj = {"Shell", Null, Null, Shell_run};
+	ObjList_add(&obj);
 }
 
 #endif
