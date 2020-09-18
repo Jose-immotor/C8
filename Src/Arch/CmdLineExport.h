@@ -51,17 +51,16 @@ typedef struct _CmdLineExCfg
 		fmt,	\
 	};
 
-#define EXPORT_SHELL_VAR_INT8(name, desc)		 EXPORT_SHELL_VAR(name, DT_INT8	 , 1, desc, Null)
-#define EXPORT_SHELL_VAR_UINT8(name, desc)		 EXPORT_SHELL_VAR(name, DT_UINT8 , 1, desc, Null)
-#define EXPORT_SHELL_VAR_INT16(name, desc)		 EXPORT_SHELL_VAR(name, DT_UINT16, 2, desc, Null)
-#define EXPORT_SHELL_VAR_UINT16(name, desc)		 EXPORT_SHELL_VAR(name, DT_UINT16, 2, desc, Null)
-#define EXPORT_SHELL_VAR_INT32(name, desc)		 EXPORT_SHELL_VAR(name, DT_INT32 , 4, desc, Null)
-#define EXPORT_SHELL_VAR_UINT32(name, desc)		 EXPORT_SHELL_VAR(name, DT_UINT32, 4, desc, Null)
-#define EXPORT_SHELL_VAR_BYTES(name, len, desc)  EXPORT_SHELL_VAR(name, DT_BYTES , len, desc, Null)
+#define EXPORT_SHELL_VAR_INT8(name)			EXPORT_SHELL_VAR(name, DT_INT8	, 1, Null, Null)
+#define EXPORT_SHELL_VAR_UINT8(name)		EXPORT_SHELL_VAR(name, DT_UINT8 , 1, Null, Null)
+#define EXPORT_SHELL_VAR_INT16(name)		EXPORT_SHELL_VAR(name, DT_UINT16, 2, Null, Null)
+#define EXPORT_SHELL_VAR_UINT16(name)		EXPORT_SHELL_VAR(name, DT_UINT16, 2, Null, Null)
+#define EXPORT_SHELL_VAR_INT32(name)		EXPORT_SHELL_VAR(name, DT_INT32 , 4, Null, Null)
+#define EXPORT_SHELL_VAR_UINT32(name)		EXPORT_SHELL_VAR(name, DT_UINT32, 4, Null, Null)
+#define EXPORT_SHELL_VAR_BYTES(name, len)   EXPORT_SHELL_VAR(name, DT_BYTES , len, Null, Null)
 
 void Shell_init();
 void Shell_rxCmd(const char* str);
-void Shell_run();
 
 #ifdef __cplusplus
 }

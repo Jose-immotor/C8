@@ -79,25 +79,10 @@ void CmdLineExport_PrinfVar(const char* name, const char* fmt)
 }
 EXPORT_SHELL_FUNC(CmdLineExport_PrinfVar, PrinfVar(char* name, char* fmt))
 
+/////////////////////////////////////////////////////////////////////////////////////////////
 static CmdLine g_cmdLine;
 static char g_cmdLineBuf[128];
 static uint8 g_cmdLineLen;
-void Shell_init()
-{
-	static CmdLineCfg cmdLineCfg;
-	static Obj obj = {"Shell", Null, Null, Shell_run};
-	ObjList_add(&obj);
-
-	g_shellVar = CmdLineExport_varArrayInit(&g_shellVarCount);
-	g_shellFn = CmdLineExport_cmdItemInit(&g_shellFnCount);
-
-	cmdLineCfg.cmdLineBuf	    = g_cmdLineBuf;
-	cmdLineCfg.printf			= printf;
-	cmdLineCfg.cmdHandlerArray  = g_shellFn;
-	cmdLineCfg.cmdHandlerCount  = g_shellFnCount;
-
-	CmdLine_Init(&g_cmdLine, &cmdLineCfg, False);
-}
 
 //Ω” ’√¸¡Ó
 void Shell_rxCmd(const char* str)
@@ -120,6 +105,23 @@ void Shell_run(const char* str)
 		CmdLine_AddStr(&g_cmdLine, str);
 	}
 
+}
+
+void Shell_init()
+{
+	static CmdLineCfg cmdLineCfg;
+	static Obj obj = { "Shell", Null, Null, Shell_run };
+	ObjList_add(&obj);
+
+	g_shellVar = CmdLineExport_varArrayInit(&g_shellVarCount);
+	g_shellFn = CmdLineExport_cmdItemInit(&g_shellFnCount);
+
+	cmdLineCfg.cmdLineBuf = g_cmdLineBuf;
+	cmdLineCfg.printf = printf;
+	cmdLineCfg.cmdHandlerArray = g_shellFn;
+	cmdLineCfg.cmdHandlerCount = g_shellFnCount;
+
+	CmdLine_Init(&g_cmdLine, &cmdLineCfg, False);
 }
 
 #endif
