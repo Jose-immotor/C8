@@ -140,11 +140,11 @@ int CmdLine_Printf(CmdLine* pCmdLine, const char* lpszFormat, ...)
 void CmdLine_Help(CmdLine* pCmdLine)
 {
 	int i = 0;
-	const FnDef* pFnDef = pCmdLine->cfg->cmdHandlerArray;
+	const CmdItem* pCmdItem = pCmdLine->cfg->cmdHandlerArray;
 	
-	for(i = 0; i < pCmdLine->cfg->cmdHandlerCount; i++, pFnDef++)
+	for(i = 0; i < pCmdLine->cfg->cmdHandlerCount; i++, pCmdItem++)
 	{		
-		CmdLine_Printf(pCmdLine, "\t %s\n", pFnDef->title);
+		CmdLine_Printf(pCmdLine, "\t %s\n", pCmdItem->Desc);
 	}
 }
 
@@ -244,15 +244,15 @@ Bool CmdLine_ArgConvert(CmdLine* pCmdLine, char* pArgs[], int argCount, uint32 a
 	pFoundEntry：查找到的第一个匹配项。
 返回值：匹配项数量。
 *****************************************************************/
-static int CmdLine_Find(CmdLine* pCmdLine, const char* pFnName, const FnDef** pFoundEntry)
+static int CmdLine_Find(CmdLine* pCmdLine, const char* pFnName, const CmdItem** pFoundEntry)
 {
 	int isFind = 0;
-	const FnDef* pFnEntry = pCmdLine->cfg->cmdHandlerArray;
+	const CmdItem* pFnEntry = pCmdLine->cfg->cmdHandlerArray;
 
 	for (int i = 0; i < pCmdLine->cfg->cmdHandlerCount; i++, pFnEntry++)
 	{
 		//和函数名部分比较
-		if (strstr(pFnEntry->title, pFnName) == pFnEntry->title)
+		if (strstr(pFnEntry->Desc, pFnName) == pFnEntry->Desc)
 		{
 			char* str;
 
@@ -264,14 +264,14 @@ static int CmdLine_Find(CmdLine* pCmdLine, const char* pFnName, const FnDef** pF
 			}
 
 			//查找函数名
-			str = strchr(pFnEntry->title, '(');
+			str = strchr(pFnEntry->Desc, '(');
 			if (Null == str)
-				str = strchr(pFnEntry->title, ' ');
+				str = strchr(pFnEntry->Desc, ' ');
 
 			if (Null == str) continue;
 
 			//和函数名完全比较
-			if (memcmp(pFnEntry->title, pFnName, str - pFnEntry->title) == 0)
+			if (memcmp(pFnEntry->Desc, pFnName, str - pFnEntry->Desc) == 0)
 			{
 				isFind = 1;
 				*pFoundEntry = pFnEntry;
@@ -285,7 +285,7 @@ static int CmdLine_Find(CmdLine* pCmdLine, const char* pFnName, const FnDef** pF
 void CmdLine_Exe(CmdLine* pCmdLine, const char* pFnName, uint32 arg[], int argCount)
 {
 	Bool findCount = 0;
-	const FnDef* pFoundEntry = Null;
+	const CmdItem* pFoundEntry = Null;
 	
 	#define FUN(n, funType, args) if(n == pFoundEntry->ex->argCount)	\
 		{	\
@@ -309,12 +309,12 @@ void CmdLine_Exe(CmdLine* pCmdLine, const char* pFnName, uint32 arg[], int argCo
 	else if(findCount > 1)
 	{
 		//如果找出的函数名多于一个，则打印所有的部分比较正确的函数名
-		const FnDef* pFnEntry = pCmdLine->cfg->cmdHandlerArray;
+		const CmdItem* pFnEntry = pCmdLine->cfg->cmdHandlerArray;
 		for(int i = 0; i < pCmdLine->cfg->cmdHandlerCount; i++, pFnEntry++)
 		{
-			if(strstr(pFnEntry->title, pFnName) == pFnEntry->title)
+			if(strstr(pFnEntry->Desc, pFnName) == pFnEntry->Desc)
 			{
-				CmdLine_Printf(pCmdLine, "%s\n", pFnEntry->title);
+				CmdLine_Printf(pCmdLine, "%s\n", pFnEntry->Desc);
 			}
 		}
 		return;
@@ -437,13 +437,13 @@ void CmdLine_Init(CmdLine* cmdLine, const CmdLineCfg* cfg, Bool isEcho)
 	
 	cmdLine->isEcho = isEcho;
 
-	const FnDef* fn = cfg->cmdHandlerArray;
+	const CmdItem* fn = cfg->cmdHandlerArray;
 	for(i = 0; i < cfg->cmdHandlerCount; i++, fn++)
 	{
-		int argCount = CmdLine_GetArgCount(fn->title);
+		int argCount = CmdLine_GetArgCount(fn->Desc);
 		if(argCount < 0 || argCount > MAX_ARG_COUNT)
 		{
-			CmdLine_Printf(cmdLine, "[%s] error, get arg count[%d] error.\n", fn->title, argCount);
+			CmdLine_Printf(cmdLine, "[%s] error, get arg count[%d] error.\n", fn->Desc, argCount);
 		}
 		
 		fn->ex->argCount = (int8)argCount;

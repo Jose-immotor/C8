@@ -20,14 +20,20 @@ extern "C"{
 #define SHELL_USED __attribute__((used))
 #define SECTION(x) __attribute__((section(x)))
 
+typedef struct _CmdLineExCfg
+{
+	char* cmdLineBuf;			//√¸¡Ó≥§∂»Buffer
+	OutPutFun printf;
+}CmdLineExCfg;
+
 #define EXPORT_SHELL_FUNC(fun, cmdline)                      \
 	const char __shell_##fun##_name[] SECTION(".rodata.name") = #cmdline;    \
 	static CmdItemEx __shell##fun##Ex;	\
 	SHELL_USED const CmdItem __shell_##fun SECTION("ShellFun")= \
 	{                           \
+		&__shell##fun##Ex,	\
 		__shell_##fun##_name,    \
 		fun,    \
-		&__shell##fun##Ex	\
 	};
 
 	//Sample:EXPORT_SHELL_FUNC(test, test(uint8 p))
@@ -53,7 +59,8 @@ extern "C"{
 #define EXPORT_SHELL_VAR_UINT32(name, desc)		 EXPORT_SHELL_VAR(name, DT_UINT32, 4, desc, Null)
 #define EXPORT_SHELL_VAR_BYTES(name, len, desc)  EXPORT_SHELL_VAR(name, DT_BYTES , len, desc, Null)
 
-	void CmdLineExport_init();
+void CmdLineExport_init(const CmdLineExCfg* cfg);
+void CmdLineExport_processCmd(const char* str);
 
 #ifdef __cplusplus
 }

@@ -36,7 +36,7 @@ static const CmdLineVar* CmdLineExport_varArrayInit(int* count)
 
 const CmdLineVar* CmdLineExport_find(const char* name)
 {
-	int count;
+//	int count;
 	const CmdLineVar* var = g_shellVar;
 	for (int i = 0; i < g_shellVarCount; i++, var++)
 	{
@@ -75,12 +75,47 @@ void CmdLineExport_PrinfVar(const char* name, const char* fmt)
 		Printf("No var[%s]\n", name);
 	}
 }
-EXPORT_SHELL_FUNC(CmdLineExport_PrinfVar, PrinfVar(const char* name))
+EXPORT_SHELL_FUNC(CmdLineExport_PrinfVar, PrinfVar(char* name, char* fmt))
 
-void CmdLineExport_init()
+static CmdLine g_cmdLine;
+static char g_cmdLineBuf[128];
+static uint8 g_cmdLineLen;
+void Shell_init(OutPutFun printf)
 {
+	static CmdLineCfg cmdLineCfg;
+
 	g_shellVar = CmdLineExport_varArrayInit(&g_shellVarCount);
 	g_shellFn = CmdLineExport_cmdItemInit(&g_shellFnCount);
+
+	cmdLineCfg.cmdLineBuf	    = g_cmdLineBuf;
+	cmdLineCfg.printf			= printf;
+	cmdLineCfg.cmdHandlerArray  = g_shellFn;
+	cmdLineCfg.cmdHandlerCount  = g_shellFnCount;
+
+	CmdLine_Init(&g_cmdLine, &cmdLineCfg, False);
+}
+
+//Ω” ’√¸¡Ó
+void Shell_rxCmd(const char* str)
+{
+	if (g_cmdLineLen + strlen(str) >= sizeof(g_cmdLineBuf))
+	{
+		g_cmdLineLen = 0;
+		return;
+	}
+
+	memcpy(&g_cmdLineBuf[g_cmdLineLen], str, strlen(str));
+}
+
+//÷¥––√¸¡Ó
+void Shell_run(const char* str)
+{
+	if (g_cmdLineLen && g_cmdLineBuf[g_cmdLineLen - 1] == '\n')
+	{
+		CmdLine_AddStr(&g_cmdLine, str);
+		g_cmdLineLen = 0;
+	}
+
 }
 
 #endif
