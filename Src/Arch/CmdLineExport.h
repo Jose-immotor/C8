@@ -59,8 +59,9 @@ typedef struct _CmdLineExCfg
 #define EXPORT_SHELL_VAR_UINT32(name, desc)		 EXPORT_SHELL_VAR(name, DT_UINT32, 4, desc, Null)
 #define EXPORT_SHELL_VAR_BYTES(name, len, desc)  EXPORT_SHELL_VAR(name, DT_BYTES , len, desc, Null)
 
-void CmdLineExport_init(const CmdLineExCfg* cfg);
-void CmdLineExport_processCmd(const char* str);
+void Shell_init();
+void Shell_rxCmd(const char* str);
+void Shell_run();
 
 #ifdef __cplusplus
 }

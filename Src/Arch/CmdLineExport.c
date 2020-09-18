@@ -9,6 +9,7 @@
 #ifdef CONFIG_CMDLINE
 
 #include "ArchDef.h"
+#include "Obj.h"
 #include "CmdLineExport.h"
 
 static const CmdItem* g_shellFn;
@@ -81,9 +82,11 @@ EXPORT_SHELL_FUNC(CmdLineExport_PrinfVar, PrinfVar(char* name, char* fmt))
 static CmdLine g_cmdLine;
 static char g_cmdLineBuf[128];
 static uint8 g_cmdLineLen;
-void Shell_init(OutPutFun printf)
+void Shell_init()
 {
 	static CmdLineCfg cmdLineCfg;
+	static Obj obj = {"Shell", Null, Null, Shell_run};
+	ObjList_add(&obj);
 
 	g_shellVar = CmdLineExport_varArrayInit(&g_shellVarCount);
 	g_shellFn = CmdLineExport_cmdItemInit(&g_shellFnCount);
@@ -99,6 +102,7 @@ void Shell_init(OutPutFun printf)
 //½ÓÊÕÃüÁî
 void Shell_rxCmd(const char* str)
 {
+	if(g_cmdLine.cmdLineLen == 0) g_cmdLineLen = 0;
 	if (g_cmdLineLen + strlen(str) >= sizeof(g_cmdLineBuf))
 	{
 		g_cmdLineLen = 0;
@@ -114,15 +118,8 @@ void Shell_run(const char* str)
 	if (g_cmdLineLen && g_cmdLineBuf[g_cmdLineLen - 1] == '\n')
 	{
 		CmdLine_AddStr(&g_cmdLine, str);
-		g_cmdLineLen = 0;
 	}
 
-}
-
-void Shell_Init()
-{
-	static Obj obj = {"Shell", Null, Null, Shell_run};
-	ObjList_add(&obj);
 }
 
 #endif
