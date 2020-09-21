@@ -149,12 +149,36 @@ void USART0_IRQHandler(void)
 {
 }
 
+void uart4_isr(void);
+void UART4_IRQHandler(void)
+{
+	uart4_isr();
+}
+
+extern void over_temp_irq(void);
+void EXTI1_IRQHandler(void)
+{
+	if(SET == exti_interrupt_flag_get(EXTI_1)){
+        exti_interrupt_flag_clear(EXTI_1);
+		over_temp_irq();
+    }
+}
+
 extern void gprs_insert(void);
 void EXTI2_IRQHandler(void)
 {
 	if(SET == exti_interrupt_flag_get(EXTI_2)){
         exti_interrupt_flag_clear(EXTI_2);
 		gprs_insert();
+    }
+}
+
+void take_apart_irq(void);
+void EXTI3_IRQHandler(void)
+{
+	if(SET == exti_interrupt_flag_get(EXTI_3)){
+        exti_interrupt_flag_clear(EXTI_3);
+		take_apart_irq();
     }
 }
 

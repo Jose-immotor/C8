@@ -30,8 +30,10 @@ static void Dump(int argc, char**argv)
 	extern void BatteryDump(void);
 	extern void NfcCardReaderDump(void);
 	extern void PmsDump();
+	extern void g_cgfInfo_Dump(void);
 	extern void g_pdoInfo_Dump(void);
 	extern void g_degInfo_Dump(void);
+
 	extern void Adc_Dump();
 	extern uint32 g_ActiveFlag;
 	extern const HwFwVer AppInfo;
@@ -50,6 +52,7 @@ static void Dump(int argc, char**argv)
 	if(12 == ind) 			 SectorMgr_Dump(g_NvdsItems[2].sectorMgr);
 	if(13 == ind)			 SectorMgr_Dump(&g_plogMgr->record.sector);
 	
+	if(20 == ind)			 g_cgfInfo_Dump();
 	if(21 == ind)			 g_pdoInfo_Dump();
 	if(22 == ind)			 g_degInfo_Dump();
 	
@@ -61,6 +64,21 @@ static void Dump(int argc, char**argv)
 	Printf("system_ms_tick = %d\n", GET_TICKS());
 }
 MSH_CMD_EXPORT(Dump, Dump sample: Dump <uint8_t ind>);
+
+extern uint32_t uart4_put_byte(uint8_t data);
+void Rs485Test(uint8 value)
+{
+	uint8 i;
+	DrvIo* g_Rs485DirCtrlIO = Null;
+	
+	g_Rs485DirCtrlIO = IO_Get(IO_DIR485_CTRL);
+	PortPin_Set(g_Rs485DirCtrlIO->periph, g_Rs485DirCtrlIO->pin, True);
+	for(i=0;i<value;i++)
+	{
+		uart4_put_byte(0x5A);
+	}
+	PortPin_Set(g_Rs485DirCtrlIO->periph, g_Rs485DirCtrlIO->pin, False);
+}
 
 /*!
  * \brief ÉèÖÃ
@@ -87,7 +105,7 @@ static void Set(int argc, char**argv)
 		case 2: LocalTimeReset(); break;
 		case 3: if(value>0&&value<5) Pms_switchStatus(value); break;
 		case 4: SetAccOn(value); break;
-////		case 5: Sign_DisableTimerReset(value); break;
+		case 5: Rs485Test(value); break;
 ////		case 6: g_Settings.IsBatVerifyEn=value; Sign_Dump(Null); Nvds_Write_Setting(); break;
 ////		case 7: g_Settings.IsAlarmMode=value; Sign_Dump(Null); break;
 ////		case 8: SET_VAR(g_ForcePmsDischarge); 
@@ -133,16 +151,6 @@ static void SelfTest(void)
 	
 	Printf("\r\nsID: %X%X%X\r\n",sn2,sn1,sn0);
 	g_pdoOkInfo_Dump();	
-	
-//	Printf("\tGprsCSQ:[%d]\n", g_pSimCard->csq);
-////	if(flag)
-//	{
-//		Printf("\tMoto ErrCode1:0x%x\n", GetErrorCode(ERR_TYPE_MOTOR1));
-//		Printf("\tBat1 ErrCode:0x%x\n", GetErrorCode(ERR_TYPE_BATTERY1));
-//		Printf("\tBat2 ErrCode:0x%x\n", GetErrorCode(ERR_TYPE_BATTERY1));
-//		Printf("\tErrCode:0x%x\n", GetErrorCodeDec());
-//		ErrList_Dump();
-//	}
 }
 MSH_CMD_EXPORT(SelfTest , SelfTest board);
 

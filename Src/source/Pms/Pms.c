@@ -21,6 +21,7 @@ static Battery* g_pActiveBat;	//当前正砸通信的电池
 static BmsRegCtrl g_regCtrl;		//电池控制
 
 uint32 g_ActiveFlag;
+DrvIo* g_pLockEnIO = Null;
 
 //以下是命令参数定义
 const static uint8_t g_bmsID_readParam[]    = { 0x00, 0x00, 0x00, 33 };
@@ -204,7 +205,7 @@ void Pms_SwitchPort()
 //	Battery* pBat = (g_pActiveBat->port == 0) ? &g_Bat[1] : &g_Bat[0];
 
 	if (!Mod_isIdle(g_pModBus)) return;
-
+	rt_thread_mdelay(200);
 	Bat_msg(g_pActiveBat, BmsMsg_deactive, 0, 0);
 	
 	//先不跳转到BAT1
@@ -267,6 +268,7 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	{
 		Pms_plugOut((Battery*)param1);
 	}
+	PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, True);
 }
 
 static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
@@ -283,6 +285,7 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	{
 		Pms_plugOut((Battery*)param1);
 	}
+	PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, False);
 }
 
 static void Pms_fsm_sleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
@@ -302,6 +305,7 @@ static void Pms_fsm_deepSleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
 		PFL(DL_PMS,"pms go to sleep mode!\n");
 		Mcu_PowerDown();
 	}
+	PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, True);
 }
 
 //在任何状态下都要处理的消息函数
@@ -430,6 +434,7 @@ void Pms_start()
 
 void Pms_init()
 {
+	
 	static const Obj obj = { "Pms", Pms_start, Null, Pms_run };
 	ObjList_add(&obj);
 
@@ -440,5 +445,6 @@ void Pms_init()
 
 	g_pActiveBat = &g_Bat[0];
 	Queue_init(&g_pms.msgQueue, g_pms.msgBuf, sizeof(Message), GET_ELEMENT_COUNT(g_pms.msgBuf));
-
+	
+	g_pLockEnIO = IO_Get(IO_LOCK_EN);
 }

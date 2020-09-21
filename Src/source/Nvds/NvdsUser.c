@@ -35,8 +35,9 @@ void g_cgfInfo_Dump(void)
 	#define PRINTF_CFG(_field) Printf("\t%s=%d\n", #_field, g_cfgInfo._field);
 	
 	Printf("Dump g_cfgInfo:\n");
-	
+	PRINTF_CFG(isActive);
 	PRINTF_CFG(vol);
+	PRINTF_CFG(isAccOn);
 
 }
 
@@ -58,6 +59,7 @@ void g_pdoInfo_Dump(void)
 	PRINTF_PDO(isFlashOk);
 	PRINTF_PDO(isGyroOk);
 	PRINTF_PDO(isNfcOk);
+	PRINTF_PDO(isBat0In);
 	PRINTF_PDO(timeStamp);
 }
 

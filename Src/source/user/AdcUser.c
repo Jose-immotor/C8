@@ -137,5 +137,5 @@ void AdcUser_Init()
 		pAdc->OnChanged = (AdcOnChangedFn)AdcUser_OnTempChanged;
 	}
 	
-	g_p18650ChgIO = IO_Get(CTRL_MCU_LED);
+	g_p18650ChgIO = IO_Get(IO_18650_CHG_EN);
 }

@@ -20,8 +20,16 @@ extern "C"
 #include <board.h>
 #include "DateTime.h"
 
-#define RTC_YEAR2000         2000            /*!< RTC Reference */
+#define USE_RTC_LXTAL
+
+#ifdef USE_RTC_LXTAL
+#define RTC_FCR_REFERENCE    32767           /*!< RTC Reference */
+#else
 #define RTC_FCR_REFERENCE    40000           /*!< RTC Reference */
+#endif
+
+#define RTC_YEAR2000         2000            /*!< RTC Reference */
+
 
 #define RTC_CLOCK_12         0                /*!< RTC 12 Hour */
 #define RTC_CLOCK_24         1                /*!< RTC 24 Hour */

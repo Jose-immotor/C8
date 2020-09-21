@@ -5,6 +5,7 @@
 #include "Led.h"
 #include "RcuMap.h"
 
+
 static Bool g_isIoStart = False;
 //uint8 g_ToggleValue = 0;
 
@@ -13,6 +14,9 @@ static Bool g_isIoStart = False;
 //DrvIo* g_pWaterIn;
 //DrvIo* g_pLightCtrl = Null;
 //DrvIo* g_pLcdResetCtrl = Null;
+
+//static DrvIo* g_pTakeApartIO = Null;
+
 
 //所有命名包含“ON”表示高电平有效, 包含“OFF”表示低电平有效
 static DrvIo g_InIOs[] =
@@ -27,6 +31,10 @@ static DrvIo g_InIOs[] =
 		GPIO_PORT_SOURCE_GPIOD, GPIO_PIN_SOURCE_9, EXTI_TRIG_BOTH},
 	{IO_NVC_BUSY	, "NVC_BUSY"		, GPIOE, GPIO_PIN_8, GPIO_MODE_IN_FLOATING},
 	{IO_NVC_DATA	, "NVC_DATA"		, GPIOB, GPIO_PIN_0 ,GPIO_MODE_IN_FLOATING},
+	{IO_TAKE_APART	, "TAKE_APART", GPIOA, GPIO_PIN_3, GPIO_MODE_IN_FLOATING, EXTI_3, 
+		GPIO_PORT_SOURCE_GPIOA, GPIO_PIN_SOURCE_3, EXTI_TRIG_BOTH},
+	{IO_OVER_TEMP	, "OVER-TEMP", GPIOE, GPIO_PIN_1, GPIO_MODE_IN_FLOATING, EXTI_1, 
+		GPIO_PORT_SOURCE_GPIOE, GPIO_PIN_SOURCE_1, EXTI_TRIG_BOTH},
 };
 
 //所有命名包含“ON”表示高电平有效, 包含“OFF”表示低电平有效
@@ -35,12 +43,17 @@ static DrvIo g_OutputIOs[] =
 	//输出配置	
 	{CTRL_MCU_LED	, "CTRL_MCU_LED"	, GPIOE, GPIO_PIN_2 ,GPIO_MODE_OUT_PP},
 	{IO_NFC_NPD_A	, "NFC_NPD_A"		, GPIOE, GPIO_PIN_14 ,GPIO_MODE_OUT_PP},
-	{IO_18650BOOST_EN	, "BOOST_EN"		, GPIOE, GPIO_PIN_11 ,GPIO_MODE_OUT_PP},
+	{IO_18650BOOST_EN, "BOOST_EN"		, GPIOE, GPIO_PIN_11 ,GPIO_MODE_OUT_PP},
 	{IO_NFC_PWR_OFF	, "NFC_PWR_OFF"		, GPIOE, GPIO_PIN_0 ,GPIO_MODE_OUT_PP},
 	{IO_18650_CHG_EN, "18650_CHG_EN"	, GPIOE, GPIO_PIN_10 ,GPIO_MODE_OUT_PP},
 //	{IO_NVC_DATA	, "NVC_DATA"		, GPIOB, GPIO_PIN_0 ,GPIO_MODE_OUT_PP},
 	{IO_NVC_PWR		, "NVC_PWR"			, GPIOC, GPIO_PIN_4 ,GPIO_MODE_OUT_PP},
 	{IO_PWR3V3_EN	, "PWR3V3_EN"		, GPIOA, GPIO_PIN_15 ,GPIO_MODE_OUT_PP},
+	{IO_PWR485_EN	, "PWR485_EN"		, GPIOD, GPIO_PIN_3 ,GPIO_MODE_OUT_PP},
+	{IO_DIR485_CTRL	, "DIR485_CTRL"		, GPIOD, GPIO_PIN_6 ,GPIO_MODE_OUT_PP},
+	{IO_LOCK_EN		, "LOCK_EN"			, GPIOD, GPIO_PIN_10 ,GPIO_MODE_OUT_PP},
+	{IO_18650_PWR_OFF, "18650_PWR_OFF"	, GPIOB, GPIO_PIN_15 ,GPIO_MODE_OUT_PP},
+	
 };
 
 ////=============================================
@@ -598,6 +611,35 @@ void bat_insert(void)
 	rt_interrupt_leave();
 }
 
+//拆开检测
+void take_apart_irq(void)
+{
+	rt_interrupt_enter();
+	if(g_isPowerDown)
+	{
+		SetWakeUpType(WAKEUP_TAKE_APART);
+	}
+	if(IO_Read(IO_TAKE_APART) == RESET)
+	{
+		LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_TakeApart, 0);
+	}
+	rt_interrupt_leave();
+}
+
+//过温
+void over_temp_irq(void)
+{
+	rt_interrupt_enter();
+	if(g_isPowerDown)
+	{
+		SetWakeUpType(WAKEUP_OVER_TEMP);
+	}
+	if(IO_Read(IO_OVER_TEMP) == RESET)
+	{
+		LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_OverTemp, 0);
+	}
+	rt_interrupt_leave();
+}
 
 void IO_Stop()
 {
@@ -704,8 +746,8 @@ void IO_Run()
 }
 static DrvIo* g_p18650BootEnIO = Null;
 static DrvIo* g_pPwr3V3EnIO = Null;
-
-
+static DrvIo* g_pPwr485EnIO = Null;
+DrvIo* g_p18650PwrOffIO = Null;
 int IO_Init(void)
 {
 	static const Obj obj = {"IODriver", IO_Start, IO_Stop, IO_Run};
@@ -728,6 +770,16 @@ int IO_Init(void)
 	PortPin_Set(g_p18650BootEnIO->periph, g_p18650BootEnIO->pin, True);
 	g_pPwr3V3EnIO = IO_Get(IO_PWR3V3_EN);
 	PortPin_Set(g_pPwr3V3EnIO->periph, g_pPwr3V3EnIO->pin, False);
+	g_pPwr485EnIO = IO_Get(IO_PWR485_EN);
+	PortPin_Set(g_pPwr485EnIO->periph, g_pPwr485EnIO->pin, True);
+	g_p18650PwrOffIO = IO_Get(IO_18650_PWR_OFF);
+	PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, True);
+	
+	
+	if(IO_Read(IO_TAKE_APART) == RESET)
+	{
+		LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_WakeUp, 0);
+	}
 	
 	return 0;
 }

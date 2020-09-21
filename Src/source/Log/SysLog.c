@@ -10,6 +10,9 @@ const LogEvt g_SysLogEvts[SYS_LOG_EVT_COUNT] =
 	 {SYS_CATID_COMMON ,0 ,SysEvtID_BATOUT, "BAT-OUT"	 },
 	 {SYS_CATID_COMMON ,0 ,SysEvtID_SysSleep, "SYS-SLEEP"	 },
 	 {SYS_CATID_COMMON ,0 ,SysEvtID_WakeUp, "SYS-WAKEUP"	 },
+	 {SYS_CATID_COMMON ,0 ,SysEvtID_TakeApart, "TAKE-APART"	 },
+	 {SYS_CATID_COMMON ,0 ,SysEvtID_OverTemp, "OVER-TEMP"	 },
+	 
 };
 
 //Sample£º add a log

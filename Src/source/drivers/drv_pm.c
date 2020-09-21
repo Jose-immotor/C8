@@ -66,9 +66,17 @@ void ResetStop()
  *
  * \return NONE 
  */
+extern DrvIo* g_p18650PwrOffIO;
 void Enter_PowerDown()
 {	
 	extern DrvIo* g_pLedIO;
+	
+	
+	if((g_cfgInfo.isActive == 0)&&(g_pdoInfo.isBat0In == 0))
+		PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, False);
+	else
+		PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, True);
+	
 	
 	PortPin_Set(g_pLedIO->periph, g_pLedIO->pin, True);
 	RTC_TimerStart(60*60);//(24*60*60);
@@ -104,9 +112,19 @@ void Mcu_PowerDown()
 	Enter_PowerDown();
 	
 	g_isPowerDown = False;
- 	Printf("\nPower up.\n");	
+ 	Printf("\nPower up.\n");
+	PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, True);	
 	LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_WakeUp, GetWakeUpType());
-	Pms_switchStatus(PMS_ACC_OFF);
+	
+	if(g_cfgInfo.isAccOn)
+	{
+		Pms_switchStatus(PMS_ACC_ON);
+	}
+	else
+	{
+		Pms_switchStatus(PMS_ACC_OFF);
+	}
+//	Pms_switchStatus(PMS_ACC_OFF);
 //	env_nvds_init();
 //	Fsm_Init();
 //	Fsm_Start();
