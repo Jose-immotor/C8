@@ -262,7 +262,7 @@ static void Utp_ReqProc(Utp* pUtp, const uint8_t* pReq, int frameLen)
 	const UtpFrameCfg* frameCfg = pUtp->frameCfg;
 	uint8_t rc = frameCfg->result_UNSUPPORTED;
 	uint8* txBuf = frameCfg->txRspBuf ? frameCfg->txRspBuf : frameCfg->txBuf;
-	uint8* txBufLen = frameCfg->txRspBuf ? frameCfg->txRspBufLen : frameCfg->txBufLen;
+	int txBufLen = frameCfg->txRspBuf ? frameCfg->txRspBufLen : frameCfg->txBufLen;
 	const uint8* pData = &pReq[frameCfg->dataByteInd];
 	const UtpCmd* pCmd = Utp_FindCmdItem(pUtp, pReq[frameCfg->cmdByteInd]);
 	int dlc = 1;
@@ -294,7 +294,7 @@ static void Utp_ReqProc(Utp* pUtp, const uint8_t* pReq, int frameLen)
 		rc = Utp_Event(pUtp, pCmd, UTP_GET_RSP);
 		if (rc == frameCfg->result_SUCCESS && pCmd->pExt->transferData)
 		{
-			if (dlc + pCmd->pExt->transferLen > txBufLen)
+			if (dlc + pCmd->pExt->transferLen <= txBufLen)
 			{
 				memcpy(&txBuf[frameCfg->dataByteInd + 1], pCmd->pExt->transferData, pCmd->pExt->transferLen);
 				dlc += pCmd->pExt->transferLen;
