@@ -267,7 +267,7 @@ static void Utp_ReqProc(Utp* pUtp, const uint8_t* pReq, int frameLen)
 	const UtpCmd* pCmd = Utp_FindCmdItem(pUtp, pReq[frameCfg->cmdByteInd]);
 	int dlc = 1;
 
-	if (pCmd)
+	if (pCmd && (pCmd->type == UTP_EVENT || pCmd->type == UTP_EVENT_NOTIFY))
 	{
 		rc = frameCfg->result_SUCCESS;
 		frameLen -= frameCfg->dataByteInd;
@@ -311,7 +311,7 @@ static void Utp_ReqProc(Utp* pUtp, const uint8_t* pReq, int frameLen)
 	}
 
 	//pCmd==Null，说明命令没有实现，返回UNSUPPORTED
-	if (pCmd==Null || pCmd->type != UTP_EVENT_NOTIFY)
+	if (pCmd==Null || pCmd->type == UTP_EVENT)
 	{
 		txBuf[frameCfg->cmdByteInd] = pReq[frameCfg->cmdByteInd];
 		txBuf[frameCfg->dataByteInd] = rc;

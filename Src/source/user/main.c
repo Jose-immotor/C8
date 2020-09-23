@@ -27,6 +27,7 @@ int main(void)
 
 	//所有对象初始化
 	cm_backtrace_init("C7Pms", "1.0", "1.0");
+	Shell_init();
 	IO_Init();
 	LocalTimeInit();
 	Debug_Init();

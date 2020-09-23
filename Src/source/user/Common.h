@@ -31,7 +31,7 @@ extern "C"{
 #include "drv_pm.h"
 #include "Debug.h"
 #include "pms.h"
-
+#include "CmdLineExport.h"
 
 #ifdef __cplusplus
 }

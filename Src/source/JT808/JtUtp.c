@@ -91,6 +91,7 @@ static int Utp_BuildFrame(Utp* pUtp, uint8_t cmd, const void* pData, int len, co
 static uint8_t g_JtUtp_txBuff[128];			//发送数据缓冲区
 static uint8_t g_JtUtp_transcodeBuf[150];	//接收数据的转码缓冲区
 static uint8_t g_JtUtp_rxBuff[200];			//接收数据缓冲区
+static uint8_t g_JtUtp_txRspBuff[64];			//接收数据缓冲区
 const UtpFrameCfg g_jtFrameCfg =
 {
 	//帧特征配置
@@ -110,6 +111,8 @@ const UtpFrameCfg g_jtFrameCfg =
 	.rxBuf	  = g_JtUtp_rxBuff,
 	.transcodeBufLen = sizeof(g_JtUtp_transcodeBuf),
 	.transcodeBuf = g_JtUtp_transcodeBuf,
+	.txRspBufLen = sizeof(g_JtUtp_txRspBuff),
+	.txRspBuf = g_JtUtp_txRspBuff,
 
 	//返回码定义
 	.result_SUCCESS = OP_SUCCESS,
