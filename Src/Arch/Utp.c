@@ -261,7 +261,8 @@ static void Utp_ReqProc(Utp* pUtp, const uint8_t* pReq, int frameLen)
 {	
 	const UtpFrameCfg* frameCfg = pUtp->frameCfg;
 	uint8_t rc = frameCfg->result_UNSUPPORTED;
-	uint8* txBuf = frameCfg->txBuf;
+	uint8* txBuf = frameCfg->txRspBuf ? frameCfg->txRspBuf : frameCfg->txBuf;
+	uint8* txBufLen = frameCfg->txRspBuf ? frameCfg->txRspBufLen : frameCfg->txBufLen;
 	const uint8* pData = &pReq[frameCfg->dataByteInd];
 	const UtpCmd* pCmd = Utp_FindCmdItem(pUtp, pReq[frameCfg->cmdByteInd]);
 	int dlc = 1;
@@ -293,15 +294,24 @@ static void Utp_ReqProc(Utp* pUtp, const uint8_t* pReq, int frameLen)
 		rc = Utp_Event(pUtp, pCmd, UTP_GET_RSP);
 		if (rc == frameCfg->result_SUCCESS && pCmd->pExt->transferData)
 		{
-			memcpy(&txBuf[frameCfg->dataByteInd + 1], pCmd->pExt->transferData, pCmd->pExt->transferLen);
-			dlc += pCmd->pExt->transferLen;
+			if (dlc + pCmd->pExt->transferLen > txBufLen)
+			{
+				memcpy(&txBuf[frameCfg->dataByteInd + 1], pCmd->pExt->transferData, pCmd->pExt->transferLen);
+				dlc += pCmd->pExt->transferLen;
+			}
+			else
+			{
+				//分配的Buff长度不够
+				Printf("%s size not enough.", frameCfg->txRspBuf ? "txRspBuf" : "txBuf");
+				Assert(False);
+			}
 		}
 
 		Utp_Event(pUtp, pCmd, UTP_REQ_SUCCESS);
 	}
 
 	//pCmd==Null，说明命令没有实现，返回UNSUPPORTED
-	if (pCmd==Null || pCmd->type != UTP_NOTIFY)
+	if (pCmd==Null || pCmd->type != UTP_EVENT_NOTIFY)
 	{
 		txBuf[frameCfg->cmdByteInd] = pReq[frameCfg->cmdByteInd];
 		txBuf[frameCfg->dataByteInd] = rc;
@@ -324,10 +334,17 @@ void Utp_RcvFrameHandler(Utp* pUtp, const uint8* pFrame, int frameLen)
 {
 	if (UTP_FSM_WAIT_RSP == pUtp->state)
 	{
-		//判断请求帧和响应帧是否匹配
-		if (pUtp->frameCfg->FrameVerify(pUtp, pFrame, frameLen, pUtp->frameCfg->txBuf))
+		if (pFrame[pUtp->frameCfg->cmdByteInd] == pUtp->frameCfg->txBuf[pUtp->frameCfg->cmdByteInd])
 		{
-			Utp_RspProc(pUtp, pFrame, frameLen, RSP_SUCCESS);	//响应处理
+			//判断请求帧和响应帧是否匹配
+			if (pUtp->frameCfg->FrameVerify(pUtp, pFrame, frameLen, pUtp->frameCfg->txBuf))
+			{
+				Utp_RspProc(pUtp, pFrame, frameLen, RSP_SUCCESS);	//响应处理
+			}
+		}
+		else if(pUtp->frameCfg->txRspBuf)
+		{
+			Utp_ReqProc(pUtp, pFrame, frameLen);	//请求处理
 		}
 	}
 	else
