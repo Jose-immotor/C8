@@ -757,9 +757,9 @@ Bool fm175Drv_transStart(Fm175Drv* pDrv, FM17522_CMD cmd, uint32 timeOutMs)
 {
 	TransMgr* item = &pDrv->transMgr;
 
-	if (!fm175Drv_isIdle(pDrv)) return False;
+	if (pDrv->transStatus != TRANSFER_STATUS_PENDING_TX) return False;
 
-	memset(item, 0, sizeof(TransMgr));
+	//memset(item, 0, sizeof(TransMgr));
 
 	pDrv->cmd = cmd;
 	//pDrv->obj = cbObj;
@@ -831,9 +831,11 @@ Bool fm175Drv_SyncTransfer(Fm175Drv* pDrv
 	int				_txBufSize  = pDrv->txBufSize;
 	void*			_rxBuf      = pDrv->rxBuf	;
 	int				_rxBufSize  = pDrv->rxBufSize;
+	TRANSFER_STATUS _transStatus = pDrv->transStatus;
 	/**************************************************************/
 
 	pDrv->Event = Null;	//事件函数指针置空,同步传输不需要Event调用
+	pDrv->transStatus = TRANSFER_STATUS_IDLE;
 
 	//启动传输并等待结果
 	fm175Drv_transferInit(pDrv, txBuf, txBufSize, rxBuf, *rxBufSize, Null);
@@ -850,12 +852,9 @@ Bool fm175Drv_SyncTransfer(Fm175Drv* pDrv
 
 	if (pDrv->latestErr == TRANS_RESULT_SUCCESS)
 	{
-		if (pDrv->rxBufSize)
-		{
-			*rxBufSize = pDrv->rxBufSize;
-			rc = True;
-			goto End;
-		}
+		*rxBufSize = pDrv->transMgr.totalLen;
+		rc = True;
+		goto End;
 	}
 End:
 	//恢复传输参数
@@ -864,7 +863,8 @@ End:
 	pDrv->txBuf		= _txBuf		;
 	pDrv->txBufSize	= _txBufSize	;
 	pDrv->rxBuf		= _rxBuf		;
-	pDrv->rxBufSize	= _rxBufSize	;
+	pDrv->rxBufSize = _rxBufSize;
+	pDrv->transStatus = _transStatus;
 	return rc;
 }
 
