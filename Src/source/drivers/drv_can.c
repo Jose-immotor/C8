@@ -22,9 +22,9 @@
 	can_message_receive(CAN0, CAN_FIFO0, &receive_message);   
     if((CAN_RX_ID == receive_message.rx_efid) && (receive_message.rx_dlen > 0))
     {
-    	JT808_rxDataProc( receive_message.rx_data , receive_message.rx_dlen );
+    	//JT808_rxDataProc( receive_message.rx_data , receive_message.rx_dlen );
+    	can0_receive_flag = SET; 
     }
-	 
 	 /* leave interrupt */
     rt_interrupt_leave();
 }

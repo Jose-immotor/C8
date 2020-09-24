@@ -8,27 +8,48 @@
 
 static TlvInMgr g_jtTlvInMgr_8900;
 
+static Jt8900 g_Jt8900 ;
+
 TlvInEventRc JtTlv8900_Event(TlvInMgr* mgr, const TlvIn* pItem, TlvInEvent ev)
 {
-	if (ev == TE_CHANGED_AFTER)
+	if( ev == TE_CHANGED_AFTER )
 	{
-		if (pItem->tag == TAG_ACTIVE)
+		switch ( pItem->tag )
 		{
-			g_cfgInfo.isActive = *pItem->storage;
-			NvdsUser_Write(NVDS_CFG_INFO);
+			case TAG_ACTIVE :
+				g_cfgInfo.isActive = *pItem->storage;
+				NvdsUser_Write(NVDS_CFG_INFO);
+				break ;
+			case TAG_SET_ACC_STATE :
+				g_pdoInfo.isRemoteAccOn = *pItem->storage ;
+				NvdsUser_Write(NVDS_PDO_INFO);
+				break ;
+			case TAG_SET_WHELL_LOCK :
+				g_pdoInfo.isWheelLock  = *pItem->storage;
+				NvdsUser_Write(NVDS_PDO_INFO);
+				break ;
+			case TAG_SET_CABIN_LOCK :
+				g_pdoInfo.isCanbinLock = *pItem->storage;
+				NvdsUser_Write(NVDS_PDO_INFO);
+				break ;
+			case TAG_SET_POWER_OFF :
+				break ;
+			case TAG_SET_BAT_IDEN_EN :
+				break ;
+			case TAG_SET_BAT_ALAM_EN :
+				break ;
+			case TAG_SET_BAT_BID :
+				break ;
+			default :break ;
 		}
-		else if (pItem->tag == TAG_SET_ACC_STATE) g_pdoInfo.isRemoteAccOn = *pItem->storage;
-		else if (pItem->tag == TAG_SET_WHELL_LOCK) g_pdoInfo.isWheelLock  = *pItem->storage;
-		else if (pItem->tag == TAG_SET_CABIN_LOCK) g_pdoInfo.isCanbinLock = *pItem->storage;
-
-		NvdsUser_Write(NVDS_PDO_INFO);
 	}
-	
+
 	return UTP_EVENT_RC_SUCCESS;
 }
 
 UTP_EVENT_RC JtTlv8900_proc(const uint8* data, int len)
 {
+	//B9 01 00 01 01 A0 10 00 01 02 01 00 00 00 01 00 00 00 01 00 01 00 00 	--- ´íÎó°ü
 	TlvInMgr_updateStorage(&g_jtTlvInMgr_8900, data, len);
 
 	return UTP_EVENT_RC_SUCCESS;
@@ -36,14 +57,19 @@ UTP_EVENT_RC JtTlv8900_proc(const uint8* data, int len)
 
 void JtTlv8900_init()
 {
-	#define RX_TLV_COUNT 4
-	static uint8 g_tlvInBuf_8900[RX_TLV_COUNT];
-	const TlvIn g_tlvIn_8900[RX_TLV_COUNT] =
+	const TlvIn g_tlvIn_8900[] =
 	{
-		{"ACT_STATE"		, TAG_ACTIVE        , 1, &g_tlvInBuf_8900[0]},
-		{"SET_ACC  "		, TAG_SET_ACC_STATE , 1, &g_tlvInBuf_8900[1]},
-		{"SET_WHELL_LOCK"	, TAG_SET_WHELL_LOCK, 1, &g_tlvInBuf_8900[2]},
-		{"SET_CABIN_LOCK"	, TAG_SET_CABIN_LOCK, 1, &g_tlvInBuf_8900[3]},
+		{"ACT_STATE"		, TAG_ACTIVE,			1, &g_Jt8900.mAcitveState },
+		{"SET_ACC  "		, TAG_SET_ACC_STATE,	1, &g_Jt8900.mAccState},
+		{"SET_WHELL_LOCK"	, TAG_SET_WHELL_LOCK,	1, &g_Jt8900.mWhellState},
+		{"SET_CABIN_LOCK"	, TAG_SET_CABIN_LOCK,	1, &g_Jt8900.mCabState},
+		{"SET_POWER_OFF"	, TAG_SET_POWER_OFF,	1, &g_Jt8900.mPowerOff},
+		{"SET_BAT_IDEN"		, TAG_SET_BAT_IDEN_EN,	1, &g_Jt8900.mBatIDEnable},
+		{"SET_BAT_ALAMEN"	, TAG_SET_BAT_ALAM_EN,	1, &g_Jt8900.mBatAlamEnable},
+		{"SET_BAT_BID"		, TAG_SET_BAT_BID,		1, (uint8_t*)&g_Jt8900.mBatVerify},
 	};
 	TlvInMgr_init(&g_jtTlvInMgr_8900, g_tlvIn_8900, GET_ELEMENT_COUNT(g_tlvIn_8900), 1, (TlvInEventFn)JtTlv8900_Event, True);
 }
+
+
+

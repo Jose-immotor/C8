@@ -25,6 +25,8 @@ extern "C"{
 		uint32 devType;
 		uint32 factoryFlag;
 	}JtDevCfgParam;
+
+	
 	
 	//TAG是大端格式
 	typedef enum
