@@ -11,7 +11,7 @@
 #include "Battery.h"
 #include "Modbus.h"
 #include "JT808.h"
-#include "NfcCardReader.h"
+#include "fm175Drv.h"
 
 Battery g_Bat[MAX_BAT_COUNT];
 static Pms g_pms;
@@ -129,7 +129,18 @@ void BatteryDump(void)
 
 void NfcCardReaderDump()
 {
-	NfcCardReader_dump(&g_Bat[0].cardReader);
+	#define PRINTF_NFC(_field) Printf("\t%s=%d\n", #_field, g_pms.fmDrv._field);
+	
+	Printf("NFC info:\n");
+	
+	PRINTF_NFC(state);
+	PRINTF_NFC(antPort);
+	
+//	PRINTF_NFC(state);
+//	PRINTF_NFC(antPort);
+//	
+//	PRINTF_NFC(state);
+//	PRINTF_NFC(antPort);
 }
 
 void PmsDump()
@@ -155,7 +166,7 @@ void Pms_setDeepSleep(Bool en)	{ g_regCtrl.deepSleepEn = en; Bat_setDeepSleep(g_
 static int Pms_Tx(const uint8_t* pData, int len)
 {
 	//调用NFC发送数据命令
-	NfcCardReader_Send(&g_pActiveBat->cardReader, pData, len);
+	fm175Drv_transferInit(&g_pms.fmDrv, pData, len, g_pModBus->frameCfg->rxBuf, g_pModBus->frameCfg->rxBufLen, g_pActiveBat);
 	return len;
 }
 
@@ -371,38 +382,40 @@ static void Pms_fsm(PmsMsg msgId, uint32_t param1, uint32_t param2)
 //	rt_interrupt_leave();
 //}
 
-NfcCardReaderEventRc Pms_cardReaderEventCb(Battery* pBat, NfcCardReaderEvent ev)
+TRANSFER_EVENT_RC Pms_EventCb(Battery* pBat, TRANS_EVENT ev)
 {
-	NfcCardReader* pReader = &pBat->cardReader;
-	if (ev == CARD_EVENT_SEARCH_SUCCESS)
+	Fm175Drv* fmDrv = &g_pms.fmDrv;
+	if (ev == SEARCH_CARD_DONE)
 	{
-		Pms_postMsg(PmsMsg_batPlugIn, (uint32)pBat, 0);
-		PFL(DL_NFC,"NFC port[%d] search success!\n",0);
+		if (fmDrv->cardIsExist)
+		{
+			Pms_postMsg(PmsMsg_batPlugIn, (uint32)pBat, 0);
+			PFL(DL_NFC, "NFC port[%d] search success!\n", 0);
+		}
+		else
+		{
+			Pms_postMsg(PmsMsg_batPlugOut, (uint32)pBat, 0);
+			PFL(DL_NFC,"NFC port[%d] search failed!\n",0);
+		}
 	}
-	else if (ev == CARD_EVENT_SEARCH_FAILED)
+	else if (ev == TRANS_SUCCESS)
 	{
-		Pms_postMsg(PmsMsg_batPlugOut, (uint32)pBat, 0);
-		PFL(DL_NFC,"NFC port[%d] search failed!\n",0);
-	}
-	else if (ev == CARD_EVENT_RX_DATA_SUCCESS)
-	{
-		Pms_Rx(pBat, pReader->rxBuf, pReader->rxLen);
+		Pms_Rx(pBat, fmDrv->rxBuf, fmDrv->rxBufSize);
 		PFL(DL_NFC,"NFC port[%d] rx date success!\n",0);
 	}
-	else if (ev == CARD_EVENT_RX_DATA_FAILED)
+	else if (ev == TRANS_FAILED)
 	{
 		Mod_busErr(g_pModBus, BUS_ERR_RX_FAILED);
 		PFL(DL_NFC,"NFC port[%d] rx date failed!\n",0);
 	}
 
-	return CARD_EVENT_RC_SUCCESS;
+	return TRANS_EVT_RC_SUCCESS;
 }
 
 void Pms_run()
 {
-#ifndef USE_NFC_THREAD
-	NfcCardReader_run(&g_pms.cardReader);
-#endif
+	fm175Drv_run(&g_pms.fmDrv);
+	
 	Mod_Run(g_pModBus);
 	Bat_run(&g_Bat[0]);
 //	Bat_run(&g_Bat[1]);
@@ -430,21 +443,26 @@ void Pms_start()
 	//查询电池设备信息
 	Bat_msg(g_pActiveBat, BmsMsg_active, *((uint32*)& g_regCtrl), 0);
 	Bat_start(&g_Bat[0]);
+	fm175Drv_start(&g_pms.fmDrv);
 }
 
 void Pms_init()
 {
-	
+	static const TransProtocolCfg fm175DrvCfg =
+	{
+		.waterLevel = 32,
+		.fifoDeepth = 64,
+	};
 	static const Obj obj = { "Pms", Pms_start, Null, Pms_run };
 	ObjList_add(&obj);
 
 	Mod_Init(g_pModBus, &g_Bat0Cfg, &g_frameCfg);
+	fm175Drv_init(&g_pms.fmDrv, FM17522_I2C_ADDR, &fm175DrvCfg, (TransEventFn)Pms_EventCb);
 
 	Bat_init(&g_Bat[0], 0, &g_Bat0Cfg);
 	Bat_init(&g_Bat[1], 1, &g_Bat1Cfg);
 
 	g_pActiveBat = &g_Bat[0];
 	Queue_init(&g_pms.msgQueue, g_pms.msgBuf, sizeof(Message), GET_ELEMENT_COUNT(g_pms.msgBuf));
-	
 	g_pLockEnIO = IO_Get(IO_LOCK_EN);
 }

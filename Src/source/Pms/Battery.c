@@ -235,11 +235,11 @@ Bool Bat_isReady(Battery* pBat)
 	return pBat->presentStatus == BAT_IN;
 }
 
-void Bat_setPreDischg(Battery* pBat, Bool en) { pBat->pBmsReg_Ctrl->preDischg = en; Bat_sendCmd(pBat, BMS_READ_CTRL); }
-void Bat_setDischg(Battery* pBat, Bool en) { pBat->pBmsReg_Ctrl->dischgEn = en; Bat_sendCmd(pBat, BMS_READ_CTRL); }
-void Bat_setChg(Battery* pBat, Bool en) { pBat->pBmsReg_Ctrl->chgEn = en; Bat_sendCmd(pBat, BMS_READ_CTRL); }
-void Bat_setSleep(Battery* pBat, Bool en) { pBat->pBmsReg_Ctrl->sleepEn = en; Bat_sendCmd(pBat, BMS_READ_CTRL); }
-void Bat_setDeepSleep(Battery* pBat, Bool en) { pBat->pBmsReg_Ctrl->deepSleepEn = en; Bat_sendCmd(pBat, BMS_READ_CTRL); }
+void Bat_setPreDischg(Battery* pBat, Bool en){ pBat->pBmsReg_Ctrl->preDischg = en  ; Bat_sendCmd(pBat, BMS_READ_CTRL); }
+void Bat_setDischg(Battery* pBat, Bool en)	 { pBat->pBmsReg_Ctrl->dischgEn = en   ; Bat_sendCmd(pBat, BMS_READ_CTRL); }
+void Bat_setChg(Battery* pBat, Bool en)		 { pBat->pBmsReg_Ctrl->chgEn = en      ; Bat_sendCmd(pBat, BMS_READ_CTRL); }
+void Bat_setSleep(Battery* pBat, Bool en)	 { pBat->pBmsReg_Ctrl->sleepEn = en    ; Bat_sendCmd(pBat, BMS_READ_CTRL); }
+void Bat_setDeepSleep(Battery* pBat, Bool en){ pBat->pBmsReg_Ctrl->deepSleepEn = en; Bat_sendCmd(pBat, BMS_READ_CTRL); }
 
 void Bat_run(Battery* pBat)
 {
@@ -248,7 +248,6 @@ void Bat_run(Battery* pBat)
 
 void Bat_start(Battery* pBat)
 {
-	NfcCardReader_start(&pBat->cardReader);
 }
 
 void Bat_init(Battery* pBat, int port, const ModCfg* cfg)
@@ -261,5 +260,4 @@ void Bat_init(Battery* pBat, int port, const ModCfg* cfg)
 	pBat->cfg = cfg;
 	pBat->pBmsReg_Ctrl = (BmsRegCtrl*)& pBat->writeBmsCtrl;
 
-	NfcCardReader_init(&pBat->cardReader, (NfcCardReader_EventFn)Pms_cardReaderEventCb, pBat);
 }

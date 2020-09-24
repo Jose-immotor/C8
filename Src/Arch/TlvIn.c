@@ -90,6 +90,7 @@ void TlvInMgr_updateStorage(TlvInMgr* mgr, const uint8* pTlvBuf, int bufSize)
 		}
 
 		pTlvBuf += mgr->tagLen + 1 + pTlvBuf[mgr->tagLen];
+		i = i + sizeof(TlvIn);
 	}
 }
 

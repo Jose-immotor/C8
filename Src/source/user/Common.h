@@ -10,7 +10,7 @@ extern "C"{
 #endif
 
 //#define CFG_LOG
-#define USE_NFC_THREAD
+//#define USE_NFC_THREAD
 
 #include "ArchDef.h"
 #include "Obj.h"

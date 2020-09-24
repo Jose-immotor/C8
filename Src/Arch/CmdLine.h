@@ -16,7 +16,7 @@ extern "C"{
 #endif
 
 #include "ArchDef.h"
-#include "CmdLineDef.h"
+#include "Datatype.h"
 
 /*
 //Typedef ============================================
@@ -82,18 +82,28 @@ typedef enum _ArgType
 
 
 #define MAX_ARG_COUNT  5
-typedef struct _CmdFnEx
+typedef struct _CmdItemEx
 {
 	//参数总数
 	uint8 argCount;
-}CmdFnEx;
+}CmdItemEx;
 
 typedef struct _FnDef
 {
-	void* 			Proc;
-	const char* 	title;
-	CmdFnEx*  ex;
-}FnDef;
+	CmdItemEx*	ex;			//命令行扩展
+	const char* Desc;		//命令行名称和参数，例如：Test(uint32 val)
+	const void* Proc;	//命令处理函数
+}CmdItem;
+
+typedef struct _CmdLineVar
+{
+	const char* name;
+	const char* desc;
+	DType type;
+	int valLen;
+	const uint8* val;
+	const char* fmt;
+}CmdLineVar;
 
 typedef void (*OutPutFun)(const char* string);
 #define MAX_CMDLINE_LEN 64
@@ -101,7 +111,7 @@ typedef void (*OutPutFun)(const char* string);
 typedef struct _CmdLineCfg
 {
 	char* cmdLineBuf;			//命令长度Buffer
-	const FnDef* cmdHandlerArray;	//命令处理函数数组
+	const CmdItem* cmdHandlerArray;	//命令处理函数数组
 	unsigned char cmdHandlerCount;	//命令处理函数数组长度
 	OutPutFun printf;
 }CmdLineCfg;

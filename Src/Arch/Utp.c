@@ -348,7 +348,10 @@ static Bool Utp_SendReq(Utp* pUtp, const UtpCmd* pCmd)
 	//设置默认的发送参数
 	pUtp->waitRspMs = pUtp->frameCfg->waitRspMsDefault;	//默认等待响应的时间为1秒
 	pUtp->maxTxCount = 3;		//默认的重发次数为3
-	if (UTP_EVENT_RC_SUCCESS != Utp_Event(pUtp, pCmd, UTP_TX_START)) return False;
+	if (UTP_EVENT_RC_SUCCESS != Utp_Event(pUtp, pCmd, UTP_TX_START))
+	{
+		return False;
+	}
 
 	Utp_ResetTxBuf(pUtp);
 	//Utp_ResetRxBuf(pUtp);
@@ -469,9 +472,6 @@ static void Utp_CheckReq(Utp* pUtp)
 		//是否有待发的READ/WRITE命令(pExt->sendDelayMs > 0)
 		if(pExt->sendDelayMs && SwTimer_isTimerOutEx(pExt->rxRspTicks, pExt->sendDelayMs))
 		{
-			//清除发送标志
-			pExt->sendDelayMs = 0;
-
 			if (pCmd->type == UTP_READ)
 			{
 				pExt->transferData = pCmd->pData;
@@ -484,6 +484,8 @@ static void Utp_CheckReq(Utp* pUtp)
 			}
 
 			Utp_SendReq(pUtp, pCmd);
+			//清除发送标志
+			pExt->sendDelayMs = 0;
 
 			if (pCmd->type == UTP_NOTIFY)
 			{

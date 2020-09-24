@@ -33,7 +33,7 @@ UTP_EVENT_RC Ble_authent(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
 	if (ev == UTP_GET_RSP)
 	{
-		if (BLE_USER_INVALID == BleUser_login(&pBle->user, pCmd->pStorage))
+		if (BLE_USER_INVALID == BleUser_login(&pBle->user, (char*)pCmd->pStorage))
 		{
 			return ERR_USERID_INVALID;
 		}

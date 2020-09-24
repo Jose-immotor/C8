@@ -65,6 +65,7 @@ extern "C" {
 	typedef struct _Pms
 	{
 		Mod modBus;
+		Fm175Drv fmDrv;	//NFC驱动对象
 
 		//Pms操作状态
 		PmsOpStatus opStatus;
@@ -85,7 +86,7 @@ extern "C" {
 	void Pms_Rx(Battery* pBat, const uint8_t* pData, int len);
 	void Pms_postMsg(PmsMsg msgId, uint32_t param1, uint32_t param2);
 
-	NfcCardReaderEventRc Pms_cardReaderEventCb(Battery* pBat, NfcCardReaderEvent ev);
+	TRANSFER_EVENT_RC Pms_EventCb(Battery* pBat, TRANS_EVENT ev);
 	void Pms_switchStatus(PmsOpStatus newStatus);
 	void Fsm_SetActiveFlag(ActiveFlag af, Bool isActive);
 #ifdef __cplusplus
