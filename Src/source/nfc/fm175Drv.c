@@ -323,17 +323,19 @@ void fm175Drv_irq_rxDone(Fm175Drv* pDrv)
 void fm175Drv_irq_rx(Fm175Drv* pDrv)
 {
 	TransMgr* item = &pDrv->transMgr;
+	uint8 bytesInFifo = 0;
 
-	if (!IICReg_readByte(&pDrv->iicReg, FIFOLevelReg, (uint8*)&item->transLen)) return;
+	if (!IICReg_readByte(&pDrv->iicReg, FIFOLevelReg, & bytesInFifo)) return;
 
 	//循环读取所有FIFO的内容
-	for (; item->transBufOffset < item->transLen; )
+	for (; item->transBufOffset < bytesInFifo; )
 	{
-		int readLen = MIN(item->transBufLen - item->transBufOffset, item->transLen - item->transBufOffset);
+		int readLen = MIN(item->transBufLen - item->transBufOffset, bytesInFifo - item->transBufOffset);
 		if (readLen == 0)
 		{
 			fm175Drv_event(pDrv, TRANS_RX_BUF_FULL, TRANS_RESULT_SUCCESS);
 			item->transBufOffset = 0;
+			IIC_REG_ERR_RETURN(IICReg_readByte(&pDrv->iicReg, FIFOLevelReg, & bytesInFifo));
 			continue;
 		}
 
@@ -351,14 +353,14 @@ void fm175Drv_irq_tx(Fm175Drv* pDrv)
 	int remainLen = 0;
 
 	//当前还有多少未传输的数据在FIFO
-	uint8 fifeSize;
-	IIC_REG_ERR_RETURN(IICReg_readByte(&pDrv->iicReg, FIFOLevelReg, &fifeSize));
+	uint8 bytesInFifo;
+	IIC_REG_ERR_RETURN(IICReg_readByte(&pDrv->iicReg, FIFOLevelReg, &bytesInFifo));
 
-	//计算实际已经传输的数据
-	item->transLen = item->transLen - fifeSize;
+	//计算实际已经传输的数据长度
+	int sentLen = item->putBytesInTxFifo - bytesInFifo;
 
-	item->offset += item->transLen;
-	item->transBufOffset += item->transLen;
+	item->offset += sentLen;
+	item->transBufOffset += sentLen;
 
 	remainLen = item->totalLen - item->offset;
 	if (remainLen == 0)
@@ -374,12 +376,12 @@ void fm175Drv_irq_tx(Fm175Drv* pDrv)
 		item->transBufOffset = 0;
 	}
 
-	//计算发送多少字节到FIFO中
-	item->transLen = MIN(item->transBufLen - item->transBufOffset, cfg->fifoDeepth - fifeSize);
+	//计算需要放到TX FIFO中的字节数
+	item->putBytesInTxFifo = MIN(item->transBufLen - item->transBufOffset, cfg->fifoDeepth - bytesInFifo);
 
-	if (item->transLen)
+	if (item->putBytesInTxFifo)
 	{
-		IIC_REG_ERR_RETURN(IICReg_writeFifo(&pDrv->iicReg, & pDrv->txBuf[item->transBufOffset], item->transLen));
+		IIC_REG_ERR_RETURN(IICReg_writeFifo(&pDrv->iicReg, & pDrv->txBuf[item->transBufOffset], item->putBytesInTxFifo));
 		IIC_REG_ERR_RETURN(IICReg_SetBitMask(&pDrv->iicReg, BitFramingReg, 0x80));	//启动发送
 	}
 	else
@@ -767,7 +769,7 @@ Bool fm175Drv_transStart(Fm175Drv* pDrv, FM17522_CMD cmd, uint32 timeOutMs)
 	item->offset = 0;
 
 	item->transBufOffset = 0;
-	item->transLen = 0;
+	item->putBytesInTxFifo = 0;
 
 	//pDrv->txBuf = txBuf;
 	//pDrv->txBufSize = txBufSize;
