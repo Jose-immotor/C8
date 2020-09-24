@@ -365,8 +365,8 @@ void fm175Drv_irq_tx(Fm175Drv* pDrv)
 	remainLen = item->totalLen - item->offset;
 	if (remainLen == 0)
 	{
-		fm175Drv_event(pDrv, TRANS_SUCCESS, TRANS_RESULT_SUCCESS);
-		return;
+		item->putBytesInTxFifo = 0;
+		goto TxDone;
 	}
 
 	if (item->transBufOffset >= item->transBufLen)
@@ -383,11 +383,17 @@ void fm175Drv_irq_tx(Fm175Drv* pDrv)
 	{
 		IIC_REG_ERR_RETURN(IICReg_writeFifo(&pDrv->iicReg, & pDrv->txBuf[item->transBufOffset], item->putBytesInTxFifo));
 		IIC_REG_ERR_RETURN(IICReg_SetBitMask(&pDrv->iicReg, BitFramingReg, 0x80));	//启动发送
+		return;
 	}
-	else
+	
+TxDone:
+	//是否需要接收数据
+	if (pDrv->rxBufSize == 0)
 	{
 		fm175Drv_event(pDrv, TRANS_SUCCESS, TRANS_RESULT_SUCCESS);
 	}
+	item->offset = 0;
+	item->transBufOffset = 0;
 }
 
 void fm175Drv_irq_idle(Fm175Drv* pDrv)
