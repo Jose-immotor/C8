@@ -14,7 +14,7 @@ void HwFwVer_Dump(const char* headStr, const HwFwVer* pHwFwVer, const char* tail
 	if (headStr == Null) headStr = "";
 	if (tailStr == Null) tailStr = "";
 
-	Printf("%sHw(%d.%d), Fw(%d.%d.%d.%d)%s"
+	Printf("%sHw(%d.%d), Fw(%d.%d.%d.%d)%s\n"
 		, headStr
 		, pHwFwVer->m_HwMainVer
 		, pHwFwVer->m_HwSubVer

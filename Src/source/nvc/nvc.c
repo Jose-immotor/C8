@@ -12,6 +12,13 @@
 #include "Sif.h"
 #include "drv_hwtimer.h"
 
+static DrvIo* g_pPwrNvcEnIO = Null;
+
+#define NVC_PWR_ON()	PortPin_Set(g_pPwrNvcEnIO->periph, g_pPwrNvcEnIO->pin, True)
+#define NVC_PWR_OFF()	PortPin_Set(g_pPwrNvcEnIO->periph, g_pPwrNvcEnIO->pin, False)
+
+#define NVC_IS_BSY() 	(IO_Read(IO_NVC_BUSY) == RESET)
+
 static const uint32 CLK_US = 100;
 
 static Sif g_Sif;
@@ -65,16 +72,16 @@ Bool Nvc_IsPwrOn()
 	return (gpio_output_bit_get(NVC_PWR_PORT,NVC_PWR_PIN) == SET);
 }
 
-////控制9级音量，0不响，1音量最小，8音量最大
-//void Nvc_SetVol(uint8 vol)
-//{
-//	g_Settings.vol = vol;
-//	if(g_Settings.vol > 8) g_Settings.vol = 8;
-//}
+//控制9级音量，0不响，1音量最小，8音量最大
+void Nvc_SetVol(uint8 vol)
+{
+	g_cfgInfo.vol = vol;
+	if(g_cfgInfo.vol > 8) g_cfgInfo.vol = 8;
+}
 
 void Nvc_Add(uint8 audioInd, uint8 maxRepeat)
 {
-//	if(g_Settings.vol == 0) return;	//不响
+	if(g_cfgInfo.vol == 0) return;	//不响
 	
 	NvcItem nvcItem = {0};
 	nvcItem.cmd = audioInd;
@@ -90,18 +97,18 @@ void Nvc_Add(uint8 audioInd, uint8 maxRepeat)
 	
 	Queue_write(&g_NvcQueue, &nvcItem, sizeof(nvcItem));
 
-//	Fsm_SetActiveFlag(AF_NVC, True);
+	Fsm_SetActiveFlag(AF_NVC, True);
 }
 
 #define CONVERT_TO_VOL(x) (x-1 + 0xE0)
-//void Nvc_PlayEx(uint8 audioInd, uint8 maxRepeat, uint8 vol)
-//{
-//	Nvc_SetVol(vol);
-//	
-//	QUEUE_removeAll(&g_NvcQueue);
-//	Nvc_Add(CONVERT_TO_VOL(g_Settings.vol), 1);
-//	Nvc_Add(audioInd, maxRepeat);
-//}
+void Nvc_PlayEx(uint8 audioInd, uint8 maxRepeat, uint8 vol)
+{
+	Nvc_SetVol(vol);
+	
+	Queue_reset(&g_NvcQueue);
+	Nvc_Add(CONVERT_TO_VOL(g_cfgInfo.vol), 1);
+	Nvc_Add(audioInd, maxRepeat);
+}
 
 void Nvc_Play(uint8 audioInd, uint8 maxRepeat)
 {
@@ -110,7 +117,7 @@ void Nvc_Play(uint8 audioInd, uint8 maxRepeat)
 		Queue_reset(&g_NvcQueue);
 		
 		//控制8级音量，E0音量最小，E7音量最大，默认最大
-//		Nvc_Add(CONVERT_TO_VOL(g_Settings.vol), 1);
+		Nvc_Add(CONVERT_TO_VOL(g_cfgInfo.vol), 1);
 	}
 	Nvc_Add(audioInd, maxRepeat);
 }
@@ -152,11 +159,10 @@ void Nvc_Reset()
 //	Fsm_SetActiveFlag(AF_NVC, False);
 }
 
-//void Nvc_Start()
-//{
-////	TIMER_Start(TIMER3);
-//}
-
+void Nvc_Start()
+{
+//	timer_enable(TIMER3);
+}
 
 void Nvc_SendNvcItem(NvcItem* pNvcItem)
 {
@@ -185,11 +191,12 @@ void Nvc_Run()
 		if(g_pNvcItem)
 		{
 			Nvc_SendNvcItem(g_pNvcItem);
+			Queue_pop(&g_NvcQueue);
 		}
 		else if(Nvc_IsPwrOn())
 		{
 			Nvc_SetPower(False);
-//			Fsm_SetActiveFlag(AF_NVC, False);
+			Fsm_SetActiveFlag(AF_NVC, False);
 		}
 	}
 	else
@@ -215,45 +222,24 @@ void Nvc_Run()
 void Nvc_Init()
 {
 	static NvcItem g_NvcItem[5];
-	Queue_init(&g_NvcQueue,g_NvcItem, sizeof(NvcItem), GET_ELEMENT_COUNT(g_NvcItem));
+	const static Obj obj = {
+	.name = "NVC",
+	.Start = Nvc_Start,
+	.Run = Nvc_Run,
+	};
 
-	gpio_init(NVC_SIF_PORT, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, NVC_SIF_PIN);
-	gpio_init(NVC_BSY_PORT, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, NVC_BSY_PIN);
-	gpio_init(NVC_PWR_PORT, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, NVC_PWR_PIN);
+	ObjList_add(&obj);
 	
+	Queue_init(&g_NvcQueue,g_NvcItem, sizeof(NvcItem), GET_ELEMENT_COUNT(g_NvcItem));
+	
+	g_pPwrNvcEnIO = IO_Get(IO_NVC_PWR);
 	NVC_PWR_ON();
 
 	Sif_Init(&g_Sif, Nvc_Done);
 
 	SwTimer_Init(&g_NvcTimer, 0, 0);
 	g_pNvcItem = Null;
-	g_failedCounter = 0;	
-}
-
-static void thread_nvc_entry(void* parameter)
-{
-	
+	g_failedCounter = 0;
 	rt_hw_hwtimer_init();
-	Nvc_Init();
-	while (1)
-    {
-		Nvc_Run();
-		rt_thread_mdelay(100);
-	}
-
+	
 }
-
-struct rt_thread thread_nvc;
-unsigned char thread_nvc_stack[1024];
-static int app_nvc_init(void)
-{
-	rt_err_t res;
-	res=rt_thread_init(&thread_nvc,"nvc", thread_nvc_entry, RT_NULL,&thread_nvc_stack[0],
-    sizeof(thread_nvc_stack), 5, 10);
-    if (res == RT_EOK) /* 如果获得线程控制块，启动这个线程 */
-        rt_thread_startup(&thread_nvc);
-	else
-		rt_kprintf("\n!!create thread ble failed!\n");
-    return 0;
-}
-//INIT_APP_EXPORT(app_nvc_init);

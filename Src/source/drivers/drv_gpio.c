@@ -5,6 +5,7 @@
 #include "Led.h"
 #include "RcuMap.h"
 
+
 static Bool g_isIoStart = False;
 //uint8 g_ToggleValue = 0;
 
@@ -14,21 +15,45 @@ static Bool g_isIoStart = False;
 //DrvIo* g_pLightCtrl = Null;
 //DrvIo* g_pLcdResetCtrl = Null;
 
+//static DrvIo* g_pTakeApartIO = Null;
+
+
 //所有命名包含“ON”表示高电平有效, 包含“OFF”表示低电平有效
 static DrvIo g_InIOs[] =
 {
 	{IO_NFC_IRQ_A, "NFC_IRQ_A", GPIOE, GPIO_PIN_15, GPIO_MODE_IN_FLOATING},//, EXTI_15, 
 		//GPIO_PORT_SOURCE_GPIOE, GPIO_PIN_SOURCE_15, EXTI_TRIG_RISING}
-	{IO_GRYO_IRQ, "GYRO_IRQ", GPIOC, GPIO_PIN_8, GPIO_MODE_IN_FLOATING, EXTI_8, 
-		GPIO_PORT_SOURCE_GPIOC, GPIO_PIN_SOURCE_8, EXTI_TRIG_BOTH}
+	{IO_GRYO_IRQ, "GYRO_IRQ", GPIOB, GPIO_PIN_8, GPIO_MODE_IN_FLOATING, EXTI_8, 
+		GPIO_PORT_SOURCE_GPIOB, GPIO_PIN_SOURCE_8, EXTI_TRIG_BOTH},
+	{IO_GPRS_INSERT, "GPRS_INSERT", GPIOA, GPIO_PIN_2, GPIO_MODE_IN_FLOATING, EXTI_2, 
+		GPIO_PORT_SOURCE_GPIOA, GPIO_PIN_SOURCE_2, EXTI_TRIG_BOTH},
+	{IO_BAT_INSERT, "BAT_INSERT", GPIOD, GPIO_PIN_9, GPIO_MODE_IN_FLOATING, EXTI_9, 
+		GPIO_PORT_SOURCE_GPIOD, GPIO_PIN_SOURCE_9, EXTI_TRIG_BOTH},
+	{IO_NVC_BUSY	, "NVC_BUSY"		, GPIOE, GPIO_PIN_8, GPIO_MODE_IN_FLOATING},
+	{IO_NVC_DATA	, "NVC_DATA"		, GPIOB, GPIO_PIN_0 ,GPIO_MODE_IN_FLOATING},
+	{IO_TAKE_APART	, "TAKE_APART", GPIOA, GPIO_PIN_3, GPIO_MODE_IN_FLOATING, EXTI_3, 
+		GPIO_PORT_SOURCE_GPIOA, GPIO_PIN_SOURCE_3, EXTI_TRIG_BOTH},
+	{IO_OVER_TEMP	, "OVER-TEMP", GPIOE, GPIO_PIN_1, GPIO_MODE_IN_FLOATING, EXTI_1, 
+		GPIO_PORT_SOURCE_GPIOE, GPIO_PIN_SOURCE_1, EXTI_TRIG_BOTH},
 };
 
 //所有命名包含“ON”表示高电平有效, 包含“OFF”表示低电平有效
 static DrvIo g_OutputIOs[] =
 {
 	//输出配置	
-	{CTRL_MCU_LED	, "CTRL_MCU_LED"	, GPIOE, GPIO_PIN_11 ,GPIO_MODE_OUT_PP},
-	{IO_NFC_NPD_A	, "NFC_NPD_A"		, GPIOE, GPIO_PIN_14 ,GPIO_MODE_OUT_PP}
+	{CTRL_MCU_LED	, "CTRL_MCU_LED"	, GPIOE, GPIO_PIN_2 ,GPIO_MODE_OUT_PP},
+	{IO_NFC_NPD_A	, "NFC_NPD_A"		, GPIOE, GPIO_PIN_14 ,GPIO_MODE_OUT_PP},
+	{IO_18650BOOST_EN, "BOOST_EN"		, GPIOE, GPIO_PIN_11 ,GPIO_MODE_OUT_PP},
+	{IO_NFC_PWR_OFF	, "NFC_PWR_OFF"		, GPIOE, GPIO_PIN_0 ,GPIO_MODE_OUT_PP},
+	{IO_18650_CHG_EN, "18650_CHG_EN"	, GPIOE, GPIO_PIN_10 ,GPIO_MODE_OUT_PP},
+//	{IO_NVC_DATA	, "NVC_DATA"		, GPIOB, GPIO_PIN_0 ,GPIO_MODE_OUT_PP},
+	{IO_NVC_PWR		, "NVC_PWR"			, GPIOC, GPIO_PIN_4 ,GPIO_MODE_OUT_PP},
+	{IO_PWR3V3_EN	, "PWR3V3_EN"		, GPIOA, GPIO_PIN_15 ,GPIO_MODE_OUT_PP},
+	{IO_PWR485_EN	, "PWR485_EN"		, GPIOD, GPIO_PIN_3 ,GPIO_MODE_OUT_PP},
+	{IO_DIR485_CTRL	, "DIR485_CTRL"		, GPIOD, GPIO_PIN_6 ,GPIO_MODE_OUT_PP},
+	{IO_LOCK_EN		, "LOCK_EN"			, GPIOD, GPIO_PIN_10 ,GPIO_MODE_OUT_PP},
+	{IO_18650_PWR_OFF, "18650_PWR_OFF"	, GPIOB, GPIO_PIN_15 ,GPIO_MODE_OUT_PP},
+	
 };
 
 ////=============================================
@@ -190,8 +215,6 @@ const static IOPortName g_IOPortName[] =
 	{GPIOC,"PC"},
 	{GPIOD,"PD"},
 	{GPIOE,"PE"},
-	{GPIOF,"PF"},
-	{GPIOG,"PG"},
 };
 
 //GPIOA->"PA"
@@ -207,18 +230,18 @@ const char* GPIOxToPx(uint32 port)
 	return "No";
 }
 
-////ch = 'A', 'B', 'C', 'D', 'E', 'F', 'G',
-//uint32 ABCDEFG_ToPort(char ch)
-//{
-//	for (int i = 0; i < GET_ELEMENT_COUNT(g_IOPortName); i++)
-//	{
-//		if (g_IOPortName[i].Name[1] == ch)
-//		{
-//			return g_IOPortName[i].periph;
-//		}
-//	}
-//	return 0;
-//}
+//ch = 'A', 'B', 'C', 'D', 'E', 'F', 'G',
+uint32 ABCDEFG_ToPort(char ch)
+{
+	for (int i = 0; i < GET_ELEMENT_COUNT(g_IOPortName); i++)
+	{
+		if (g_IOPortName[i].Name[1] == ch)
+		{
+			return g_IOPortName[i].periph;
+		}
+	}
+	return 0;
+}
 
 ////根据port和pin参数，转换为字符串，例如 PortNameToStr(GPIOA, GPIO_PIN_3) -> "PA3"
 //返回值："PA0";"PA1"..."PG15"
@@ -240,33 +263,33 @@ char* PortPinToPxx(uint32 port, uint32 pin)
 	return retStr;
 }
 
-////str = "PA1";"PB2";...
-//DrvIo* PxxToPortPin(const char* Pxx, uint32* port, uint32* pin)
-//{
-//	char ch;
-//	if (2 == sscanf(Pxx, "P%c%ud", &ch, pin))
-//	{
-//		*pin = BIT(*pin);
-//		*port = ABCDEFG_ToPort(ch);
-//	}
+//str = "PA1";"PB2";...
+DrvIo* PxxToPortPin(const char* Pxx, uint32* port, uint32* pin)
+{
+	char ch;
+	if (2 == sscanf(Pxx, "P%c%ud", &ch, pin))
+	{
+		*pin = BIT(*pin);
+		*port = ABCDEFG_ToPort(ch);
+	}
 
-//	for (int i = 0; i < GET_ELEMENT_COUNT(g_InIOs); i++)
-//	{
-//		if (g_InIOs[i].periph == *port && g_InIOs[i].pin == *pin) return &g_InIOs[i];
-//	}
+	for (int i = 0; i < GET_ELEMENT_COUNT(g_InIOs); i++)
+	{
+		if (g_InIOs[i].periph == *port && g_InIOs[i].pin == *pin) return &g_InIOs[i];
+	}
 
 //	for (int i = 0; i < GET_ELEMENT_COUNT(g_SwitchIOs); i++)
 //	{
 //		if (g_SwitchIOs[i].periph == *port && g_SwitchIOs[i].pin == *pin) return &g_SwitchIOs[i];
 //	}
 
-//	for (int i = 0; i < GET_ELEMENT_COUNT(g_OutputIOs); i++)
-//	{
-//		if (g_OutputIOs[i].periph == *port && g_OutputIOs[i].pin == *pin) return &g_OutputIOs[i];
-//	}
+	for (int i = 0; i < GET_ELEMENT_COUNT(g_OutputIOs); i++)
+	{
+		if (g_OutputIOs[i].periph == *port && g_OutputIOs[i].pin == *pin) return &g_OutputIOs[i];
+	}
 
-//	return Null;
-//}
+	return Null;
+}
 
 ////根据exti号获取IO对象
 //DrvIo* IO_GetByExti(uint32 exti)
@@ -408,39 +431,39 @@ uint8 PortPin_Read(const DrvIo* pDrvIo)
 	return gpio_input_bit_get(pDrvIo->periph, pDrvIo->pin);
 }
 
-////Pxx = "PA1","PB2"..."PE15"
-////value = 0;1
-//uint8 IODesc_Read(const char* Pxx)
-//{
-//	char ch;
-//	int pin = 0;
-//	uint8 value = 0;
-//	if (2 == sscanf(Pxx, "P%c%d", &ch, &pin))
-//	{
-//		uint32 port = ABCDEFG_ToPort(ch);
-//		if (port && pin < 16)
-//		{
-//			pin = BIT(pin);
-//			value = gpio_input_bit_get(port, pin);
-//			Printf("%s[%X,%X]=%d\n", Pxx, port, pin, value);
-//		}
-//		else
-//		{
-//			Printf("Port[%d] is invalid\n", port);
-//		}
-//	}
-//	else
-//	{
-//		Printf("Param[%s] is invalid\n", Pxx);
-//	}
-//	return value;
-//}
+//Pxx = "PA1","PB2"..."PE15"
+//value = 0;1
+uint8 IODesc_Read(const char* Pxx)
+{
+	char ch;
+	int pin = 0;
+	uint8 value = 0;
+	if (2 == sscanf(Pxx, "P%c%d", &ch, &pin))
+	{
+		uint32 port = ABCDEFG_ToPort(ch);
+		if (port && pin < 16)
+		{
+			pin = BIT(pin);
+			value = gpio_input_bit_get(port, pin);
+			Printf("%s[%X,%X]=%d\n", Pxx, port, pin, value);
+		}
+		else
+		{
+			Printf("Port[%d] is invalid\n", port);
+		}
+	}
+	else
+	{
+		Printf("Param[%s] is invalid\n", Pxx);
+	}
+	return value;
+}
 
-//uint8 IO_Read(IO_ID pin)
-//{
-//	DrvIo*  p = IO_Get(pin);
-//	return PortPin_Read(p);
-//}
+uint8 IO_Read(IO_ID pin)
+{
+	DrvIo*  p = IO_Get(pin);
+	return PortPin_Read(p);
+}
 
 ////Pxx = "PA1","PB2"..."PE15"
 //void IODesc_Set(const char* Pxx, uint8 value)
@@ -558,6 +581,66 @@ void IO_IRQEnable(Bool isEnable)
 
 //}
 
+//外置模块插入、拔出处理
+void gprs_insert(void)
+{
+	rt_interrupt_enter();
+	if(g_isPowerDown)
+	{
+		SetWakeUpType(WAKEUP_GPRS_INSERT);
+	}	
+//	if(GPIO_READ(PB, 14))
+//	{
+//		PostMsg(MSG_GYRO_ASSERT);
+//	}
+	rt_interrupt_leave();
+}
+
+//电池电压插入，拔出处理
+void bat_insert(void)
+{
+	rt_interrupt_enter();
+	if(g_isPowerDown)
+	{
+		SetWakeUpType(WAKEUP_BAT_INSERT);
+	}	
+//	if(GPIO_READ(PB, 14))
+//	{
+//		PostMsg(MSG_GYRO_ASSERT);
+//	}
+	rt_interrupt_leave();
+}
+
+//拆开检测
+void take_apart_irq(void)
+{
+	rt_interrupt_enter();
+	if(g_isPowerDown)
+	{
+		SetWakeUpType(WAKEUP_TAKE_APART);
+	}
+	if(IO_Read(IO_TAKE_APART) == RESET)
+	{
+		LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_TakeApart, 0);
+	}
+	rt_interrupt_leave();
+}
+
+//过温
+void over_temp_irq(void)
+{
+	rt_interrupt_enter();
+	if(g_isPowerDown)
+	{
+		SetWakeUpType(WAKEUP_OVER_TEMP);
+	}
+	if(IO_Read(IO_OVER_TEMP) == RESET)
+	{
+		LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_OverTemp, 0);
+	}
+	rt_interrupt_leave();
+}
+
 void IO_Stop()
 {
 	g_isIoStart = False;
@@ -661,11 +744,16 @@ void IO_Run()
 
 //	IO_CheckIOState();
 }
-
+static DrvIo* g_p18650BootEnIO = Null;
+static DrvIo* g_pPwr3V3EnIO = Null;
+static DrvIo* g_pPwr485EnIO = Null;
+DrvIo* g_p18650PwrOffIO = Null;
 int IO_Init(void)
 {
 	static const Obj obj = {"IODriver", IO_Start, IO_Stop, IO_Run};
 	ObjList_add(&obj);
+	
+	gpio_pin_remap_config(GPIO_SWJ_SWDPENABLE_REMAP,ENABLE);
 	
 	for (int i = 0; i < GET_ELEMENT_COUNT(g_InIOs); i++)
 	{
@@ -677,6 +765,22 @@ int IO_Init(void)
 	{
 		IO_PinInit(&g_OutputIOs[i]);
 	}
+	
+	g_p18650BootEnIO = IO_Get(IO_18650BOOST_EN);
+	PortPin_Set(g_p18650BootEnIO->periph, g_p18650BootEnIO->pin, True);
+	g_pPwr3V3EnIO = IO_Get(IO_PWR3V3_EN);
+	PortPin_Set(g_pPwr3V3EnIO->periph, g_pPwr3V3EnIO->pin, False);
+	g_pPwr485EnIO = IO_Get(IO_PWR485_EN);
+	PortPin_Set(g_pPwr485EnIO->periph, g_pPwr485EnIO->pin, True);
+	g_p18650PwrOffIO = IO_Get(IO_18650_PWR_OFF);
+	PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, True);
+	
+	
+	if(IO_Read(IO_TAKE_APART) == RESET)
+	{
+		LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_WakeUp, 0);
+	}
+	
 	return 0;
 }
 //INIT_BOARD_EXPORT(IO_Init);

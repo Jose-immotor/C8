@@ -16,16 +16,61 @@ static DbgInfo g_dbgInfo_mirror;
 static uint8_t		g_exchBuf[sizeof(PdoInfo)];
 static SectorMgr    g_nvdsSecMgr[NVDS_ITEM_COUNT];
 
+void SetAccOn(uint8 on)
+{
+	if(on)
+	{
+		g_cfgInfo.isAccOn = 1;
+		Pms_postMsg(PmsMsg_accOn, 0, 0);
+	}
+	else
+	{
+		g_cfgInfo.isAccOn = 0;
+		Pms_postMsg(PmsMsg_accOff, 0, 0);
+	}
+}
+
+void g_cgfInfo_Dump(void)
+{
+	#define PRINTF_CFG(_field) Printf("\t%s=%d\n", #_field, g_cfgInfo._field);
+	
+	Printf("Dump g_cfgInfo:\n");
+	PRINTF_CFG(isActive);
+	PRINTF_CFG(vol);
+	PRINTF_CFG(isAccOn);
+
+}
+
+void g_pdoOkInfo_Dump(void)
+{
+	#define PRINTF_PDO(_field) Printf("\t%s=%d\n", #_field, g_pdoInfo._field);
+		
+	PRINTF_PDO(isFlashOk);
+	PRINTF_PDO(isGyroOk);
+	PRINTF_PDO(isNfcOk);
+}
+
 void g_pdoInfo_Dump(void)
 {
-	#define PRINTF_NVDS(_field) Printf("\t%s=%d\n", #_field, g_pdoInfo._field);
+	#define PRINTF_PDO(_field) Printf("\t%s=%d\n", #_field, g_pdoInfo._field);
 	
 	Printf("Dump g_pdoInfo:\n");
 	
-	PRINTF_NVDS(isFlashOk);
-	PRINTF_NVDS(isGyroOk);
+	PRINTF_PDO(isFlashOk);
+	PRINTF_PDO(isGyroOk);
+	PRINTF_PDO(isNfcOk);
+	PRINTF_PDO(isBat0In);
+	PRINTF_PDO(timeStamp);
 }
 
+void g_degInfo_Dump(void)
+{
+	#define PRINTF_DEG(_field) Printf("\t%s=%8x\n", #_field, g_degInfo._field);
+	
+	Printf("Dump g_degInfo:\n");
+	
+	PRINTF_DEG(debugLevel);
+}
 
 //从Flsah读取数据
 Bool Nvde_Read(uint32 addr, void* buf, int len)
@@ -69,6 +114,10 @@ static Bool PdoInfo_Event(PdoInfo* p, NvdsEventID eventId)
 	if (eventId == BE_DATA_ERROR)
 	{
 		memset(p, 0, sizeof(PdoInfo));
+	}
+	else if (eventId == BE_ON_WRITE_BEFORE)
+	{
+		p->timeStamp = DateTime_GetSeconds(Null);
 	}
 	return True;
 }
@@ -124,6 +173,13 @@ void NvdsUser_Init()
 	
 	Nvds_Init(g_NvdsItems, GET_ELEMENT_COUNT(g_NvdsItems));
 	flash_id = spi_flash_read_id();
-//	Printf("The Flash_ID:0x%X\n\r",flash_id);
+	Printf("The Flash_ID:0x%X\n\r",flash_id);
 	g_pdoInfo.isFlashOk = (flash_id == 0xC22015)? 1:0;
+	if(g_pdoInfo.timeStamp)
+	{
+		S_RTC_TIME_DATA_T localDt = {0};
+		DateTime_SecondsToRtc(g_pdoInfo.timeStamp, &localDt);
+		LocalTimeSync(&localDt);
+		//DateTime_dump(&localDt);
+	}
 }

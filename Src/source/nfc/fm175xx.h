@@ -4,6 +4,7 @@
 #define FM175XX_H
 
 #include "drv_i2c.h"
+#include "typedef.h"
 
 #define CommandReg	0x01
 #define ComIEnReg	0x02
@@ -84,7 +85,7 @@
 //定义读卡器的数量
 #define NFC_READER_COUNT_MAX 1//单仓
 //FM17522芯片I2C地址
-#define FM17522_I2C_ADDR  0x0f
+#define FM17522_I2C_ADDR  0x28
 //NFC1
 #define FM17522_I2C_ADDR1 0x29
 

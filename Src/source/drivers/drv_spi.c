@@ -11,7 +11,7 @@
 
 #include <rtthread.h>
 #include "drv_spi.h"
-#include "gd32f403.h"
+#include "gd32e10x.h"
 #include <string.h>
 
 #define WRITE            0x02     /* write to memory instruction */
@@ -390,7 +390,7 @@ int spi_flash_init(void)
     /* SPI0_SCK(PA5), SPI0_MISO(PA6) and SPI0_MOSI(PA7) GPIO pin configuration */
     gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_5 | GPIO_PIN_7);
     gpio_init(GPIOA, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, GPIO_PIN_6);
-    /* SPI0_CS(PE3) GPIO pin configuration */
+    /* SPI0_CS(PA4) GPIO pin configuration */
     gpio_init(GPIOA, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_4);
 
     /* chip select invalid*/

@@ -6,19 +6,13 @@ extern "C"{
 #endif
 
 #include "typedef.h"
-#include "gd32f403.h"
+#include "gd32e10x.h"
 
-#define NVC_SIF_PORT	GPIOC
-#define NVC_SIF_PIN		GPIO_PIN_6
-#define NVC_BSY_PORT	GPIOC
-#define NVC_BSY_PIN		GPIO_PIN_7
 #define NVC_PWR_PORT	GPIOC
-#define NVC_PWR_PIN		GPIO_PIN_8
+#define NVC_PWR_PIN		GPIO_PIN_4
 
-#define NVC_PWR_ON()	gpio_bit_set(NVC_PWR_PORT,NVC_PWR_PIN)
-#define NVC_PWR_OFF()	gpio_bit_reset(NVC_PWR_PORT,NVC_PWR_PIN)
-
-#define NVC_IS_BSY() 	(gpio_input_bit_get(NVC_BSY_PORT,NVC_BSY_PIN) == RESET)
+#define NVC_SIF_PORT	GPIOB
+#define NVC_SIF_PIN		GPIO_PIN_0
 
 #define SIF_IO_HIGH()	gpio_bit_set(NVC_SIF_PORT,NVC_SIF_PIN)
 #define SIF_IO_LOW()	gpio_bit_reset(NVC_SIF_PORT,NVC_SIF_PIN)

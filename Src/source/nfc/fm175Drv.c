@@ -16,6 +16,8 @@
 #include "SwTimer.h"
 #include "_Macro.h"
 #include "Fm175Drv.h"
+#include "drv_gpio.h"
+#include "drv_i2c.h"
 
 //static Fm175Drv g_fmDrv;
 
@@ -26,11 +28,11 @@ Bool fm175Drv_transStart(Fm175Drv* pDrv, FM17522_CMD cmd, uint32 timeOutMs);
 
 #if 1
 
-//static DrvIo* g_pNfcNpdAIO = Null;
-//#define FM17522_NPD_HIGHT 	PortPin_Set(g_pNfcNpdAIO->periph, g_pNfcNpdAIO->pin, 1)
-//#define FM17522_NPD_LOW		PortPin_Set(g_pNfcNpdAIO->periph, g_pNfcNpdAIO->pin, 0)
-#define FM17522_NPD_HIGHT	//待定
-#define FM17522_NPD_LOW		//待定
+static DrvIo* g_pNfcNpdAIO = Null;
+static DrvIo* g_pNfcPwrOffIO = Null;
+
+#define FM17522_NPD_HIGHT 	PortPin_Set(g_pNfcNpdAIO->periph, g_pNfcNpdAIO->pin, 1)
+#define FM17522_NPD_LOW		PortPin_Set(g_pNfcNpdAIO->periph, g_pNfcNpdAIO->pin, 0)
 
 /*********************************************/
 /*函数名：	    Pcd_ConfigISOType    */
@@ -905,4 +907,9 @@ void fm175Drv_init(Fm175Drv* pDrv, uint8 iicAddr, const TransProtocolCfg* cfg, T
 	pDrv->Event = Event;
 
 	pDrv->iicReg.dev_addr = iicAddr;
+	
+	rt_hw_i2c_init(NFC_I2C);
+	g_pNfcNpdAIO = IO_Get(IO_NFC_NPD_A);
+	g_pNfcPwrOffIO=IO_Get(IO_NFC_PWR_OFF);
+	PortPin_Set(g_pNfcPwrOffIO->periph, g_pNfcPwrOffIO->pin, False);
 }

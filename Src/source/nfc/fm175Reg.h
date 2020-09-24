@@ -72,7 +72,7 @@
 #define SoftReset	0x0F
 
 //FM17522–æ∆¨IICµÿ÷∑1
-#define FM17522_I2C_ADDR  0x0f
+#define FM17522_I2C_ADDR  0x28
 //FM17522–æ∆¨IICµÿ÷∑2
 #define FM17522_I2C_ADDR1 0x29
 

@@ -15,14 +15,15 @@ extern "C" {
 #include "Bit.h"
 
 #define MAX_BAT_COUNT 2
+#define PMS_ACC_OFF_ACTIVE_TIME 5*60*1000//5分钟
 
 	//活动标志定义，当该标志被置位时，设备不能进入睡眠。
 	typedef enum _ActiveFlag
 	{
-		 AF_MDB = BIT_0	//modbus处于工作状态
+		 AF_MDB = BIT_0			//modbus处于工作状态
+		,AF_NVC = BIT_1			//NVC正在播放语音
 	//	,AF_MCU_RESET = BIT_1	//MCU处于延时复位状态
-	//	,AF_NVC = BIT_2			//NVC正在播放语音
-	//	
+		
 	//	,AF_SIM = BIT_8			//SIM模组有命令没有发完
 	//	,AF_CARBIN_LOCK = BIT_9	//正在操作座舱锁
 	//	
@@ -35,7 +36,7 @@ extern "C" {
 	//电池操作状态
 	typedef enum _PmsOpStatus
 	{
-		PMS_ACC_OFF = 1,		//熄火,初始状态
+		PMS_ACC_OFF = 1,	//熄火,初始状态
 		PMS_ACC_ON	,		//点火
 		PMS_SLEEP	,		//浅休眠
 		PMS_DEEP_SLEEP,		//深度休眠

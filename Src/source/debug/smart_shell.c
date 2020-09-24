@@ -29,47 +29,56 @@ static void Dump(int argc, char**argv)
 	extern void DateTime_dump(S_RTC_TIME_DATA_T* dt);
 	extern void BatteryDump(void);
 	extern void NfcCardReaderDump(void);
+	extern void PmsDump();
+	extern void g_cgfInfo_Dump(void);
 	extern void g_pdoInfo_Dump(void);
-	extern uint32 g_ActiveFlag;
+	extern void g_degInfo_Dump(void);
 
+	extern void Adc_Dump();
+	extern uint32 g_ActiveFlag;
+	extern const HwFwVer AppInfo;
+	
 	sscanf(&(*argv[1]), "%d", &ind);
-//	if(1 == ind || 0 == ind) DaraRom_Dump();
-////	if(2 == ind || 0 == ind) Sign_Dump();
+	if(1 == ind || 0 == ind) HwFwVer_Dump(Null,&AppInfo,Null);
+	if(2 == ind || 0 == ind) PmsDump();
 ////	if(3 == ind || 0 == ind) Gps_Dump();
 ////	if(4 == ind || 0 == ind) Gprs_Dump();
+	
+	if(6 == ind) 			 Adc_Dump();
 	if(7 == ind || 0 == ind) BatteryInfoDump();
 	if(9 == ind || 0 == ind) DateTime_dump(Null);
-	if(10 == ind) 			 SectorMgr_Dump(g_NvdsItems[2].sectorMgr);
-	if(11 == ind)			 SectorMgr_Dump(&g_plogMgr->record.sector);
+	if(10 == ind) 			 SectorMgr_Dump(g_NvdsItems[0].sectorMgr);
+	if(11 == ind) 			 SectorMgr_Dump(g_NvdsItems[1].sectorMgr);
+	if(12 == ind) 			 SectorMgr_Dump(g_NvdsItems[2].sectorMgr);
+	if(13 == ind)			 SectorMgr_Dump(&g_plogMgr->record.sector);
 	
-	if(15 == ind)			 g_pdoInfo_Dump();
+	if(20 == ind)			 g_cgfInfo_Dump();
+	if(21 == ind)			 g_pdoInfo_Dump();
+	if(22 == ind)			 g_degInfo_Dump();
 	
-	if(20 == ind)			 BatteryDump();
-	if(21 == ind)			 NfcCardReaderDump();
+	if(30 == ind)			 BatteryDump();
+	if(31 == ind)			 NfcCardReaderDump();
 	
 	Printf("g_ActiveFlag=0x%x\n", g_ActiveFlag);
-	Printf("g_dwDebugLevel = 0x%04x\n", g_dwDebugLevel);
+	Printf("g_dwDebugLevel = 0x%08x\n", g_dwDebugLevel);
+	Printf("system_ms_tick = %d\n", GET_TICKS());
 }
 MSH_CMD_EXPORT(Dump, Dump sample: Dump <uint8_t ind>);
 
-//void SetFwVer(uint8_t mainVer, uint8_t SubVer, uint8_t MinorVer, uint32 buildeNum)
-//{
-//	g_pDataRom->m_AppMainVer   = mainVer;
-//	g_pDataRom->m_AppSubVer    = SubVer;
-//	g_pDataRom->m_AppMinorVer  = MinorVer;
-//	g_pDataRom->m_AppBuildeNum = buildeNum;
-//	DataRom_Write();
-//	Printf("OK.\n");
-//}
-
-//void SetHwVer(uint8_t mainVer, uint8_t SubVer)
-//{
-//	g_pDataRom->m_HwMainVer   = mainVer;
-//	g_pDataRom->m_HwSubVer    = SubVer;
-//	
-//	DataRom_Write();
-//	Printf("OK.\n");
-//}
+extern uint32_t uart4_put_byte(uint8_t data);
+void Rs485Test(uint8 value)
+{
+	uint8 i;
+	DrvIo* g_Rs485DirCtrlIO = Null;
+	
+	g_Rs485DirCtrlIO = IO_Get(IO_DIR485_CTRL);
+	PortPin_Set(g_Rs485DirCtrlIO->periph, g_Rs485DirCtrlIO->pin, True);
+	for(i=0;i<value;i++)
+	{
+		uart4_put_byte(0x5A);
+	}
+	PortPin_Set(g_Rs485DirCtrlIO->periph, g_Rs485DirCtrlIO->pin, False);
+}
 
 /*!
  * \brief 设置
@@ -82,30 +91,49 @@ static void Set(int argc, char**argv)
 {
 	int ind = 0;
 	uint32 value;
+	void LocalTimeReset(void);
 
+	extern void Nvc_SetVol(uint8 vol);
+	extern void SetAccOn(uint8 on);
+	
 	sscanf(&(*argv[1]), "%d", &ind);
 	sscanf(&(*argv[2]), "%d", &value);
 	switch(ind)
 	{
 		case 0: LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_McuReset, value);break;
-////		case 1: SetActive(value); Nvds_Write_Setting(); break;
-////		case 2: SetForbidDischarge(value); Nvds_Write_Setting(); break;
-////		case 3: SetSignEn(value); Nvds_Write_Setting(); break;
-////		case 4: Sign_SetMaxTime(value); break;
-////		case 5: Sign_DisableTimerReset(value); break;
+		case 1: if(value>0&&value<4) NvdsUser_Write(value);break;
+		case 2: LocalTimeReset(); break;
+		case 3: if(value>0&&value<5) Pms_switchStatus(value); break;
+		case 4: SetAccOn(value); break;
+		case 5: Rs485Test(value); break;
 ////		case 6: g_Settings.IsBatVerifyEn=value; Sign_Dump(Null); Nvds_Write_Setting(); break;
 ////		case 7: g_Settings.IsAlarmMode=value; Sign_Dump(Null); break;
 ////		case 8: SET_VAR(g_ForcePmsDischarge); 
 ////		case 9: SET_VAR(g_ForceBatSoc); 
 ////		case 10: Sim_PowerReset(0); break;
-////		case 11: Nvc_SetVol(value); break;
+		case 11: Nvc_SetVol(value); break;
 ////		case 12: Fsm_StateKeyOff(MSG_FORCE_POWERDOWN); break;
-//		case 13: RTC_TimerStart(value); break;
+//		case 13: Nvc_PlayEx(value); break;
 	}
 //		
 	//Nvds_Write_Setting();
 }
 MSH_CMD_EXPORT(Set, Set sample: Set <uint8_t ind uint32 value>);
+
+static void NvcPlay(int argc, char**argv)
+{
+	int audioInd = 0;
+	int maxRepeat = 0;
+	int vol = 0;
+
+	extern void Nvc_PlayEx(uint8 audioInd, uint8 maxRepeat, uint8 vol);
+	
+	sscanf(&(*argv[1]), "%d", &audioInd);
+	sscanf(&(*argv[2]), "%d", &maxRepeat);
+	sscanf(&(*argv[3]), "%d", &vol);
+	Nvc_PlayEx(audioInd,maxRepeat,vol);
+}
+MSH_CMD_EXPORT(NvcPlay, NvcPlay sample: NvcPlay <audioInd maxRepeatvol>);
 
 /*!
  * \brief 自检，检测电路板硬件
@@ -116,22 +144,13 @@ MSH_CMD_EXPORT(Set, Set sample: Set <uint8_t ind uint32 value>);
  */
 static void SelfTest(void)
 {
-	extern void ErrList_Dump(void);
+	extern void g_pdoOkInfo_Dump(void);
 	__IO uint32_t sn0=*(__IO uint32_t*)(0x1FFFF7E8);
 	__IO uint32_t sn1=*(__IO uint32_t*)(0x1FFFF7EC);
 	__IO uint32_t sn2=*(__IO uint32_t*)(0x1FFFF7F0);
 	
 	Printf("\r\nsID: %X%X%X\r\n",sn2,sn1,sn0);
-
-//	Printf("\tGprsCSQ:[%d]\n", g_pSimCard->csq);
-////	if(flag)
-//	{
-//		Printf("\tMoto ErrCode1:0x%x\n", GetErrorCode(ERR_TYPE_MOTOR1));
-//		Printf("\tBat1 ErrCode:0x%x\n", GetErrorCode(ERR_TYPE_BATTERY1));
-//		Printf("\tBat2 ErrCode:0x%x\n", GetErrorCode(ERR_TYPE_BATTERY1));
-//		Printf("\tErrCode:0x%x\n", GetErrorCodeDec());
-//		ErrList_Dump();
-//	}
+	g_pdoOkInfo_Dump();	
 }
 MSH_CMD_EXPORT(SelfTest , SelfTest board);
 

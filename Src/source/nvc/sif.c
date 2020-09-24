@@ -12,8 +12,6 @@
 #include "Sif.h"
 #include "nvc.h"
 
-//#define SIF_ISR_ENABLE() 0
-//#define SIF_ISR_DISABLE() 1
 void SIF_ISR_ENABLE(void)
 {
 	timer_counter_value_config(TIMER3,0);

@@ -21,6 +21,7 @@ static Battery* g_pActiveBat;	//当前正砸通信的电池
 static BmsRegCtrl g_regCtrl;		//电池控制
 
 uint32 g_ActiveFlag;
+DrvIo* g_pLockEnIO = Null;
 
 //以下是命令参数定义
 const static uint8_t g_bmsID_readParam[]    = { 0x00, 0x00, 0x00, 33 };
@@ -128,7 +129,28 @@ void BatteryDump(void)
 
 void NfcCardReaderDump()
 {
-	//NfcCardReader_dump(&g_Bat[0].cardReader);
+	#define PRINTF_NFC(_field) Printf("\t%s=%d\n", #_field, g_pms.fmDrv._field);
+	
+	Printf("NFC info:\n");
+	
+	PRINTF_NFC(state);
+	PRINTF_NFC(antPort);
+	
+//	PRINTF_NFC(state);
+//	PRINTF_NFC(antPort);
+//	
+//	PRINTF_NFC(state);
+//	PRINTF_NFC(antPort);
+}
+
+void PmsDump()
+{
+	#define PRINTF_PMS(_field) Printf("\t%s=%d\n", #_field, g_pms._field);
+	
+	Printf("Pms info:\n");
+	
+	PRINTF_PMS(opStatus);
+	PRINTF_PMS(statusSwitchTicks);
 }
 
 /********************************************************************/
@@ -194,7 +216,7 @@ void Pms_SwitchPort()
 //	Battery* pBat = (g_pActiveBat->port == 0) ? &g_Bat[1] : &g_Bat[0];
 
 	if (!Mod_isIdle(g_pModBus)) return;
-
+	rt_thread_mdelay(200);
 	Bat_msg(g_pActiveBat, BmsMsg_deactive, 0, 0);
 	
 	//先不跳转到BAT1
@@ -240,7 +262,7 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
 	if (msgId == PmsMsg_run)
 	{
-		if ((g_pJt->isLocation)||(SwTimer_isTimerOutEx(g_pms.statusSwitchTicks,60000)))
+		if ((g_pJt->isLocation)||(SwTimer_isTimerOutEx(g_pms.statusSwitchTicks,PMS_ACC_OFF_ACTIVE_TIME)))
 		{
 			Pms_switchStatus(PMS_DEEP_SLEEP);
 		}
@@ -257,6 +279,7 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	{
 		Pms_plugOut((Battery*)param1);
 	}
+	PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, True);
 }
 
 static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
@@ -273,6 +296,7 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	{
 		Pms_plugOut((Battery*)param1);
 	}
+	PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, False);
 }
 
 static void Pms_fsm_sleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
@@ -292,6 +316,7 @@ static void Pms_fsm_deepSleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
 		PFL(DL_PMS,"pms go to sleep mode!\n");
 		Mcu_PowerDown();
 	}
+	PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, True);
 }
 
 //在任何状态下都要处理的消息函数
@@ -389,9 +414,8 @@ TRANSFER_EVENT_RC Pms_EventCb(Battery* pBat, TRANS_EVENT ev)
 
 void Pms_run()
 {
-#ifndef USE_NFC_THREAD
-	NfcCardReader_run(&g_pms.cardReader);
-#endif
+	fm175Drv_run(&g_pms.fmDrv);
+	
 	Mod_Run(g_pModBus);
 	Bat_run(&g_Bat[0]);
 //	Bat_run(&g_Bat[1]);
@@ -408,8 +432,14 @@ void Pms_run()
 
 void Pms_start()
 {
-	//启动NFC驱动
-	Pms_switchStatus(PMS_ACC_OFF);
+	if(g_cfgInfo.isAccOn)
+	{
+		Pms_switchStatus(PMS_ACC_ON);
+	}
+	else
+	{
+		Pms_switchStatus(PMS_ACC_OFF);
+	}
 	//查询电池设备信息
 	Bat_msg(g_pActiveBat, BmsMsg_active, *((uint32*)& g_regCtrl), 0);
 	Bat_start(&g_Bat[0]);
@@ -434,4 +464,5 @@ void Pms_init()
 
 	g_pActiveBat = &g_Bat[0];
 	Queue_init(&g_pms.msgQueue, g_pms.msgBuf, sizeof(Message), GET_ELEMENT_COUNT(g_pms.msgBuf));
+	g_pLockEnIO = IO_Get(IO_LOCK_EN);
 }

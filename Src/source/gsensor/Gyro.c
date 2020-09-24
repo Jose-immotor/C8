@@ -13,10 +13,10 @@ void Gyro_Isr()
 {
 	rt_interrupt_enter();
 
-//	if(g_isPowerDown)
-//	{
-//		SetWakeUpType(WAKEUP_GYRO);
-//	}
+	if(g_isPowerDown)
+	{
+		SetWakeUpType(WAKEUP_GYRO);
+	}
 	
 	g_GyroIsrTicks = GET_TICKS();
 
@@ -27,7 +27,7 @@ void Gyro_Isr()
 	g_pdoInfo.isGyroOk  = True;
 //	g_Settings.isGyroAssert = True;
 	
-	PFL(DL_GYRO,"gyro interrupt!\n");
+//	PFL(DL_GYRO,"gyro interrupt!\n");
 	
 	rt_interrupt_leave();
 }
@@ -63,9 +63,9 @@ void Gyro_Start()
 	rt_thread_mdelay(200);	
 	rt_hw_i2c_init(GYRO_I2C);
 
-	//g_Settings.isGyroOk = (mir3da_init(FS_2G, 0x1B) != -1);	//FS_8G
+	g_pdoInfo.isGyroOk = (mir3da_init(FS_2G, 0x1B) != -1);	//FS_8G
 	//g_Settings.isGyroOk = (mir3da_init(FS_2G, 0x08) != -1);	//FS_8G≤ªπª¡È√Ù
-	g_pdoInfo.isGyroOk = (mir3da_init(FS_2G, 0x06) != -1);
+//	g_pdoInfo.isGyroOk = (mir3da_init(FS_2G, 0x06) != -1);
 	//g_Settings.isGyroOk = (mir3da_init(FS_2G, 0x04) != -1);	//FS_8GÃ´¡È√Ù
 	mir3da_open_interrupt(0);
 }

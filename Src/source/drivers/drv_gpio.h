@@ -8,7 +8,7 @@ extern "C" {
 
 #include "typedef.h"
 #include "MsgDef.h"
-#include "gd32f403.h"
+#include "gd32e10x.h"
 
 #define IS_OUT_MODE(mode) ((mode & 0xF0) == 0x10)
 #define IS_IN_MODE(mode) ((mode & 0xF0) != 0x10)
@@ -74,7 +74,21 @@ typedef enum
 	IO_NFC_NPD_A,
 	IO_NFC_IRQ_A,
 	IO_GRYO_IRQ,
-	
+	IO_18650BOOST_EN,
+	IO_NFC_PWR_OFF,
+	IO_GPRS_INSERT,
+	IO_18650_CHG_EN,
+	IO_BAT_INSERT,
+	IO_NVC_DATA,
+	IO_NVC_BUSY,
+	IO_NVC_PWR,
+	IO_PWR3V3_EN,
+	IO_PWR485_EN,
+	IO_DIR485_CTRL,
+	IO_TAKE_APART,
+	IO_LOCK_EN,
+	IO_OVER_TEMP,
+	IO_18650_PWR_OFF,
 	
 }IO_ID;
 
@@ -187,9 +201,6 @@ void IODesc_Set(const char* portPinName, uint8 value);
 void IO_Set(IO_ID pin, uint8 value);
 void IO_AllStateChanged();
 void IO_TriggerStateChanged(IO_ID pin);
-char* PortPinToPxx(uint32 port, uint32 pin);
-
-void IO_SetRunLed(uint16 onMs, uint16 offMs);
 char* PortPinToPxx(uint32 port, uint32 pin);
 int IO_Init(void);
 #ifdef __cplusplus

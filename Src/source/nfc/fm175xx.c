@@ -27,6 +27,7 @@
 #define	NPD_OFF		0
 
 static DrvIo* g_pNfcNpdAIO = Null;
+static DrvIo* g_pNfcPwrOffIO = Null;
 
 static unsigned char g_iicPortAddr = 0;
 
@@ -67,11 +68,11 @@ rt_err_t i2c_write_fm17522_reg(rt_uint8_t reg_addr, rt_uint8_t value)
 	dev_addr = Fm17522_get_slave_addr();
     if (gd32_i2c_write(NFC_I2C,dev_addr, &data,reg_addr,1))
     {
-        return RT_EOK;
+        return RT_ERROR;
     }
     else
     {
-        return -RT_ERROR;
+        return RT_EOK;
     }
 
 }
@@ -119,8 +120,7 @@ rt_err_t i2c_read_fm17522_fifo(rt_uint8_t fifo_reg_addr, rt_uint8_t *fifo_buf, r
 
 unsigned char Write_Reg(unsigned char reg_addr, unsigned char reg_value)
 {
-    i2c_write_fm17522_reg(reg_addr, reg_value);
-	return OK;
+	return i2c_write_fm17522_reg(reg_addr, reg_value);
 }
 
 rt_err_t i2c_write_fm17522_fifo(rt_uint8_t fifo_reg_addr, rt_uint8_t *fifo_buf, rt_uint8_t fifo_buf_len)
@@ -226,8 +226,8 @@ unsigned char Set_BitMask(unsigned char reg_addr, unsigned char mask)
 {
     unsigned char result;
     result = Read_Reg(reg_addr);
-    Write_Reg(reg_addr, result|mask);
-    result = OK;
+    result = Write_Reg(reg_addr, result|mask);
+//    result = OK;
 	return result;
 }
 
@@ -599,7 +599,7 @@ unsigned char  FM175XX_SoftReset(void)
     unsigned char result;
     Write_Reg(CommandReg,SoftReset);//chenke, 复位FM17522
     result = Set_BitMask(ControlReg,0x10);//17520初始值配置//chenke, FM17522 RFT位置1
-    result = OK;
+//    result = OK;
     return result;
 }
 
@@ -721,6 +721,8 @@ void FM17522_Init(void)
 {
     rt_hw_i2c_init(NFC_I2C);
 	g_pNfcNpdAIO = IO_Get(IO_NFC_NPD_A);
+	g_pNfcPwrOffIO=IO_Get(IO_NFC_PWR_OFF);
+	PortPin_Set(g_pNfcPwrOffIO->periph, g_pNfcPwrOffIO->pin, False);
 	nfc_ms_handler = rt_timer_create("nfc_ms_timer", nfc_ms_timer_cb, RT_NULL, 1, RT_TIMER_FLAG_PERIODIC);
     if (nfc_ms_handler != RT_NULL) 
         rt_timer_start(nfc_ms_handler);

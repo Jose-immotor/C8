@@ -16,7 +16,7 @@
 #ifndef __BOARD_H__
 #define __BOARD_H__
 
-#include <gd32f403.h>
+#include "gd32e10x.h"
 
 // <o> Internal SRAM memory size[Kbytes] <8-64>
 //	<i>Default: 64
@@ -27,10 +27,10 @@ extern char __ICFEDIT_region_RAM_end__;
 #else
 
 #define GD32_FLASH_START_ADRESS     ((uint32_t)0x08000000)
-#define GD32_FLASH_SIZE             (3072 * 1024)
+#define GD32_FLASH_SIZE             (128 * 1024)
 #define GD32_FLASH_END_ADDRESS      ((uint32_t)(GD32_FLASH_START_ADRESS + GD32_FLASH_SIZE))
 
-#define GD32_SRAM_SIZE         128//lane 191206
+#define GD32_SRAM_SIZE         32//lane 20200914
 #define GD32_SRAM_END          (0x20000000 + GD32_SRAM_SIZE * 1024)
 #endif
 

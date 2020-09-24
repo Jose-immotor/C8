@@ -10,7 +10,7 @@ extern "C"{
 #endif
 
 //#define CFG_LOG
-#define USE_NFC_THREAD
+//#define USE_NFC_THREAD
 
 #include "ArchDef.h"
 #include "Obj.h"
@@ -25,12 +25,17 @@ extern "C"{
 #include "ExternFlashMap.h"
 #include "NvdsUser.h"
 #include "rtthread.h"
-#include "gd32f403.h"
+#include "gd32e10x.h"
 #include "LogUser.h"
 #include "SysLog.h"
 #include "drv_pm.h"
+#include "drv_gpio.h"
 #include "Debug.h"
 #include "pms.h"
+#include "drv_rtc.h"
+#include "main.h"
+#include "HwFwVer.h"
+#include "nvc.h"
 #include "CmdLineExport.h"
 
 #ifdef __cplusplus
