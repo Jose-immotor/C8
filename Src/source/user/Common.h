@@ -36,7 +36,7 @@ extern "C"{
 #include "main.h"
 #include "HwFwVer.h"
 #include "nvc.h"
-
+#include "CmdLineExport.h"
 
 #ifdef __cplusplus
 }

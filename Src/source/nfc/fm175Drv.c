@@ -33,8 +33,6 @@ static DrvIo* g_pNfcPwrOffIO = Null;
 
 #define FM17522_NPD_HIGHT 	PortPin_Set(g_pNfcNpdAIO->periph, g_pNfcNpdAIO->pin, 1)
 #define FM17522_NPD_LOW		PortPin_Set(g_pNfcNpdAIO->periph, g_pNfcNpdAIO->pin, 0)
-//#define FM17522_NPD_HIGHT	//待定
-//#define FM17522_NPD_LOW		//待定
 
 /*********************************************/
 /*函数名：	    Pcd_ConfigISOType    */
@@ -93,7 +91,7 @@ Bool Fm175Drv_Request(Fm175Drv* pDrv, unsigned char* pTagType)
 
 	send_buff[0] = 0x26;// chenke, 0x26是REQA命令，由PCD发出，以探测用于类型A PICC的工作场
 
-	result = fm175Drv_SyncTransfer(pDrv, Transceive, send_buff, 1, rece_buff, &rece_bitlen, 200);
+	result = fm175Drv_SyncTransfer(pDrv, Transceive, send_buff, 1, rece_buff, &rece_bitlen, 1);
 	if (result && rece_bitlen == 2)
 	{
 		*pTagType = rece_buff[0];
@@ -357,26 +355,19 @@ void fm175Drv_irq_tx(Fm175Drv* pDrv)
 	int remainLen = 0;
 
 	//当前还有多少未传输的数据在FIFO
-	uint8 fifeSize;
-	IIC_REG_ERR_RETURN(IICReg_readByte(&pDrv->iicReg, FIFOLevelReg, &fifeSize));
+	uint8 bytesInFifo;
+	IIC_REG_ERR_RETURN(IICReg_readByte(&pDrv->iicReg, FIFOLevelReg, &bytesInFifo));
 
-	//计算实际已经传输的数据
-	item->transLen = item->transLen - fifeSize;
+	//计算实际已经传输的数据长度
+	int sentLen = item->putBytesInTxFifo - bytesInFifo;
 
-	item->offset += item->transLen;
-	item->transBufOffset += item->transLen;
+	item->offset += sentLen;
+	item->transBufOffset += sentLen;
 
 	remainLen = item->totalLen - item->offset;
 	if (remainLen == 0)
 	{
-//		item->offset = 0;
-//		item->transBufOffset = 0;
-		IIC_REG_ERR_RETURN(IICReg_writeByte(&pDrv->iicReg, CommandReg, Idle));
-		IIC_REG_ERR_RETURN(IICReg_clearBitMask(&pDrv->iicReg, BitFramingReg, 0x80));//关闭发送
-		if(pDrv->rxBufSize == 0)
-		{
-			fm175Drv_event(pDrv, TRANS_SUCCESS, TRANS_RESULT_SUCCESS);
-		}
+		fm175Drv_event(pDrv, TRANS_SUCCESS, TRANS_RESULT_SUCCESS);
 		return;
 	}
 
@@ -387,24 +378,17 @@ void fm175Drv_irq_tx(Fm175Drv* pDrv)
 		item->transBufOffset = 0;
 	}
 
-	//计算发送多少字节到FIFO中
-	item->transLen = MIN(item->transBufLen - item->transBufOffset, cfg->fifoDeepth - fifeSize);
+	//计算需要放到TX FIFO中的字节数
+	item->putBytesInTxFifo = MIN(item->transBufLen - item->transBufOffset, cfg->fifoDeepth - bytesInFifo);
 
-	if (item->transLen)
+	if (item->putBytesInTxFifo)
 	{
-		IIC_REG_ERR_RETURN(IICReg_writeFifo(&pDrv->iicReg, & pDrv->txBuf[item->transBufOffset], item->transLen));
+		IIC_REG_ERR_RETURN(IICReg_writeFifo(&pDrv->iicReg, & pDrv->txBuf[item->transBufOffset], item->putBytesInTxFifo));
 		IIC_REG_ERR_RETURN(IICReg_SetBitMask(&pDrv->iicReg, BitFramingReg, 0x80));	//启动发送
 	}
 	else
 	{
-		item->offset = 0;
-		item->transBufOffset = 0;
-		IIC_REG_ERR_RETURN(IICReg_writeByte(&pDrv->iicReg, CommandReg, Idle));
-		IIC_REG_ERR_RETURN(IICReg_clearBitMask(&pDrv->iicReg, BitFramingReg, 0x80));//关闭发送
-		if(pDrv->rxBufSize == 0)
-		{
-			fm175Drv_event(pDrv, TRANS_SUCCESS, TRANS_RESULT_SUCCESS);
-		}
+		fm175Drv_event(pDrv, TRANS_SUCCESS, TRANS_RESULT_SUCCESS);
 	}
 }
 
@@ -750,7 +734,6 @@ Bool fm175Drv_transferInit(Fm175Drv* pDrv, const void* txBuf, int txBufSize, voi
 		pDrv->txBufSize = txBufSize;
 		item->transBufLen = txBufSize;
 		item->totalLen = pDrv->txBufSize;
-		item->transLen = txBufSize;//lane
 	}
 	else
 	{
@@ -778,9 +761,9 @@ Bool fm175Drv_transStart(Fm175Drv* pDrv, FM17522_CMD cmd, uint32 timeOutMs)
 {
 	TransMgr* item = &pDrv->transMgr;
 
-	if (pDrv->transStatus != TRANSFER_STATUS_PENDING_TX) return False;//lane
+	if (pDrv->transStatus != TRANSFER_STATUS_PENDING_TX) return False;
 
-//	memset(item, 0, sizeof(TransMgr));//lane
+	//memset(item, 0, sizeof(TransMgr));
 
 	pDrv->cmd = cmd;
 	//pDrv->obj = cbObj;
@@ -788,7 +771,7 @@ Bool fm175Drv_transStart(Fm175Drv* pDrv, FM17522_CMD cmd, uint32 timeOutMs)
 	item->offset = 0;
 
 	item->transBufOffset = 0;
-	item->transLen = 0;
+	item->putBytesInTxFifo = 0;
 
 	//pDrv->txBuf = txBuf;
 	//pDrv->txBufSize = txBufSize;
@@ -856,8 +839,7 @@ Bool fm175Drv_SyncTransfer(Fm175Drv* pDrv
 	/**************************************************************/
 
 	pDrv->Event = Null;	//事件函数指针置空,同步传输不需要Event调用
-	
-	pDrv->transStatus = TRANSFER_STATUS_IDLE;//强制空闲
+	pDrv->transStatus = TRANSFER_STATUS_IDLE;
 
 	//启动传输并等待结果
 	fm175Drv_transferInit(pDrv, txBuf, txBufSize, rxBuf, *rxBufSize, Null);
@@ -874,12 +856,9 @@ Bool fm175Drv_SyncTransfer(Fm175Drv* pDrv
 
 	if (pDrv->latestErr == TRANS_RESULT_SUCCESS)
 	{
-//		if (pDrv->rxBufSize)
-//		{
-			*rxBufSize = pDrv->transMgr.totalLen;
-			rc = True;
-			goto End;
-//		}
+		*rxBufSize = pDrv->transMgr.totalLen;
+		rc = True;
+		goto End;
 	}
 End:
 	//恢复传输参数
@@ -888,7 +867,8 @@ End:
 	pDrv->txBuf		= _txBuf		;
 	pDrv->txBufSize	= _txBufSize	;
 	pDrv->rxBuf		= _rxBuf		;
-	pDrv->rxBufSize	= _rxBufSize	;
+	pDrv->rxBufSize = _rxBufSize;
+	pDrv->transStatus = _transStatus;
 	return rc;
 }
 

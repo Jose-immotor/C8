@@ -40,6 +40,7 @@ int main(void)
 	HwFwVer_Dump(Null,&AppInfo,Null);
 	//所有对象初始化
 	cm_backtrace_init("C7Pms", "1.0", "1.0");
+//	Shell_init();
 	IO_Init();
 	AdcUser_Init();
 	Adc_init();

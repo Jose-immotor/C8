@@ -154,6 +154,14 @@ typedef struct _UtpFrameCfg
 	int		 transcodeBufLen;//transcodeBuf的长度
 	uint8_t* transcodeBuf;	 //存放rxBuf转码后的帧数据
 
+	/*****************************************************
+	如果要实现在等待响应的同时能够接收新的请求功能，必须初始化txRspBuf指针。
+		!=Null: 用于保存要发送的响应数据
+		= Null：在等待响应数据的同时，丢弃接收到新的请求数据
+	*****************************************************/
+	uint8_t* txRspBuf;		
+	int      txRspBufLen;	//txRspBuf的长度
+
 	uint8_t result_SUCCESS;		//返回码定义：成功
 	uint8_t result_UNSUPPORTED;	//返回码定义：接收到不支持的请求
 
