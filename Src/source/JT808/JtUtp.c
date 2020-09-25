@@ -31,7 +31,7 @@ static Bool Utp_VerifyFrame(Utp* pUtp, const JtUtp* pFrame, int frameLen, const 
 		if (frameLen < pUtp->frameCfg->dataByteInd)
 		{
 			Printf("frame len error.(%d)\n", frameLen);
-			return False;
+			goto Error;
 		}
 
 		//如果pReq=Null ,仅仅检验接收到的数据是否完整。
@@ -91,7 +91,7 @@ static int Utp_BuildFrame(Utp* pUtp, uint8_t cmd, const void* pData, int len, co
 static uint8_t g_JtUtp_txBuff[128];			//发送数据缓冲区
 static uint8_t g_JtUtp_transcodeBuf[150];	//接收数据的转码缓冲区
 static uint8_t g_JtUtp_rxBuff[200];			//接收数据缓冲区
-static uint8_t g_JtUtp_txRspBuff[64];			//接收数据缓冲区
+static uint8_t g_JtUtp_txRspBuf[128];
 const UtpFrameCfg g_jtFrameCfg =
 {
 	//帧特征配置
@@ -111,17 +111,17 @@ const UtpFrameCfg g_jtFrameCfg =
 	.rxBuf	  = g_JtUtp_rxBuff,
 	.transcodeBufLen = sizeof(g_JtUtp_transcodeBuf),
 	.transcodeBuf = g_JtUtp_transcodeBuf,
-	.txRspBufLen = sizeof(g_JtUtp_txRspBuff),
-	.txRspBuf = g_JtUtp_txRspBuff,
+	.txRspBuf = g_JtUtp_txRspBuf,
+	.txRspBufLen = sizeof(g_JtUtp_txRspBuf),
 
 	//返回码定义
 	.result_SUCCESS = OP_SUCCESS,
 	.result_UNSUPPORTED = OP_UNSUPPORTED,
 
 	//配置传输参数
-	.waitRspMsDefault = 1000,
+	.waitRspMsDefault = 3000,		// 1000
 	.rxIntervalMs = 1000,
-	.sendCmdIntervalMs = 10,
+	.sendCmdIntervalMs = 10,		// 10ms
 
 	//初始化函数指针
 	.FrameVerify = (UtpFrameVerifyFn)Utp_VerifyFrame,

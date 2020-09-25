@@ -57,17 +57,18 @@ void TlvInMgr_updateStorage(TlvInMgr* mgr, const uint8* pTlvBuf, int bufSize)
 	const TlvIn* p = Null;
 	const uint8* pVal = Null;
 	uint32 tag = 0;
-	for (int i = 0; i < bufSize; )
+	for (int i = 0; i + mgr->tagLen < bufSize; )
 	{
 		memcpy(&tag, pTlvBuf, mgr->tagLen);
 
 		p = TlvInMgr_find(mgr->itemArray, mgr->itemCount, tag);
+		
 		if (p)
 		{
 			int len = MIN(p->len, pTlvBuf[mgr->tagLen]);
 			if (memcmp(p->storage, &pTlvBuf[mgr->tagLen + 1], len) != 0)
 			{
-				if (p->len > pTlvBuf[mgr->tagLen]) memset(p->storage, 0, p->len);
+				if (p->len > pTlvBuf[mgr->tagLen] ) memset(p->storage, 0, p->len);
 
 				if (TERC_SUCCESS == TlvInMgr_event(mgr, p, TE_CHANGED_BEFORE))
 				{
@@ -86,13 +87,15 @@ void TlvInMgr_updateStorage(TlvInMgr* mgr, const uint8* pTlvBuf, int bufSize)
 						memcpy(p->mirror, p->storage, p->len);
 				}
 			}
-			TlvInMgr_event(mgr, p, TE_UPDATE_DONE);
+			TlvInMgr_event(mgr, p, TE_UPDATE_DONE);			
 		}
-
+		//i = i + sizeof(TlvIn);
+		i += mgr->tagLen + 1 + pTlvBuf[mgr->tagLen];
 		pTlvBuf += mgr->tagLen + 1 + pTlvBuf[mgr->tagLen];
-		i = i + sizeof(TlvIn);
 	}
 }
+
+
 
 void TlvInMgr_init(TlvInMgr* mgr, const TlvIn* items, int itemCount, uint8 tagLen, TlvInEventFn Event, Bool isSwap)
 {
