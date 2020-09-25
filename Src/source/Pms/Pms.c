@@ -450,7 +450,6 @@ void Pms_init()
 {
 	static const TransProtocolCfg fm175DrvCfg =
 	{
-		.waterLevel = 32,
 		.fifoDeepth = 64,
 	};
 	static const Obj obj = { "Pms", Pms_start, Null, Pms_run };

@@ -87,6 +87,12 @@ typedef struct _Fm175Drv
 	uint8_t* rxBuf;		//接收数据Buffer
 	int rxBufSize;		//接收数据长度,
 
+	/*************************************************
+	接收数据时：如果 FIFO 缓冲器空间剩下的字节数小于等于 WaterLevel 定义的字节数， 触发HiAlert中断
+	发送数据时：如果 FIFO 中的字节数小于等于 WaterLevel 字节数， 触发LoAlert中断
+	*************************************************/
+	uint8 waterLevel;
+
 	const TransProtocolCfg* cfg;//传输协议配置
 	TransMgr transMgr;			//传输管理
 

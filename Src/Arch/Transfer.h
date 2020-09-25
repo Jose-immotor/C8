@@ -70,21 +70,12 @@ extern "C"{
 
 		int transBufLen;		//用于发送和接收，txBuf或rxBuf内的有效的长度
 		int transBufOffset;		//用于发送和接收，已经传输的数据在txBuf/rxBuf中的偏移
-<<<<<<< .mine
-		int putBytesInTxFifo;		//用于发送，当前正在传输的数据包长度
-=======
 		int putBytesInTxFifo;			//用于发送，当前正在传输的数据包长度
->>>>>>> .theirs
 	}TransMgr;
 
 	//传输协议配置
 	typedef struct _TransProtocolCfg
 	{
-		/*************************************************
-		接收数据时：如果 FIFO 缓冲器空间剩下的字节数小于等于 WaterLevel 定义的字节数， 触发HiAlert中断
-		发送数据时：如果 FIFO 中的字节数小于等于 WaterLevel 字节数， 触发LoAlert中断
-		*************************************************/
-		uint8 waterLevel;
 		uint8 fifoDeepth;	//Fifo的深度（最大传输字节数）
 
 	}TransProtocolCfg;
