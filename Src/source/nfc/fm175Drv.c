@@ -850,7 +850,6 @@ Bool fm175Drv_transStart(Fm175Drv* pDrv, FM17522_CMD cmd, uint32 timeOutMs)
 	fm175Drv_event(pDrv, TRANS_TX_START, TRANS_RESULT_SUCCESS);
 
 	fm175Drv_irq_tx(pDrv);
-
 	return True;
 }
 
@@ -901,6 +900,7 @@ Bool fm175Drv_SyncTransfer(Fm175Drv* pDrv
 	}
 	else
 	{
+		pDrv->latestErr == TRANS_RESULT_FAILED;
 		rc = False;
 		goto End; 
 	}
