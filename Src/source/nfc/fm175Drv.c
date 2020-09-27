@@ -422,14 +422,16 @@ TxDone:
 	{
 		fm175Drv_event(pDrv, TRANS_SUCCESS, TRANS_RESULT_SUCCESS);
 	}
+	else
+	{
+		item->offset = 0;
+		item->transBufOffset = 0;
+		item->transBufLen = pDrv->rxBufSize;
+		pDrv->transStatus = TRANSFER_STATUS_RX;
 
-	item->offset = 0;
-	item->transBufOffset = 0;
-	item->transBufLen = pDrv->rxBufSize;
-	pDrv->transStatus = TRANSFER_STATUS_RX;
-
-	pDrv->waterLevel = (pDrv->rxBufSize <= pDrv->cfg->fifoDeepth) ? pDrv->cfg->fifoDeepth : (pDrv->cfg->fifoDeepth >> 1);
-	IIC_REG_ERR_RETURN(IICReg_writeByte(&pDrv->iicReg, WaterLevelReg, pDrv->waterLevel));//设置接收FIFO的WaterLeve
+		pDrv->waterLevel = (pDrv->rxBufSize <= pDrv->cfg->fifoDeepth) ? pDrv->cfg->fifoDeepth : (pDrv->cfg->fifoDeepth >> 1);
+		IIC_REG_ERR_RETURN(IICReg_writeByte(&pDrv->iicReg, WaterLevelReg, pDrv->waterLevel));//设置接收FIFO的WaterLeve
+	}
 }
 
 void fm175Drv_irq_idle(Fm175Drv* pDrv)
