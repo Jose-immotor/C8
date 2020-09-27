@@ -132,7 +132,7 @@ static Bool DbgInfo_Event(DbgInfo* p, NvdsEventID eventId)
 
 		//不能再这里打印输出，如果UART没初始化，会导致程序堵塞
 		//默认只打开主要的调试开关
-		g_dwDebugLevel = 0xF;
+		g_dwDebugLevel = 0xF | DL_NFC;
 	}
 	else if (eventId == BE_DATA_OK)
 	{

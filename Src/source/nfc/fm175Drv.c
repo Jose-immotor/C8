@@ -23,6 +23,7 @@
 //static Fm175Drv g_fmDrv;
 
 static FmFsmFn fm175Drv_findFsm(uint8 state);
+static void fm175Drv_switchState(Fm175Drv* pDrv, uint8 state);
 void fm175Drv_irq_timeOut(Fm175Drv* pDrv);
 void fm175Drv_irq_tx(Fm175Drv* pDrv);
 Bool fm175Drv_transStart(Fm175Drv* pDrv, FM17522_CMD cmd, uint32 timeOutMs);
@@ -307,7 +308,7 @@ void fm175Drv_event(Fm175Drv* pDrv, TRANS_EVENT evt, TRANSFER_RESULT res)
 
 	if (evt == TRANS_FAILED || evt == TRANS_SUCCESS)
 	{
-		pDrv->txBufSize = 0;	//取消传输
+		pDrv->transParam.txBufSize = 0;	//取消传输
 
 		IIC_REG_ERR_RETURN(IICReg_SetBitMask(&pDrv->iicReg, ControlReg, 0x80));           // stop timer now
 		IIC_REG_ERR_RETURN(IICReg_writeByte(&pDrv->iicReg, CommandReg, Idle));
@@ -317,45 +318,46 @@ void fm175Drv_event(Fm175Drv* pDrv, TRANS_EVENT evt, TRANSFER_RESULT res)
 		SwTimer_Stop(&pDrv->timer);
 		pDrv->transStatus = TRANSFER_STATUS_IDLE;
 	}
-}	
 
+	if (evt == TRANS_FAILED && pDrv->state == FM_STATE_TRANSFER)
+	{
+		//重新搜卡
+		fm175Drv_switchState(pDrv, FM_STATE_NPD_LOW);
+	}
+}	
 
 void fm175Drv_irq_rx(Fm175Drv* pDrv)
 {
-	TransMgr* item = &pDrv->transMgr;
+	TransParam* param = &pDrv->transParam;
 	uint8 bytesInFifo = 0;
 
-	if (!IICReg_readByte(&pDrv->iicReg, FIFOLevelReg, & bytesInFifo)) return;
+	if (pDrv->transStatus != TRANSFER_STATUS_RX) return;
+	IIC_REG_ERR_RETURN(IICReg_readByte(&pDrv->iicReg, FIFOLevelReg, &bytesInFifo));
 
 	//循环读取所有FIFO的内容
-	for (; item->transBufOffset < bytesInFifo; )
+	while (bytesInFifo)
 	{
-		int readLen = MIN(item->transBufLen - item->transBufOffset, bytesInFifo - item->transBufOffset);
+		int readLen = MIN(param->rxBufSize - param->transBufOffset, bytesInFifo);
 		if (readLen == 0)
 		{
+			//用户应该在此事件中，处理已经接收到的数据param->rxBuf中，并且设置param->rxBufSize的值
 			fm175Drv_event(pDrv, TRANS_RX_BUF_FULL, TRANS_RESULT_SUCCESS);
-			item->transBufOffset = 0;
-			IIC_REG_ERR_RETURN(IICReg_readByte(&pDrv->iicReg, FIFOLevelReg, & bytesInFifo));
-			continue;
+			param->transBufOffset = 0;
 		}
-
-		IIC_REG_ERR_RETURN(IICReg_readFifo(&pDrv->iicReg, &pDrv->rxBuf[item->transBufOffset], readLen)); //读出FIFO内容
-		item->transBufOffset += readLen;
-		item->offset += readLen;
+		else
+		{
+			IIC_REG_ERR_RETURN(IICReg_readFifo(&pDrv->iicReg, &param->rxBuf[param->transBufOffset], readLen)); //读出FIFO内容
+			param->transBufOffset += readLen;
+			param->offset += readLen;
+			IIC_REG_ERR_RETURN(IICReg_readByte(&pDrv->iicReg, FIFOLevelReg, & bytesInFifo));
+		}
 	}
-	item->totalLen = item->offset;
-
-}
-
-void fm175Drv_irq_rxDone(Fm175Drv* pDrv)
-{
-	fm175Drv_irq_rx(pDrv);
-	fm175Drv_event(pDrv, TRANS_SUCCESS, TRANS_RESULT_SUCCESS);
+	param->totalLen = param->offset;
 }
 
 void fm175Drv_irq_tx(Fm175Drv* pDrv)
 {
-	TransMgr* item = &pDrv->transMgr;
+	TransParam* param = &pDrv->transParam;
 	const TransProtocolCfg* cfg = pDrv->cfg;
 	int remainLen = 0;
 
@@ -372,16 +374,16 @@ void fm175Drv_irq_tx(Fm175Drv* pDrv)
 	}
 
 	//计算实际已经传输的数据长度
-	int sentLen = item->putBytesInTxFifo - bytesInFifo;
+	int sentLen = param->putBytesInTxFifo - bytesInFifo;
 
-	item->offset += sentLen;
-	item->transBufOffset += sentLen;
+	param->offset += sentLen;
+	param->transBufOffset += sentLen;
 
-	remainLen = item->totalLen - item->offset;
+	remainLen = param->totalLen - param->offset;
 	if (remainLen == 0)
 	{
-		PFL(DL_NFC, "NFC TX(%d) Done.\n", item->transBufOffset);
-		item->putBytesInTxFifo = 0;
+		PFL(DL_NFC, "NFC TX(%d) Done.\n", param->transBufOffset);
+		param->putBytesInTxFifo = 0;
 		goto TxDone;
 	}
 	else
@@ -395,41 +397,41 @@ void fm175Drv_irq_tx(Fm175Drv* pDrv)
 		}
 	}
 
-	if (item->transBufOffset >= item->transBufLen)
+	if (param->transBufOffset >= param->txBufSize)
 	{
-		//用户应该在此事件中，复制要传输的数据到txBuf中，并且设置item->transBufLen的值
+		//用户应该在此事件中，复制要传输的数据到pDrv->txBuf中，并且设置pDrv->transMgr.txBufSize的值
 		fm175Drv_event(pDrv, TRANS_TX_BUF_EMPTY, TRANS_RESULT_SUCCESS);
-		item->transBufOffset = 0;
+		param->transBufOffset = 0;
 	}
 
 	//计算需要放到TX FIFO中的字节数
-	item->putBytesInTxFifo = MIN(item->transBufLen - item->transBufOffset, cfg->fifoDeepth - bytesInFifo);
+	param->putBytesInTxFifo = MIN(param->txBufSize - param->transBufOffset, cfg->fifoDeepth - bytesInFifo);
 
-	if (item->putBytesInTxFifo)
+	if (param->putBytesInTxFifo)
 	{
-		PFL(DL_NFC, "NFC TX(%d/%d,%d):", item->transBufOffset, item->totalLen, item->putBytesInTxFifo);
-		DUMP_BYTE_LEVEL(DL_NFC, & pDrv->txBuf[item->transBufOffset], item->putBytesInTxFifo);
+		PFL(DL_NFC, "NFC TX(%d/%d,%d):", param->transBufOffset, param->totalLen, param->putBytesInTxFifo);
+		DUMP_BYTE_LEVEL(DL_NFC, & param->txBuf[param->transBufOffset], param->putBytesInTxFifo);
 		PFL(DL_NFC, "\n");
 		
-		IIC_REG_ERR_RETURN(IICReg_writeFifo(&pDrv->iicReg, & pDrv->txBuf[item->transBufOffset], item->putBytesInTxFifo));
+		IIC_REG_ERR_RETURN(IICReg_writeFifo(&pDrv->iicReg, &param->txBuf[param->transBufOffset], param->putBytesInTxFifo));
 		IIC_REG_ERR_RETURN(IICReg_SetBitMask(&pDrv->iicReg, BitFramingReg, 0x80));	//启动发送
 		return;
 	}
 	
 TxDone:
 	//是否需要接收数据
-	if (pDrv->rxBufSize == 0)
+	if (param->rxBufSize == 0)
 	{
 		fm175Drv_event(pDrv, TRANS_SUCCESS, TRANS_RESULT_SUCCESS);
 	}
 	else
 	{
-		item->offset = 0;
-		item->transBufOffset = 0;
-		item->transBufLen = pDrv->rxBufSize;
+		param->offset = 0;
+		param->transBufOffset = 0;
 		pDrv->transStatus = TRANSFER_STATUS_RX;
+		param->totalLen = 0;
 
-		pDrv->waterLevel = (pDrv->rxBufSize <= pDrv->cfg->fifoDeepth) ? pDrv->cfg->fifoDeepth : (pDrv->cfg->fifoDeepth >> 1);
+		pDrv->waterLevel = (param->rxBufSize <= pDrv->cfg->fifoDeepth) ? pDrv->cfg->fifoDeepth : (pDrv->cfg->fifoDeepth >> 1);
 		IIC_REG_ERR_RETURN(IICReg_writeByte(&pDrv->iicReg, WaterLevelReg, pDrv->waterLevel));//设置接收FIFO的WaterLeve
 	}
 }
@@ -441,6 +443,13 @@ void fm175Drv_irq_hiAlert(Fm175Drv* pDrv)
 {
 	fm175Drv_irq_rx(pDrv);
 }
+
+void fm175Drv_irq_rxDone(Fm175Drv* pDrv)
+{
+	fm175Drv_irq_rx(pDrv);
+	fm175Drv_event(pDrv, TRANS_SUCCESS, TRANS_RESULT_SUCCESS);
+}
+
 void fm175Drv_irq_loAlert(Fm175Drv* pDrv)
 {
 	fm175Drv_irq_tx(pDrv);
@@ -485,12 +494,12 @@ FmIrqFn fm175Drv_getIrqHandler(Fm175Drv * pDrv, uint8 irq)
 
 void fm175Drv_irq(Fm175Drv * pDrv, uint8 irq)
 {
-	/*
+#if 0
 	//查看中断位
 	char buf[128]={0};
 	SprintfBit(buf, "TxDone[%6B],RxDone[%5B],Idle[%4B],RxFifoHi[%3B],TxFifoLo[%2B],Err[%1B],Timeout[%0B]", irq, Null);
 	PFL(DL_NFC, "irq=0x%02X, [%s]\n", irq, buf);
-	*/
+#endif
 	for (int i = 0; i < 8; i++)
 	{
 		if (irq & BIT(i))
@@ -629,7 +638,7 @@ void fm175Drv_fsmSleep(Fm175Drv* pDrv, FM17522_MSG msg, uint32 param)
 {
 	if (msg == FM_MSG_RUN)
 	{
-		if (pDrv->txBufSize && pDrv->transStatus == TRANSFER_STATUS_PENDING_TX)
+		if (pDrv->transParam.txBufSize && pDrv->transStatus == TRANSFER_STATUS_PENDING_TX)
 		{
 			fm175Drv_switchState(pDrv, FM_STATE_NPD_LOW);
 		}
@@ -662,10 +671,8 @@ void fm175Drv_fsmTransfer(Fm175Drv* pDrv, FM17522_MSG msg, uint32 param)
 		if (SwTimer_isTimerOut(&pDrv->timer))
 		{
 			fm175Drv_irq_timeOut(pDrv);
-			//重新搜卡
-			fm175Drv_switchState(pDrv, FM_STATE_NPD_LOW);
 		}
-		else if (pDrv->txBufSize && pDrv->transStatus == TRANSFER_STATUS_PENDING_TX)
+		else if (pDrv->transParam.txBufSize && pDrv->transStatus == TRANSFER_STATUS_PENDING_TX)
 		{
 			SwTimer_ReStart(&pDrv->sleepWdTimer);
 			if (!fm175Drv_transStart(pDrv, Transceive, 200))
@@ -773,18 +780,16 @@ Bool fm175Drv_setTimer(Fm175Drv* pDrv, unsigned long delaytime)//设定超时时间（m
 ***************************************************************/
 Bool fm175Drv_transferInit(Fm175Drv* pDrv, const void* txBuf, int txBufSize, void* rxBuf, int rxBufSize, void* pObj)
 {
-	TransMgr* item = &pDrv->transMgr;
+	TransParam* param = &pDrv->transParam;
 	//有数据正在传输
 	if (pDrv->transStatus != TRANSFER_STATUS_IDLE) return False;
 	pDrv->transStatus = TRANSFER_STATUS_PENDING_TX;
 	
-	pDrv->txBuf		= txBuf;
+	param->txBuf		= txBuf;
+	param->txBufSize = txBufSize;
 
-	pDrv->txBufSize = txBufSize;
-	//如果txBuf为NULL，表示不指定传输数据，需要在TRANS_TX_BUF_EMPTY中填充发送数据
-
-	pDrv->rxBuf		= rxBuf;
-	pDrv->rxBufSize = rxBufSize;
+	param->rxBuf		= rxBuf;
+	param->rxBufSize = rxBufSize;
 	pDrv->obj = pObj;
 
 	return True;
@@ -801,24 +806,25 @@ Bool fm175Drv_transferInit(Fm175Drv* pDrv, const void* txBuf, int txBufSize, voi
 ***************************************************************/
 Bool fm175Drv_transStart(Fm175Drv* pDrv, FM17522_CMD cmd, uint32 timeOutMs)
 {
-	timeOutMs = 400;
-	TransMgr* item = &pDrv->transMgr;
+	//timeOutMs = 200;
+	TransParam* param = &pDrv->transParam;
 
 	if (pDrv->transStatus != TRANSFER_STATUS_PENDING_TX) return False;
 
 	pDrv->cmd = cmd;
 	//pDrv->obj = cbObj;
 
-	item->offset = 0;
+	param->totalLen = pDrv->transParam.txBufSize;
+	param->offset = 0;
 
-	item->totalLen = pDrv->txBufSize;
-	item->transBufLen = (pDrv->txBuf) ? pDrv->txBufSize : 0;
+	//如果txBuf为NULL，表示不指定传输数据，需要在TRANS_TX_BUF_EMPTY中填充发送数据
+	param->txBufSize = (param->txBuf) ? pDrv->transParam.txBufSize : 0;
 
-	item->transBufOffset = 0;
-	item->putBytesInTxFifo = 0;
+	param->transBufOffset = 0;
+	param->putBytesInTxFifo = 0;
 
 	//pDrv->txBuf = txBuf;
-	//pDrv->txBufSize = txBufSize;
+	//pDrv->transMgr.txBufSize = txBufSize;
 	//pDrv->rxBuf = rxBuf;
 	//pDrv->rxBufSize = rxBufSize;
 
@@ -856,6 +862,7 @@ Bool fm175Drv_SyncTransfer(Fm175Drv* pDrv
 	, uint32 timeOutMs
 )
 {
+	TransParam* param = &pDrv->transParam;
 	//如果设备状态state是激活，
 	if (pDrv->state == FM_STATE_TRANSFER)
 	{
@@ -876,10 +883,10 @@ Bool fm175Drv_SyncTransfer(Fm175Drv* pDrv
 	//临时保存传输参数，同步传输结束后恢复**************************
 	TransEventFn	_evtFn		= pDrv->Event	;
 	FM17522_CMD		_cmd		= pDrv->cmd		;
-	const void*		_txBuf		= pDrv->txBuf	;
-	int				_txBufSize  = pDrv->txBufSize;
-	void*			_rxBuf      = pDrv->rxBuf	;
-	int				_rxBufSize  = pDrv->rxBufSize;
+	const void*		_txBuf		= param->txBuf	;
+	int				_txBufSize  = pDrv->transParam.txBufSize;
+	void*			_rxBuf      = param->rxBuf	;
+	int				_rxBufSize  = param->rxBufSize;
 	TRANSFER_STATUS _transStatus = pDrv->transStatus;
 	/**************************************************************/
 
@@ -901,7 +908,7 @@ Bool fm175Drv_SyncTransfer(Fm175Drv* pDrv
 
 	if (pDrv->latestErr == TRANS_RESULT_SUCCESS)
 	{
-		*rxBufSize = pDrv->transMgr.totalLen;
+		*rxBufSize = pDrv->transParam.totalLen;
 		rc = True;
 		goto End;
 	}
@@ -909,10 +916,10 @@ End:
 	//恢复传输参数
 	pDrv->Event		= _evtFn		;
 	pDrv->cmd		= _cmd		;
-	pDrv->txBuf		= _txBuf		;
-	pDrv->txBufSize	= _txBufSize	;
-	pDrv->rxBuf		= _rxBuf		;
-	pDrv->rxBufSize = _rxBufSize;
+	param->txBuf		= _txBuf		;
+	pDrv->transParam.txBufSize	= _txBufSize	;
+	param->rxBuf		= _rxBuf		;
+	param->rxBufSize = _rxBufSize;
 	pDrv->transStatus = _transStatus;
 	return rc;
 }

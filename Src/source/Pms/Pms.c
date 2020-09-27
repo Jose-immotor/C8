@@ -385,6 +385,7 @@ static void Pms_fsm(PmsMsg msgId, uint32_t param1, uint32_t param2)
 TRANSFER_EVENT_RC Pms_EventCb(Battery* pBat, TRANS_EVENT ev)
 {
 	Fm175Drv* fmDrv = &g_pms.fmDrv;
+	TransParam* param = &fmDrv->transParam;
 	if (ev == SEARCH_CARD_DONE)
 	{
 		if (fmDrv->cardIsExist)
@@ -400,13 +401,13 @@ TRANSFER_EVENT_RC Pms_EventCb(Battery* pBat, TRANS_EVENT ev)
 	}
 	else if (ev == TRANS_SUCCESS)
 	{
-		Pms_Rx(pBat, fmDrv->rxBuf, fmDrv->rxBufSize);
-		PFL(DL_NFC,"NFC port[%d] rx date success!\n",0);
+		Pms_Rx(pBat, param->rxBuf, param->totalLen);
+		PFL(DL_NFC,"NFC port[%d] rx date success, len=%d!\n", fmDrv->antPort, param->totalLen);
 	}
 	else if (ev == TRANS_FAILED)
 	{
 		Mod_busErr(g_pModBus, BUS_ERR_RX_FAILED);
-		PFL(DL_NFC,"NFC port[%d] rx date failed!\n",0);
+		PFL(DL_NFC,"NFC port[%d] rx date failed!\n", fmDrv->antPort);
 	}
 
 	return TRANS_EVT_RC_SUCCESS;
