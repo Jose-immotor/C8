@@ -36,7 +36,9 @@ extern "C"{
 #include "main.h"
 #include "HwFwVer.h"
 #include "nvc.h"
+#include "CmdLineExport.h"
 
+#define CFG_CABIN_LOCK
 
 #ifdef __cplusplus
 }

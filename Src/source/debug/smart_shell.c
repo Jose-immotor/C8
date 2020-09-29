@@ -33,7 +33,7 @@ static void Dump(int argc, char**argv)
 	extern void g_cgfInfo_Dump(void);
 	extern void g_pdoInfo_Dump(void);
 	extern void g_degInfo_Dump(void);
-
+	extern void Cabin_Dump(void);
 	extern void Adc_Dump();
 	extern uint32 g_ActiveFlag;
 	extern const HwFwVer AppInfo;
@@ -43,7 +43,7 @@ static void Dump(int argc, char**argv)
 	if(2 == ind || 0 == ind) PmsDump();
 ////	if(3 == ind || 0 == ind) Gps_Dump();
 ////	if(4 == ind || 0 == ind) Gprs_Dump();
-	
+	if(5 == ind) 			 Cabin_Dump();
 	if(6 == ind) 			 Adc_Dump();
 	if(7 == ind || 0 == ind) BatteryInfoDump();
 	if(9 == ind || 0 == ind) DateTime_dump(Null);
@@ -95,6 +95,7 @@ static void Set(int argc, char**argv)
 
 	extern void Nvc_SetVol(uint8 vol);
 	extern void SetAccOn(uint8 on);
+	extern void Cabin_UnLock();
 	
 	sscanf(&(*argv[1]), "%d", &ind);
 	sscanf(&(*argv[2]), "%d", &value);
@@ -108,7 +109,7 @@ static void Set(int argc, char**argv)
 		case 5: Rs485Test(value); break;
 ////		case 6: g_Settings.IsBatVerifyEn=value; Sign_Dump(Null); Nvds_Write_Setting(); break;
 ////		case 7: g_Settings.IsAlarmMode=value; Sign_Dump(Null); break;
-////		case 8: SET_VAR(g_ForcePmsDischarge); 
+		case 8: Cabin_UnLock();
 ////		case 9: SET_VAR(g_ForceBatSoc); 
 ////		case 10: Sim_PowerReset(0); break;
 		case 11: Nvc_SetVol(value); break;

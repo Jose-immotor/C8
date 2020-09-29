@@ -182,10 +182,15 @@ void EXTI3_IRQHandler(void)
     }
 }
 
+extern void Mcu_CabinLockIsr();
 extern void Gyro_Isr();
 extern void bat_insert(void);
 void EXTI5_9_IRQHandler(void)
 {
+	if(SET == exti_interrupt_flag_get(EXTI_6)){
+        exti_interrupt_flag_clear(EXTI_6);
+		Mcu_CabinLockIsr();
+    }
 	if(SET == exti_interrupt_flag_get(EXTI_8)){
         exti_interrupt_flag_clear(EXTI_8);
 		Gyro_Isr();
@@ -202,3 +207,11 @@ void EXTI10_15_IRQHandler(void)
         exti_interrupt_flag_clear(EXTI_13);
     }
 }
+
+extern void can0_receive_isr(void);
+void CAN0_RX0_IRQHandler(void)
+{
+    /* check the receive message */
+		can0_receive_isr(); 
+}
+

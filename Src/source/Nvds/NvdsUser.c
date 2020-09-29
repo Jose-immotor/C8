@@ -20,12 +20,12 @@ void SetAccOn(uint8 on)
 {
 	if(on)
 	{
-		g_cfgInfo.isAccOn = 1;
+		g_pdoInfo.isRemoteAccOn = 1;
 		Pms_postMsg(PmsMsg_accOn, 0, 0);
 	}
 	else
 	{
-		g_cfgInfo.isAccOn = 0;
+		g_pdoInfo.isRemoteAccOn = 0;
 		Pms_postMsg(PmsMsg_accOff, 0, 0);
 	}
 }
@@ -37,7 +37,7 @@ void g_cgfInfo_Dump(void)
 	Printf("Dump g_cfgInfo:\n");
 	PRINTF_CFG(isActive);
 	PRINTF_CFG(vol);
-	PRINTF_CFG(isAccOn);
+//	PRINTF_CFG(isAccOn);
 
 }
 
@@ -55,6 +55,10 @@ void g_pdoInfo_Dump(void)
 	#define PRINTF_PDO(_field) Printf("\t%s=%d\n", #_field, g_pdoInfo._field);
 	
 	Printf("Dump g_pdoInfo:\n");
+	
+	PRINTF_PDO(isRemoteAccOn);//车辆远程点火
+	PRINTF_PDO(isWheelLock);///轮毂锁
+	PRINTF_PDO(isCanbinLock);///座舱锁
 	
 	PRINTF_PDO(isFlashOk);
 	PRINTF_PDO(isGyroOk);
@@ -182,4 +186,12 @@ void NvdsUser_Init()
 		LocalTimeSync(&localDt);
 		//DateTime_dump(&localDt);
 	}
+	if(!g_cfgInfo.vol)
+	{
+		g_cfgInfo.vol=2;//默认音量为2
+	}
+//	if(!g_pdoInfo.isRemoteAccOn)
+//	{
+//		g_pdoInfo.isRemoteAccOn=1;
+//	}
 }

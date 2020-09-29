@@ -269,6 +269,7 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 		Pms_plugOut((Battery*)param1);
 	}
 	PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, True);
+	g_pdoInfo.isWheelLock =1;
 }
 
 static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
@@ -286,6 +287,7 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 		Pms_plugOut((Battery*)param1);
 	}
 	PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, False);
+	g_pdoInfo.isWheelLock =0;
 }
 
 static void Pms_fsm_sleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
@@ -306,6 +308,7 @@ static void Pms_fsm_deepSleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
 		Mcu_PowerDown();
 	}
 	PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, True);
+	g_pdoInfo.isWheelLock =1;
 }
 
 //在任何状态下都要处理的消息函数
@@ -419,7 +422,7 @@ void Pms_run()
 
 void Pms_start()
 {
-	if(g_cfgInfo.isAccOn)
+	if(g_pdoInfo.isRemoteAccOn)
 	{
 		Pms_switchStatus(PMS_ACC_ON);
 	}
