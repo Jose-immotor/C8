@@ -83,12 +83,12 @@ static int Utp_BuildFrame(Utp* pUtp, uint8_t cmd, const void* pData, int len, co
 	}
 	memcpy(frame->data, pData, len);
 
-	frame->checkSum = (uint8_t)CheckSum_Get(&checkSum, &frame->vendor, len + 4);
+	frame->checkSum = (uint8_t)CheckSum_Get(&checkSum, &frame->vendor, len + 5);
 
 	return len + pUtp->frameCfg->dataByteInd;
 }
 
-static uint8_t g_JtUtp_txBuff[128];			//发送数据缓冲区
+static uint8_t g_JtUtp_txBuff[128];			//发送数据缓冲区5
 static uint8_t g_JtUtp_transcodeBuf[150];	//接收数据的转码缓冲区
 static uint8_t g_JtUtp_rxBuff[200];			//接收数据缓冲区
 static uint8_t g_JtUtp_txRspBuf[128];

@@ -146,6 +146,21 @@ extern "C"{
 #define			_STATE_ALAM_EN			BIT(6)		//	移动
 
 
+#define		_SMS_SIZE		(140)
+	typedef struct
+	{
+		uint32 	smsRevTime;
+		uint8	smsLen;
+		uint8	smsText[_SMS_SIZE];
+	}SMSContext;
+	#define		_SMS_ARRY_CNT	(2)
+	typedef struct
+	{
+		uint8 		smsExist;
+		uint8 		smsCount;
+		SMSContext	smsText[_SMS_ARRY_CNT];
+	}GetSMSContext;
+
 // 附加报警状态定义
 
 
@@ -176,6 +191,8 @@ extern "C"{
 		uint16_t 		bleEnCtrl;
 		JtDevBleProperty bleproperty ;
 		JtDevBleCfgParam blecfgParam ;
+		
+		GetSMSContext	smsContext ;
 		
 		// 文件属性
 		UpdateFileInfo  updatefileinfo ;

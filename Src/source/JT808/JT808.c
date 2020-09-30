@@ -524,6 +524,7 @@ UTP_EVENT_RC JT808_event_devStateChanged(JT808* pJt, const UtpCmd* pCmd, UTP_TXF
 		if( g_Jt.devState.cnt & _SMS_EXIT_BIT )
 		{
 			Printf("Rev SMS\r\n");
+			Utp_SendCmd(&g_JtUtp, JTCMD_CMD_GET_SMS );// 获取短信
 		}
 		else
 		{
@@ -532,6 +533,23 @@ UTP_EVENT_RC JT808_event_devStateChanged(JT808* pJt, const UtpCmd* pCmd, UTP_TXF
 	}
 	return UTP_EVENT_RC_SUCCESS;
 }
+
+
+UTP_EVENT_RC JT808_event_getSMSContext(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
+{
+	if( ev == UTP_CHANGED_AFTER )
+	{
+		// 处理短信
+
+		// 还有短信
+		if( g_Jt.smsContext.smsExist )
+		{
+			Utp_SendCmd(&g_JtUtp, JTCMD_CMD_GET_SMS );
+		}
+	}
+	return UTP_EVENT_RC_SUCCESS;
+}
+
 
 UTP_EVENT_RC JT808_event_LocationChanged(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
@@ -590,6 +608,8 @@ UTP_EVENT_RC JT808_event_sendSvrData(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVE
 	else if(ev == UTP_REQ_SUCCESS)
 	{
 		g_txlen = 0;
+		int len = JtTlv0900_getChangedTlv(g_txBuf, sizeof(g_txBuf), Null);
+		JtTlv0900_updateMirror( g_txBuf , len );
 	}
 
 	return UTP_EVENT_RC_SUCCESS;
@@ -597,6 +617,10 @@ UTP_EVENT_RC JT808_event_sendSvrData(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVE
 
 UTP_EVENT_RC JT808_cmd_getFileContent(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
+	if(ev == UTP_CHANGED_AFTER )
+	{
+		//Offset[UINT32] + file Data[UINT8[]
+	}
 	return UTP_EVENT_RC_SUCCESS;
 }
 
@@ -613,10 +637,8 @@ UTP_EVENT_RC JT808_event_setLocationExtras(JT808* pJt, const UtpCmd* pCmd, UTP_T
 UTP_EVENT_RC JT808_event_rcvBleData(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {	
 	// 应该处理 UTP_CHANGED_AFTER 事件
-	if (ev == UTP_GET_RSP)
+	if( ev == UTP_CHANGED_AFTER )	// 收到数据
 	{
-		// 将返回数据写入 pCmd->pExt->transferData       & pCmd->pExt->transferLen及可
-
 		//uint8 rspLen = 0;
 		//pCmd->pExt->transferData = Ble_ReqProc(pCmd->pStorage, pCmd->storageLen, &rspLen);
 		//pCmd->pExt->transferLen = rspLen;
@@ -624,7 +646,10 @@ UTP_EVENT_RC JT808_event_rcvBleData(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVEN
 		//{
 		//	return UTP_EVENT_RC_FAILED;
 		//}
-		
+	}
+	else if (ev == UTP_GET_RSP)		// 返回数据
+	{
+		// 将返回数据写入 pCmd->pExt->transferData		  & pCmd->pExt->transferLen及可
 	}
 	return UTP_EVENT_RC_SUCCESS;
 }
@@ -702,6 +727,7 @@ void JT808_fsm_operation(uint8_t msgID, uint32_t param1, uint32_t param2)
 {
 	if (msgID == MSG_RUN)
 	{
+		// update
 		if (Utp_isIdle(&g_JtUtp) && (g_Jt.devState.cnt & _NETWORK_CONNECTION_BIT) )	// 空闲 & 连接网络s
 		{
 			int len = JtTlv0900_getChangedTlv(g_txBuf, sizeof(g_txBuf), Null);
@@ -709,7 +735,6 @@ void JT808_fsm_operation(uint8_t msgID, uint32_t param1, uint32_t param2)
 			{
 				g_txlen = len;
 				Utp_SendCmd(&g_JtUtp, JTCMD_CMD_SEND_TO_SVR);
-				JtTlv0900_updateMirror(g_txBuf,len);
 			}
 		}
 	}
@@ -890,7 +915,7 @@ void JT808_init()
 *以下变量是协议变量，仅供协议使用
 ************************************************/
 	
-	#define JT_CMD_SIZE 22
+	#define JT_CMD_SIZE 23
 	static uint8_t g_protocolVer = 1;	//传输协议版本号
 	static uint8_t g_updatefiletype = 1; // 中控
 	static uint8_t g_rxBuf[192];	
@@ -911,22 +936,22 @@ void JT808_init()
 		{&g_JtCmdEx[9],UTP_WRITE, JTCMD_CMD_SET_BLE_EN, "SetBLEEnable", (uint8_t*)&g_Jt.bleEnCtrl , 2, Null, 0, (UtpEventFn)JT808_cmd_setBleEnable},
 		{&g_JtCmdEx[10],UTP_READ , JTCMD_CMD_GET_FILE_INFO , "GetFileInfo",(uint8_t*)&g_Jt.updatefileinfo , sizeof(UpdateFileInfo),(uint8_t*)&g_updatefiletype,1,(UtpEventFn)JT808_cmd_getFileInfo },
 		{&g_JtCmdEx[11],UTP_WRITE , JTCMD_SET_OP_STATE, "SetOpState"	, (uint8_t*)& g_Jt.setToOpState, 1 , Null , 0 , (UtpEventFn)JT808_cmd_setToOpState},
-		{&g_JtCmdEx[12],UTP_WRITE, JTCMD_CMD_SEND_TO_SVR, "SendDataToSvr", (uint8_t*)g_rxBuf, sizeof(g_rxBuf), Null, 0, (UtpEventFn)JT808_event_sendSvrData},
-
-		{&g_JtCmdEx[13],UTP_READ , JTCMD_CMD_GET_FILE_CONTENT, "GetFileContent"	, (uint8_t*)g_rxBuf, sizeof(g_rxBuf), (uint8_t*)& g_Jt.filecontent, sizeof(FileContent) , (UtpEventFn)JT808_cmd_getFileContent},
-		{&g_JtCmdEx[14],UTP_WRITE, JTCMD_CMD_SET_LOCATION_EXTRAS, "SetLocationExtras", (uint8_t*)g_rxBuf, sizeof(g_rxBuf), Null, 0, (UtpEventFn)JT808_event_setLocationExtras},
+		{&g_JtCmdEx[12],UTP_WRITE, JTCMD_CMD_SEND_TO_SVR, "SendDataToSvr", (uint8_t*)g_txBuf, sizeof(g_txBuf), Null, 0, (UtpEventFn)JT808_event_sendSvrData},
+		{&g_JtCmdEx[13],UTP_READ,JTCMD_CMD_GET_SMS,"GetSMSContext",(uint8_t*)&g_Jt.smsContext,sizeof(GetSMSContext),Null,0,(UtpEventFn)JT808_event_getSMSContext},
+		{&g_JtCmdEx[14],UTP_READ , JTCMD_CMD_GET_FILE_CONTENT, "GetFileContent"	, (uint8_t*)g_rxBuf, sizeof(g_rxBuf), (uint8_t*)& g_Jt.filecontent, sizeof(FileContent),(UtpEventFn)JT808_cmd_getFileContent},
+		{&g_JtCmdEx[15],UTP_WRITE, JTCMD_CMD_SET_LOCATION_EXTRAS, "SetLocationExtras", (uint8_t*)g_rxBuf, sizeof(g_rxBuf), Null, 0, (UtpEventFn)JT808_event_setLocationExtras},
 
 		// EVENT 
 		// 网络 & GPS
-		{&g_JtCmdEx[15],UTP_EVENT, JTCMD_EVENT_DEV_STATE_CHANGED, "DevStateChanged", (uint8_t*)& g_Jt.devState, sizeof(JT_devState), Null, 0, (UtpEventFn)JT808_event_devStateChanged},
-		{&g_JtCmdEx[16],UTP_EVENT, JTCMD_EVENT_DEV_STATE_LOCATION, "LocationChanged", (uint8_t*)& g_Jt.locatData, sizeof(Jt_LocationData), Null, 0, (UtpEventFn)JT808_event_LocationChanged},
-		{&g_JtCmdEx[17],UTP_EVENT, JTCMD_EVT_RCV_SVR_DATA, "RcvSvrData", (uint8_t*)g_rxBuf, sizeof(g_rxBuf), Null, 0, (UtpEventFn)JT808_event_rcvSvrData},
-		{&g_JtCmdEx[18],UTP_EVENT, JTCMD_EVT_RCV_FILE_DATA, "RcvFileData", (uint8_t*)g_rxBuf, sizeof(g_rxBuf), Null, 0, (UtpEventFn)JT808_event_rcvFileData},
+		{&g_JtCmdEx[16],UTP_EVENT, JTCMD_EVENT_DEV_STATE_CHANGED, "DevStateChanged", (uint8_t*)& g_Jt.devState, sizeof(JT_devState), Null, 0, (UtpEventFn)JT808_event_devStateChanged},
+		{&g_JtCmdEx[17],UTP_EVENT, JTCMD_EVENT_DEV_STATE_LOCATION, "LocationChanged", (uint8_t*)& g_Jt.locatData, sizeof(Jt_LocationData), Null, 0, (UtpEventFn)JT808_event_LocationChanged},
+		{&g_JtCmdEx[18],UTP_EVENT, JTCMD_EVT_RCV_SVR_DATA, "RcvSvrData", (uint8_t*)g_rxBuf, sizeof(g_rxBuf), Null, 0, (UtpEventFn)JT808_event_rcvSvrData},
+		{&g_JtCmdEx[19],UTP_EVENT, JTCMD_EVT_RCV_FILE_DATA, "RcvFileData", (uint8_t*)g_rxBuf, sizeof(g_rxBuf), Null, 0, (UtpEventFn)JT808_event_rcvFileData},
 		// 蓝牙
-		{&g_JtCmdEx[19],UTP_EVENT, JTCMD_BLE_EVT_AUTH, "BleAuth", (uint8_t*)g_rxBuf, sizeof(g_rxBuf), Null , 0 , (UtpEventFn)JT808_event_bleAuthChanged },
-		{&g_JtCmdEx[20],UTP_EVENT, JTCMD_BLE_EVT_CNT, "BleCnt", (uint8_t*)&g_Jt.bleState, sizeof(Jt_BleState) , Null , 0 , (UtpEventFn)JT808_event_bleStateChanged },
+		{&g_JtCmdEx[20],UTP_EVENT, JTCMD_BLE_EVT_AUTH, "BleAuth", (uint8_t*)g_rxBuf, sizeof(g_rxBuf), Null , 0 , (UtpEventFn)JT808_event_bleAuthChanged },
+		{&g_JtCmdEx[21],UTP_EVENT, JTCMD_BLE_EVT_CNT, "BleCnt", (uint8_t*)&g_Jt.bleState, sizeof(Jt_BleState) , Null , 0 , (UtpEventFn)JT808_event_bleStateChanged },
 		// 
-		{&g_JtCmdEx[21],UTP_EVENT, JTCMD_BLE_RCV_DAT, "BleRcvDat", (uint8_t*)g_rxBuf, sizeof(g_rxBuf), (uint8_t*)g_txBuf, sizeof(g_txBuf), (UtpEventFn)JT808_event_rcvBleData},
+		{&g_JtCmdEx[22],UTP_EVENT, JTCMD_BLE_RCV_DAT, "BleRcvDat", (uint8_t*)g_rxBuf, sizeof(g_rxBuf), (uint8_t*)g_txBuf, sizeof(g_txBuf), (UtpEventFn)JT808_event_rcvBleData},
 	}; 
 	
 	static const UtpCfg g_cfg =
