@@ -61,26 +61,39 @@ extern "C"{
 
 	typedef TRANSFER_EVENT_RC (*TransEventFn)(void* obj, TRANS_EVENT evt);
 
-	typedef struct _TransMgr
+	//传输参数结构定义
+	typedef struct _TransParam
 	{
-		//用于发送和接收，发送时必须指明传输数据总长度,接收是可以为0，表示不指定传输数据总长度，实际的传输长度由offset记录
+		/*===============以下变量由外部应用使用，外部应用在传输初始化时，或者在Event回调函数中配置======================
+		用于发送数据和接收数据,
+		发送时：保存发送数据的总长度。
+		接收时：保存接收数据的总长度。
+		****************************/
 		int totalLen;		
-		//用于发送和接收，表示已经成功发送或者接收的数据长度
-		int offset;			
 
-		int transBufLen;		//用于发送和接收，txBuf或rxBuf内的有效的长度
-		int transBufOffset;		//用于发送和接收，已经传输的数据在txBuf/rxBuf中的偏移
-		int putBytesInTxFifo;			//用于发送，当前正在传输的数据包长度
-	}TransMgr;
+		const uint8_t* txBuf;	//用于发送，发送数据缓冲区指针, 外部应用可以在(TRANS_TX_BUF_EMPTY)回调函数中修改。
+		int txBufSize;			//用于发送，发送数据缓冲区长度, 外部应用可以在EVENT(TRANS_TX_BUF_EMPTY)回调函数中修改。
+
+		uint8_t* rxBuf;			//用于接收，接收数据缓冲区指针, 外部应用可以在EVENT(TRANS_RX_BUF_FULL)回调函数中修改
+		int rxBufSize;			//用于接收，接收数据缓冲区长度, 外部应用可以在EVENT(TRANS_RX_BUF_FULL)回调函数中修改
+
+		/*===============以下变量由传输协议使用，外部应用不能在Event回调函数中修改============================
+		用于发送和接收，表示已经成功发送或者接收的数据长度,
+		****************************/
+		int offset;
+		/***************************
+		用于发送数据和接收数据,有协议代码维护，外部应用不能在Event回调函数中修改
+		发送时：已经发送的数据在txBuf中的偏移。
+		接收时：已经接收的数据在txBuf中的偏移。
+		****************************/
+		int transBufOffset;		
+		//用于发送，当前正在传输的数据包长度，外部应用不能在Event回调函数中修改
+		int putBytesInTxFifo;	
+	}TransParam;
 
 	//传输协议配置
 	typedef struct _TransProtocolCfg
 	{
-		/*************************************************
-		接收数据时：如果 FIFO 缓冲器空间剩下的字节数小于等于 WaterLevel 定义的字节数， 触发HiAlert中断
-		发送数据时：如果 FIFO 中的字节数小于等于 WaterLevel 字节数， 触发LoAlert中断
-		*************************************************/
-		uint8 waterLevel;
 		uint8 fifoDeepth;	//Fifo的深度（最大传输字节数）
 
 	}TransProtocolCfg;

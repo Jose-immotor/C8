@@ -100,10 +100,7 @@
         <tRSysVw>1</tRSysVw>
         <sRunDeb>0</sRunDeb>
         <sLrtime>0</sLrtime>
-        <bEvRecOn>1</bEvRecOn>
-        <bSchkAxf>0</bSchkAxf>
-        <bTchkAxf>0</bTchkAxf>
-        <nTsel>4</nTsel>
+        <nTsel>6</nTsel>
         <sDll></sDll>
         <sDllPa></sDllPa>
         <sDlgDll></sDlgDll>
@@ -140,7 +137,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>JL2CM3</Key>
-          <Name>-U59425868 -O78 -S2 -ZTIFSpeedSel5000 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST0 -N00("ARM CoreSight SW-DP") -D00(2BA01477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO7 -FD20000000 -FC1000 -FN1 -FF0GD32E10x.FLM -FS08000000 -FL020000 -FP0($$Device:GD32E103VB$Flash\GD32E10x.FLM)</Name>
+          <Name>-U59300616 -O78 -S2 -A0 -C0 -JU1 -JI127.0.0.1 -JP0 -RST0 -N00("ARM CoreSight SW-DP") -D00(2BA01477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8001 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -TB1 -TFE0 -FO15 -FD20000000 -FC1000 -FN1 -FF0GD32E10x.FLM -FS08000000 -FL020000 -FP0($$Device:GD32E103VB$Flash\GD32E10x.FLM)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -148,56 +145,7 @@
           <Name>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0GD32E10x -FS08000000 -FL01000 -FP0($$Device:GD32E103VB$Flash\GD32E10x.FLM))</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
-      <Breakpoint>
-        <Bp>
-          <Number>0</Number>
-          <Type>0</Type>
-          <LineNumber>428</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134254108</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\Src\source\nfc\fm175Drv.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\C7Pms\../../Src/source/nfc/fm175Drv.c\428</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>324</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134254092</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\Src\source\nfc\fm175Drv.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\C7Pms\../../Src/source/nfc/fm175Drv.c\324</Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>424</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>..\..\Src\source\nfc\fm175Drv.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-      </Breakpoint>
+      <Breakpoint/>
       <WatchWindow1>
         <Ww>
           <count>0</count>
@@ -212,79 +160,19 @@
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>pDrv</ItemText>
+          <ItemText>item</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
           <ItemText>pDrv</ItemText>
         </Ww>
-        <Ww>
-          <count>4</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>pDrv</ItemText>
-        </Ww>
-        <Ww>
-          <count>5</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>pDrv</ItemText>
-        </Ww>
-        <Ww>
-          <count>6</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>pDrv</ItemText>
-        </Ww>
-        <Ww>
-          <count>7</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>pDrv</ItemText>
-        </Ww>
-        <Ww>
-          <count>8</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>item</ItemText>
-        </Ww>
-        <Ww>
-          <count>9</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>pDrv</ItemText>
-        </Ww>
-        <Ww>
-          <count>10</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>pDrv</ItemText>
-        </Ww>
-        <Ww>
-          <count>11</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>pDrv</ItemText>
-        </Ww>
-        <Ww>
-          <count>12</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>item</ItemText>
-        </Ww>
-        <Ww>
-          <count>13</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>item</ItemText>
-        </Ww>
-        <Ww>
-          <count>14</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>pDrv</ItemText>
-        </Ww>
-        <Ww>
-          <count>15</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>item</ItemText>
-        </Ww>
       </WatchWindow1>
       <MemoryWindow1>
         <Mm>
           <WinNumber>1</WinNumber>
           <SubType>0</SubType>
-          <ItemText>pData</ItemText>
+          <ItemText>pDrv-&gt;rxBuf</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow1>
@@ -294,7 +182,7 @@
       <DebugFlag>
         <trace>0</trace>
         <periodic>0</periodic>
-        <aLwin>0</aLwin>
+        <aLwin>1</aLwin>
         <aCover>0</aCover>
         <aSer1>0</aSer1>
         <aSer2>0</aSer2>
@@ -319,17 +207,6 @@
       </DebugFlag>
       <LintExecutable></LintExecutable>
       <LintConfigFile></LintConfigFile>
-      <bLintAuto>0</bLintAuto>
-      <bAutoGenD>0</bAutoGenD>
-      <LntExFlags>0</LntExFlags>
-      <pMisraName></pMisraName>
-      <pszMrule></pszMrule>
-      <pSingCmds></pSingCmds>
-      <pMultCmds></pMultCmds>
-      <pMisraNamep></pMisraNamep>
-      <pszMrulep></pszMrulep>
-      <pSingCmdsp></pSingCmdsp>
-      <pMultCmdsp></pMultCmdsp>
     </TargetOption>
   </Target>
 
@@ -344,6 +221,7 @@
       <FileNumber>1</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Firmware\CMSIS\GD\GD32E10x\Source\system_gd32e10x.c</PathWithFileName>
@@ -356,6 +234,7 @@
       <FileNumber>2</FileNumber>
       <FileType>2</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Firmware\CMSIS\GD\GD32E10x\Source\ARM\startup_gd32e10x.s</PathWithFileName>
@@ -376,6 +255,7 @@
       <FileNumber>3</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Firmware\GD32E10x_standard_peripheral\Source\gd32e10x_adc.c</PathWithFileName>
@@ -388,6 +268,7 @@
       <FileNumber>4</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Firmware\GD32E10x_standard_peripheral\Source\gd32e10x_bkp.c</PathWithFileName>
@@ -400,6 +281,7 @@
       <FileNumber>5</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Firmware\GD32E10x_standard_peripheral\Source\gd32e10x_can.c</PathWithFileName>
@@ -412,6 +294,7 @@
       <FileNumber>6</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Firmware\GD32E10x_standard_peripheral\Source\gd32e10x_crc.c</PathWithFileName>
@@ -424,6 +307,7 @@
       <FileNumber>7</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Firmware\GD32E10x_standard_peripheral\Source\gd32e10x_ctc.c</PathWithFileName>
@@ -436,6 +320,7 @@
       <FileNumber>8</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Firmware\GD32E10x_standard_peripheral\Source\gd32e10x_dac.c</PathWithFileName>
@@ -448,6 +333,7 @@
       <FileNumber>9</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Firmware\GD32E10x_standard_peripheral\Source\gd32e10x_dbg.c</PathWithFileName>
@@ -460,6 +346,7 @@
       <FileNumber>10</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Firmware\GD32E10x_standard_peripheral\Source\gd32e10x_dma.c</PathWithFileName>
@@ -472,6 +359,7 @@
       <FileNumber>11</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Firmware\GD32E10x_standard_peripheral\Source\gd32e10x_exmc.c</PathWithFileName>
@@ -484,6 +372,7 @@
       <FileNumber>12</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Firmware\GD32E10x_standard_peripheral\Source\gd32e10x_exti.c</PathWithFileName>
@@ -496,6 +385,7 @@
       <FileNumber>13</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Firmware\GD32E10x_standard_peripheral\Source\gd32e10x_fmc.c</PathWithFileName>
@@ -508,6 +398,7 @@
       <FileNumber>14</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Firmware\GD32E10x_standard_peripheral\Source\gd32e10x_fwdgt.c</PathWithFileName>
@@ -520,6 +411,7 @@
       <FileNumber>15</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Firmware\GD32E10x_standard_peripheral\Source\gd32e10x_gpio.c</PathWithFileName>
@@ -532,6 +424,7 @@
       <FileNumber>16</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Firmware\GD32E10x_standard_peripheral\Source\gd32e10x_i2c.c</PathWithFileName>
@@ -544,6 +437,7 @@
       <FileNumber>17</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Firmware\GD32E10x_standard_peripheral\Source\gd32e10x_misc.c</PathWithFileName>
@@ -556,6 +450,7 @@
       <FileNumber>18</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Firmware\GD32E10x_standard_peripheral\Source\gd32e10x_pmu.c</PathWithFileName>
@@ -568,6 +463,7 @@
       <FileNumber>19</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Firmware\GD32E10x_standard_peripheral\Source\gd32e10x_rcu.c</PathWithFileName>
@@ -580,6 +476,7 @@
       <FileNumber>20</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Firmware\GD32E10x_standard_peripheral\Source\gd32e10x_rtc.c</PathWithFileName>
@@ -592,6 +489,7 @@
       <FileNumber>21</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Firmware\GD32E10x_standard_peripheral\Source\gd32e10x_spi.c</PathWithFileName>
@@ -604,6 +502,7 @@
       <FileNumber>22</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Firmware\GD32E10x_standard_peripheral\Source\gd32e10x_timer.c</PathWithFileName>
@@ -616,6 +515,7 @@
       <FileNumber>23</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Firmware\GD32E10x_standard_peripheral\Source\gd32e10x_usart.c</PathWithFileName>
@@ -628,6 +528,7 @@
       <FileNumber>24</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Firmware\GD32E10x_standard_peripheral\Source\gd32e10x_wwdgt.c</PathWithFileName>
@@ -648,6 +549,7 @@
       <FileNumber>25</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\rt-thread\src\clock.c</PathWithFileName>
@@ -660,6 +562,7 @@
       <FileNumber>26</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\rt-thread\src\components.c</PathWithFileName>
@@ -672,6 +575,7 @@
       <FileNumber>27</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\rt-thread\src\cpu.c</PathWithFileName>
@@ -684,6 +588,7 @@
       <FileNumber>28</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\rt-thread\src\idle.c</PathWithFileName>
@@ -696,6 +601,7 @@
       <FileNumber>29</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\rt-thread\src\ipc.c</PathWithFileName>
@@ -708,6 +614,7 @@
       <FileNumber>30</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\rt-thread\src\irq.c</PathWithFileName>
@@ -720,6 +627,7 @@
       <FileNumber>31</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\rt-thread\src\kservice.c</PathWithFileName>
@@ -732,6 +640,7 @@
       <FileNumber>32</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\rt-thread\src\mem.c</PathWithFileName>
@@ -744,6 +653,7 @@
       <FileNumber>33</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\rt-thread\src\memheap.c</PathWithFileName>
@@ -756,6 +666,7 @@
       <FileNumber>34</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\rt-thread\src\mempool.c</PathWithFileName>
@@ -768,6 +679,7 @@
       <FileNumber>35</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\rt-thread\src\object.c</PathWithFileName>
@@ -780,6 +692,7 @@
       <FileNumber>36</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\rt-thread\src\scheduler.c</PathWithFileName>
@@ -792,6 +705,7 @@
       <FileNumber>37</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\rt-thread\src\slab.c</PathWithFileName>
@@ -804,6 +718,7 @@
       <FileNumber>38</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\rt-thread\src\thread.c</PathWithFileName>
@@ -816,6 +731,7 @@
       <FileNumber>39</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\rt-thread\src\timer.c</PathWithFileName>
@@ -836,6 +752,7 @@
       <FileNumber>40</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\src\rt-thread\components\finsh\cmd.c</PathWithFileName>
@@ -848,6 +765,7 @@
       <FileNumber>41</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\src\rt-thread\components\finsh\msh.c</PathWithFileName>
@@ -860,6 +778,7 @@
       <FileNumber>42</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\src\rt-thread\components\finsh\shell.c</PathWithFileName>
@@ -880,6 +799,7 @@
       <FileNumber>43</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\src\rt-thread\libcpu\arm\cortex-m4\cpuport.c</PathWithFileName>
@@ -892,6 +812,7 @@
       <FileNumber>44</FileNumber>
       <FileType>2</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\src\rt-thread\libcpu\arm\cortex-m4\context_rvds.S</PathWithFileName>
@@ -912,6 +833,7 @@
       <FileNumber>45</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Arch\Bit.c</PathWithFileName>
@@ -924,6 +846,7 @@
       <FileNumber>46</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Arch\CheckSum.c</PathWithFileName>
@@ -936,6 +859,7 @@
       <FileNumber>47</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Arch\CmdLine.c</PathWithFileName>
@@ -948,6 +872,7 @@
       <FileNumber>48</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Arch\Dump.c</PathWithFileName>
@@ -960,6 +885,7 @@
       <FileNumber>49</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Arch\HwFwVer.c</PathWithFileName>
@@ -972,6 +898,7 @@
       <FileNumber>50</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Arch\queue.c</PathWithFileName>
@@ -984,6 +911,7 @@
       <FileNumber>51</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Arch\SwTimer.c</PathWithFileName>
@@ -996,6 +924,7 @@
       <FileNumber>52</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Arch\Utp.c</PathWithFileName>
@@ -1008,6 +937,7 @@
       <FileNumber>53</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Arch\Obj.c</PathWithFileName>
@@ -1020,6 +950,7 @@
       <FileNumber>54</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Arch\Nvds.c</PathWithFileName>
@@ -1032,6 +963,7 @@
       <FileNumber>55</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Arch\SectorMgr.c</PathWithFileName>
@@ -1044,6 +976,7 @@
       <FileNumber>56</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Arch\Dbg.c</PathWithFileName>
@@ -1056,6 +989,7 @@
       <FileNumber>57</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Arch\Log.c</PathWithFileName>
@@ -1068,6 +1002,7 @@
       <FileNumber>58</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Arch\Record.c</PathWithFileName>
@@ -1080,6 +1015,7 @@
       <FileNumber>59</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Arch\Tlv.c</PathWithFileName>
@@ -1092,6 +1028,7 @@
       <FileNumber>60</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Arch\TlvIn.c</PathWithFileName>
@@ -1104,6 +1041,7 @@
       <FileNumber>61</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Arch\TlvOut.c</PathWithFileName>
@@ -1116,6 +1054,7 @@
       <FileNumber>62</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Arch\date.c</PathWithFileName>
@@ -1128,6 +1067,7 @@
       <FileNumber>63</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Arch\DateTime.c</PathWithFileName>
@@ -1140,6 +1080,7 @@
       <FileNumber>64</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Arch\DataType.c</PathWithFileName>
@@ -1152,6 +1093,7 @@
       <FileNumber>65</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\Arch\md5.c</PathWithFileName>
@@ -1172,6 +1114,7 @@
       <FileNumber>66</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\CmBacktrace\cm_backtrace.c</PathWithFileName>
@@ -1184,6 +1127,7 @@
       <FileNumber>67</FileNumber>
       <FileType>2</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\CmBacktrace\cmb_fault.S</PathWithFileName>
@@ -1204,6 +1148,7 @@
       <FileNumber>68</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\src\source\drivers\board.c</PathWithFileName>
@@ -1216,6 +1161,7 @@
       <FileNumber>69</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\src\source\drivers\drv_usart.c</PathWithFileName>
@@ -1228,6 +1174,7 @@
       <FileNumber>70</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\src\source\drivers\drv_i2c.c</PathWithFileName>
@@ -1240,6 +1187,7 @@
       <FileNumber>71</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\drivers\drv_hwtimer.c</PathWithFileName>
@@ -1252,6 +1200,7 @@
       <FileNumber>72</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\drivers\drv_spi.c</PathWithFileName>
@@ -1264,6 +1213,7 @@
       <FileNumber>73</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\drivers\RcuMap.c</PathWithFileName>
@@ -1276,6 +1226,7 @@
       <FileNumber>74</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\drivers\drv_gpio.c</PathWithFileName>
@@ -1288,6 +1239,7 @@
       <FileNumber>75</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\drivers\drv_rtc.c</PathWithFileName>
@@ -1300,6 +1252,7 @@
       <FileNumber>76</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\drivers\drv_pm.c</PathWithFileName>
@@ -1312,6 +1265,7 @@
       <FileNumber>77</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\drivers\drv_can.c</PathWithFileName>
@@ -1324,6 +1278,7 @@
       <FileNumber>78</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\drivers\drv_adc.c</PathWithFileName>
@@ -1344,6 +1299,7 @@
       <FileNumber>79</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\src\source\user\main.c</PathWithFileName>
@@ -1356,6 +1312,7 @@
       <FileNumber>80</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\user\Led.c</PathWithFileName>
@@ -1368,6 +1325,7 @@
       <FileNumber>81</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\user\gd32e10x_it.c</PathWithFileName>
@@ -1380,6 +1338,7 @@
       <FileNumber>82</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\user\AdcUser.c</PathWithFileName>
@@ -1392,6 +1351,7 @@
       <FileNumber>83</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\user\Threshold.c</PathWithFileName>
@@ -1412,6 +1372,7 @@
       <FileNumber>84</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\src\source\debug\smart_shell.c</PathWithFileName>
@@ -1424,6 +1385,7 @@
       <FileNumber>85</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\debug\debug.c</PathWithFileName>
@@ -1436,6 +1398,7 @@
       <FileNumber>86</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\debug\console.c</PathWithFileName>
@@ -1456,6 +1419,7 @@
       <FileNumber>87</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\Modbus\Modbus.c</PathWithFileName>
@@ -1476,6 +1440,7 @@
       <FileNumber>88</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\nfc\fm175Drv.c</PathWithFileName>
@@ -1488,6 +1453,7 @@
       <FileNumber>89</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\nfc\fm175Reg.c</PathWithFileName>
@@ -1508,6 +1474,7 @@
       <FileNumber>90</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\Pms\Battery.c</PathWithFileName>
@@ -1520,6 +1487,7 @@
       <FileNumber>91</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\Pms\BmsReg.c</PathWithFileName>
@@ -1532,6 +1500,7 @@
       <FileNumber>92</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\Pms\Pms.c</PathWithFileName>
@@ -1544,6 +1513,7 @@
       <FileNumber>93</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\Pms\Bat.c</PathWithFileName>
@@ -1564,6 +1534,7 @@
       <FileNumber>94</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\JT808\JT808.c</PathWithFileName>
@@ -1576,6 +1547,7 @@
       <FileNumber>95</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\JT808\JtUtp.c</PathWithFileName>
@@ -1588,6 +1560,7 @@
       <FileNumber>96</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\JT808\JtTlv0900.c</PathWithFileName>
@@ -1600,6 +1573,7 @@
       <FileNumber>97</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\JT808\JtTlv8900.c</PathWithFileName>
@@ -1612,6 +1586,7 @@
       <FileNumber>98</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\JT808\Ble.c</PathWithFileName>
@@ -1624,6 +1599,7 @@
       <FileNumber>99</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\JT808\BleTpu.c</PathWithFileName>
@@ -1636,6 +1612,7 @@
       <FileNumber>100</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\JT808\JtTlv8103.c</PathWithFileName>
@@ -1648,6 +1625,7 @@
       <FileNumber>101</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\JT808\BleUser.c</PathWithFileName>
@@ -1659,7 +1637,7 @@
 
   <Group>
     <GroupName>nvds</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1667,7 +1645,8 @@
       <GroupNumber>15</GroupNumber>
       <FileNumber>102</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\nvds\NvdsUser.c</PathWithFileName>
@@ -1688,6 +1667,7 @@
       <FileNumber>103</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\nvc\nvc.c</PathWithFileName>
@@ -1700,6 +1680,7 @@
       <FileNumber>104</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\nvc\sif.c</PathWithFileName>
@@ -1720,6 +1701,7 @@
       <FileNumber>105</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\Log\LogUser.c</PathWithFileName>
@@ -1732,6 +1714,7 @@
       <FileNumber>106</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\Log\SysLog.c</PathWithFileName>
@@ -1752,6 +1735,7 @@
       <FileNumber>107</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\gsensor\Gyro.c</PathWithFileName>
@@ -1764,6 +1748,7 @@
       <FileNumber>108</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\gsensor\mir3da.c</PathWithFileName>
@@ -1784,6 +1769,7 @@
       <FileNumber>109</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
+      <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Src\source\rs485\rs485_protocol.c</PathWithFileName>
