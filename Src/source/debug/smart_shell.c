@@ -109,7 +109,7 @@ static void Set(int argc, char**argv)
 		case 5: Rs485Test(value); break;
 ////		case 6: g_Settings.IsBatVerifyEn=value; Sign_Dump(Null); Nvds_Write_Setting(); break;
 ////		case 7: g_Settings.IsAlarmMode=value; Sign_Dump(Null); break;
-		case 8: Cabin_UnLock();
+		case 8: g_pdoInfo.isCanbinLock =1;break;
 ////		case 9: SET_VAR(g_ForceBatSoc); 
 ////		case 10: Sim_PowerReset(0); break;
 		case 11: Nvc_SetVol(value); break;

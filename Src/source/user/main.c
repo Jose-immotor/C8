@@ -23,6 +23,7 @@
 #include "nvc.h"
 #include "cabin.h"
 #include "rs485_protocol.h"
+#include "drv_can.h"
 
 const HwFwVer AppInfo={
 FW_VER_MAIN,
@@ -45,12 +46,13 @@ int main(void)
 	LocalTimeInit();	
 	NvdsUser_Init();
 	LogUser_init();	
-
+//	Shell_init();
 	IO_Init();
 	AdcUser_Init();
 	Adc_init();
 	Led_init();
-//	JT808_init();
+	hw_can_init(CAN1);
+	JT808_init();
 	Pms_init();
 	Gyro_Init();
 	Nvc_Init();

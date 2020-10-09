@@ -151,6 +151,7 @@ static uint16_t Utp_SendFrame(Utp* pUtp, uint8_t cmd, const void* pData, uint16_
 	int i = 0;
 	uint8_t byte[BUF_SIZE];
 	int j = 0;
+	if( !pUtp || !pData || !len ) return 0;
 
 	while(i < len)
 	{
@@ -261,12 +262,13 @@ static void Utp_ReqProc(Utp* pUtp, const uint8_t* pReq, int frameLen)
 {	
 	const UtpFrameCfg* frameCfg = pUtp->frameCfg;
 	uint8_t rc = frameCfg->result_UNSUPPORTED;
-	uint8* txBuf = frameCfg->txBuf;
+	uint8* txBuf = frameCfg->txRspBuf ? frameCfg->txRspBuf : frameCfg->txBuf;
+	int txBufLen = frameCfg->txRspBuf ? frameCfg->txRspBufLen : frameCfg->txBufLen;
 	const uint8* pData = &pReq[frameCfg->dataByteInd];
 	const UtpCmd* pCmd = Utp_FindCmdItem(pUtp, pReq[frameCfg->cmdByteInd]);
 	int dlc = 1;
 
-	if (pCmd)
+	if( pCmd && (pCmd->type == UTP_EVENT || pCmd->type == UTP_EVENT_NOTIFY ))
 	{
 		rc = frameCfg->result_SUCCESS;
 		frameLen -= frameCfg->dataByteInd;
@@ -289,45 +291,66 @@ static void Utp_ReqProc(Utp* pUtp, const uint8_t* pReq, int frameLen)
 		}
 		//预置默认的应答数据指针
 		pCmd->pExt->transferData = pCmd->pData;
-		pCmd->pExt->transferLen = pCmd->dataLen;
+		pCmd->pExt->transferLen = 0;//pCmd->dataLen;
 		rc = Utp_Event(pUtp, pCmd, UTP_GET_RSP);
 		if (rc == frameCfg->result_SUCCESS && pCmd->pExt->transferData)
 		{
-			memcpy(&txBuf[frameCfg->dataByteInd + 1], pCmd->pExt->transferData, pCmd->pExt->transferLen);
-			dlc += pCmd->pExt->transferLen;
+			if (dlc + pCmd->pExt->transferLen <= txBufLen)
+			{
+				memcpy(&txBuf[frameCfg->dataByteInd + 1], pCmd->pExt->transferData, pCmd->pExt->transferLen);
+				dlc += pCmd->pExt->transferLen;
+			}
+			else
+			{
+				//分配的Buff长度不够
+				Printf("%s size not enough.", frameCfg->txRspBuf ? "txRspBuf" : "txBuf");
+				Assert(False);
+			}
 		}
 
 		Utp_Event(pUtp, pCmd, UTP_REQ_SUCCESS);
 	}
-
-	//pCmd==Null，说明命令没有实现，返回UNSUPPORTED
-	if (pCmd==Null || pCmd->type != UTP_NOTIFY)
+	
+	if (pCmd==Null || pCmd->type == UTP_EVENT )
 	{
+		int txlen = 0 ;
 		txBuf[frameCfg->cmdByteInd] = pReq[frameCfg->cmdByteInd];
 		txBuf[frameCfg->dataByteInd] = rc;
 
-		pUtp->txBufLen = frameCfg->FrameBuild(pUtp
+		txlen = frameCfg->FrameBuild(pUtp
 			, pReq[frameCfg->cmdByteInd]
 			, &txBuf[frameCfg->dataByteInd]
 			, dlc
-			, pReq
+			, Null//pReq
 			, txBuf);
-
-		Utp_SendFrame(pUtp, pReq[frameCfg->cmdByteInd], txBuf, frameLen);
+		Utp_SendFrame(pUtp, pReq[frameCfg->cmdByteInd], txBuf, txlen );
 	}
-
-	Utp_ResetTxBuf(pUtp);
+	//
+	//if( pUtp->state != UTP_FSM_WAIT_RSP )
+	//{
+	//	Utp_ResetTxBuf(pUtp);
+	//}
 }
+
+
 
 //接收帧处理
 void Utp_RcvFrameHandler(Utp* pUtp, const uint8* pFrame, int frameLen)
 {
+
 	if (UTP_FSM_WAIT_RSP == pUtp->state)
 	{
-		//判断请求帧和响应帧是否匹配
-		if (pUtp->frameCfg->FrameVerify(pUtp, pFrame, frameLen, pUtp->frameCfg->txBuf))
+		if (pFrame[pUtp->frameCfg->cmdByteInd] == pUtp->frameCfg->txBuf[pUtp->frameCfg->cmdByteInd])
 		{
-			Utp_RspProc(pUtp, pFrame, frameLen, RSP_SUCCESS);	//响应处理
+			//判断请求帧和响应帧是否匹配
+			if (pUtp->frameCfg->FrameVerify(pUtp, pFrame, frameLen, pUtp->frameCfg->txBuf))
+			{
+				Utp_RspProc(pUtp, pFrame, frameLen, RSP_SUCCESS);	//响应处理
+			}
+		}
+		else if(pUtp->frameCfg->txRspBuf)
+		{
+			Utp_ReqProc(pUtp, pFrame, frameLen);	//请求处理
 		}
 	}
 	else
@@ -457,21 +480,19 @@ static void Utp_CheckReq(Utp* pUtp)
 
 	UtpCmdEx* pExt;
 	const UtpCmd* pCmd = pUtp->cfg->cmdArray;
+	
 	for (int i = 0; i < pUtp->cfg->cmdCount; i++, pCmd++)
 	{
 		pExt = pCmd->pExt;
+		
 		if(pExt == Null || pCmd->type == UTP_EVENT) continue;
 
 		//帧间隔是否超时，
 		if(!SwTimer_isTimerOutEx(pUtp->rxRspTicks, pUtp->frameCfg->sendCmdIntervalMs)) break;
-
-
+		
 		//是否有待发的READ/WRITE命令(pExt->sendDelayMs > 0)
 		if(pExt->sendDelayMs && SwTimer_isTimerOutEx(pExt->rxRspTicks, pExt->sendDelayMs))
 		{
-			//清除发送标志
-			pExt->sendDelayMs = 0;
-
 			if (pCmd->type == UTP_READ)
 			{
 				pExt->transferData = pCmd->pData;
@@ -484,6 +505,8 @@ static void Utp_CheckReq(Utp* pUtp)
 			}
 
 			Utp_SendReq(pUtp, pCmd);
+			//清除发送标志
+			pExt->sendDelayMs = 0;
 
 			if (pCmd->type == UTP_NOTIFY)
 			{
@@ -597,9 +620,8 @@ void Utp_CheckRxFrame(Utp* pUtp)
 }
 
 void Utp_Run(Utp* pUtp)
-{	
+{
 	Utp_CheckRxFrame(pUtp);
-
 	if(UTP_FSM_WAIT_RSP == pUtp->state)	//判断等待响应是否超时
 	{
 		if(SwTimer_isTimerOut(&pUtp->waitRspTimer))
@@ -617,7 +639,7 @@ void Utp_Run(Utp* pUtp)
 			}
 		}
 	}
-	
+//	if(UTP_FSM_WAIT_RSP != pUtp->state) //lane20200929
 	Utp_CheckReq(pUtp);
 }
 

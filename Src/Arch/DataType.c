@@ -42,10 +42,10 @@ void* Dt_swap(uint8* val, DType dt)
 	switch (dt)
 	{
 	case DT_INT16: 
-	case DT_UINT16: {*val = SWAP16(*val); return val; }
+	case DT_UINT16: {*(uint16*)val = SWAP16(*val); return val; }
 	case DT_INT32:  
 	case DT_UINT32: 
-	case DT_FLOAT32:{*val = SWAP32(*val); return val; }
+	case DT_FLOAT32:{*(uint32*)val = SWAP32(*val); return val; }
 	default:
 		return val;
 	}

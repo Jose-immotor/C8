@@ -825,7 +825,7 @@ void timer_channel_output_config(uint32_t timer_periph, uint16_t channel, timer_
         if((TIMER0 == timer_periph) || (TIMER7 == timer_periph)){
             /* reset the ISO3 bit */
             TIMER_CTL1(timer_periph) &= (~(uint32_t)TIMER_CTL1_ISO3);
-            /* set the ISO3 bit */
+            /* set the ISO3 bit */ 
             TIMER_CTL1(timer_periph) |= (uint32_t)((uint32_t)(ocpara->ocidlestate) << 6U);
         }
         TIMER_CHCTL1(timer_periph) &= ~(uint32_t)TIMER_CHCTL1_CH3MS;

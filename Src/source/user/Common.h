@@ -10,7 +10,7 @@ extern "C"{
 #endif
 
 //#define CFG_LOG
-#define USE_NFC_THREAD
+//#define USE_NFC_THREAD
 
 #include "ArchDef.h"
 #include "Obj.h"
@@ -37,8 +37,11 @@ extern "C"{
 #include "HwFwVer.h"
 #include "nvc.h"
 #include "CmdLineExport.h"
+#include "Dump.h"
+
 
 #define CFG_CABIN_LOCK
+
 
 #ifdef __cplusplus
 }

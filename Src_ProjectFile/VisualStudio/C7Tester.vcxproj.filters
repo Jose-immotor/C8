@@ -138,15 +138,6 @@
     <ClCompile Include="..\..\Src\source\user\McuFlashMap.c">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\source\002nfc\nfc_crc.c">
-      <Filter>Nfc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\source\002nfc\NfcCardReader.c">
-      <Filter>Nfc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\source\002nfc\type_a.c">
-      <Filter>Nfc</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\source\user\Led.c">
       <Filter>Main</Filter>
     </ClCompile>
@@ -201,11 +192,35 @@
     <ClCompile Include="..\..\Src\rt-thread\components\finsh\shell.c">
       <Filter>FinSH</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\source\JT808\BleUser.c">
-      <Filter>JT808</Filter>
+    <ClCompile Include="..\..\Src\source\Pms\Bat.c">
+      <Filter>Pms</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Arch\md5.c">
+    <ClCompile Include="..\..\Src\Arch\CmdLineExport.c">
       <Filter>Arch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\nfc\fm175xx.c">
+      <Filter>Nfc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\nfc\NfcCardReader.c">
+      <Filter>Nfc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\nfc\type_a.c">
+      <Filter>Nfc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Arch\Transfer.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\002nfc\nfc_cmd_process.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\002nfc\ntag_app.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\nfc\fm175Drv.c">
+      <Filter>Nfc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\source\nfc\fm175Reg.c">
+      <Filter>Nfc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -308,15 +323,6 @@
     <ClInclude Include="..\..\Src\source\user\ExternFlashMap.h">
       <Filter>Main</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Src\source\002nfc\nfc_crc.h">
-      <Filter>Nfc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\source\002nfc\NfcCardReader.h">
-      <Filter>Nfc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\source\002nfc\type_a.h">
-      <Filter>Nfc</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Src\source\user\Led.h">
       <Filter>Main</Filter>
     </ClInclude>
@@ -371,14 +377,38 @@
     <ClInclude Include="..\..\Src\rt-thread\components\finsh\shell.h">
       <Filter>FinSH</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Src\Arch\CmdLineDef.h">
+    <ClInclude Include="..\..\Src\source\Pms\Bat.h">
+      <Filter>Pms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\CmdLineExport.h">
       <Filter>Arch</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Src\source\JT808\BleUser.h">
-      <Filter>JT808</Filter>
+    <ClInclude Include="..\..\Src\source\nfc\bmsfault.h">
+      <Filter>Nfc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Src\Arch\md5.h">
-      <Filter>Arch</Filter>
+    <ClInclude Include="..\..\Src\source\nfc\fm175xx.h">
+      <Filter>Nfc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\nfc\NfcCardReader.h">
+      <Filter>Nfc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\nfc\type_a.h">
+      <Filter>Nfc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Arch\Transfer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\002nfc\nfc_cmd_process.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\002nfc\ntag_app.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\nfc\fm175Drv.h">
+      <Filter>Nfc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\source\nfc\fm175Reg.h">
+      <Filter>Nfc</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

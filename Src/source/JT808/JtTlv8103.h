@@ -25,6 +25,8 @@ extern "C"{
 		uint32 devType;
 		uint32 factoryFlag;
 	}JtDevCfgParam;
+
+	
 	
 	//TAG是大端格式
 	typedef enum
@@ -38,7 +40,7 @@ extern "C"{
 		TAG_LOC_REPORT_PLAN		= 0x2100,	//位置汇报方案， 0：定时汇报； 1：定距汇报； 2：定时和定距汇报。
 		TAG_SLEEP_LOC_INTERVAL	= 0x2700,	//休眠时汇报时间间隔，单位为秒(s),>0。
 		TAG_URG_LOC_INTERVAL	= 0x2800,	//紧急时汇报时间间隔，单位为秒(s),>0。
-		TAG_DEF_LOC_INTERVAL	= 0x2800,	//默认汇报时间间隔，单位为秒(s),>0。
+		TAG_DEF_LOC_INTERVAL	= 0x2900,	//默认汇报时间间隔，单位为秒(s),>0。
 		TAG_DEVICE_TYPE		 = 0x3000,				//设备类型。
 		TAG_FACTORY_CFG_FLAG = 0x3100,			//出厂配置标志，0-出厂配置，1-非出厂配置。
 		//未完待续。。。

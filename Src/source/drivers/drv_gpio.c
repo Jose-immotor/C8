@@ -59,6 +59,7 @@ static DrvIo g_OutputIOs[] =
 	{IO_AT8837_IN1	, "AT8837_IN1"		, GPIOD, GPIO_PIN_14 ,GPIO_MODE_OUT_PP},
 	{IO_AT8837_IN2	, "AT8837_IN2"		, GPIOD, GPIO_PIN_15 ,GPIO_MODE_OUT_PP},
 	{IO_AT8837_nSLEEP, "AT8837_nSLEEP"	, GPIOD, GPIO_PIN_12 ,GPIO_MODE_OUT_PP},
+	{IO_CAN_STB		, "CAN_STB"			, GPIOB, GPIO_PIN_14 ,GPIO_MODE_OUT_PP},
 };
 
 ////=============================================
@@ -752,6 +753,7 @@ void IO_Run()
 static DrvIo* g_p18650BootEnIO = Null;
 static DrvIo* g_pPwr3V3EnIO = Null;
 static DrvIo* g_pPwr485EnIO = Null;
+DrvIo* g_pCanSTBIO = Null;
 DrvIo* g_p18650PwrOffIO = Null;
 int IO_Init(void)
 {
@@ -779,7 +781,8 @@ int IO_Init(void)
 	PortPin_Set(g_pPwr485EnIO->periph, g_pPwr485EnIO->pin, True);
 	g_p18650PwrOffIO = IO_Get(IO_18650_PWR_OFF);
 	PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, True);
-	
+	g_pCanSTBIO = IO_Get(IO_CAN_STB);
+	PortPin_Set(g_pCanSTBIO->periph, g_pCanSTBIO->pin, False);
 	
 	if(IO_Read(IO_TAKE_APART) == RESET)
 	{

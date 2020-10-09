@@ -100,6 +100,7 @@ int TlvOutMgr_getChanged(TlvOutMgr* mgr, uint8* pBuf, int bufSize, uint8* tlvCou
 {
 	Bool isChanged = False;
 	int offset = 0;
+	uint16_t tlv_l = 0 ;
 	uint8 remain = (tlvCount) ? *tlvCount : 0;
 	if (remain == 0)
 	{
@@ -114,27 +115,37 @@ int TlvOutMgr_getChanged(TlvOutMgr* mgr, uint8* pBuf, int bufSize, uint8* tlvCou
 		isChanged = TlvOutMgr_isChanged(mgr, p);
 		if(isChanged)
 		{
-			if((offset + p->len + mgr->tagLen + 1) > bufSize) break;
+			// 不能直接这么判断，有字符串
+			if( p->dt == DT_STRING )
+			{
+				tlv_l = strlen( p->storage );
+			}
+			else
+			{
+				tlv_l = p->len ;
+			}
+			if((offset + tlv_l/*p->len*/ + mgr->tagLen + 1) > bufSize) break;
 
 			memcpy(&pBuf[offset], &p->tag, mgr->tagLen);
 			offset += mgr->tagLen;
 
-			pBuf[offset++] = p->len;	
+			pBuf[offset++] = tlv_l;//p->len;	
 
 			//只有小于8个字节的数据才可能是整数，需要大小端转换
-			if (mgr->isSwap && p->len <= sizeof(val))
+			if (mgr->isSwap && tlv_l/*p->len*/ <= sizeof(val))
 			{
-				memcpy(val, p->storage, p->len);
+				memcpy(val, p->storage, tlv_l/*p->len*/);		// 获取的是 storage 不是 miro
 				Dt_swap(val, p->dt);
-				memcpy(&pBuf[offset], val, p->len);
+				memcpy(&pBuf[offset], val, tlv_l/*p->len*/);
 			}
 			else
 			{
-				memcpy(&pBuf[offset], p->storage, p->len);
+				memcpy(&pBuf[offset], p->storage, tlv_l/*p->len*/);
 			}
-			offset += p->len;
+			offset += tlv_l/*p->len*/;
 
 			count++;
+
 		}
 	}
 	
@@ -144,13 +155,14 @@ int TlvOutMgr_getChanged(TlvOutMgr* mgr, uint8* pBuf, int bufSize, uint8* tlvCou
 }
 
 //更新镜像指针值
+
 void TlvOutMgr_updateMirror(TlvOutMgr* mgr, const uint8* pTlvBuf, int bufSize)
 {
 	const TlvOut* p = Null;
 	uint32 tag = 0;
 	const uint8* pVal;
 	int len = 0;
-	for(int i = 0; i < bufSize; )
+	for(int i = 0; i + mgr->tagLen < bufSize; )
 	{
 		pVal = &pTlvBuf[mgr->tagLen + 1];
 
@@ -177,16 +189,19 @@ void TlvOutMgr_updateMirror(TlvOutMgr* mgr, const uint8* pTlvBuf, int bufSize)
 		}
 		else
 		{
+			memset( p->mirror , 0 , p->len );
 			memcpy(p->mirror, pVal, len);
 			if (mgr->isSwap)
 			{
 				Dt_swap(p->mirror, p->dt);
 			}
 		}
-
+		i += mgr->tagLen + 1 + pTlvBuf[mgr->tagLen] ;
 		pTlvBuf += mgr->tagLen + 1 + pTlvBuf[mgr->tagLen];
 	}
 }
+
+
 
 void TlvOutMgr_init(TlvOutMgr* mgr, const TlvOut* items, int itemCount,  int tagLen, Bool isSwap)
 {

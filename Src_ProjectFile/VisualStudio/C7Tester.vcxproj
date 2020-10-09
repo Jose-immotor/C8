@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -107,6 +107,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>..\..\Src\Arch;..\..\Src\Common;..\..\Src\Source\Utp;..\..\Src\Source\Jt808;..\..\Src\Source\User;..\..\Src\Source\Debug;..\..\Src\Source\Modbus;..\..\Src\Source\Pms;..\..\Src\Source\Nfc;..\..\Src\Source\Drivers;..\..\Src\Source\Nvds;..\..\Src\Source\Ble</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -155,13 +156,13 @@
     <ClCompile Include="..\..\Src\Arch\Bit.c" />
     <ClCompile Include="..\..\Src\Arch\CheckSum.c" />
     <ClCompile Include="..\..\Src\Arch\CmdLine.c" />
+    <ClCompile Include="..\..\Src\Arch\CmdLineExport.c" />
     <ClCompile Include="..\..\Src\Arch\DataType.c" />
     <ClCompile Include="..\..\Src\Arch\DateTime.c" />
     <ClCompile Include="..\..\Src\Arch\Dbg.c" />
     <ClCompile Include="..\..\Src\Arch\Dump.c" />
     <ClCompile Include="..\..\Src\Arch\HwFwVer.c" />
     <ClCompile Include="..\..\Src\Arch\Log.c" />
-    <ClCompile Include="..\..\Src\Arch\md5.c" />
     <ClCompile Include="..\..\Src\Arch\Message.c" />
     <ClCompile Include="..\..\Src\Arch\Nvds.c" />
     <ClCompile Include="..\..\Src\Arch\Obj.c" />
@@ -173,13 +174,13 @@
     <ClCompile Include="..\..\Src\Arch\SwTimer.c" />
     <ClCompile Include="..\..\Src\Arch\Tlv.c" />
     <ClCompile Include="..\..\Src\Arch\TlvOut.c" />
+    <ClCompile Include="..\..\Src\Arch\Transfer.c" />
     <ClCompile Include="..\..\Src\Arch\Utp.c" />
     <ClCompile Include="..\..\Src\rt-thread\components\finsh\cmd.c" />
     <ClCompile Include="..\..\Src\rt-thread\components\finsh\msh.c" />
     <ClCompile Include="..\..\Src\rt-thread\components\finsh\shell.c" />
-    <ClCompile Include="..\..\Src\source\002nfc\NfcCardReader.c" />
-    <ClCompile Include="..\..\Src\source\002nfc\nfc_crc.c" />
-    <ClCompile Include="..\..\Src\source\002nfc\type_a.c" />
+    <ClCompile Include="..\..\Src\source\002nfc\nfc_cmd_process.c" />
+    <ClCompile Include="..\..\Src\source\002nfc\ntag_app.c" />
     <ClCompile Include="..\..\Src\source\debug\console.c" />
     <ClCompile Include="..\..\Src\source\debug\Debug.c" />
     <ClCompile Include="..\..\Src\source\debug\printf.c" />
@@ -188,7 +189,6 @@
     <ClCompile Include="..\..\Src\source\drivers\drv_usart.c" />
     <ClCompile Include="..\..\Src\source\JT808\Ble.c" />
     <ClCompile Include="..\..\Src\source\JT808\BleTpu.c" />
-    <ClCompile Include="..\..\Src\source\JT808\BleUser.c" />
     <ClCompile Include="..\..\Src\source\JT808\JT808.c" />
     <ClCompile Include="..\..\Src\source\JT808\JtTlv8103.c" />
     <ClCompile Include="..\..\Src\source\JT808\JtTlv8900.c" />
@@ -197,7 +197,13 @@
     <ClCompile Include="..\..\Src\source\Log\LogUser.c" />
     <ClCompile Include="..\..\Src\source\Log\SysLog.c" />
     <ClCompile Include="..\..\Src\source\Modbus\Modbus.c" />
+    <ClCompile Include="..\..\Src\source\nfc\fm175Reg.c" />
+    <ClCompile Include="..\..\Src\source\nfc\fm175xx.c" />
+    <ClCompile Include="..\..\Src\source\nfc\fm175Drv.c" />
+    <ClCompile Include="..\..\Src\source\nfc\NfcCardReader.c" />
+    <ClCompile Include="..\..\Src\source\nfc\type_a.c" />
     <ClCompile Include="..\..\Src\source\Nvds\NvdsUser.c" />
+    <ClCompile Include="..\..\Src\source\Pms\Bat.c" />
     <ClCompile Include="..\..\Src\source\Pms\Pms.c" />
     <ClCompile Include="..\..\Src\source\Pms\Battery.c" />
     <ClCompile Include="..\..\Src\source\Pms\BmsReg.c" />
@@ -211,13 +217,12 @@
     <ClInclude Include="..\..\Src\Arch\Bit.h" />
     <ClInclude Include="..\..\Src\Arch\CheckSum.h" />
     <ClInclude Include="..\..\Src\Arch\CmdLine.h" />
-    <ClInclude Include="..\..\Src\Arch\CmdLineDef.h" />
+    <ClInclude Include="..\..\Src\Arch\CmdLineExport.h" />
     <ClInclude Include="..\..\Src\Arch\DataType.h" />
     <ClInclude Include="..\..\Src\Arch\Dbg.h" />
     <ClInclude Include="..\..\Src\Arch\Dump.h" />
     <ClInclude Include="..\..\Src\Arch\HwFwVer.h" />
     <ClInclude Include="..\..\Src\Arch\Log.h" />
-    <ClInclude Include="..\..\Src\Arch\md5.h" />
     <ClInclude Include="..\..\Src\Arch\Message.h" />
     <ClInclude Include="..\..\Src\Arch\Nvds.h" />
     <ClInclude Include="..\..\Src\Arch\Obj.h" />
@@ -226,6 +231,7 @@
     <ClInclude Include="..\..\Src\Arch\SectorMgr.h" />
     <ClInclude Include="..\..\Src\Arch\Tlv.h" />
     <ClInclude Include="..\..\Src\Arch\TlvOut.h" />
+    <ClInclude Include="..\..\Src\Arch\Transfer.h" />
     <ClInclude Include="..\..\Src\Arch\Utp.h" />
     <ClInclude Include="..\..\Src\Arch\_Macro.h" />
     <ClInclude Include="..\..\Src\Arch\queue.h" />
@@ -236,9 +242,8 @@
     <ClInclude Include="..\..\Src\rt-thread\components\finsh\finsh_api.h" />
     <ClInclude Include="..\..\Src\rt-thread\components\finsh\msh.h" />
     <ClInclude Include="..\..\Src\rt-thread\components\finsh\shell.h" />
-    <ClInclude Include="..\..\Src\source\002nfc\NfcCardReader.h" />
-    <ClInclude Include="..\..\Src\source\002nfc\nfc_crc.h" />
-    <ClInclude Include="..\..\Src\source\002nfc\type_a.h" />
+    <ClInclude Include="..\..\Src\source\002nfc\nfc_cmd_process.h" />
+    <ClInclude Include="..\..\Src\source\002nfc\ntag_app.h" />
     <ClInclude Include="..\..\Src\source\debug\console.h" />
     <ClInclude Include="..\..\Src\source\debug\Debug.h" />
     <ClInclude Include="..\..\Src\source\debug\printf.h" />
@@ -247,7 +252,6 @@
     <ClInclude Include="..\..\Src\source\drivers\drv_usart.h" />
     <ClInclude Include="..\..\Src\source\JT808\Ble.h" />
     <ClInclude Include="..\..\Src\source\JT808\BleTpu.h" />
-    <ClInclude Include="..\..\Src\source\JT808\BleUser.h" />
     <ClInclude Include="..\..\Src\source\JT808\JT808.h" />
     <ClInclude Include="..\..\Src\source\JT808\JtTlv8103.h" />
     <ClInclude Include="..\..\Src\source\JT808\JtTlv8900.h" />
@@ -256,7 +260,14 @@
     <ClInclude Include="..\..\Src\source\Log\LogUser.h" />
     <ClInclude Include="..\..\Src\source\Log\SysLog.h" />
     <ClInclude Include="..\..\Src\source\Modbus\Modbus.h" />
+    <ClInclude Include="..\..\Src\source\nfc\bmsfault.h" />
+    <ClInclude Include="..\..\Src\source\nfc\fm175Reg.h" />
+    <ClInclude Include="..\..\Src\source\nfc\fm175xx.h" />
+    <ClInclude Include="..\..\Src\source\nfc\fm175Drv.h" />
+    <ClInclude Include="..\..\Src\source\nfc\NfcCardReader.h" />
+    <ClInclude Include="..\..\Src\source\nfc\type_a.h" />
     <ClInclude Include="..\..\Src\source\Nvds\NvdsUser.h" />
+    <ClInclude Include="..\..\Src\source\Pms\Bat.h" />
     <ClInclude Include="..\..\Src\source\Pms\Pms.h" />
     <ClInclude Include="..\..\Src\source\Pms\Battery.h" />
     <ClInclude Include="..\..\Src\source\Pms\BmsReg.h" />

@@ -48,7 +48,11 @@ extern "C" {
 			uint8 isRemoteAccOn : 1;//BIT[0]:车辆远程点火
 			uint8 isWheelLock : 1;	//BIT[1]:轮毂锁
 			uint8 isCanbinLock : 1;	//BIT[2]:座舱锁
-			uint8 reserved : 5;		//BIT[3-7]:保留
+			uint8 IsForbidDischarge : 1;//BIT[3]:远程断电/禁止放电
+			uint8 IsBatVerifyEn:1;  //BIT[4]:是否使能电池身份验证
+			uint8 IsAlarmMode:1;	///BIT[5]:是否境界模式/异动报警使能
+			uint8 BatVerifyRet:2;	///BIT[6-7]:电池身份校验结果。0：忽略，不校验。1：合法：2：非法。	
+//			uint8 reserved : 5;		//BIT[3-7]:保留
 		};
 		union
 		{

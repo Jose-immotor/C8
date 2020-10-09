@@ -9,7 +9,7 @@
  *锁状态：0-关锁、锁上；1-开锁。
  *
  *电机锁：AT8837IN1、AT8847IN2、nSLEEP
- *开锁：nSLEEP=1&IN1=1&IN2=0 延时2s。nSLEEP=1&IN1=0&IN2=0 延时1s。nSLEEP=1&IN1=0&IN2=1 延时2s。nSLEEP=0。
+ *开锁：nSLEEP=1&IN1=1&IN2=0 延时2s。nSLEEP=1&IN1=0&IN2=0 延时1s。nSLEEP=1&IN1=0&IN2=1 延时2s。nSLEEP=0&IN1=0&IN2=0。
  *锁状态：0-关锁、锁上；1-开锁。
  * Change Logs:
  * Date		      Author		Notes
@@ -86,6 +86,11 @@ void Cabin_UnLock()
 
 void Cabin_Run()
 {
+	if((g_pdoInfo.isCanbinLock == 1)&&(g_IsForceCabinLock))
+	{
+		Cabin_UnLock();
+	}
+	
 	if(SwTimer_isTimerOut_onId(&g_CabinTimer,CABIN_TIME_ID1))
 	{
 		CABIN_12V_OFF();//电磁锁
