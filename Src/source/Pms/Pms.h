@@ -22,7 +22,7 @@ extern "C" {
 	{
 		 AF_MDB = BIT_0			//modbus处于工作状态
 		,AF_NVC = BIT_1			//NVC正在播放语音
-	//	,AF_MCU_RESET = BIT_1	//MCU处于延时复位状态
+		,AF_CABIN = BIT_2		//座舱锁处于工作状态
 		
 	//	,AF_SIM = BIT_8			//SIM模组有命令没有发完
 	//	,AF_CARBIN_LOCK = BIT_9	//正在操作座舱锁

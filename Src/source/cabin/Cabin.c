@@ -9,7 +9,9 @@
  *锁状态：0-关锁、锁上；1-开锁。
  *
  *电机锁：AT8837IN1、AT8847IN2、nSLEEP
- *开锁：nSLEEP=1&IN1=1&IN2=0 延时2s。nSLEEP=1&IN1=0&IN2=0 延时1s。nSLEEP=1&IN1=0&IN2=1 延时2s。nSLEEP=0&IN1=0&IN2=0。
+ *开锁：nSLEEP=1&IN1=0&IN2=0延时500ms;nSLEEP=1&IN1=1&IN2=0延时1s;
+ *nSLEEP=1&IN1=1&IN2=1延时2s。nSLEEP=1&IN1=0&IN2=1延时1s。
+ *nSLEEP=1&IN1=1&IN2=1延时2s。nSLEEP=0&IN1=0&IN2=0。
  *锁状态：0-关锁、锁上；1-开锁。
  * Change Logs:
  * Date		      Author		Notes
@@ -26,6 +28,7 @@
 #define CABIN_TIME_ID2	1
 #define CABIN_TIME_ID3	2
 #define CABIN_TIME_ID4	3
+#define CABIN_TIME_ID5	4
 
 static SwTimer g_CabinTimer;
 static SwTimer g_CabinLockStateTimer;
@@ -76,11 +79,11 @@ void Cabin_UnLock()
 	if(!g_CabinTimer.m_isStart)
 	{
 		CABIN_12V_ON();//电磁锁
-		CABIN_nSLEEP_H();
-		CABIN_IN1_H();
+		CABIN_nSLEEP_H();//电机锁
+		CABIN_IN1_L();
 		CABIN_IN2_L();
 		SwTimer_Start(&g_CabinTimer, 2000, CABIN_TIME_ID1);
-//		Fsm_SetActiveFlag(AF_CARBIN_LOCK, True);
+		Fsm_SetActiveFlag(AF_CABIN, True);
 	}
 }
 
@@ -95,21 +98,37 @@ void Cabin_Run()
 	{
 		CABIN_12V_OFF();//电磁锁
 		CABIN_nSLEEP_H();//电机锁
-		CABIN_IN1_L();
+		CABIN_IN1_H();
 		CABIN_IN2_L();
 		SwTimer_Start(&g_CabinTimer, 1000, CABIN_TIME_ID2);
 	}
 	else if(SwTimer_isTimerOut_onId(&g_CabinTimer,CABIN_TIME_ID2))
 	{
 		CABIN_nSLEEP_H();//电机锁
-		CABIN_IN1_L();
+		CABIN_IN1_H();
 		CABIN_IN2_H();
 		SwTimer_Start(&g_CabinTimer, 2000, CABIN_TIME_ID3);
 	}
 	else if(SwTimer_isTimerOut_onId(&g_CabinTimer,CABIN_TIME_ID3))
 	{
+		CABIN_nSLEEP_H();//电机锁
+		CABIN_IN1_L();
+		CABIN_IN2_H();
+		SwTimer_Start(&g_CabinTimer, 1000, CABIN_TIME_ID4);
+	}
+	else if(SwTimer_isTimerOut_onId(&g_CabinTimer,CABIN_TIME_ID4))
+	{
+		CABIN_nSLEEP_H();//电机锁
+		CABIN_IN1_H();
+		CABIN_IN2_H();
+		SwTimer_Start(&g_CabinTimer, 2000, CABIN_TIME_ID5);
+	}
+	else if(SwTimer_isTimerOut_onId(&g_CabinTimer,CABIN_TIME_ID5))
+	{
 		CABIN_nSLEEP_L();//电机锁
-		//		Fsm_SetActiveFlag(AF_CARBIN_LOCK, False);
+		CABIN_IN1_L();
+		CABIN_IN2_L();
+		Fsm_SetActiveFlag(AF_CABIN, False);
 		g_IsCabinLockFault = g_IsCabinLock;
 	}
 	
