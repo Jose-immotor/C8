@@ -24,6 +24,7 @@
 #include "cabin.h"
 #include "rs485_protocol.h"
 #include "drv_can.h"
+#include "workmode.h"
 
 const HwFwVer AppInfo={
 FW_VER_MAIN,
@@ -57,7 +58,8 @@ int main(void)
 	Gyro_Init();
 	Nvc_Init();
 	Cabin_Init();
-	RS485_Init();
+//	RS485_Init();
+	WorkMode_init();
 	LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_McuReset, 1);
 
 	//∂‘œÛ∆Ù∂Ø

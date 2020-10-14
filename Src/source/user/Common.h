@@ -38,7 +38,8 @@ extern "C"{
 #include "nvc.h"
 #include "CmdLineExport.h"
 #include "Dump.h"
-
+#include "Ble.h"
+#include "workmode.h"
 
 #define CFG_CABIN_LOCK
 

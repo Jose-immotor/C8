@@ -21,7 +21,7 @@ static Bool Utp_VerifyFrame(Utp* pUtp, const JtUtp* pFrame, int frameLen, const 
 	{
 		if (pFrame->cmd != pReq->cmd)
 		{
-			Printf("Cmd[0x%02x, 0x%02x] not match:", pReq->cmd, pFrame->cmd);
+			PFL_WARNING("Cmd[0x%02x, 0x%02x] not match:", pReq->cmd, pFrame->cmd);
 			goto Error;
 		}
 	}
@@ -30,7 +30,7 @@ static Bool Utp_VerifyFrame(Utp* pUtp, const JtUtp* pFrame, int frameLen, const 
 		//检验帧长度
 		if (frameLen < pUtp->frameCfg->dataByteInd)
 		{
-			Printf("frame len error.(%d)\n", frameLen);
+			PFL_WARNING("frame len error.(%d)\n", frameLen);
 			goto Error;
 		}
 
@@ -39,14 +39,14 @@ static Bool Utp_VerifyFrame(Utp* pUtp, const JtUtp* pFrame, int frameLen, const 
 		dstCheckSum = (uint8_t)CheckSum_Get(&dstCheckSum, &pFrame->vendor, frameLen - 2);
 		if (pFrame->checkSum != dstCheckSum)
 		{
-			Printf("Crc[0x%02x, 0x%02x] error:", pFrame->checkSum, dstCheckSum);
+			PFL_WARNING("Crc[0x%02x, 0x%02x] error:", pFrame->checkSum, dstCheckSum);
 			goto Error;
 		}
 	}
 	return True;
 
 Error:
-	DUMP_BYTE(pFrame, frameLen);
+//	DUMP_BYTE(pFrame, frameLen);
 	return False;
 }
 
@@ -83,12 +83,12 @@ static int Utp_BuildFrame(Utp* pUtp, uint8_t cmd, const void* pData, int len, co
 	}
 	memcpy(frame->data, pData, len);
 
-	frame->checkSum = (uint8_t)CheckSum_Get(&checkSum, &frame->vendor, len + 4);
+	frame->checkSum = (uint8_t)CheckSum_Get(&checkSum, &frame->vendor, len + 5);
 
 	return len + pUtp->frameCfg->dataByteInd;
 }
 
-static uint8_t g_JtUtp_txBuff[128];			//发送数据缓冲区
+static uint8_t g_JtUtp_txBuff[128];			//发送数据缓冲区5
 static uint8_t g_JtUtp_transcodeBuf[150];	//接收数据的转码缓冲区
 static uint8_t g_JtUtp_rxBuff[200];			//接收数据缓冲区
 static uint8_t g_JtUtp_txRspBuf[128];

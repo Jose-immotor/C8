@@ -7,16 +7,12 @@
 
 
 static Bool g_isIoStart = False;
-//uint8 g_ToggleValue = 0;
 
-//DrvIo* g_pPumpCtrl = Null;
-//DrvIo* g_pBucket;
-//DrvIo* g_pWaterIn;
-//DrvIo* g_pLightCtrl = Null;
-//DrvIo* g_pLcdResetCtrl = Null;
-
-//static DrvIo* g_pTakeApartIO = Null;
-
+static DrvIo* g_p18650BootEnIO = Null;
+DrvIo* g_pPwr3V3EnIO = Null;
+DrvIo* g_pPwr485EnIO = Null;
+DrvIo* g_pCanSTBIO = Null;
+DrvIo* g_p18650PwrOffIO = Null;
 
 //所有命名包含“ON”表示高电平有效, 包含“OFF”表示低电平有效
 static DrvIo g_InIOs[] =
@@ -649,36 +645,35 @@ void over_temp_irq(void)
 
 void IO_Stop()
 {
-	g_isIoStart = False;
-	IO_IRQEnable(False);
+
+	PortPin_Set(g_pPwr485EnIO->periph, g_pPwr485EnIO->pin, False);
+	PortPin_Set(g_pCanSTBIO->periph, g_pCanSTBIO->pin, True);
+	PortPin_Set(g_pPwr3V3EnIO->periph, g_pPwr3V3EnIO->pin, True);
+	
+//	g_isIoStart = False;
+//	IO_IRQEnable(False);
 }
 
-////所有IO对象触发一次状态改变	
-//void IO_AllStateChanged()
-//{
-//	DrvIo* p = g_InIOs;
-
-//	for (int i = 0; i < GET_ELEMENT_COUNT(g_InIOs); i++, p++)
-//	{
-//		if (!IS_OUT_MODE(p->mode))
-//		{
-//			p->value = 0xFF;
-//			IO_IRQHandler(p);
-//		}
-//	}
-//}
-
-////触发一次状态改变
-//void IO_TriggerStateChanged(IO_ID pin)
-//{
-//	DrvIo* p = IO_Get(pin);
-
-//	p->value = 0xFF;
-//	IO_IRQHandler(p);
-//}
 
 void IO_Start()
 {
+	g_p18650BootEnIO = IO_Get(IO_18650BOOST_EN);
+	PortPin_Set(g_p18650BootEnIO->periph, g_p18650BootEnIO->pin, True);
+	g_pPwr3V3EnIO = IO_Get(IO_PWR3V3_EN);
+	PortPin_Set(g_pPwr3V3EnIO->periph, g_pPwr3V3EnIO->pin, False);
+	g_pPwr485EnIO = IO_Get(IO_PWR485_EN);
+	PortPin_Set(g_pPwr485EnIO->periph, g_pPwr485EnIO->pin, True);
+	g_p18650PwrOffIO = IO_Get(IO_18650_PWR_OFF);
+	PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, True);
+	g_pCanSTBIO = IO_Get(IO_CAN_STB);
+	PortPin_Set(g_pCanSTBIO->periph, g_pCanSTBIO->pin, False);
+		
+	if(IO_Read(IO_TAKE_APART) == RESET)
+	{
+		LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_WakeUp, 0);
+	}
+	
+	
 	g_isIoStart = True;
 	IO_IRQEnable(True);
 }
@@ -750,11 +745,6 @@ void IO_Run()
 
 //	IO_CheckIOState();
 }
-static DrvIo* g_p18650BootEnIO = Null;
-static DrvIo* g_pPwr3V3EnIO = Null;
-static DrvIo* g_pPwr485EnIO = Null;
-DrvIo* g_pCanSTBIO = Null;
-DrvIo* g_p18650PwrOffIO = Null;
 int IO_Init(void)
 {
 	static const Obj obj = {"IODriver", IO_Start, IO_Stop, IO_Run};
@@ -773,21 +763,7 @@ int IO_Init(void)
 		IO_PinInit(&g_OutputIOs[i]);
 	}
 	
-	g_p18650BootEnIO = IO_Get(IO_18650BOOST_EN);
-	PortPin_Set(g_p18650BootEnIO->periph, g_p18650BootEnIO->pin, True);
-	g_pPwr3V3EnIO = IO_Get(IO_PWR3V3_EN);
-	PortPin_Set(g_pPwr3V3EnIO->periph, g_pPwr3V3EnIO->pin, False);
-	g_pPwr485EnIO = IO_Get(IO_PWR485_EN);
-	PortPin_Set(g_pPwr485EnIO->periph, g_pPwr485EnIO->pin, True);
-	g_p18650PwrOffIO = IO_Get(IO_18650_PWR_OFF);
-	PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, True);
-	g_pCanSTBIO = IO_Get(IO_CAN_STB);
-	PortPin_Set(g_pCanSTBIO->periph, g_pCanSTBIO->pin, False);
 	
-	if(IO_Read(IO_TAKE_APART) == RESET)
-	{
-		LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_WakeUp, 0);
-	}
 	
 	return 0;
 }

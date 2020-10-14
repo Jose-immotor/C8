@@ -10,7 +10,7 @@ TlvOutMgr g_jtTlvOutMgr_8103;
 
 //#define		_JT808_DEGMSG 		Printf
 
-#define		_NETWORK_SERVER_URL		"47.106.161.54"//47.107.191.163"//"d-ec-netty-g2.ehuandian.net"
+#define		_NETWORK_SERVER_URL		"47.106.161.54"//"192.168.3.67"//"47.106.161.54"//47.107.191.163"//"d-ec-netty-g2.ehuandian.net"
 #define		_NETWORK_SERVER_PORT	9006
 
 // 读取返回的数据
@@ -31,7 +31,10 @@ static JtDevCfgParam g_cfgParam =
 	.factoryFlag = 0 ,
 };
 
-
+void JtTlv8103IP_Dump()
+{	
+	Printf("\tIpAddr:%s, Port=%d.\n", g_cfgParam.mainSvrUrl, g_cfgParam.mainSvrPort);
+}
 
 
 void JtTlv8103_Dump()

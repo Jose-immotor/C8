@@ -24,11 +24,11 @@ TlvInEventRc JtTlv8900_Event(TlvInMgr* mgr, const TlvIn* pItem, TlvInEvent ev)
 				g_pdoInfo.isRemoteAccOn = *pItem->storage ;
 				if(g_pdoInfo.isRemoteAccOn)
 				{
-					Pms_switchStatus(PMS_ACC_ON);
+					Pms_postMsg(PmsMsg_accOn, 0, 0);
 				}
 				else
 				{
-					Pms_switchStatus(PMS_ACC_OFF);
+					Pms_postMsg(PmsMsg_accOff, 0, 0);
 				}
 				NvdsUser_Write(NVDS_PDO_INFO);
 				break ;

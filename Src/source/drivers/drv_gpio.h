@@ -181,12 +181,10 @@ typedef struct
 
 	Bool isEnable;
 }DrvIo;
-extern uint8 g_ToggleValue;
-extern DrvIo* g_pBucket;			//水桶水位开关状态
-extern DrvIo* g_pWaterIn;			//机柜水位开关状态
-extern DrvIo* g_pPumpCtrl;			//水泵控制
-extern DrvIo* g_pLightCtrl;			//照明灯控制
-extern DrvIo* g_pLcdResetCtrl;		//LCD Reset
+
+extern DrvIo* g_pPwr485EnIO;
+extern DrvIo* g_pCanSTBIO;
+extern DrvIo* g_pPwr3V3EnIO;
 
 //void IO_Init();
 void IO_Dump(DrvIo* p, const char* head);

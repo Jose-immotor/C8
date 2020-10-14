@@ -13,6 +13,7 @@
 #include "Ble.h"
 #include "BleTpu.h"
 #include "TlvIn.h"
+#include "JT808.h"
 
 Ble g_Ble;
 static BleTpu g_BleTpu;
@@ -23,8 +24,57 @@ UTP_EVENT_RC Ble_getSelfTestResult(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT 
 	{
 		SelfTestResult*  pResult = (SelfTestResult*)pCmd->pExt->transferData;
 		//pResult的结构赋值
-		pResult->simState = 0;	//待定。
-		//...
+		pResult->simState = 0;	//SIM卡状态
+		pResult->gprsState = (g_pJt->devState.cnt & _NETWORK_CONNECTION_BIT)?1:0;
+		pResult->gpsState = (g_Jt.devState.cnt & _GPS_FIXE_BIT)?1:0;
+		pResult->devState = g_pdoInfo.isRemoteAccOn;
+		pResult->_18650Vol = 0;
+		pResult->devState2 = g_cfgInfo.isActive;
+		pResult->batVerify = 0;
+	}
+	return UTP_EVENT_RC_SUCCESS;
+}
+
+UTP_EVENT_RC Ble_getGpsGprsInfo(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
+{
+	if (ev == UTP_GET_RSP)
+	{
+		GpsPkt*  pResult = (GpsPkt*)pCmd->pExt->transferData;
+		//pResult的结构赋值
+		pResult->CSQ = g_Jt.devState.csq;
+		pResult->Satellites = g_Jt.devState.siv;
+		pResult->SNR = g_Jt.devState.snr;
+		pResult->longitude = g_Jt.locatData.longitude;
+		pResult->latitude = g_Jt.locatData.latitude;
+		pResult->speed = 0;
+	}
+	return UTP_EVENT_RC_SUCCESS;
+}
+
+UTP_EVENT_RC Ble_getBmsInfo(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
+{
+	if (ev == UTP_GET_RSP)
+	{
+		BleGetDevIDPkt*  pResult = (BleGetDevIDPkt*)pCmd->pExt->transferData;
+		//pResult的结构赋值
+		pResult->protocolVer = 1;
+		pResult->hwMainVer = g_Bat[0].bmsID.hwver;
+		pResult->hwSubVer = g_Bat[0].bmsID.hwver>>8;
+		pResult->fwMainVer = g_Bat[0].bmsID.fwmsv;
+		pResult->fwSubVer = g_Bat[0].bmsID.fwmsv>>8;
+		pResult->fwMinorVer = g_Bat[0].bmsID.fwrev;
+		pResult->buildNum = g_Bat[0].bmsID.fwbnl;
+		pCmd->pExt->transferLen = sizeof(BleGetDevIDPkt);
+		
+	}
+	return UTP_EVENT_RC_SUCCESS;
+}
+
+UTP_EVENT_RC Ble_devActive(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
+{
+	if (ev == UTP_GET_RSP)
+	{
+		
 	}
 	return UTP_EVENT_RC_SUCCESS;
 }
@@ -83,13 +133,13 @@ static Bool Ble_cmdIsAllow(Ble* pBle, uint8 cmd)
 		{BLE_USER_ADMIN, REQ_ID_SET_ALARM_MODE},
 	};
 
-	for (int i = 0; i < GET_ELEMENT_COUNT(cmdRoleMatch); i++)
-	{
-		if (cmdRoleMatch[i].cmd == cmd)
-		{
-			return cmdRoleMatch[i].role & pBle->user.role;
-		}
-	}
+//	for (int i = 0; i < GET_ELEMENT_COUNT(cmdRoleMatch); i++)
+//	{
+//		if (cmdRoleMatch[i].cmd == cmd)
+//		{
+//			return cmdRoleMatch[i].role & pBle->user.role;
+//		}
+//	}
 
 	//默认允许
 	return True;
@@ -102,13 +152,19 @@ UTP_EVENT_RC Ble_utpEventCb(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 		//判断命令是否允许
 		if (!Ble_cmdIsAllow(pBle, pCmd->cmd)) return ERR_CMD_NOT_ALLOW;
 
-		if (pCmd->cmd == REQ_ID_GET_PORT_STATE)
+		if (pCmd->cmd == REQ_ID_GET_BATTERYINFO)
 		{
 			uint8 port = *pCmd->pStorage;
-			if (port >= MAX_BAT_COUNT) return ERR_PARA_INVALID;
+			if (port >= 1 /*MAX_BAT_COUNT*/) return ERR_PARA_INVALID;
 
 			pCmd->pExt->transferData = (uint8*)&g_Ble.batDesc[port];
 			pCmd->pExt->transferLen = sizeof(BatteryDesc);
+		}
+		else if (pCmd->cmd == REQ_ID_GET_DEVICECAP)
+		{
+			uint32_t recerive_data = 0x5e6;
+			pCmd->pExt->transferData = (uint8*)&recerive_data;
+			pCmd->pExt->transferLen = 4;
 		}
 		else if (pCmd->cmd == REQ_ID_RESET)
 		{
@@ -131,7 +187,7 @@ int Ble_txData(uint8_t cmd, const uint8_t* pData, int len)
 
 void Ble_init(uint8* mac)
 {
-#define BLE_CMD_SIZE 13
+#define BLE_CMD_SIZE 15
 	static UtpCmdEx g_JtCmdEx[BLE_CMD_SIZE];
 	static uint8 rxBuf[32];
 	static uint8 txBuf[64];
@@ -142,15 +198,17 @@ void Ble_init(uint8* mac)
 		{&g_JtCmdEx[1],UTP_EVENT, REQ_ID_GET_PORT_STATE  , "GetPortState",Null, 0, (uint8*)& g_Ble.portState , sizeof(PmsPortStatePkt)},
 		{&g_JtCmdEx[2],UTP_EVENT, REQ_ID_GET_BATTERYINFO , "GetBatInfo"  , rxBuf, 1},
 		{&g_JtCmdEx[3],UTP_EVENT, REQ_ID_GET_TESTRESULT  , "GetSelfTest" , Null, 0, txBuf, sizeof(SelfTestResult), (UtpEventFn)Ble_getSelfTestResult},
-		{&g_JtCmdEx[4],UTP_EVENT, REQ_ID_GET_GPS_GPRS_INFO,"GetGpsInfo"  , Null, 0, (uint8*)& g_Ble.gpsPkt, sizeof(GpsPkt)},
+		{&g_JtCmdEx[4],UTP_EVENT, REQ_ID_GET_GPS_GPRS_INFO,"GetGpsInfo"  , Null, 0, (uint8*)& g_Ble.gpsPkt, sizeof(GpsPkt),(UtpEventFn)Ble_getGpsGprsInfo},
 		{&g_JtCmdEx[5],UTP_EVENT, REQ_ID_GET_PMS_INFO	  ,"GetPmsInfo"  , Null, 0, (uint8*)& g_Ble.pmsPkt, sizeof(PmsPkt)},
 		{&g_JtCmdEx[6],UTP_EVENT, REQ_ID_RESET	  ,"DevReset"},
 		{&g_JtCmdEx[7],UTP_EVENT, REQ_ID_SET_NVDS ,"SetNvds", (uint8*)& rxBuf, sizeof(rxBuf), Null, 0, (UtpEventFn)Ble_setNvds},
 		//{&g_JtCmdEx[8],UTP_EVENT, REQ_ID_SET_FACTORY_SETTINGS ,"RecoverFactoryCfg", Null, 0, (uint8*)& g_Ble.pmsPkt, sizeof(PmsPkt)},
 		//{&g_JtCmdEx[9],UTP_EVENT, REQ_ID_GET_NVDS		  ,"GetNvds"     , Null, 0, (uint8*)& g_Ble.pmsPkt, sizeof(PmsPkt)},
-		//{&g_JtCmdEx[10],UTP_EVENT, REQ_ID_ACTIVE_REQ	  ,"DevActive"   , Null, 0, (uint8*)& g_Ble.pmsPkt, sizeof(PmsPkt)},
+		{&g_JtCmdEx[10],UTP_EVENT, REQ_ID_ACTIVE_REQ	  ,"DevActive"   , Null, 0, Null, 0,(UtpEventFn)Ble_devActive},
 		//{&g_JtCmdEx[11],UTP_EVENT, REQ_ID_BAT_VERIFY	  ,"BatVerify"   , Null, 0, (uint8*)& g_Ble.pmsPkt, sizeof(PmsPkt)},
 		//{&g_JtCmdEx[12],UTP_EVENT, REQ_ID_SET_ALARM_MODE,"SetAlarmMode", Null, 0, (uint8*)& g_Ble.pmsPkt, sizeof(PmsPkt)},
+		{&g_JtCmdEx[13],UTP_EVENT, REQ_ID_GET_DEVICECAP , "GetDeviceCap"  , rxBuf, 4},
+		{&g_JtCmdEx[14],UTP_EVENT, REQ_ID_GET_BMS_INFO,"GetBmsInfo"  , Null, 0, Null, 0,(UtpEventFn)Ble_getBmsInfo},
 	};
 	static const UtpCfg cfg =
 	{
@@ -163,7 +221,7 @@ void Ble_init(uint8* mac)
 
 	static uint8_t g_JtUtp_txBuff[128];			//发送数据缓冲区
 	static uint8_t g_JtUtp_rxBuff[200];			//接收数据缓冲区
-	const BleTpuFrameCfg g_BleFrameCfg =
+	static const BleTpuFrameCfg g_BleFrameCfg =
 	{
 		//帧特征配置
 		.cmdByteInd = 0,
@@ -184,7 +242,19 @@ void Ble_init(uint8* mac)
 	g_Ble.portState.portCount = 2;
 	g_Ble.portState.property[0].portNum = 0;
 	g_Ble.portState.property[1].portNum = 1;
+	
+	g_Ble.batDesc[0].portId = 0;
+	g_Ble.batDesc[1].portId = 1;
 
+	g_Ble.pmsPkt.Version = g_Ble.devIdPkt.protocolVer = 1;
+	g_Ble.pmsPkt.HwMainVer = g_Ble.devIdPkt.hwMainVer = DES_HW_VER_MAIN;
+	g_Ble.pmsPkt.HwSubVer = g_Ble.devIdPkt.hwSubVer = DES_HW_VER_SUB;
+	g_Ble.pmsPkt.AppMainVer = g_Ble.devIdPkt.fwMainVer = FW_VER_MAIN;
+	g_Ble.pmsPkt.AppSubVer = g_Ble.devIdPkt.fwSubVer = FW_VER_S1;
+	g_Ble.pmsPkt.AppMinorVer = g_Ble.devIdPkt.fwMinorVer = FW_VER_S2;
+	g_Ble.pmsPkt.AppBuildNum = g_Ble.devIdPkt.buildNum = FW_VER_BUILD;
+	g_Ble.pmsPkt.State = 1;
+	
 	BleTpu_Init(&g_BleTpu, &cfg, &g_BleFrameCfg);
 	BleUser_init(&g_Ble.user, mac);
 }

@@ -12,6 +12,7 @@
 #include "Modbus.h"
 #include "JT808.h"
 #include "fm175Drv.h"
+#include "workmode.h"
 
 Battery g_Bat[MAX_BAT_COUNT];
 static Pms g_pms;
@@ -20,7 +21,6 @@ Mod* g_pModBus = &g_pms.modBus;
 static Battery* g_pActiveBat;	//当前正砸通信的电池
 static BmsRegCtrl g_regCtrl;		//电池控制
 
-uint32 g_ActiveFlag;
 DrvIo* g_pLockEnIO = Null;
 
 //以下是命令参数定义
@@ -38,11 +38,11 @@ static ModCmdEx g_BmsCmdEx[BMS_CMD_COUNT];
 /*电池槽位0的命令配置表*******************************************************************/
 const static ModCmd g_Bms0Cmds[BMS_CMD_COUNT] =
 {
-	{&g_BmsCmdEx[0], BMS_READ_ID    ,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms0ID"   , &g_Bat[0].bmsID		 , BMS_REG_ID_SIZE    , (void*)g_bmsID_readParam, 4},
+	{&g_BmsCmdEx[0], BMS_READ_ID    ,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms0ID"   , &g_Bat[0].bmsID		 , BMS_REG_ID_SIZE    , (void*)g_bmsID_readParam, 4, Null,(ModEventFn)Bat_event_readBmsID},
 	{&g_BmsCmdEx[1], BMS_READ_INFO_1,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms0Info1", &g_Bat[0].bmsInfo	     , BMS_REG_INFO_SIZE_1, (void*)g_bmsInfo1_readParam, 4, Null, (ModEventFn)Bat_event_readBmsInfo},
 	{&g_BmsCmdEx[2], BMS_READ_INFO_2,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms0Info2", &g_Bat[0].bmsInfo.cmost, BMS_REG_INFO_SIZE_2, (void*)g_bmsInfo2_readParam, 4},
 	{&g_BmsCmdEx[3], BMS_READ_CTRL  ,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms0Ctrl" , &g_Bat[0].bmsCtrl	     , BMS_REG_CTRL_SIZE  , (void*)g_bmsCtrl_readParam, 4},
-	{&g_BmsCmdEx[4], BMS_WRITE_CTRL ,MOD_WRITE,MOD_WEITE_SINGLE_REG,"WriteReg0-Ctrl", &g_Bat[0].writeBmsCtrl , 2				  , (void*)g_bmsCtrl_writeParam, 2,  &g_Bat[0].writeBmsCtrl_mirror},
+	{&g_BmsCmdEx[4], BMS_WRITE_CTRL ,MOD_WRITE,MOD_WEITE_SINGLE_REG,"WriteReg0-Ctrl", &g_Bat[0].writeBmsCtrl , 2				  , (void*)g_bmsCtrl_writeParam, 2,  &g_Bat[0].bmsCtrl},//bmsInfo.state},//&g_Bat[0].writeBmsCtrl_mirror},
 };
 
 const static ModCfg g_Bat0Cfg =
@@ -66,7 +66,7 @@ const static ModCmd g_Bms1Cmds[BMS_CMD_COUNT] =
 };
 const static ModCfg g_Bat1Cfg =
 {
-	.port = 0,
+	.port = 1,
 	.cmdCount = BMS_CMD_COUNT,
 	.cmdArray = g_Bms1Cmds,
 	.pCbObj = &g_Bat[1],
@@ -89,17 +89,7 @@ const static ModFrameCfg g_frameCfg =
 	.sendCmdIntervalMs = 100,
 };
 
-void Fsm_SetActiveFlag(ActiveFlag af, Bool isActive)
-{
-	if(isActive)
-	{
-		g_ActiveFlag |= af;
-	}
-	else
-	{
-		g_ActiveFlag &= ~af;
-	}
-}
+
 
 void BatteryInfoDump(void)
 {
@@ -135,12 +125,6 @@ void NfcCardReaderDump()
 	
 	PRINTF_NFC(state);
 	PRINTF_NFC(antPort);
-	
-//	PRINTF_NFC(state);
-//	PRINTF_NFC(antPort);
-//	
-//	PRINTF_NFC(state);
-//	PRINTF_NFC(antPort);
 }
 
 void PmsDump()
@@ -216,7 +200,9 @@ void Pms_SwitchPort()
 //	Battery* pBat = (g_pActiveBat->port == 0) ? &g_Bat[1] : &g_Bat[0];
 
 	if (!Mod_isIdle(g_pModBus)) return;
-	rt_thread_mdelay(200);
+//	Fsm_SetActiveFlag(AF_MDB,False);
+	rt_thread_mdelay(500);
+//	Fsm_SetActiveFlag(AF_MDB,True);
 	Bat_msg(g_pActiveBat, BmsMsg_deactive, 0, 0);
 	
 	//先不跳转到BAT1
@@ -243,6 +229,7 @@ void Pms_switchStatus(PmsOpStatus newStatus)
 	else if (newStatus == PMS_ACC_ON)
 	{
 		Pms_setDischg(True);
+		Pms_setChg(True);
 	}
 	else if (newStatus == PMS_SLEEP)
 	{
@@ -262,9 +249,18 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
 	if (msgId == PmsMsg_run)
 	{
-		if ((/*g_pJt->isLocationg_pJt->devState & _GPS_FIXE_BIT*/0)||(SwTimer_isTimerOutEx(g_pms.statusSwitchTicks,PMS_ACC_OFF_ACTIVE_TIME)))
+		static uint32 accoff_tick = 0;
+		if ((0/*g_pJt->devState.cnt & _GPS_FIXE_BIT*/)||(SwTimer_isTimerOutEx(g_pms.statusSwitchTicks,PMS_ACC_OFF_ACTIVE_TIME)))
 		{
-			Pms_switchStatus(PMS_DEEP_SLEEP);
+			workmode_switchStatus(WM_SLEEP);
+//			Pms_switchStatus(PMS_DEEP_SLEEP);
+		}
+		
+		if(((g_Bat[0].bmsInfo.state&0x0300)!=0x0300)&&((GET_TICKS() -accoff_tick) >3000 ))
+		{
+			Pms_setDischg(True);
+			Pms_setChg(True);
+			accoff_tick = GET_TICKS();
 		}
 	}
 	else if (msgId == PmsMsg_accOn)
@@ -285,7 +281,17 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 
 static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
-	if (msgId == PmsMsg_accOff)
+	if (msgId == PmsMsg_run)
+	{
+		static uint32 accon_tick = 0;
+		if(((g_Bat[0].bmsInfo.state&0x0300)!=0x0300)&&((GET_TICKS() -accon_tick) >3000 ))
+		{
+			Pms_setDischg(True);
+			Pms_setChg(True);
+			accon_tick = GET_TICKS();
+		}
+	}
+	else if (msgId == PmsMsg_accOff)
 	{
 		Pms_switchStatus(PMS_ACC_OFF);
 	}
@@ -313,10 +319,16 @@ static void Pms_fsm_CANErr(PmsMsg msgId, uint32_t param1, uint32_t param2)
 
 static void Pms_fsm_deepSleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
-	if(!g_ActiveFlag)
+	static uint32 accsleep_tick = 0;
+	if(((g_Bat[0].bmsInfo.state&0x0300)!=0x0000)&&((GET_TICKS() -accsleep_tick) >3000 ))
 	{
-		PFL(DL_PMS,"pms go to sleep mode!\n");
-		Mcu_PowerDown();
+		Pms_setDischg(False);
+		Pms_setChg(False);
+		accsleep_tick = GET_TICKS();
+	}
+	if((g_Bat[0].bmsInfo.state&0x0300)==0x0000)
+	{
+		Fsm_SetActiveFlag(AF_PMS, False);
 	}
 	PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, True);
 	g_pdoInfo.isWheelLock =1;
@@ -324,16 +336,7 @@ static void Pms_fsm_deepSleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
 
 //在任何状态下都要处理的消息函数
 static void Pms_fsm_anyStatusDo(PmsMsg msgId, uint32_t param1, uint32_t param2)
-{
-//	if(g_pdoInfo.isRemoteAccOn)
-//	{
-//		Pms_switchStatus(PMS_ACC_ON);
-//	}
-//	else
-//	{
-//		Pms_switchStatus(PMS_ACC_OFF);
-//	}
-	
+{	
 //	int i = 0;
 //	Battery* pPkt = Null;
 
@@ -425,6 +428,12 @@ TRANSFER_EVENT_RC Pms_EventCb(Battery* pBat, TRANS_EVENT ev)
 	return TRANS_EVT_RC_SUCCESS;
 }
 
+void Pms_stop()
+{
+	Pms_switchStatus(PMS_DEEP_SLEEP);
+	fm175Drv_stop(&g_pms.fmDrv);
+}	
+
 void Pms_run()
 {
 	fm175Drv_run(&g_pms.fmDrv);
@@ -453,10 +462,12 @@ void Pms_start()
 	{
 		Pms_switchStatus(PMS_ACC_OFF);
 	}
+	g_pms.statusSwitchTicks = GET_TICKS();
 	//查询电池设备信息
 	Bat_msg(g_pActiveBat, BmsMsg_active, *((uint32*)& g_regCtrl), 0);
 	Bat_start(&g_Bat[0]);
 	fm175Drv_start(&g_pms.fmDrv);
+	Fsm_SetActiveFlag(AF_PMS, True);
 }
 
 void Pms_init()
@@ -465,7 +476,7 @@ void Pms_init()
 	{
 		.fifoDeepth = 64,
 	};
-	static const Obj obj = { "Pms", Pms_start, Null, Pms_run };
+	static const Obj obj = { "Pms", Pms_start, Pms_stop, Pms_run };
 	ObjList_add(&obj);
 
 	Mod_Init(g_pModBus, &g_Bat0Cfg, &g_frameCfg);

@@ -47,8 +47,8 @@ extern "C"{
 	typedef enum
 	{
 		JT_STATE_INIT			= 0x01,
-		JT_STATE_SLEEP			,//= 0x01,
-		JT_STATE_WAKEUP			,//= 0x02,
+		JT_STATE_SLEEP			,//= 0x02,
+		JT_STATE_WAKEUP			,//= 0x03,
 		JT_STATE_PREOPERATION	,//= 0x04,
 		JT_STATE_OPERATION		,//= 0x05,
 
@@ -63,31 +63,31 @@ extern "C"{
 
 	typedef struct _JT_devState
 	{
-		uint16_t cnt;	// 连接状态
-		uint8_t csq;	// GPRS/4G信号强度
-		uint8_t snr;	// GPS信号强度
-		uint8_t siv;	// GPS可见卫星
+		uint16_t cnt;	// á??ó×′ì?
+		uint8_t csq;	// GPRS/4GD?o????è
+		uint8_t snr;	// GPSD?o????è
+		uint8_t siv;	// GPS?é???àD?
 	}JT_devState;
 
 #pragma pack(1)
 
 
-	//终端的设备属性定义
+	//????μ?éè±?ê?D??¨ò?
 #define JT_DEV_HW_VER_SIZE 10
 #define JT_DEV_FW_VER_SIZE 20
 	typedef struct _JtDevProperty
 	{
-		uint16  protocolVer;	//传输协议版本号
-		uint32 devClass;	//终端类型
-		uint8  vendorID[5];	//制造商ID
-		uint8  devModel[20];//终端型号
-		uint8  devId[12];	//终端 ID
-		uint8  iccid[10];	//终端 SIM 卡 ICCID
-		uint8  hwVer[JT_DEV_HW_VER_SIZE];	//终端硬件版本号,以0结尾
-		uint8  fwVer[JT_DEV_FW_VER_SIZE];	//终端固件版本号,以0结尾
+		uint16  protocolVer;	//′?ê?D-òé°?±?o?
+		uint32 devClass;	//????ààDí
+		uint8  vendorID[5];	//???ìéìID
+		uint8  devModel[20];//????Dío?
+		char  devId[12];	//???? ID
+		char  iccid[10];	//???? SIM ?¨ ICCID
+		char  hwVer[JT_DEV_HW_VER_SIZE];	//????ó2?t°?±?o?,ò?0?á?2
+		char  fwVer[JT_DEV_FW_VER_SIZE];	//????1ì?t°?±?o?,ò?0?á?2
 	}JtDevProperty;
 	// Jose add 2020/09/17
-	// 终端蓝牙
+	// ????à??à
 #define		JT_DEV_BLE_MAC_ADDR_SIZE	6
 #define		JT_DEV_BLE_HW_VER_SIZE		16
 #define		JT_DEV_BLE_FW_VER_SIZE		16
@@ -95,18 +95,18 @@ extern "C"{
 	typedef struct _JtDevBleProperty
 	{
 		uint16 BleType ;
-		uint8  BleMac[JT_DEV_BLE_MAC_ADDR_SIZE];
-		uint8  BlehwVer[JT_DEV_BLE_HW_VER_SIZE];
-		uint8  BlefwVer[JT_DEV_BLE_FW_VER_SIZE];
+		char  BleMac[JT_DEV_BLE_MAC_ADDR_SIZE];
+		char  BlehwVer[JT_DEV_BLE_HW_VER_SIZE];
+		char  BlefwVer[JT_DEV_BLE_FW_VER_SIZE];
 	}JtDevBleProperty;
 	
 	// Jose add 2020/09/17
 	typedef struct _JtDevBleCfgParam
 	{
-		uint8 BleName[32];		// 蓝牙广播名称
-		uint32 BleAdvInterval ;	// 广播间隔(1ms)
-		uint8 BleAdvPower ;		// 文件发射功率
-		uint8 BleAdvData[31];	// 广播内容
+		char BleName[32];		// à??à1?2￥??3?
+		uint32 BleAdvInterval ;	// 1?2￥????(1ms)
+		uint8 BleAdvPower ;		// ???t·￠é?1|?ê
+		uint8 BleAdvData[31];	// 1?2￥?úèY
 	}JtDevBleCfgParam;
 
 	typedef struct 
@@ -121,32 +121,47 @@ extern "C"{
 		uint32 	fileOffset;
 	}FileContent;
 
-	// 定位坐标
+	// ?¨??×?±ê
 	typedef struct
 	{
-		int32 longitude ;	// 经度单位为度,为实际值 x 1E7 , 0 表示没定义
-		int32 latitude ;	// 纬度
+		int32 longitude ;	// ?-?èμ￥???a?è,?aêμ?ê?μ x 1E7 , 0 ±íê????¨ò?
+		int32 latitude ;	// ?3?è
 	}Jt_LocationData;
 
 #define		_BLE_CONNECT_BIT		BIT(0)
-	// ble状态
+	// ble×′ì?
 	typedef struct
 	{
 		uint8 bleConnectState ;
 		uint8 bleConnectMAC[6];
 	}Jt_BleState;
 
-// 附加设备状态定义
+// ???óéè±?×′ì??¨ò?
 #define			_STATE_ACC				BIT(0)		// ACC 
-#define			_STATE_WHEL_LLOCK		BIT(1)		// 轮毂
-#define			_STATE_CAB_LOCK			BIT(2)		//	座舱锁状态
-#define			_STATE_REPOWER_OFF		BIT(3)		//  远程断电
-#define			_STATE_ACTIVE			BIT(4)		//	激活状态
-#define			_STATE_BAT_AUTH_EN		BIT(5)		//	激活状态
-#define			_STATE_ALAM_EN			BIT(6)		//	移动
+#define			_STATE_WHEL_LLOCK		BIT(1)		// ??ì±
+#define			_STATE_CAB_LOCK			BIT(2)		//	×ù2???×′ì?
+#define			_STATE_REPOWER_OFF		BIT(3)		//  ??3ì??μ?
+#define			_STATE_ACTIVE			BIT(4)		//	?¤??×′ì?
+#define			_STATE_BAT_AUTH_EN		BIT(5)		//	?¤??×′ì?
+#define			_STATE_ALAM_EN			BIT(6)		//	ò??ˉ
 
 
-// 附加报警状态定义
+#define		_SMS_SIZE		(140)
+	typedef struct
+	{
+		uint32 	smsRevTime;
+		uint8	smsLen;
+		uint8	smsText[_SMS_SIZE];
+	}SMSContext;
+	#define		_SMS_ARRY_CNT	(2)
+	typedef struct
+	{
+		uint8 		smsExist;
+		uint8 		smsCount;
+		SMSContext	smsText[_SMS_ARRY_CNT];
+	}GetSMSContext;
+
+// ???ó±¨?ˉ×′ì??¨ò?
 
 
 
@@ -157,27 +172,29 @@ extern "C"{
 	typedef void (*JT808fsmFn)(uint8_t msgID, uint32_t param1, uint32_t param2);
 	typedef struct _JT808
 	{
-		//当前JT808的操作状态
+		//μ±?°JT808μ?2ù×÷×′ì?
 		JT_state opState;
-		//设置JT808的操作状态
+		//éè??JT808μ?2ù×÷×′ì?
 		JT_state setToOpState;
 
 		JT_devState devState;
 
 		Jt_LocationData locatData ;
 		
-		//是否定位成功
+		//ê?·??¨??3é1|
 		//Bool isLocation;
 		
-		//终端属性数据
+		//????ê?D?êy?Y
 		JtDevProperty property;
-		// ble属性
+		// bleê?D?
 		Jt_BleState		bleState ;
 		uint16_t 		bleEnCtrl;
 		JtDevBleProperty bleproperty ;
 		JtDevBleCfgParam blecfgParam ;
 		
-		// 文件属性
+		GetSMSContext	smsContext ;
+		
+		// ???tê?D?
 		UpdateFileInfo  updatefileinfo ;
 		FileContent		filecontent ;
 		//

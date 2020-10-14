@@ -33,6 +33,9 @@ static void Dump(int argc, char**argv)
 	extern void g_cgfInfo_Dump(void);
 	extern void g_pdoInfo_Dump(void);
 	extern void g_degInfo_Dump(void);
+	extern void Sim_Dump(void);
+	extern void Gprs_Dump(void);
+	extern void Ble_Dump(void);
 	extern void Cabin_Dump(void);
 	extern void Adc_Dump();
 	extern uint32 g_ActiveFlag;
@@ -41,11 +44,12 @@ static void Dump(int argc, char**argv)
 	sscanf(&(*argv[1]), "%d", &ind);
 	if(1 == ind || 0 == ind) HwFwVer_Dump(Null,&AppInfo,Null);
 	if(2 == ind || 0 == ind) PmsDump();
-////	if(3 == ind || 0 == ind) Gps_Dump();
-////	if(4 == ind || 0 == ind) Gprs_Dump();
+	if(3 == ind || 0 == ind) Sim_Dump();
+	if(4 == ind || 0 == ind) Gprs_Dump();
 	if(5 == ind) 			 Cabin_Dump();
 	if(6 == ind) 			 Adc_Dump();
 	if(7 == ind || 0 == ind) BatteryInfoDump();
+	if(8 == ind || 0 == ind) Ble_Dump();
 	if(9 == ind || 0 == ind) DateTime_dump(Null);
 	if(10 == ind) 			 SectorMgr_Dump(g_NvdsItems[0].sectorMgr);
 	if(11 == ind) 			 SectorMgr_Dump(g_NvdsItems[1].sectorMgr);
@@ -104,15 +108,15 @@ static void Set(int argc, char**argv)
 		case 0: LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_McuReset, value);break;
 		case 1: if(value>0&&value<4) NvdsUser_Write(value);break;
 		case 2: LocalTimeReset(); break;
-		case 3: if(value>0&&value<5) Pms_switchStatus(value); break;
-		case 4: SetAccOn(value); break;
+		case 3: workmode_switchStatus(WM_SLEEP); break;
+		case 4: SetAccOn(value); NvdsUser_Write(NVDS_PDO_INFO);break;
 		case 5: Rs485Test(value); break;
 ////		case 6: g_Settings.IsBatVerifyEn=value; Sign_Dump(Null); Nvds_Write_Setting(); break;
 ////		case 7: g_Settings.IsAlarmMode=value; Sign_Dump(Null); break;
 		case 8: Cabin_UnLock();break;//g_pdoInfo.isCanbinLock =1;break;
-////		case 9: SET_VAR(g_ForceBatSoc); 
+		case 9: g_cfgInfo.isActive= value;NvdsUser_Write(NVDS_CFG_INFO);break;
 		case 10: g_pdoInfo.isCanbinLock =value;break;
-		case 11: Nvc_SetVol(value); break;
+		case 11: Nvc_SetVol(value);NvdsUser_Write(NVDS_CFG_INFO);break;
 ////		case 12: Fsm_StateKeyOff(MSG_FORCE_POWERDOWN); break;
 //		case 13: Nvc_PlayEx(value); break;
 	}
@@ -150,7 +154,7 @@ static void SelfTest(void)
 	__IO uint32_t sn1=*(__IO uint32_t*)(0x1FFFF7EC);
 	__IO uint32_t sn2=*(__IO uint32_t*)(0x1FFFF7F0);
 	
-	Printf("\r\nsID: %X%X%X\r\n",sn2,sn1,sn0);
+	Printf("\r\nsID: %8X%8X%8X\r\n",sn2,sn1,sn0);
 	g_pdoOkInfo_Dump();	
 }
 MSH_CMD_EXPORT(SelfTest , SelfTest board);
