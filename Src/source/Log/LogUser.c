@@ -44,6 +44,12 @@ Bool LogItem_Verify(const LogItem* pItem)
 	return True;
 }
 
+//清除所有保存内容，恢复出厂值
+void LogUser_Reset()
+{
+	Record_RemoveAll(&g_plogMgr->record);
+}
+
 void LogUser_init()
 {
 	extern time_t DateTime_GetCurrentSeconds();

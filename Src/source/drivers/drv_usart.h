@@ -19,7 +19,7 @@
 #include "queue.h"
 
 #define SHELL_USART0
-#define RS485_UART4		USART4
+//#define RS485_UART4		USART4
 
 //485接收数组buff长度
 #define RX_BUFF_SIZE          256

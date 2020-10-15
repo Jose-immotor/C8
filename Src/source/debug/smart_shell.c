@@ -100,6 +100,7 @@ static void Set(int argc, char**argv)
 	extern void Nvc_SetVol(uint8 vol);
 	extern void SetAccOn(uint8 on);
 	extern void Cabin_UnLock();
+	extern void LogUser_Reset();
 	
 	sscanf(&(*argv[1]), "%d", &ind);
 	sscanf(&(*argv[2]), "%d", &value);
@@ -111,7 +112,7 @@ static void Set(int argc, char**argv)
 		case 3: workmode_switchStatus(WM_SLEEP); break;
 		case 4: SetAccOn(value); NvdsUser_Write(NVDS_PDO_INFO);break;
 		case 5: Rs485Test(value); break;
-////		case 6: g_Settings.IsBatVerifyEn=value; Sign_Dump(Null); Nvds_Write_Setting(); break;
+		case 6: LogUser_Reset(); break;
 ////		case 7: g_Settings.IsAlarmMode=value; Sign_Dump(Null); break;
 		case 8: Cabin_UnLock();break;//g_pdoInfo.isCanbinLock =1;break;
 		case 9: g_cfgInfo.isActive= value;NvdsUser_Write(NVDS_CFG_INFO);break;

@@ -145,14 +145,16 @@ void DebugMon_Handler(void)
     \param[out] none
     \retval     none
 */
+void uart0_isr(void);
 void USART0_IRQHandler(void)
 {
+	uart0_isr();
 }
 
-void uart4_isr(void);
+//void uart4_isr(void);
 void UART4_IRQHandler(void)
 {
-	uart4_isr();
+//	uart4_isr();
 }
 
 extern void over_temp_irq(void);

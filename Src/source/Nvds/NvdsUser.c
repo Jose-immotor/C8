@@ -164,6 +164,14 @@ const NvdsItem g_NvdsItems[NVDS_ITEM_COUNT] =
 		&g_nvdsSecMgr[2], (NvdsEventFn)DbgInfo_Event,& g_dbgInfo_mirror},
 };
 
+//清除所有保存内容，恢复出厂值
+void NvdsUser_Reset()
+{
+	SectorMgr_Erase(g_NvdsItems[0].sectorMgr);
+	SectorMgr_Erase(g_NvdsItems[1].sectorMgr);
+	SectorMgr_Erase(g_NvdsItems[2].sectorMgr);
+}
+
 //写入指定的NvdsID
 void NvdsUser_Write(NvdsID id)
 {

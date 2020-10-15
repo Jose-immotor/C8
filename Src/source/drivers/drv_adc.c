@@ -229,8 +229,8 @@ void rcu_config(void)
 	rcu_periph_clock_enable(RCU_DMA0);
 	/* enable ADC0 clock */
 	rcu_periph_clock_enable(RCU_ADC0);
-    /* enable TIMER2 clock */
-//    rcu_periph_clock_enable(RCU_TIMER0);
+    /* enable TIMER1 clock */
+    rcu_periph_clock_enable(RCU_TIMER1);
 	if (adc1Count)
 	{
 		/* enable ADC1 clock */
@@ -263,7 +263,7 @@ void timer_config(void)
 
 	TIMERx channelx duty cycle = (50us * 30000)  = 1.5s
 	----------------------------------------------------------------------- */
-	/* TIMER2 configuration */
+	/* TIMER1 configuration */
 	timer_initpara.prescaler = 3599;
 	timer_initpara.alignedmode = TIMER_COUNTER_EDGE;
 	timer_initpara.counterdirection = TIMER_COUNTER_UP;
@@ -271,24 +271,24 @@ void timer_config(void)
 	timer_initpara.clockdivision = TIMER_CKDIV_DIV1;
 	timer_initpara.repetitioncounter = 0;
 	//(8399+1)*(29999+1) / 168M = 1.5s
-	timer_init(TIMER2, &timer_initpara);
+	timer_init(TIMER1, &timer_initpara);
 
     /* CH0 configuration in PWM mode0 */
     timer_ocintpara.ocpolarity  = TIMER_OC_POLARITY_HIGH;
     timer_ocintpara.outputstate = TIMER_CCX_ENABLE;
-    timer_channel_output_config(TIMER2, TIMER_CH_1, &timer_ocintpara);
+    timer_channel_output_config(TIMER1, TIMER_CH_1, &timer_ocintpara);
 
-    timer_channel_output_pulse_value_config(TIMER2, TIMER_CH_1, 3999);
-    timer_channel_output_mode_config(TIMER2, TIMER_CH_1, TIMER_OC_MODE_PWM0);
-    timer_channel_output_shadow_config(TIMER2, TIMER_CH_1, TIMER_OC_SHADOW_DISABLE);
+    timer_channel_output_pulse_value_config(TIMER1, TIMER_CH_1, 3999);
+    timer_channel_output_mode_config(TIMER1, TIMER_CH_1, TIMER_OC_MODE_PWM0);
+    timer_channel_output_shadow_config(TIMER1, TIMER_CH_1, TIMER_OC_SHADOW_DISABLE);
 
-    /* TIMER2 primary output enable */
-    timer_primary_output_config(TIMER2, ENABLE);
+    /* TIMER1 primary output enable */
+    timer_primary_output_config(TIMER1, ENABLE);
     /* auto-reload preload enable */
-    timer_auto_reload_shadow_enable(TIMER2); 
+    timer_auto_reload_shadow_enable(TIMER1); 
     
-    /* enable TIMER2 */
-//    timer_enable(TIMER2);
+    /* enable TIMER1 */
+//    timer_enable(TIMER1);
 }
 
 void dma_config(void)
@@ -325,7 +325,7 @@ void adc_setting(uint32_t adc_periph, int chnlCount)
 	/* ADC scan mode function enable */
 	adc_special_function_config(adc_periph, ADC_SCAN_MODE, ENABLE);
 	/* ADC trigger config */
-	adc_external_trigger_source_config(adc_periph, ADC_REGULAR_CHANNEL, ADC0_1_EXTTRIG_REGULAR_T0_CH0);
+	adc_external_trigger_source_config(adc_periph, ADC_REGULAR_CHANNEL, ADC0_1_EXTTRIG_REGULAR_T1_CH1);
 	/* ADC data alignment config */
 	adc_data_alignment_config(adc_periph, ADC_DATAALIGN_RIGHT);
 	/* ADC external trigger enable */
@@ -382,14 +382,14 @@ void adc_config(void)
 void Adc_Stop()
 {
 	PFL(DL_ADC, "Adc Stop.");
-	timer_disable(TIMER2);
+	timer_disable(TIMER1);
 }
 
 void Adc_Start()
 {
 	PFL(DL_ADC, "Adc Start.\n");
-	/* enable TIMER2 */
-	timer_enable(TIMER2);
+	/* enable TIMER1 */
+	timer_enable(TIMER1);
 }
 
 void Adc_Run()

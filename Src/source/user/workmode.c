@@ -41,7 +41,7 @@ static void workmode_fsm_sleep(workmode* pworkmode, uint8_t msgId, uint32_t para
 	if(((!g_ActiveFlag)&&((g_Bat[0].bmsInfo.state&0x0300)==0x0000))||
 		(SwTimer_isTimerOutEx(g_workmode.statusSwitchTicks,WORKMODE_FORCE_SLEEP_TIME)))
 	{
-		Printf("g_ActiveFlag= %08x.\n",g_ActiveFlag);
+		Printf("g_ActiveFlag= 0x%08x.\n",g_ActiveFlag);
 		g_workmode.sleep_flag = 0;
 		g_workmode.active_flag = 0;
 		Printf("workmode go to sleep mode!\n");

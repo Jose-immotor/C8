@@ -37,7 +37,7 @@ extern "C" {
 
 //	#define LOG_TRACE1(moduleId, catId, subId, eventId, __val) \
 //		{uint32 _val = (__val);LogUser_Write(moduleId, catId, subId, LT_TRACE , eventId, _val);}
-	
+	void LogUser_Reset();
 	void LogUser_init();
 
 	extern LogMgr* g_plogMgr;
