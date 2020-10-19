@@ -6,13 +6,22 @@
 
 LogMgr* g_plogMgr;
 
+void LogUser_Dump(void)
+{
+	#define PRINTF_LOGUSER(_field) Printf("\t%s=%d\n", #_field, g_plogMgr->record._field);
+	
+	Printf("LOgUser info:\n");
+	
+	PRINTF_LOGUSER(itemCount);
+}
+
 Bool LogUserEvent(struct _LogMgr* p, const LogItem * pItem, LOG_EVENT ev)
 {
 	if(ev ==LOG_WRITE_AFTER)
 	{
 		if (g_dwDebugLevel & DL_LOG)
 		{
-			Printf("%04d:", p->record.sector.itemCount);
+			Printf("%04d:", p->record.itemCount);
 			Log_Dump(p, (LogItem *)pItem, Null, Null);
 		}
 	}

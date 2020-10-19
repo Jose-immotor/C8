@@ -64,7 +64,7 @@ extern "C" {
 				uint16 isNfcOk : 1;	//BIT[2]:NFC通讯 is OK;
 				uint16 isBat0In : 1;//BIT[3]:电池0在位;
 				uint16 isBat1In : 1;//BIT[4]:电池1在位;
-	//			uint16 isCanbinLock : 1;	//BIT[2]:座舱锁
+				uint16 isTakeApart : 1;	//BIT[5]:拆开
 				uint16 reserved01 : 5;		//BIT[3-7]:保留
 			};
 		};

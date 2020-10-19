@@ -302,6 +302,7 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	else if (msgId == PmsMsg_batPlugOut)
 	{
 		Pms_plugOut((Battery*)param1);
+		Pms_switchStatus(PMS_ACC_OFF);
 	}
 	PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, False);
 	g_pdoInfo.isWheelLock =0;
@@ -330,7 +331,7 @@ static void Pms_fsm_deepSleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	{
 		Fsm_SetActiveFlag(AF_PMS, False);
 	}
-	PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, True);
+	PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, False);
 	g_pdoInfo.isWheelLock =1;
 }
 
@@ -454,7 +455,7 @@ void Pms_run()
 
 void Pms_start()
 {
-	if(g_pdoInfo.isRemoteAccOn)
+	if((g_pdoInfo.isRemoteAccOn)&&(g_Bat[0].presentStatus == BAT_IN))
 	{
 		Pms_switchStatus(PMS_ACC_ON);
 	}

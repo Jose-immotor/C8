@@ -53,30 +53,31 @@ void Adc_ItemDump(const Adc* pAdc, const char* pTitle)
 
 void Adc_Dump()
 {
-	const Adc* pAdc = g_Adc;
+//	const Adc* pAdc = g_Adc;
 
-	for (int i = 0; i < GET_ELEMENT_COUNT(g_Adc); i++, pAdc++)
-	{
-		if (pAdc->adcId >= ADC_TEMP_LCD && pAdc->adcId <= ADC_TEMP_CHGR)
-		{
-			Printf("%s-%s: rawValue=0x%04x(%04d), value=0x%04x(%d), temp=%d"
-				, PortPinToPxx(pAdc->ioPort, pAdc->ioPin)
-				, pAdc->name
-				, pAdc->rawValue, pAdc->rawValue
-				, pAdc->newValue, pAdc->newValue
-				, pAdc->newValue - 40);
-		}
-		else
-		{
-			Printf("%s-%s: rawValue=0x%04x(%04d), value=0x%04x(%d)"
-				, PortPinToPxx(pAdc->ioPort, pAdc->ioPin)
-				, pAdc->name
-				, pAdc->rawValue, pAdc->rawValue
-				, pAdc->newValue, pAdc->newValue);
-		}
+//	for (int i = 0; i < GET_ELEMENT_COUNT(g_Adc); i++, pAdc++)
+//	{
+//		if (pAdc->adcId >= ADC_TEMP_LCD && pAdc->adcId <= ADC_TEMP_CHGR)
+//		{
+//			Printf("%s-%s: rawValue=0x%04x(%04d), value=0x%04x(%d), temp=%d"
+//				, PortPinToPxx(pAdc->ioPort, pAdc->ioPin)
+//				, pAdc->name
+//				, pAdc->rawValue, pAdc->rawValue
+//				, pAdc->newValue, pAdc->newValue
+//				, pAdc->newValue - 40);
+//		}
+//		else
+//		{
+//			Printf("%s-%s: rawValue=0x%04x(%04d), value=0x%04x(%d)"
+//				, PortPinToPxx(pAdc->ioPort, pAdc->ioPin)
+//				, pAdc->name
+//				, pAdc->rawValue, pAdc->rawValue
+//				, pAdc->newValue, pAdc->newValue);
+//		}
 
-		Printf("%s\n", !pAdc->isPresent ? " *** FAULT or NOT EXIST **" : "");
-	}
+//		Printf("%s\n", !pAdc->isPresent ? " *** FAULT or NOT EXIST **" : "");
+//	}
+	Printf("18650 voltage=%dmv.\n",g_Adc[0].newValue);
 }
 
 Bool Adc_DevIsPresent(const Adc* pAdc)

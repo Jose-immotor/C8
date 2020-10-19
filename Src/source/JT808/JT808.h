@@ -103,10 +103,10 @@ extern "C"{
 	// Jose add 2020/09/17
 	typedef struct _JtDevBleCfgParam
 	{
-		char BleName[32];		// à??à1?2￥??3?
-		uint32 BleAdvInterval ;	// 1?2￥????(1ms)
-		uint8 BleAdvPower ;		// ???t·￠é?1|?ê
-		uint8 BleAdvData[31];	// 1?2￥?úèY
+		char BleName[32];		// 蓝牙广播名称
+		uint32 BleAdvInterval ;	// 广播间隔(1ms)
+		uint8 BleAdvPower ;		// 文件发射功率
+		uint8 BleAdvData[31];	// 广播内容
 	}JtDevBleCfgParam;
 
 	typedef struct 
@@ -172,21 +172,21 @@ extern "C"{
 	typedef void (*JT808fsmFn)(uint8_t msgID, uint32_t param1, uint32_t param2);
 	typedef struct _JT808
 	{
-		//μ±?°JT808μ?2ù×÷×′ì?
+		//当前JT808的操作状态
 		JT_state opState;
-		//éè??JT808μ?2ù×÷×′ì?
+		//设置JT808的操作状态
 		JT_state setToOpState;
 
 		JT_devState devState;
 
 		Jt_LocationData locatData ;
 		
-		//ê?·??¨??3é1|
+		//是否定位成功
 		//Bool isLocation;
 		
-		//????ê?D?êy?Y
+		//终端属性数据
 		JtDevProperty property;
-		// bleê?D?
+		// ble属性
 		Jt_BleState		bleState ;
 		uint16_t 		bleEnCtrl;
 		JtDevBleProperty bleproperty ;
@@ -194,7 +194,7 @@ extern "C"{
 		
 		GetSMSContext	smsContext ;
 		
-		// ???tê?D?
+		// 文件属性
 		UpdateFileInfo  updatefileinfo ;
 		FileContent		filecontent ;
 		//

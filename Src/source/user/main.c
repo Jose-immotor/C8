@@ -25,6 +25,8 @@
 #include "rs485_protocol.h"
 #include "drv_can.h"
 #include "workmode.h"
+#include "CmdLineExport.h"
+#include "smart_shell.h"
 
 const HwFwVer AppInfo={
 FW_VER_MAIN,
@@ -47,7 +49,7 @@ int main(void)
 	LocalTimeInit();	
 	NvdsUser_Init();
 	LogUser_init();	
-//	Shell_init();
+	Smart_shell_init();
 	IO_Init();
 	AdcUser_Init();
 	Adc_init();
@@ -58,7 +60,6 @@ int main(void)
 	Gyro_Init();
 	Nvc_Init();
 	Cabin_Init();
-//	RS485_Init();
 	WorkMode_init();
 	LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_McuReset, 1);
 

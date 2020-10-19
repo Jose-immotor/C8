@@ -39,7 +39,7 @@ extern "C" {
 //		{uint32 _val = (__val);LogUser_Write(moduleId, catId, subId, LT_TRACE , eventId, _val);}
 	void LogUser_Reset();
 	void LogUser_init();
-
+	void LogUser_Dump(void);
 	extern LogMgr* g_plogMgr;
 	
 #else

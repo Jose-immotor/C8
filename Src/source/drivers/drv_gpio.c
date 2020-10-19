@@ -6,7 +6,7 @@
 #include "RcuMap.h"
 
 
-static Bool g_isIoStart = False;
+//static Bool g_isIoStart = False;
 
 static DrvIo* g_p18650BootEnIO = Null;
 DrvIo* g_pPwr3V3EnIO = Null;
@@ -623,7 +623,12 @@ void take_apart_irq(void)
 	}
 	if(IO_Read(IO_TAKE_APART) == RESET)
 	{
-		LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_TakeApart, 0);
+		if(g_pdoInfo.isTakeApart == 0)
+		{
+			LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_TakeApart, 0);
+			g_pdoInfo.isTakeApart = 1;
+			NvdsUser_Write(NVDS_PDO_INFO);
+		}
 	}
 	rt_interrupt_leave();
 }
@@ -668,13 +673,14 @@ void IO_Start()
 	g_pCanSTBIO = IO_Get(IO_CAN_STB);
 	PortPin_Set(g_pCanSTBIO->periph, g_pCanSTBIO->pin, False);
 		
-	if(IO_Read(IO_TAKE_APART) == RESET)
+	if((IO_Read(IO_TAKE_APART) == RESET)&&(g_pdoInfo.isTakeApart == 0))
 	{
-		LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_WakeUp, 0);
+		LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_TakeApart, 0);
+		g_pdoInfo.isTakeApart = 1;
+		NvdsUser_Write(NVDS_PDO_INFO);
 	}
-	
-	
-	g_isIoStart = True;
+
+//	g_isIoStart = True;
 	IO_IRQEnable(True);
 }
 

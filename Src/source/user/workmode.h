@@ -39,6 +39,7 @@
 		
 		uint32_t statusSwitchTicks;
 		
+		uint8_t first_flag;
 		uint8_t active_flag;
 		uint8_t sleep_flag;
 

@@ -262,6 +262,7 @@ void Log_DumpByInd(LogMgr * logMgr, int ind, int count)
 	{
 		if (Record_Read(&logMgr->record, &item, sizeof(LogItem)))
 		{
+			Printf("%04d:", logMgr->record.readPointer);
 			Log_Dump(logMgr, &item, Null, Null);
 		}
 	}

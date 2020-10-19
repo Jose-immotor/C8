@@ -24,10 +24,11 @@ void Fsm_SetActiveFlag(ActiveFlag af, Bool isActive)
 
 static void workmode_fsm_active(workmode* pworkmode, uint8_t msgId, uint32_t param1, uint32_t param2)
 {
-	if(g_workmode.active_flag == 0)
+	if((g_workmode.active_flag == 0)&&(g_workmode.first_flag == 0))
 	{
 		ObjList_start();
 		g_workmode.active_flag = 1;
+		
 	}
 }
 
@@ -42,6 +43,7 @@ static void workmode_fsm_sleep(workmode* pworkmode, uint8_t msgId, uint32_t para
 		(SwTimer_isTimerOutEx(g_workmode.statusSwitchTicks,WORKMODE_FORCE_SLEEP_TIME)))
 	{
 		Printf("g_ActiveFlag= 0x%08x.\n",g_ActiveFlag);
+		g_workmode.first_flag = 0;
 		g_workmode.sleep_flag = 0;
 		g_workmode.active_flag = 0;
 		Printf("workmode go to sleep mode!\n");
@@ -108,6 +110,7 @@ void WorkMode_init()
 
 	ObjList_add(&obj);
 	
+	g_workmode.first_flag =1;
 	g_workmode.active_flag =0;
 	g_workmode.sleep_flag =0;
 }

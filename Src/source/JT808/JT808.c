@@ -555,7 +555,7 @@ UTP_EVENT_RC JT808_event_simHb(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 	if (ev == UTP_CHANGED_BEFORE)
 	{
 		JT_state newOp = *pCmd->pExt->transferData;
-		//PFL(DL_JT808,"SIMHb:%d-%d\r\n",pJt->opState,newOp);
+		PFL(DL_JT808,"SIMHb:%d-%d\r\n",pJt->opState,newOp);
 		JT808_switchState(pJt, newOp);
 	}
 	return UTP_EVENT_RC_SUCCESS;
@@ -848,6 +848,8 @@ void JT808_fsm(uint8_t msgID, uint32_t param1, uint32_t param2)
 	g_pJt->fsm(msgID, param1, param2);
 }
 
+#if 0
+
 void JTcmd(int argc, char** argv)
 {
  int  cmdCode = 0;
@@ -870,7 +872,7 @@ void JTcmd(int argc, char** argv)
 
 
 MSH_CMD_EXPORT(JTcmd, JT808_sendCmd<uint8_t ind>);
-
+#endif 
 
 
 

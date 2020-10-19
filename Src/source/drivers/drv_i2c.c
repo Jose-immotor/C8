@@ -76,12 +76,43 @@ void I2C_init(uint32_t i2c_periph)
     /* enable acknowledge */
     i2c_ack_config(i2c_periph, I2C_ACK_ENABLE);
 }
-void Delay_I2C(uint32_t i)
+//void Delay_I2C(uint32_t i)
+//{
+////	Delay_I2C(i);
+////	rt_thread_mdelay(i);
+//    while(i--);
+//}
+
+static void Delay_I2C(uint32_t us)
 {
-//	rt_thread_delay(i);
-//	rt_thread_mdelay(i);
-    while(i--);
+    uint32_t ticks;
+    uint32_t told, tnow, tcnt = 0;
+    uint32_t reload = SysTick->LOAD;
+
+    ticks = us * reload / (1000);
+    told = SysTick->VAL;
+    while (1)
+    {
+        tnow = SysTick->VAL;
+        if (tnow != told)
+        {
+            if (tnow < told)
+            {
+                tcnt += told - tnow;
+            }
+            else
+            {
+                tcnt += reload - tnow + told;
+            }
+            told = tnow;
+            if (tcnt >= ticks)
+            {
+                break;
+            }
+        }
+    }
 }
+
 void Resume_IIC(uint32_t Timeout, uint32_t i2c_periph)
 {
 	#if 1
@@ -116,13 +147,13 @@ void Resume_IIC(uint32_t Timeout, uint32_t i2c_periph)
         gpio_init(GPIO_SCL, GPIO_MODE_OUT_OD, GPIO_OSPEED_50MHZ, GPIO_Pin_SCL);
         gpio_init(GPIO_SDA, GPIO_MODE_OUT_OD, GPIO_OSPEED_50MHZ, GPIO_Pin_SDA);
         gpio_bit_reset(GPIO_SCL, GPIO_Pin_SCL);
-        rt_thread_delay(20);
+        Delay_I2C(20);
         gpio_bit_reset(GPIO_SDA, GPIO_Pin_SDA);
-        rt_thread_delay(20);
+        Delay_I2C(20);
         gpio_bit_set(GPIO_SCL, GPIO_Pin_SCL);
-        rt_thread_delay(20);
+        Delay_I2C(20);
         gpio_bit_set(GPIO_SDA, GPIO_Pin_SDA);
-        rt_thread_delay(20);
+        Delay_I2C(20);
 		Timeout--;
         if( Timeout == 0)
 		{

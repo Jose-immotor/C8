@@ -14,6 +14,8 @@
  */
  
 #include "common.h"
+#include "smart_shell.h"
+#include "Shell_CmdLine.h"
 
 /*!
  * \brief 打印状态信息
@@ -22,9 +24,8 @@
  *
  * \return NONE 
  */
-static void Dump(int argc, char**argv)
+void Dump(uint8_t ind)
 {
-	int ind = 0;
 	extern void BatteryInfoDump(void);
 	extern void DateTime_dump(S_RTC_TIME_DATA_T* dt);
 	extern void BatteryDump(void);
@@ -41,7 +42,6 @@ static void Dump(int argc, char**argv)
 	extern uint32 g_ActiveFlag;
 	extern const HwFwVer AppInfo;
 	
-	sscanf(&(*argv[1]), "%d", &ind);
 	if(1 == ind || 0 == ind) HwFwVer_Dump(Null,&AppInfo,Null);
 	if(2 == ind || 0 == ind) PmsDump();
 	if(3 == ind || 0 == ind) Sim_Dump();
@@ -55,6 +55,7 @@ static void Dump(int argc, char**argv)
 	if(11 == ind) 			 SectorMgr_Dump(g_NvdsItems[1].sectorMgr);
 	if(12 == ind) 			 SectorMgr_Dump(g_NvdsItems[2].sectorMgr);
 	if(13 == ind)			 SectorMgr_Dump(&g_plogMgr->record.sector);
+	if(14 == ind)			 LogUser_Dump();
 	
 	if(20 == ind)			 g_cgfInfo_Dump();
 	if(21 == ind)			 g_pdoInfo_Dump();
@@ -67,7 +68,7 @@ static void Dump(int argc, char**argv)
 	Printf("g_dwDebugLevel = 0x%08x\n", g_dwDebugLevel);
 	Printf("system_ms_tick = %d\n", GET_TICKS());
 }
-MSH_CMD_EXPORT(Dump, Dump sample: Dump <uint8_t ind>);
+
 
 extern uint32_t uart4_put_byte(uint8_t data);
 void Rs485Test(uint8 value)
@@ -91,19 +92,16 @@ void Rs485Test(uint8 value)
  *
  * \return NONE 
  */
-static void Set(int argc, char**argv)
+void Set(uint8 ind, uint32 value)
 {
-	int ind = 0;
-	uint32 value;
+
 	void LocalTimeReset(void);
 
 	extern void Nvc_SetVol(uint8 vol);
 	extern void SetAccOn(uint8 on);
 	extern void Cabin_UnLock();
 	extern void LogUser_Reset();
-	
-	sscanf(&(*argv[1]), "%d", &ind);
-	sscanf(&(*argv[2]), "%d", &value);
+
 	switch(ind)
 	{
 		case 0: LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_McuReset, value);break;
@@ -124,22 +122,13 @@ static void Set(int argc, char**argv)
 //		
 	//Nvds_Write_Setting();
 }
-MSH_CMD_EXPORT(Set, Set sample: Set <uint8_t ind uint32 value>);
 
-static void NvcPlay(int argc, char**argv)
+void NvcPlay(uint8 audioInd, uint8 maxRepeat, uint8 vol)
 {
-	int audioInd = 0;
-	int maxRepeat = 0;
-	int vol = 0;
-
 	extern void Nvc_PlayEx(uint8 audioInd, uint8 maxRepeat, uint8 vol);
 	
-	sscanf(&(*argv[1]), "%d", &audioInd);
-	sscanf(&(*argv[2]), "%d", &maxRepeat);
-	sscanf(&(*argv[3]), "%d", &vol);
 	Nvc_PlayEx(audioInd,maxRepeat,vol);
 }
-MSH_CMD_EXPORT(NvcPlay, NvcPlay sample: NvcPlay <audioInd maxRepeatvol>);
 
 /*!
  * \brief 自检，检测电路板硬件
@@ -148,7 +137,7 @@ MSH_CMD_EXPORT(NvcPlay, NvcPlay sample: NvcPlay <audioInd maxRepeatvol>);
  *
  * \return NONE 
  */
-static void SelfTest(void)
+void SelfTest(uint8 flag)
 {
 	extern void g_pdoOkInfo_Dump(void);
 	__IO uint32_t sn0=*(__IO uint32_t*)(0x1FFFF7E8);
@@ -158,7 +147,6 @@ static void SelfTest(void)
 	Printf("\r\nsID: %8X%8X%8X\r\n",sn2,sn1,sn0);
 	g_pdoOkInfo_Dump();	
 }
-MSH_CMD_EXPORT(SelfTest , SelfTest board);
 
 /*!
  * \brief 复位
@@ -167,53 +155,67 @@ MSH_CMD_EXPORT(SelfTest , SelfTest board);
  *
  * \return NONE 
  */
-static void Reset(void)
+void SystemReset(void)
 {
     Boot();
 }
-MSH_CMD_EXPORT(Reset, Reboot System);
 
-static void Debug_SetL(int argc, char**argv)
+void Debug_SetL(uint32_t value)
 {
-	uint32_t value;
-
-	sscanf(&(*argv[1]), "%d", &value);
 	g_dwDebugLevel = value;
 	Dbg_SetLevel(value);
 	NvdsUser_Write(NVDS_DBG_INFO);
 }
-MSH_CMD_EXPORT(Debug_SetL, Debug_SetL sample: Debug_SetL <uint32_t ind>);
 
-static void Debug_SetB (int argc, char**argv)
+
+void Debug_SetB(uint32_t nIndex, Bool isEnable)
 {
-	uint32_t nIndex;
-	int isEnable;
-
-	sscanf(&(*argv[1]), "%d", &nIndex);
-	sscanf(&(*argv[2]), "%d", &isEnable);
 	Dbg_SetBit(nIndex, isEnable);
 	NvdsUser_Write(NVDS_DBG_INFO);
 }
-MSH_CMD_EXPORT(Debug_SetB, Debug_SetL sample: Debug_SetL <uint32_t ind>);
 
-
-//static void LogDumpCount(int argc, char**argv)
-//{
-//	int count;
-
-//	sscanf(&(*argv[1]), "%d", &count);
-////	Log_DumpByCount(g_plogMgr, count);
-//}
-//MSH_CMD_EXPORT(LogDumpCount, LogUser_DumpByCount);
-
-static void LogDumpInd(int argc, char**argv)
+void Log_DumpCount(int count)
 {
-	int ind = 0;
-	int count;
+	int ind = g_plogMgr->record.itemCount - count;
+	if(ind < 0) ind = 0;
 
-	sscanf(&(*argv[1]), "%d", &ind);
-	sscanf(&(*argv[2]), "%d", &count);
-	Log_DumpByInd(g_plogMgr, ind, count);
+	Log_DumpByInd(g_plogMgr,ind, count);
 }
-MSH_CMD_EXPORT(LogDumpInd, LogUser_DumpByInd);
 
+void Log_DumpInd(int ind, int count)
+{
+	Log_DumpByInd(g_plogMgr,ind, count);
+}
+
+extern char rt_hw_console_getchar(void);
+void Smart_Shell_run()
+{
+	char data;
+	data = rt_hw_console_getchar();
+	
+	if(data != 0xff)
+	{
+		Shell_CmdLine_AddStrEx(&data, 1);
+	}
+}
+
+void Smart_shell_init()
+{
+//	static CmdLineCfg cmdLineCfg;
+	static Obj obj = { "SmartShell", Null, Null, Smart_Shell_run };
+	ObjList_add(&obj);
+
+	static SFnDef g_CmdTable[] =
+	{
+		   {(void*)Dump		  , "Dump(uint8_t ind)", 1}
+		  ,{(void*)SystemReset, "Reset()", 0}
+		  ,{(void*)Debug_SetL, "Debug_SetL(uint32_t value)", 1}
+		  ,{(void*)Debug_SetB , "Debug_SetB(uint32_t nIndex, Bool isEnable)", 2}
+		  ,{(void*)Set		  , "Set(uint8 ind, uint32 value)",2}
+		  ,{(void*)SelfTest		, "SelfTest(uint8 param)"}
+		  ,{(void*)NvcPlay      	, "NvcPlay(uint8 audioInd, uint8 maxRepeat, uint8 vol)"}
+		  ,{(void*)Log_DumpCount 	,"Log_DumpCount(int count)"}
+		  ,{(void*)Log_DumpInd  	,"Log_DumpInd(int ind, int count)"}
+	};
+	SCmdLine_Init(g_CmdTable,sizeof(g_CmdTable)/sizeof(SFnDef), TRUE ,(OutPutFun)printf);
+}
