@@ -28,7 +28,7 @@
 #include "gd32e10x.h"
 
 #define I2C_SHORT_TIMEOUT 0x3fff
-#define I2C_LONG_TIMEOUT 0x5f//0x5fff
+#define I2C_LONG_TIMEOUT 0x5fff
 
 int rt_hw_i2c_init(uint32_t i2c_periph);
 int gd32_i2c_read(uint32_t i2c_periph,uint8_t slave_address,uint8_t* p_buffer,uint8_t read_address,uint8_t data_byte);

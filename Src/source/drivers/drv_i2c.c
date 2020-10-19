@@ -112,7 +112,6 @@ static void Delay_I2C(uint32_t us)
         }
     }
 }
-
 void Resume_IIC(uint32_t Timeout, uint32_t i2c_periph)
 {
 	#if 1
