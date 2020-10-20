@@ -46,32 +46,59 @@ extern "C"{
 
 	typedef enum
 	{
-		JT_STATE_INIT			= 0x01,
-		JT_STATE_SLEEP			,//= 0x01,
-		JT_STATE_WAKEUP			,//= 0x02,
-		JT_STATE_PREOPERATION	,//= 0x04,
-		JT_STATE_OPERATION		,//= 0x05,
+		JT_STATE_INIT			= 0x00,
+		JT_STATE_SLEEP			= 0x01,
+		JT_STATE_WAKEUP			= 0x02,
+		JT_STATE_PREOPERATION	= 0x04,
+		JT_STATE_OPERATION		= 0x05,
 
 		JT_STATE_UNKNOWN		= 0xFF,
 	}JT_state;
 
+#define			_BIT(x,n)			((x) << (n))
+#define			_SET_BIT(n)			_BIT(1,n)
+		
+	
+	// 0 ~ 1 GPRS状态
+#define			_GPRS_POWEROFF		_BIT(0,0)	// GPRS 电源关闭
+#define			_GPRS_LOWMODE		_BIT(1,0)	// GPRS 低功耗,TCP连接中断,短信可唤醒
+#define			_GPRS_RESERVED		_BIT(2,0)	// 保留
+#define			_GPRS_NORMAL		_BIT(3,0)	// 全功能
+	// 2 ~ 3 GPS状态
+#define			_GPS_POWEROFF		_BIT(0,2)	// GPS 关闭
+#define			_GPS_LOWMODE		_BIT(1,2)	// GPS 低功耗
+#define			_GPS_RESERVED		_BIT(2,2)	// 保留
+#define			_GPS_NORMAL			_BIT(3,2)	// 全功能
+	// 4 ~ 5 BLE 状态
+#define			_BLE_POWEROFF		_BIT(0,4)	// 关闭BLE电源
+#define			_BLE_LOWMODE		_BIT(1,4)	// BLE低功耗,广播,等待连接
+#define			_BLE_RESERVED		_BIT(2,4)	// 保留
+#define			_BLE_NORMAL			_BIT(3,4)	// 全功能
+		
+		
+	
+	
+#define			_NETWORK_CONNECTION_BIT			_SET_BIT(0)
+#define			_GPS_FIXE_BIT					_SET_BIT(1)
+#define			_SMS_EXIT_BIT					_SET_BIT(2)
 
-
-#define			_NETWORK_CONNECTION_BIT			BIT(0)
-#define			_GPS_FIXE_BIT					BIT(1)
-#define			_SMS_EXIT_BIT					BIT(2)
-
-	typedef struct _JT_devState
-	{
-		uint16_t cnt;	// 连接状态
-		uint8_t csq;	// GPRS/4G信号强度
-		uint8_t snr;	// GPS信号强度
-		uint8_t siv;	// GPS可见卫星
-	}JT_devState;
 
 #pragma pack(1)
 
+	typedef struct
+		{
+			uint8_t 	OperationState;
+			uint8_t 	StateParameter;
+		}JT_SetOperationState;
 
+		typedef struct _JT_devState
+		{
+			uint16_t cnt;	// 设备状态-GPRS,GPS,SMS
+			uint8_t csq;	// GPRS/4G 信号强度
+			uint8_t snr;	// GPS 信噪比
+			uint8_t siv;	// GPS 可见星
+		}JT_devState;
+		
 	//终端的设备属性定义
 #define JT_DEV_HW_VER_SIZE 10
 #define JT_DEV_FW_VER_SIZE 20
@@ -175,7 +202,8 @@ extern "C"{
 		//当前JT808的操作状态
 		JT_state opState;
 		//设置JT808的操作状态
-		JT_state setToOpState;
+		//JT_state setToOpState;
+		JT_SetOperationState setToOpState;
 
 		JT_devState devState;
 

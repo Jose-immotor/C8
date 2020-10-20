@@ -639,8 +639,10 @@ void Utp_Run(Utp* pUtp)
 			}
 		}
 	}
-	if(UTP_FSM_WAIT_RSP != pUtp->state)
-	Utp_CheckReq(pUtp);
+	else
+	{
+		Utp_CheckReq(pUtp);
+	}
 }
 
 void Utp_Init(Utp* pUtp, const UtpCfg* cfg, const UtpFrameCfg* frameCfg)

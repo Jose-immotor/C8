@@ -45,16 +45,10 @@ void can_sleep()
     can_interrupt_disable(CAN0, CAN_INTEN_RFNEIE1);
     //return True;
 }
-void can0_init(void)
+
+static void _can_init(void)
 {
-//    const static Obj obj = { "can0", can_start, Null, Null };
-//    bjList_add(&obj);
-    const static Obj obj = {
-	.name = "CAN",
-	.Start = can_start,
-	};
-    ObjList_add(&obj);
-		/* enable CAN clock */ 
+	/* enable CAN clock */ 
 		rcu_periph_clock_enable(RCU_AF);
     rcu_periph_clock_enable(RCU_CAN0);
 		rcu_periph_clock_enable(RCU_GPIOB);
@@ -123,6 +117,31 @@ void can0_init(void)
     transmit_message.tx_ft = CAN_FT_DATA;
     transmit_message.tx_ff = CAN_FF_EXTENDED;
     //transmit_message.tx_dlen = 2;
+}
+
+void can0_reset(void)
+{
+	uint32_t reset_ms = 0;
+	//rcu_periph_clock_disable(RCU_AF);
+    rcu_periph_clock_disable(RCU_CAN0);
+	//rcu_periph_clock_enable(RCU_GPIOB);
+	can_deinit(CAN0);
+	reset_ms = GET_TICKS();
+	while( GET_TICKS() - reset_ms < 100 );
+	_can_init();
+	can_start();
+}
+
+void can0_init(void)
+{
+//    const static Obj obj = { "can0", can_start, Null, Null };
+//    bjList_add(&obj);
+    const static Obj obj = {
+	.name = "CAN",
+	.Start = can_start,
+	};
+    ObjList_add(&obj);
+	_can_init();
 }
 
 
