@@ -214,13 +214,13 @@ extern void can0_receive_isr(void);
 void CAN0_RX0_IRQHandler(void)
 {
     /* check the receive message */
-		can0_receive_isr(); 
+		//can1_receive_isr(); 
 }
 
-extern void can0_receive_isr(void);
+extern void can1_receive_isr(void);
 void CAN1_RX0_IRQHandler(void)
 {
     /* check the receive message */
-		can0_receive_isr(); 
+		can1_receive_isr(); 
 }
 

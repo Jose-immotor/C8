@@ -9,6 +9,8 @@
 
 #include "ArchDef.h"
 #include "Utp.h"
+#include "debug.h"
+
 
 static Bool Utp_RspProc(Utp* pUtp, const uint8_t* pRsp, int frameLen, UTP_RCV_RSP_RC rspCode);
 static void Utp_RcvRsp(Utp* pUtp, const uint8_t* pRsp, int frameLen, UTP_RCV_RSP_RC rspCode);
@@ -437,6 +439,8 @@ static void Utp_RcvRsp(Utp* pUtp, const uint8_t* pRsp, int frameLen, UTP_RCV_RSP
 	pCmd->pExt->transferLen = rspDlc;
 	pCmd->pExt->rxRspTicks = GET_TICKS();
 
+	PFL(DL_JT808,"CAN RSP:%s\n",pCmd->cmdName );
+
 	int minlen = MIN(rspDlc, pCmd->storageLen);
 	if(pRsp[frameCfg->dataByteInd] == frameCfg->result_SUCCESS)
 	{
@@ -628,10 +632,12 @@ void Utp_Run(Utp* pUtp)
 		{
 			if(pUtp->reTxCount >= pUtp->maxTxCount && pUtp->maxTxCount != UTP_ENDLESS)
 			{
+				PFL(DL_JT808,"CAN Send Cmd:0x%02X Timeout\n", pUtp->pWaitRspCmd->cmd);
 				Utp_RspProc(pUtp, Null, 0, RSP_TIMEOUT);
 			}
 			else
 			{
+				PFL(DL_JT808,"CAN Resend Cmd:0x%02X\n", pUtp->pWaitRspCmd->cmd);
 				Utp_SendFrame(pUtp, pUtp->pWaitRspCmd->cmd, pUtp->frameCfg->txBuf, pUtp->txBufLen);
 				
 				pUtp->reTxCount++;

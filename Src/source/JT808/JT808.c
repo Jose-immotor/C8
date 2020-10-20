@@ -40,6 +40,68 @@ static JT808fsmFn JT808_findFsm(JT_state state);
 
 static void _SetOperationState(uint8_t Operation, uint8_t Parameter );
 
+void Sim_Dump(void)
+{
+	void JtTlv8103IP_Dump();
+	
+	#define PRINTF_SIMID(_field) Printf("\t%s=%d\n", #_field, g_Jt.property._field);
+	#define PRINTF_GPRSLOC(_field) Printf("\t%s=%d\n", #_field, g_Jt.locatData._field);
+	
+	Printf("Sim dump:\n");
+	
+	PRINTF_SIMID(protocolVer);
+	PRINTF_SIMID(devClass);
+	
+	Printf("\tICCID = %s\n", g_Jt.property.iccid);
+	Printf("\tSimhwVer = %s\n", g_Jt.property.hwVer);
+	Printf("\tSimfwVer = %s\n", g_Jt.property.fwVer);
+	Printf("\tID = %s\n", g_Jt.property.devId);
+		
+	JtTlv8103IP_Dump();
+}
+
+void Gprs_Dump(void)
+{
+	#define PRINTF_GPRSDEVSTA(_field) Printf("\t%s=%d\n", #_field, g_Jt.devState._field);
+	#define PRINTF_GPRSLOC(_field) Printf("\t%s=%d\n", #_field, g_Jt.locatData._field);
+	
+	Printf("Gprs dump:\n");
+	
+	Printf("\topState=%d\n",g_Jt.opState);
+	
+	PRINTF_GPRSDEVSTA(cnt);
+	PRINTF_GPRSDEVSTA(csq);
+	PRINTF_GPRSDEVSTA(snr);
+	PRINTF_GPRSDEVSTA(siv);
+	
+	PRINTF_GPRSLOC(longitude);
+	PRINTF_GPRSLOC(latitude);
+	
+}
+
+void Ble_Dump(void)
+{
+	#define PRINTF_BLEDEVSTA(_field) Printf("\t%s=%d\n", #_field, g_Jt.bleproperty._field);
+	#define PRINTF_BLEDEVCFG(_field) Printf("\t%s=%d\n", #_field, g_Jt.blecfgParam._field);
+	Printf("Ble dump:\n");
+
+	Printf("\tBlehwVer = %s\n", g_Jt.bleproperty.BlehwVer);
+	Printf("\tBlefwVer = %s\n", g_Jt.bleproperty.BlefwVer);	
+	PRINTF_BLEDEVSTA(BleType);
+	Printf("\tMAC = [%s]\n", g_Jt.bleproperty.BleMac);
+
+	Printf("\tBleName = %s\n", g_Jt.blecfgParam.BleName);
+	
+	PRINTF_BLEDEVCFG(BleAdvInterval);
+	PRINTF_BLEDEVCFG(BleAdvPower);
+	
+	Printf("\tbleState=%d\n",g_Jt.bleState.bleConnectState);
+	Printf("\tbleConnectMAC=%s\n",g_Jt.bleState.bleConnectMAC);
+	
+	
+
+}
+
 
 UTP_EVENT_RC JT808_cmd_getSimID(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
@@ -888,11 +950,11 @@ int JT808_txData(uint8_t cmd, const uint8_t* pData, uint32_t len)	//cmdÎªCANÐ­Òé
 		}
 		memcpy(transmit_message.tx_data, pData, send_len);	
 		transmit_message.tx_dlen = send_len;
-		can_message_transmit(CAN0, &transmit_message);
+		can_message_transmit(CAN1, &transmit_message);
 //		rt_thread_mdelay(20);
 		tx_timeout = GET_TICKS();
 		while(
-			CAN_TRANSMIT_PENDING == can_transmit_states(CAN0, CAN_MAILBOX0) &&
+			CAN_TRANSMIT_PENDING == can_transmit_states(CAN1, CAN_MAILBOX0) &&
 			GET_TICKS() - tx_timeout <_CAN_TX_TIMEOUT_MS );
 
 		if(len > 8)
@@ -926,12 +988,13 @@ void JT808_timerProc()
 		can0_receive_flag = RESET;
 		JT808_rxDataProc( receive_message.rx_data , receive_message.rx_dlen );
 		gCanbusRevTimeMS = GET_TICKS();
+		PFL(DL_JT808,"CAN Rev len:%d\n",receive_message.rx_dlen );
 	}
 	else
 	{
 		if( GET_TICKS() - gCanbusRevTimeMS > _CAN_BUS_REV_TIMEOUT_MS )
 		{
-			PFL_WARNING("Can Rev Timeout.reset can\r\n");
+			PFL_WARNING("CAN Rev Timeout.reset can\r\n");
 			can0_reset();
 			gCanbusRevTimeMS = GET_TICKS();
 		}
