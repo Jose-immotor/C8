@@ -203,6 +203,10 @@ void Pms_SwitchPort()
 //	Fsm_SetActiveFlag(AF_MDB,False);
 	rt_thread_mdelay(500);
 //	Fsm_SetActiveFlag(AF_MDB,True);
+	if(!(Fsm_ReadActiveFlag() & AF_PMS))
+	{
+		fm175Drv_stop(&g_pms.fmDrv);
+	}
 	Bat_msg(g_pActiveBat, BmsMsg_deactive, 0, 0);
 	
 	//先不跳转到BAT1
@@ -432,7 +436,7 @@ TRANSFER_EVENT_RC Pms_EventCb(Battery* pBat, TRANS_EVENT ev)
 void Pms_stop()
 {
 	Pms_switchStatus(PMS_DEEP_SLEEP);
-	fm175Drv_stop(&g_pms.fmDrv);
+	//fm175Drv_stop(&g_pms.fmDrv);
 }	
 
 void Pms_run()

@@ -48,5 +48,6 @@
 
 void WorkMode_init();
 void workmode_switchStatus(WorkmodeOpStatus newStatus);
-void Fsm_SetActiveFlag(ActiveFlag af, Bool isActive);	
+void Fsm_SetActiveFlag(ActiveFlag af, Bool isActive);
+uint32 Fsm_ReadActiveFlag(void);
 #endif

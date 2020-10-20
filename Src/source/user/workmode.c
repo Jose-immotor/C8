@@ -9,6 +9,10 @@ void WorkMode_Dump()
 {
 
 }
+uint32 Fsm_ReadActiveFlag(void)
+{
+	return g_ActiveFlag;
+}
 
 void Fsm_SetActiveFlag(ActiveFlag af, Bool isActive)
 {
