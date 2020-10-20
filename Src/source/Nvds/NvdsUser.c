@@ -20,12 +20,12 @@ void SetAccOn(uint8 on)
 {
 	if(on)
 	{
-		g_cfgInfo.isAccOn = 1;
+		g_pdoInfo.isRemoteAccOn = 1;
 		Pms_postMsg(PmsMsg_accOn, 0, 0);
 	}
 	else
 	{
-		g_cfgInfo.isAccOn = 0;
+		g_pdoInfo.isRemoteAccOn = 0;
 		Pms_postMsg(PmsMsg_accOff, 0, 0);
 	}
 }
@@ -37,7 +37,7 @@ void g_cgfInfo_Dump(void)
 	Printf("Dump g_cfgInfo:\n");
 	PRINTF_CFG(isActive);
 	PRINTF_CFG(vol);
-	PRINTF_CFG(isAccOn);
+//	PRINTF_CFG(isAccOn);
 
 }
 
@@ -56,10 +56,14 @@ void g_pdoInfo_Dump(void)
 	
 	Printf("Dump g_pdoInfo:\n");
 	
+	PRINTF_PDO(isRemoteAccOn);//车辆远程点火
+	PRINTF_PDO(isWheelLock);///轮毂锁
+	PRINTF_PDO(isCanbinLock);///座舱锁
+	
 	PRINTF_PDO(isFlashOk);
 	PRINTF_PDO(isGyroOk);
 	PRINTF_PDO(isNfcOk);
-	PRINTF_PDO(isBat0In);
+	PRINTF_PDO(isTakeApart);
 	PRINTF_PDO(timeStamp);
 }
 
@@ -160,6 +164,14 @@ const NvdsItem g_NvdsItems[NVDS_ITEM_COUNT] =
 		&g_nvdsSecMgr[2], (NvdsEventFn)DbgInfo_Event,& g_dbgInfo_mirror},
 };
 
+//清除所有保存内容，恢复出厂值
+void NvdsUser_Reset()
+{
+	SectorMgr_Erase(g_NvdsItems[0].sectorMgr);
+	SectorMgr_Erase(g_NvdsItems[1].sectorMgr);
+	SectorMgr_Erase(g_NvdsItems[2].sectorMgr);
+}
+
 //写入指定的NvdsID
 void NvdsUser_Write(NvdsID id)
 {
@@ -182,4 +194,12 @@ void NvdsUser_Init()
 		LocalTimeSync(&localDt);
 		//DateTime_dump(&localDt);
 	}
+	if(!g_cfgInfo.vol)
+	{
+		g_cfgInfo.vol=2;//默认音量为2
+	}
+//	if(!g_pdoInfo.isRemoteAccOn)
+//	{
+//		g_pdoInfo.isRemoteAccOn=1;
+//	}
 }

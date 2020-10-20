@@ -16,6 +16,7 @@ static const DbgSwitch g_defDbgSwh[] =
 	DBG_LEV_DEF(DL_NFC),
 	DBG_LEV_DEF(DL_GYRO),
 	DBG_LEV_DEF(DL_JT808),
+	DBG_LEV_DEF(DL_CABIN),
 };
 
 void Debug_Init()

@@ -32,7 +32,7 @@ extern "C" {
 			uint8 reserved : 7;		//BIT[1-7]:保留
 		};
 		uint8 vol;					//音量
-		uint8 isAccOn:1;			//远程控制ACC
+		uint8 isAccOn:1;			//远程控制ACC  ！！取消，用下面的
 		uint8 reserved0:7;
 		uint8 Reserved[14];	//保留15个字节
 		uint8 latestByte;	//从存储区读出的字节不等于 EEPROM_LATEST_BYTE，说明该存储区被修改，已经失效
@@ -48,7 +48,11 @@ extern "C" {
 			uint8 isRemoteAccOn : 1;//BIT[0]:车辆远程点火
 			uint8 isWheelLock : 1;	//BIT[1]:轮毂锁
 			uint8 isCanbinLock : 1;	//BIT[2]:座舱锁
-			uint8 reserved : 5;		//BIT[3-7]:保留
+			uint8 IsForbidDischarge : 1;//BIT[3]:远程断电/禁止放电
+			uint8 IsBatVerifyEn:1;  //BIT[4]:是否使能电池身份验证
+			uint8 IsAlarmMode:1;	///BIT[5]:是否境界模式/异动报警使能
+			uint8 BatVerifyRet:2;	///BIT[6-7]:电池身份校验结果。0：忽略，不校验。1：合法：2：非法。	
+//			uint8 reserved : 5;		//BIT[3-7]:保留
 		};
 		union
 		{
@@ -60,7 +64,7 @@ extern "C" {
 				uint16 isNfcOk : 1;	//BIT[2]:NFC通讯 is OK;
 				uint16 isBat0In : 1;//BIT[3]:电池0在位;
 				uint16 isBat1In : 1;//BIT[4]:电池1在位;
-	//			uint16 isCanbinLock : 1;	//BIT[2]:座舱锁
+				uint16 isTakeApart : 1;	//BIT[5]:拆开
 				uint16 reserved01 : 5;		//BIT[3-7]:保留
 			};
 		};

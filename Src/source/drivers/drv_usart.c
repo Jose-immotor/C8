@@ -18,16 +18,51 @@
 #include "gd32e10x.h"
 #include "drv_usart.h"
 
+uint8_t Shell_rx_buf[RX_BUFF_SIZE];
+Queue QuenueShellRx;
+void Shell_rxCmd(const char* str);
+void uart0_isr(void)
+{
+	rt_interrupt_enter();
+	if(usart_interrupt_flag_get(USART0, USART_INT_FLAG_RBNE) != RESET)
+    {
+		uint8_t data = usart_data_receive(USART0);
+		if(Queue_writeByte(&QuenueShellRx, data))
+		{
+		}
+		else
+		{
+			//overflow
+		}
+    }
+	rt_interrupt_leave();
+
+}
+
 char rt_hw_console_getchar(void)
 {
-	//使用查询方式
-	int ch = -1;
+	#if 1
+	uint8_t* data;
 	
-	if (usart_flag_get(USART0, USART_FLAG_RBNE) != RESET)
-    {
-        ch = usart_data_receive(USART0);
-    }
-	return ch;
+	data = (uint8_t*)Queue_pop(&QuenueShellRx);
+	if (data)
+	{
+		return *data;
+	}
+	else
+	{
+		return -1;
+	}
+	#else
+//	//使用查询方式
+//	int ch = -1;
+//	
+//	if (usart_flag_get(USART0, USART_FLAG_RBNE) != RESET)
+//    {
+//        ch = usart_data_receive(USART0);
+//    }
+//	return ch;
+	#endif
 }
 
 /*!
@@ -45,7 +80,7 @@ uint32_t usart0_put_byte(uint8_t data)
 	while(RESET == usart_flag_get(USART0, USART_FLAG_TBE));
     return sta;   
 }
-
+#if 1
 Queue QuenueRs485Rx;
 void uart4_isr(void)
 {
@@ -88,7 +123,7 @@ uint32_t uart4_put_byte(uint8_t data)
 	while(RESET == usart_flag_get(UART4, USART_FLAG_TBE));
     return sta;   
 }
-
+#endif
 /*!
  * \brief usart0作为调试串口，只使用接收中断.使用发送中断会出现Hard Fault
  *		  
@@ -118,6 +153,10 @@ int gd32_hw_usart_init(void)
 	usart_parity_config(USART0, USART_PM_NONE);
     usart_receive_config(USART0, USART_RECEIVE_ENABLE);
     usart_transmit_config(USART0, USART_TRANSMIT_ENABLE);
+	usart_interrupt_enable(USART0, USART_INT_RBNE);
+	nvic_irq_enable(USART0_IRQn, 0, 0);
+	
+	Queue_init(&QuenueShellRx, Shell_rx_buf, 1, RX_BUFF_SIZE);
     usart_enable(USART0);
 #endif
 #ifdef RS485_UART4
@@ -131,7 +170,7 @@ int gd32_hw_usart_init(void)
 	rcu_periph_clock_enable(RCU_GPIOD);
     rcu_periph_clock_enable(RCU_AF);
 
-    /* connect port to USARTx_Tx */
+    /* connect port to USARTx_Tx */t
     gpio_init(GPIOC, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_12);
     /* connect port to USARTx_Rx */
     gpio_init(GPIOD, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, GPIO_PIN_2);
@@ -145,10 +184,11 @@ int gd32_hw_usart_init(void)
     usart_receive_config(UART4, USART_RECEIVE_ENABLE);
     usart_transmit_config(UART4, USART_TRANSMIT_ENABLE);
 	usart_interrupt_enable(UART4, USART_INT_RBNE);
+	Queue_init(&QuenueRs485Rx, Rs485_rx_buf, 1, RX_BUFF_SIZE);
     usart_enable(UART4);
 	
 	nvic_irq_enable(UART4_IRQn, 0, 0);
-	Queue_init(&QuenueRs485Rx, Rs485_rx_buf, 1, RX_BUFF_SIZE);
+	
 #endif
     return 0;
 }

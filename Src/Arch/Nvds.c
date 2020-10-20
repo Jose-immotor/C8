@@ -28,7 +28,7 @@ void Nvds_write(uint8_t nvdsId)
 			if (isOk)
 			{
 				if (p->mirror)
-					isOk = (memcpy(p->secCfg.storage, p->mirror, p->secCfg.storageSize) != 0); // 应该是比较吧
+					isOk = (memcmp(p->secCfg.storage, p->mirror, p->secCfg.storageSize) != 0);
 			}
 			if (isOk)
 			{

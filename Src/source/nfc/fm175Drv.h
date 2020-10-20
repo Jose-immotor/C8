@@ -19,6 +19,7 @@ typedef enum _FM17522_MSG
 {
 	FM_MSG_RUN,
 	FM_MSG_SWITCH_NFC,	//Fsm(FM_MSG_SWITCH_NFC, iicAddr)
+	FM_MSG_STOP,//休眠模式
 }FM17522_MSG;
 
 //FM17522传输命令码定义
@@ -128,6 +129,7 @@ inline Bool fm175Drv_isIdle(const Fm175Drv* pDrv) { return pDrv->transStatus == 
 void fm175Drv_init(Fm175Drv* pDrv, uint8 iicAddr, const TransProtocolCfg* cfg, TransEventFn	Event);
 void fm175Drv_run(Fm175Drv* pDrv);
 void fm175Drv_start(Fm175Drv* pDrv);
+void fm175Drv_stop(Fm175Drv* pDrv);
 Bool fm175Drv_switchNfc(Fm175Drv* pDrv, uint8 iicAddr);
 void fm175Drv_fsm(Fm175Drv* pDrv, FM17522_MSG msg, uint32 param);
 

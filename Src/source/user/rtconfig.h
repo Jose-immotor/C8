@@ -3,7 +3,7 @@
 #ifndef __RTTHREAD_CFG_H__
 #define __RTTHREAD_CFG_H__
 
-#define RTE_USING_FINSH
+//#define RTE_USING_FINSH
 
 // <<< Use Configuration Wizard in Context Menu >>>
 // <h>Basic Configuration

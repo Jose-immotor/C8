@@ -145,14 +145,16 @@ void DebugMon_Handler(void)
     \param[out] none
     \retval     none
 */
+void uart0_isr(void);
 void USART0_IRQHandler(void)
 {
+	uart0_isr();
 }
 
-void uart4_isr(void);
+//void uart4_isr(void);
 void UART4_IRQHandler(void)
 {
-	uart4_isr();
+//	uart4_isr();
 }
 
 extern void over_temp_irq(void);
@@ -182,10 +184,15 @@ void EXTI3_IRQHandler(void)
     }
 }
 
+extern void Mcu_CabinLockIsr();
 extern void Gyro_Isr();
 extern void bat_insert(void);
 void EXTI5_9_IRQHandler(void)
 {
+	if(SET == exti_interrupt_flag_get(EXTI_6)){
+        exti_interrupt_flag_clear(EXTI_6);
+		Mcu_CabinLockIsr();
+    }
 	if(SET == exti_interrupt_flag_get(EXTI_8)){
         exti_interrupt_flag_clear(EXTI_8);
 		Gyro_Isr();
@@ -205,6 +212,13 @@ void EXTI10_15_IRQHandler(void)
 
 extern void can0_receive_isr(void);
 void CAN0_RX0_IRQHandler(void)
+{
+    /* check the receive message */
+		can0_receive_isr(); 
+}
+
+extern void can0_receive_isr(void);
+void CAN1_RX0_IRQHandler(void)
 {
     /* check the receive message */
 		can0_receive_isr(); 

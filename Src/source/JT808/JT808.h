@@ -60,20 +60,20 @@ extern "C"{
 		
 	
 	// 0 ~ 1 GPRS×´Ì¬
-#define			_GPRS_POWEROFF		_BIT(0,0)	// GPRS µçÔ´¹Ø±Õ
-#define			_GPRS_LOWMODE		_BIT(1,0)	// GPRS µÍ¹¦ºÄ,TCPÁ¬½ÓÖÐ¶Ï,¶ÌÐÅ¿É»½ÐÑ
-#define			_GPRS_RESERVED		_BIT(2,0)	// ±£Áô
-#define			_GPRS_NORMAL		_BIT(3,0)	// È«¹¦ÄÜ
+#define			_GPRS_POWEROFF		_BIT(0,0)	// GPRS ï¿½ï¿½Ô´ï¿½Ø±ï¿½
+#define			_GPRS_LOWMODE		_BIT(1,0)	// GPRS ï¿½Í¹ï¿½ï¿½ï¿½,TCPï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½,ï¿½ï¿½ï¿½Å¿É»ï¿½ï¿½ï¿½
+#define			_GPRS_RESERVED		_BIT(2,0)	// ï¿½ï¿½ï¿½ï¿½
+#define			_GPRS_NORMAL		_BIT(3,0)	// È«ï¿½ï¿½ï¿½ï¿½
 	// 2 ~ 3 GPS×´Ì¬
-#define			_GPS_POWEROFF		_BIT(0,2)	// GPS ¹Ø±Õ
-#define			_GPS_LOWMODE		_BIT(1,2)	// GPS µÍ¹¦ºÄ
-#define			_GPS_RESERVED		_BIT(2,2)	// ±£Áô
-#define			_GPS_NORMAL			_BIT(3,2)	// È«¹¦ÄÜ
+#define			_GPS_POWEROFF		_BIT(0,2)	// GPS ï¿½Ø±ï¿½
+#define			_GPS_LOWMODE		_BIT(1,2)	// GPS ï¿½Í¹ï¿½ï¿½ï¿½
+#define			_GPS_RESERVED		_BIT(2,2)	// ï¿½ï¿½ï¿½ï¿½
+#define			_GPS_NORMAL			_BIT(3,2)	// È«ï¿½ï¿½ï¿½ï¿½
 	// 4 ~ 5 BLE ×´Ì¬
-#define			_BLE_POWEROFF		_BIT(0,4)	// ¹Ø±ÕBLEµçÔ´
-#define			_BLE_LOWMODE		_BIT(1,4)	// BLEµÍ¹¦ºÄ,¹ã²¥,µÈ´ýÁ¬½Ó
-#define			_BLE_RESERVED		_BIT(2,4)	// ±£Áô
-#define			_BLE_NORMAL			_BIT(3,4)	// È«¹¦ÄÜ
+#define			_BLE_POWEROFF		_BIT(0,4)	// ï¿½Ø±ï¿½BLEï¿½ï¿½Ô´
+#define			_BLE_LOWMODE		_BIT(1,4)	// BLEï¿½Í¹ï¿½ï¿½ï¿½,ï¿½ã²¥,ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½
+#define			_BLE_RESERVED		_BIT(2,4)	// ï¿½ï¿½ï¿½ï¿½
+#define			_BLE_NORMAL			_BIT(3,4)	// È«ï¿½ï¿½ï¿½ï¿½
 		
 		
 	
@@ -93,28 +93,28 @@ extern "C"{
 
 		typedef struct _JT_devState
 		{
-			uint16_t cnt;	// Éè±¸×´Ì¬-GPRS,GPS,SMS
-			uint8_t csq;	// GPRS/4G ÐÅºÅÇ¿¶È
-			uint8_t snr;	// GPS ÐÅÔë±È
-			uint8_t siv;	// GPS ¿É¼ûÐÇ
+			uint16_t cnt;	// ï¿½è±¸×´Ì¬-GPRS,GPS,SMS
+			uint8_t csq;	// GPRS/4G ï¿½Åºï¿½Ç¿ï¿½ï¿½
+			uint8_t snr;	// GPS ï¿½ï¿½ï¿½ï¿½ï¿½
+			uint8_t siv;	// GPS ï¿½É¼ï¿½ï¿½ï¿½
 		}JT_devState;
 		
-	//ÖÕ¶ËµÄÉè±¸ÊôÐÔ¶¨Òå
+	//ï¿½Õ¶Ëµï¿½ï¿½è±¸ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½
 #define JT_DEV_HW_VER_SIZE 10
 #define JT_DEV_FW_VER_SIZE 20
 	typedef struct _JtDevProperty
 	{
-		uint16  protocolVer;	//´«ÊäÐ­Òé°æ±¾ºÅ
-		uint32 devClass;	//ÖÕ¶ËÀàÐÍ
-		uint8  vendorID[5];	//ÖÆÔìÉÌID
-		uint8  devModel[20];//ÖÕ¶ËÐÍºÅ
-		uint8  devId[12];	//ÖÕ¶Ë ID
-		uint8  iccid[10];	//ÖÕ¶Ë SIM ¿¨ ICCID
-		uint8  hwVer[JT_DEV_HW_VER_SIZE];	//ÖÕ¶ËÓ²¼þ°æ±¾ºÅ,ÒÔ0½áÎ²
-		uint8  fwVer[JT_DEV_FW_VER_SIZE];	//ÖÕ¶Ë¹Ì¼þ°æ±¾ºÅ,ÒÔ0½áÎ²
+		uint16  protocolVer;	//ï¿½ï¿½?ï¿½ï¿½?D-ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½?o?
+		uint32 devClass;	//????ï¿½ï¿½ï¿½ï¿½Dï¿½ï¿½
+		uint8  vendorID[5];	//???ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ID
+		uint8  devModel[20];//????Dï¿½ï¿½o?
+		char  devId[12];	//???? ID
+		char  iccid[10];	//???? SIM ?ï¿½ï¿½ ICCID
+		char  hwVer[JT_DEV_HW_VER_SIZE];	//????ï¿½ï¿½2?tï¿½ï¿½?ï¿½ï¿½?o?,ï¿½ï¿½?0?ï¿½ï¿½?2
+		char  fwVer[JT_DEV_FW_VER_SIZE];	//????1ï¿½ï¿½?tï¿½ï¿½?ï¿½ï¿½?o?,ï¿½ï¿½?0?ï¿½ï¿½?2
 	}JtDevProperty;
 	// Jose add 2020/09/17
-	// ÖÕ¶ËÀ¶ÑÀ
+	// ????ï¿½ï¿½??ï¿½ï¿½
 #define		JT_DEV_BLE_MAC_ADDR_SIZE	6
 #define		JT_DEV_BLE_HW_VER_SIZE		16
 #define		JT_DEV_BLE_FW_VER_SIZE		16
@@ -122,18 +122,18 @@ extern "C"{
 	typedef struct _JtDevBleProperty
 	{
 		uint16 BleType ;
-		uint8  BleMac[JT_DEV_BLE_MAC_ADDR_SIZE];
-		uint8  BlehwVer[JT_DEV_BLE_HW_VER_SIZE];
-		uint8  BlefwVer[JT_DEV_BLE_FW_VER_SIZE];
+		char  BleMac[JT_DEV_BLE_MAC_ADDR_SIZE];
+		char  BlehwVer[JT_DEV_BLE_HW_VER_SIZE];
+		char  BlefwVer[JT_DEV_BLE_FW_VER_SIZE];
 	}JtDevBleProperty;
 	
 	// Jose add 2020/09/17
 	typedef struct _JtDevBleCfgParam
 	{
-		uint8 BleName[32];		// À¶ÑÀ¹ã²¥Ãû³Æ
-		uint32 BleAdvInterval ;	// ¹ã²¥¼ä¸ô(1ms)
-		uint8 BleAdvPower ;		// ÎÄ¼þ·¢Éä¹¦ÂÊ
-		uint8 BleAdvData[31];	// ¹ã²¥ÄÚÈÝ
+		char BleName[32];		// ï¿½ï¿½ï¿½ï¿½ï¿½ã²¥ï¿½ï¿½ï¿½ï¿½
+		uint32 BleAdvInterval ;	// ï¿½ã²¥ï¿½ï¿½ï¿½(1ms)
+		uint8 BleAdvPower ;		// ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ä¹¦ï¿½ï¿½
+		uint8 BleAdvData[31];	// ï¿½ã²¥ï¿½ï¿½ï¿½ï¿½
 	}JtDevBleCfgParam;
 
 	typedef struct 
@@ -148,29 +148,29 @@ extern "C"{
 		uint32 	fileOffset;
 	}FileContent;
 
-	// ¶¨Î»×ø±ê
+	// ?ï¿½ï¿½??ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½
 	typedef struct
 	{
-		int32 longitude ;	// ¾­¶Èµ¥Î»Îª¶È,ÎªÊµ¼ÊÖµ x 1E7 , 0 ±íÊ¾Ã»¶¨Òå
-		int32 latitude ;	// Î³¶È
+		int32 longitude ;	// ?-?ï¿½ï¿½ï¿½Ì£ï¿½???a?ï¿½ï¿½,?aï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ x 1E7 , 0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½????ï¿½ï¿½ï¿½ï¿½?
+		int32 latitude ;	// ?3?ï¿½ï¿½
 	}Jt_LocationData;
 
 #define		_BLE_CONNECT_BIT		BIT(0)
-	// ble×´Ì¬
+	// bleï¿½ï¿½ï¿½ä¨¬?
 	typedef struct
 	{
 		uint8 bleConnectState ;
 		uint8 bleConnectMAC[6];
 	}Jt_BleState;
 
-// ¸½¼ÓÉè±¸×´Ì¬¶¨Òå
+// ???ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ä¨¬??ï¿½ï¿½ï¿½ï¿½?
 #define			_STATE_ACC				BIT(0)		// ACC 
-#define			_STATE_WHEL_LLOCK		BIT(1)		// ÂÖì±
-#define			_STATE_CAB_LOCK			BIT(2)		//	×ù²ÕËø×´Ì¬
-#define			_STATE_REPOWER_OFF		BIT(3)		//  Ô¶³Ì¶Ïµç
-#define			_STATE_ACTIVE			BIT(4)		//	¼¤»î×´Ì¬
-#define			_STATE_BAT_AUTH_EN		BIT(5)		//	¼¤»î×´Ì¬
-#define			_STATE_ALAM_EN			BIT(6)		//	ÒÆ¶¯
+#define			_STATE_WHEL_LLOCK		BIT(1)		// ??ï¿½ï¿½ï¿½ï¿½
+#define			_STATE_CAB_LOCK			BIT(2)		//	ï¿½ï¿½ï¿½ï¿½2???ï¿½ï¿½ï¿½ä¨¬?
+#define			_STATE_REPOWER_OFF		BIT(3)		//  ??3ï¿½ï¿½??ï¿½ï¿½?
+#define			_STATE_ACTIVE			BIT(4)		//	?ï¿½ï¿½??ï¿½ï¿½ï¿½ä¨¬?
+#define			_STATE_BAT_AUTH_EN		BIT(5)		//	?ï¿½ï¿½??ï¿½ï¿½ï¿½ä¨¬?
+#define			_STATE_ALAM_EN			BIT(6)		//	ï¿½ï¿½??ï¿½ï¿½
 
 
 #define		_SMS_SIZE		(140)
@@ -188,7 +188,7 @@ extern "C"{
 		SMSContext	smsText[_SMS_ARRY_CNT];
 	}GetSMSContext;
 
-// ¸½¼Ó±¨¾¯×´Ì¬¶¨Òå
+// ???ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ä¨¬??ï¿½ï¿½ï¿½ï¿½?
 
 
 
@@ -199,9 +199,9 @@ extern "C"{
 	typedef void (*JT808fsmFn)(uint8_t msgID, uint32_t param1, uint32_t param2);
 	typedef struct _JT808
 	{
-		//µ±Ç°JT808µÄ²Ù×÷×´Ì¬
+		//ï¿½ï¿½Ç°JT808ï¿½Ä²ï¿½ï¿½ï¿½×´Ì¬
 		JT_state opState;
-		//ÉèÖÃJT808µÄ²Ù×÷×´Ì¬
+		//ï¿½ï¿½ï¿½ï¿½JT808ï¿½Ä²ï¿½ï¿½ï¿½×´Ì¬
 		//JT_state setToOpState;
 		JT_SetOperationState setToOpState;
 
@@ -209,12 +209,12 @@ extern "C"{
 
 		Jt_LocationData locatData ;
 		
-		//ÊÇ·ñ¶¨Î»³É¹¦
+		//ï¿½Ç·ï¿½Î»ï¿½É¹ï¿½
 		//Bool isLocation;
 		
-		//ÖÕ¶ËÊôÐÔÊý¾Ý
+		//ï¿½Õ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		JtDevProperty property;
-		// bleÊôÐÔ
+		// bleï¿½ï¿½ï¿½ï¿½
 		Jt_BleState		bleState ;
 		uint16_t 		bleEnCtrl;
 		JtDevBleProperty bleproperty ;
@@ -222,7 +222,7 @@ extern "C"{
 		
 		GetSMSContext	smsContext ;
 		
-		// ÎÄ¼þÊôÐÔ
+		// ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½
 		UpdateFileInfo  updatefileinfo ;
 		FileContent		filecontent ;
 		//

@@ -37,6 +37,12 @@ extern "C"{
 #include "HwFwVer.h"
 #include "nvc.h"
 #include "CmdLineExport.h"
+#include "Dump.h"
+#include "Ble.h"
+#include "workmode.h"
+
+#define CFG_CABIN_LOCK
+
 
 #ifdef __cplusplus
 }

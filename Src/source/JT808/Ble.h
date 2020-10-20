@@ -25,6 +25,7 @@ extern "C"{
 #define REQ_ID_GET_BLE_PSW		0x0B
 #define REQ_ID_EVENT_IND		0x0C
 
+#define REQ_ID_GET_DEVICECAP		0x18
 #define REQ_ID_GET_DEVICEID			0x19
 #define REQ_ID_GET_PMS_INFO			0x1A
 #define REQ_ID_GET_BMS_INFO			0x1B
@@ -47,6 +48,9 @@ extern "C"{
 
 #define REQ_ID_SET_ALARM_MODE	0x2C
 #define REQ_ID_GET_RUNPARAM		0x36	
+
+#define REQ_ID_SET_CABINLOCK	0x38
+#define REQ_ID_SET_ACC			0x39
 
 #define REQ_ID_SET_IP				0xf1
 #define REQ_ID_GET_IP				0xf2
@@ -77,6 +81,7 @@ extern "C"{
 		uint8 portNum;
 		uint16 nominalVol;
 		uint16 nominalCur;
+		uint16 nominalCap;
 	}BatProperty;
 
 	typedef struct _PmsPortStatePkt
@@ -111,16 +116,16 @@ extern "C"{
 		uint8  fault;
 		uint8  damage;
 		uint16 cycleCount;
-		uint16 rateVoltage;
-		uint16 rateCurrent;
-		uint16 capacity;
-		uint16 maxVoltage;
-		uint16 minVoltage;
-		uint8  maxVolCell;
-		uint8  minVolCell;
-		int8   bmsPcbTemp;
-		int8   connectorTemp;
-		uint8  mosState;
+//		uint16 rateVoltage;
+//		uint16 rateCurrent;
+//		uint16 capacity;
+//		uint16 maxVoltage;
+//		uint16 minVoltage;
+//		uint8  maxVolCell;
+//		uint8  minVolCell;
+//		int8   bmsPcbTemp;
+//		int8   connectorTemp;
+//		uint8  mosState;
 	}BatteryDesc;
 
 	typedef struct _GpsPkt
@@ -151,7 +156,7 @@ extern "C"{
 		uint8  gprsState;
 		uint8  gpsState;
 		uint8  devState;
-		uint8  _18650Vol;
+		uint16  _18650Vol;
 		uint8  devState2;
 		uint8  batVerify;
 	}SelfTestResult;

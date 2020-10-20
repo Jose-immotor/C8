@@ -43,11 +43,11 @@ void Gyro_Run()
 
 void Gyro_Stop()
 {
-	if(!g_Gyro.m_isPowerOn) return;
-	//Printf("Gyro_Stop()\n");
-//	GYRO_DISABLE();
-//	GYRO_POWER_OFF();
-	g_Gyro.m_isPowerOn = False;
+//	if(!g_Gyro.m_isPowerOn) return;
+//	//Printf("Gyro_Stop()\n");
+////	GYRO_DISABLE();
+////	GYRO_POWER_OFF();
+//	g_Gyro.m_isPowerOn = False;
 }
 
 void Gyro_Start()

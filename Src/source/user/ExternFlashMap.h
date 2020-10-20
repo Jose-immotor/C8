@@ -23,9 +23,13 @@ extern "C" {
 #define  EX_FLASH_CFG_DBG_INFO_ADDR		(EX_FLASH_CFG_PDO_INFO_ADDR + EX_FLASH_CFG_PDO_INFO_SIZE)
 #define  EX_FLASH_CFG_DBG_INFO_SIZE		EX_FLASH_SECTOR_SIZE
 
-//起始地址在1M
+//起始地址在6k
 #define	 EX_FLASH_LOG_AREA_ADDR			(EX_FLASH_CFG_DBG_INFO_ADDR + EX_FLASH_CFG_DBG_INFO_SIZE)
-#define	 EX_FLASH_LOG_AREA_SIZE			0x100000	//1M
+#define	 EX_FLASH_LOG_AREA_SIZE			0x2000	//8k
+
+//起始地址在14k
+#define	 EX_FLASH_BIN_AREA_ADDR			(EX_FLASH_LOG_AREA_ADDR + EX_FLASH_LOG_AREA_SIZE)
+#define	 EX_FLASH_BIN_AREA_SIZE			0x10000	//64k
 
 	/*******************************************************************************
 	部Flash空间映射定义

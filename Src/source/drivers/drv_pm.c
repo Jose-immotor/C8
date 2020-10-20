@@ -70,22 +70,16 @@ extern DrvIo* g_p18650PwrOffIO;
 void Enter_PowerDown()
 {	
 	extern DrvIo* g_pLedIO;
+	DrvIo* g_pNfcON = Null;
 	
-	
-	if((g_cfgInfo.isActive == 0)&&(g_pdoInfo.isBat0In == 0))
+	if((g_cfgInfo.isActive == 0)&&(g_Bat[0].presentStatus != BAT_IN))
 		PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, False);
 	else
 		PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, True);
 	
-	
+
 	PortPin_Set(g_pLedIO->periph, g_pLedIO->pin, True);
-	RTC_TimerStart(60*60);//(24*60*60);
-//	//485 power
-//	POWER_3V3_485_OFF;
-//	//NFC power
-//	rt_pin_write(FM17522_ON, PIN_LOW);
-//	rt_pin_write(FM17522_ON1, PIN_LOW);
-//	ADC_Ctrl(ADC1, DISABLE);
+	RTC_TimerStart(24*60*60);
 
 	//待机模式
 	rcu_periph_clock_enable(RCU_PMU);
@@ -93,6 +87,9 @@ void Enter_PowerDown()
 	//停止模式唤醒后，需要重新配置系统时钟
 	SystemInit();
 	rt_thread_mdelay(200);
+	workmode_switchStatus(WM_ACTIVE);
+//	ObjList_start();
+
 }
 
 /*!
@@ -115,7 +112,7 @@ void Mcu_PowerDown()
  	Printf("\nPower up.\n");
 	PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, True);	
 	LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_WakeUp, GetWakeUpType());
-	
+	Printf("wake up reason:%d\n",GetWakeUpType());
 	if(g_cfgInfo.isAccOn)
 	{
 		Pms_switchStatus(PMS_ACC_ON);
@@ -124,7 +121,6 @@ void Mcu_PowerDown()
 	{
 		Pms_switchStatus(PMS_ACC_OFF);
 	}
-//	Pms_switchStatus(PMS_ACC_OFF);
 //	env_nvds_init();
 //	Fsm_Init();
 //	Fsm_Start();

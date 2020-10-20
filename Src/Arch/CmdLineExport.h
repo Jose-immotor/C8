@@ -6,7 +6,7 @@
  * 2020-08-27     Allen      first version
  */
 
-#ifdef CONFIG_CMDLINE
+#if 1//def CONFIG_CMDLINE
 
 #ifndef  _CMDLINE_EXPORT_DEF_H_
 #define  _CMDLINE_EXPORT_DEF_H_

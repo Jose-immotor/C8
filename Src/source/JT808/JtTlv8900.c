@@ -22,6 +22,14 @@ TlvInEventRc JtTlv8900_Event(TlvInMgr* mgr, const TlvIn* pItem, TlvInEvent ev)
 				break ;
 			case TAG_SET_ACC_STATE :
 				g_pdoInfo.isRemoteAccOn = *pItem->storage ;
+				if(g_pdoInfo.isRemoteAccOn)
+				{
+					Pms_postMsg(PmsMsg_accOn, 0, 0);
+				}
+				else
+				{
+					Pms_postMsg(PmsMsg_accOff, 0, 0);
+				}
 				NvdsUser_Write(NVDS_PDO_INFO);
 				break ;
 			case TAG_SET_WHELL_LOCK :
@@ -33,12 +41,20 @@ TlvInEventRc JtTlv8900_Event(TlvInMgr* mgr, const TlvIn* pItem, TlvInEvent ev)
 				NvdsUser_Write(NVDS_PDO_INFO);
 				break ;
 			case TAG_SET_POWER_OFF :
+				g_pdoInfo.IsForbidDischarge = *pItem->storage;
+				NvdsUser_Write(NVDS_PDO_INFO);
 				break ;
 			case TAG_SET_BAT_IDEN_EN :
+				g_pdoInfo.IsBatVerifyEn = *pItem->storage;
+				NvdsUser_Write(NVDS_PDO_INFO);
 				break ;
 			case TAG_SET_BAT_ALAM_EN :
+				g_pdoInfo.IsAlarmMode = *pItem->storage;
+				NvdsUser_Write(NVDS_PDO_INFO);
 				break ;
 			case TAG_SET_BAT_BID :
+				g_pdoInfo.BatVerifyRet = *pItem->storage;
+				NvdsUser_Write(NVDS_PDO_INFO);
 				break ;
 			default :break ;
 		}

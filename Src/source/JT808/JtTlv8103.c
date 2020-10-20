@@ -32,7 +32,10 @@ static JtDevCfgParam g_cfgParam =
 	.factoryFlag = 0 ,
 };
 
-
+void JtTlv8103IP_Dump()
+{	
+	Printf("\tIpAddr:%s, Port=%d.\n", g_cfgParam.mainSvrUrl, g_cfgParam.mainSvrPort);
+}
 
 
 void JtTlv8103_Dump()

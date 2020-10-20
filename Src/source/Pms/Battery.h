@@ -139,6 +139,7 @@ extern "C" {
 
 	//Bat ÊÂ¼þº¯Êý
 	MOD_EVENT_RC Bat_event(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev);
+	MOD_EVENT_RC Bat_event_readBmsID(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev);
 	MOD_EVENT_RC Bat_event_readBmsInfo(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev);
 
 #ifdef __cplusplus

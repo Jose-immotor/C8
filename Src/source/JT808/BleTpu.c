@@ -17,7 +17,7 @@ static const UtpCmd* BleTpu_FindCmdItem(BleTpu* pBleTpu, uint8_t cmd)
 
 Bool BleTpu_verify(BleTpu* pBleTpu, const uint8_t* pReq, int frameLen)
 {
-	return (frameLen == pReq[1]);
+	return 1;//(frameLen == pReq[1]);
 }
 
 static UTP_EVENT_RC BleTpu_Event(BleTpu* pBleTpu, const UtpCmd* pCmd, UTP_TXF_EVENT ev)

@@ -21,7 +21,12 @@
 #include "drv_adc.h"
 #include "AdcUser.h"
 #include "nvc.h"
+#include "cabin.h"
 #include "rs485_protocol.h"
+#include "drv_can.h"
+#include "workmode.h"
+#include "CmdLineExport.h"
+#include "smart_shell.h"
 
 const HwFwVer AppInfo={
 FW_VER_MAIN,
@@ -40,21 +45,22 @@ int main(void)
 	HwFwVer_Dump(Null,&AppInfo,Null);
 	//所有对象初始化
 	cm_backtrace_init("C7Pms", "1.0", "1.0");
-//	Shell_init();
+	Debug_Init();	
+	LocalTimeInit();	
+	NvdsUser_Init();
+	LogUser_init();	
+	Smart_shell_init();
 	IO_Init();
 	AdcUser_Init();
 	Adc_init();
-	LocalTimeInit();
-	Debug_Init();
-	NvdsUser_Init();
-	LogUser_init();
 	Led_init();
-	can0_init();
+	hw_can_init(CAN1);
 	JT808_init();
 	Pms_init();
 	Gyro_Init();
 	Nvc_Init();
-	RS485_Init();
+	Cabin_Init();
+	WorkMode_init();
 	LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_McuReset, 1);
 
 	//对象启动
