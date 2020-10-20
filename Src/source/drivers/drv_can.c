@@ -10,6 +10,8 @@
 #include "Common.h"
 
  FlagStatus can0_receive_flag;
+ can_parameter_struct can_init_parameter;
+ can_filter_parameter_struct can_filter_parameter;
  can_trasnmit_message_struct transmit_message;
  can_receive_message_struct receive_message;
  void can0_receive_isr()
