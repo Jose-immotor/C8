@@ -2,6 +2,7 @@
 #include "Common.h"
 #include "JT808.h"
 #include "MsgDef.h"
+#include "cirbuffer.h"
 #include "JtUtp.h"
 #include "JtTlv0900.h"
 #include "JtTlv8900.h"
@@ -682,6 +683,7 @@ UTP_EVENT_RC JT808_event_LocationChanged(JT808* pJt, const UtpCmd* pCmd, UTP_TXF
 
 
 
+
 UTP_EVENT_RC JT808_event_rcvSvrData(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
 	 if (ev == UTP_CHANGED_AFTER)
@@ -844,7 +846,7 @@ void JT808_fsm_operation(uint8_t msgID, uint32_t param1, uint32_t param2)
 	if (msgID == MSG_RUN)
 	{
 		// 更新JtTlv9000数据
-		//JtTlv0900_updateStorage();	//
+		JtTlv0900_updateStorage();	//
 		
 		if (Utp_isIdle(&g_JtUtp) && (g_Jt.devState.cnt & _NETWORK_CONNECTION_BIT) )	// 空闲 & 连接网络s
 		{
@@ -973,9 +975,11 @@ int JT808_txData(uint8_t cmd, const uint8_t* pData, uint32_t len)	//cmd为CAN协议
 
 
 //xx 从总线上接收数据
+
 void JT808_rxDataProc(const uint8_t* pData, int len)
 {
-	Utp_RxData(&g_JtUtp, pData, len);
+	//Utp_RxData(&g_JtUtp, pData, len);
+	CirBuffPush( &g_JtUtp.rxBuffCirBuff, pData ,len );
 }
 
 // GPS 1s一条,心跳2s一条
@@ -986,9 +990,9 @@ void JT808_timerProc()
 	if( can0_receive_flag == SET )
 	{
 		can0_receive_flag = RESET;
-		JT808_rxDataProc( receive_message.rx_data , receive_message.rx_dlen );
+		//JT808_rxDataProc( receive_message.rx_data , receive_message.rx_dlen );
 		gCanbusRevTimeMS = GET_TICKS();
-		PFL(DL_JT808,"CAN Rev len:%d\n",receive_message.rx_dlen );
+		//PFL(DL_JT808,"CAN Rev len:%d\n",receive_message.rx_dlen );
 	}
 	else
 	{

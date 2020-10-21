@@ -12,6 +12,7 @@
  FlagStatus can0_receive_flag;
  can_trasnmit_message_struct transmit_message;
  can_receive_message_struct receive_message;
+ extern void JT808_rxDataProc(const uint8_t* pData, int len);
  void can1_receive_isr()
 {
 	  /* enter interrupt */
@@ -21,6 +22,7 @@
     if((CAN_RX_ID == receive_message.rx_efid) && (receive_message.rx_dlen > 0))
     {
     	//JT808_rxDataProc( receive_message.rx_data , receive_message.rx_dlen );
+    	JT808_rxDataProc( receive_message.rx_data , receive_message.rx_dlen );
     	can0_receive_flag = SET; 
     }
 	 /* leave interrupt */
@@ -50,6 +52,7 @@ static void _can_init(void)
 	can_filter_parameter_struct can_filter_parameter;
 	/* enable CAN clock */ 
 		rcu_periph_clock_enable(RCU_AF);
+	rcu_periph_clock_enable(RCU_CAN0);
     rcu_periph_clock_enable(RCU_CAN1);
 		rcu_periph_clock_enable(RCU_GPIOB);
 	
@@ -80,7 +83,7 @@ static void _can_init(void)
 	can_init_parameter.prescaler = 14;
 	/* 250KBps */
 #elif CAN_BAUDRATE == 250
-	can_init_parameter.prescaler = 28;
+	can_init_parameter.prescaler = 18;
 	/* 125KBps */
 #elif CAN_BAUDRATE == 125
 	can_init_parameter.prescaler = 56;
@@ -102,7 +105,7 @@ static void _can_init(void)
 	can_init(CAN1, &can_init_parameter);
    
     /* initialize filter */ 
-    can_filter_parameter.filter_number=0;//14;
+    can_filter_parameter.filter_number=14;
     can_filter_parameter.filter_mode = CAN_FILTERMODE_MASK;
     can_filter_parameter.filter_bits = CAN_FILTERBITS_32BIT;
     can_filter_parameter.filter_list_high = 0x0000;
