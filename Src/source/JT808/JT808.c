@@ -2,6 +2,7 @@
 #include "Common.h"
 #include "JT808.h"
 #include "MsgDef.h"
+#include "cirbuffer.h"
 #include "JtUtp.h"
 #include "JtTlv0900.h"
 #include "JtTlv8900.h"
@@ -13,7 +14,7 @@
 JT808 g_Jt;
 JT808* g_pJt = &g_Jt;
 static Utp g_JtUtp;
-static uint32_t g_hbIntervalMs = 2000;	//MCU心跳时间间隔，单位Ms
+//static uint32_t g_hbIntervalMs = 2000;	//MCU心跳时间间隔，单位Ms
 static uint8_t g_txBuf[100];
 static uint8_t g_txlen = 0;
 uint8_t g_hbdata[4] = {0x00, 0x00, 0x07, 0xD0};
@@ -24,10 +25,84 @@ static uint8_t gSendCanCmdCnt = 0 ;	// 发送计数---连接失败多次,则重启之...
 static uint32_t gCanbusRevTimeMS = 0;
 #define			_RESEND_CMD_COUNT		(2)	// 重发3
 
+// GPS时间---用以记录 GPS定位用时时间
+static uint32 	gGPSTimeCnt ;		// 
+static uint32 	gGPSFixCnt;			// GPS 定时时间
+// GPRS时间---用以记录GPRS从发送到接收时间
+static uint32 	gGPRSSendTimeCnt;
+static uint32 	gGPRSConTimeCnt ;		// 连接用时时间
+static uint32	gGPRSConCnt;			// GPRS 连接时间
+
+extern void can0_reset(void);
 
 void JT808_fsm(uint8_t msgID, uint32_t param1, uint32_t param2);
 
 static JT808fsmFn JT808_findFsm(JT_state state);
+
+static void _SetOperationState(uint8_t Operation, uint8_t Parameter );
+
+void Sim_Dump(void)
+{
+	void JtTlv8103IP_Dump();
+	
+	#define PRINTF_SIMID(_field) Printf("\t%s=%d\n", #_field, g_Jt.property._field);
+	#define PRINTF_GPRSLOC(_field) Printf("\t%s=%d\n", #_field, g_Jt.locatData._field);
+	
+	Printf("Sim dump:\n");
+	
+	PRINTF_SIMID(protocolVer);
+	PRINTF_SIMID(devClass);
+	
+	Printf("\tICCID = %s\n", g_Jt.property.iccid);
+	Printf("\tSimhwVer = %s\n", g_Jt.property.hwVer);
+	Printf("\tSimfwVer = %s\n", g_Jt.property.fwVer);
+	Printf("\tID = %s\n", g_Jt.property.devId);
+		
+	JtTlv8103IP_Dump();
+}
+
+void Gprs_Dump(void)
+{
+	#define PRINTF_GPRSDEVSTA(_field) Printf("\t%s=%d\n", #_field, g_Jt.devState._field);
+	#define PRINTF_GPRSLOC(_field) Printf("\t%s=%d\n", #_field, g_Jt.locatData._field);
+	
+	Printf("Gprs dump:\n");
+	
+	Printf("\topState=%d\n",g_Jt.opState);
+	
+	PRINTF_GPRSDEVSTA(cnt);
+	PRINTF_GPRSDEVSTA(csq);
+	PRINTF_GPRSDEVSTA(snr);
+	PRINTF_GPRSDEVSTA(siv);
+	
+	PRINTF_GPRSLOC(longitude);
+	PRINTF_GPRSLOC(latitude);
+	
+}
+
+void Ble_Dump(void)
+{
+	#define PRINTF_BLEDEVSTA(_field) Printf("\t%s=%d\n", #_field, g_Jt.bleproperty._field);
+	#define PRINTF_BLEDEVCFG(_field) Printf("\t%s=%d\n", #_field, g_Jt.blecfgParam._field);
+	Printf("Ble dump:\n");
+
+	Printf("\tBlehwVer = %s\n", g_Jt.bleproperty.BlehwVer);
+	Printf("\tBlefwVer = %s\n", g_Jt.bleproperty.BlefwVer);	
+	PRINTF_BLEDEVSTA(BleType);
+	Printf("\tMAC = [%s]\n", g_Jt.bleproperty.BleMac);
+
+	Printf("\tBleName = %s\n", g_Jt.blecfgParam.BleName);
+	
+	PRINTF_BLEDEVCFG(BleAdvInterval);
+	PRINTF_BLEDEVCFG(BleAdvPower);
+	
+	Printf("\tbleState=%d\n",g_Jt.bleState.bleConnectState);
+	Printf("\tbleConnectMAC=%s\n",g_Jt.bleState.bleConnectMAC);
+	
+	
+
+}
+
 
 UTP_EVENT_RC JT808_cmd_getSimID(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
@@ -66,14 +141,14 @@ UTP_EVENT_RC JT808_cmd_getSimID(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev
 		g_Jt.property.devClass = Dt_convertToU32( &g_Jt.property.devClass , DT_UINT32 );
 
 		// Info
-		//_JT808_DEBUGMSG("SIM ID\r\n");
-		//_JT808_DEBUGMSG("ver:%02X\r\n",g_Jt.property.protocolVer);
-		//_JT808_DEBUGMSG("Calss:%d\r\n",g_Jt.property.devClass);
-		//_JT808_DEBUGMSG("devModel:%s\r\n",g_Jt.property.devModel);
-		//_JT808_DEBUGMSG("devID:%s\r\n",g_Jt.property.devId);
-		//_JT808_DEBUGMSG("ICCID:%s\r\n",g_Jt.property.iccid);
-		//_JT808_DEBUGMSG("hwVer:%s\r\n",g_Jt.property.hwVer);
-		//_JT808_DEBUGMSG("fwVer:%s\r\n",g_Jt.property.fwVer);
+		//PFL(DL_JT808,"SIM ID\r\n");
+		//PFL(DL_JT808,"ver:%02X\r\n",g_Jt.property.protocolVer);
+		//PFL(DL_JT808,"Calss:%d\r\n",g_Jt.property.devClass);
+		//PFL(DL_JT808,"devModel:%s\r\n",g_Jt.property.devModel);
+		//PFL(DL_JT808,"devID:%s\r\n",g_Jt.property.devId);
+		//PFL(DL_JT808,"ICCID:%s\r\n",g_Jt.property.iccid);
+		//PFL(DL_JT808,"hwVer:%s\r\n",g_Jt.property.hwVer);
+		//PFL(DL_JT808,"fwVer:%s\r\n",g_Jt.property.fwVer);
 
 		gSendCanCmdCnt = 0 ;	// 清0
 	}
@@ -82,8 +157,8 @@ UTP_EVENT_RC JT808_cmd_getSimID(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev
 		PFL_WARNING("Read sim param failed.\r\n" );
 		if( ++gSendCanCmdCnt > _RESEND_CMD_COUNT )
 		{
-			PFL_WARNING("Resend Cmd Timeout,reboot\r\n");
-			Boot();
+			PFL_WARNING("Resend Cmd Timeout,can reset\r\n");
+			can0_reset();
 		}
 		else
 		{
@@ -140,14 +215,15 @@ UTP_EVENT_RC JT808_cmd_getSimCfg(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT e
 		PFL_WARNING("Write sim param failed.\r\n");
 		if( ++gSendCanCmdCnt > _RESEND_CMD_COUNT )
 		{
-			PFL_WARNING("Resend Cmd Timeout,reboot\r\n");
-			Boot();
+			gSendCanCmdCnt = 0x00;
+			can0_reset();
+			PFL_WARNING("Resend Cmd Timeout,can reset\r\n");
 		}
 		else
 		{
 			PFL_WARNING("Resend Cmd :%02X[%d]\r\n",JTCMD_CMD_GET_SIM_CFG,gSendCanCmdCnt);
-			Utp_SendCmd(&g_JtUtp, JTCMD_CMD_GET_SIM_CFG);
 		}
+		Utp_SendCmd(&g_JtUtp, JTCMD_CMD_GET_SIM_CFG);	// 一定要获取到
 	}
 
 	return UTP_EVENT_RC_SUCCESS;
@@ -173,14 +249,15 @@ UTP_EVENT_RC JT808_cmd_setSimCfg(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT e
 		PFL_WARNING("Write sim CFG failed.\r\n");
 		if( ++gSendCanCmdCnt > _RESEND_CMD_COUNT )
 		{
-			PFL_WARNING("Resend Cmd Timeout,reboot\r\n");
-			Boot();
+			gSendCanCmdCnt = 0x00;
+			can0_reset();
+			PFL_WARNING("Resend Cmd Timeout,CAN reset\r\n");
 		}
 		else
 		{
 			PFL_WARNING("Resend Cmd :%02X[%d]\r\n",JTCMD_CMD_SET_SIM_CFG,gSendCanCmdCnt);
-			Utp_SendCmd(&g_JtUtp, JTCMD_CMD_SET_SIM_CFG);
 		}
+		Utp_SendCmd(&g_JtUtp, JTCMD_CMD_SET_SIM_CFG);
 	}
 	return UTP_EVENT_RC_SUCCESS;
 }
@@ -202,14 +279,15 @@ UTP_EVENT_RC JT808_cmd_setBleCfg(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT e
 		PFL_WARNING("Write BLE CFG failed.\r\n");
 		if( ++gSendCanCmdCnt > _RESEND_CMD_COUNT )
 		{
-			PFL_WARNING("Resend Cmd Timeout,reboot\r\n");
-			Boot();
+			gSendCanCmdCnt = 0;
+			can0_reset();
+			PFL_WARNING("Resend Cmd Timeout,CAN reset\r\n");
 		}
 		else
 		{
-			PFL_WARNING("Resend Cmd :%02X[%d]\r\n",JTCMD_CMD_SET_SIM_CFG,gSendCanCmdCnt);
-			Utp_SendCmd(&g_JtUtp, JTCMD_CMD_SET_BLE_CFG );
+			PFL_WARNING("Resend Cmd :%02X[%d]\r\n",JTCMD_CMD_SET_SIM_CFG,gSendCanCmdCnt);			
 		}
+		Utp_SendCmd(&g_JtUtp, JTCMD_CMD_SET_BLE_CFG );
 	}
 	return UTP_EVENT_RC_SUCCESS;
 }
@@ -232,14 +310,15 @@ UTP_EVENT_RC JT808_cmd_getBleEnable(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVEN
 		PFL_WARNING("Get BLE Enable failed.\r\n");
 		if( ++gSendCanCmdCnt > _RESEND_CMD_COUNT )
 		{
-			PFL_WARNING("Resend Cmd Timeout,reboot\r\n");
-			Boot();
+			gSendCanCmdCnt = 0;
+			can0_reset();
+			PFL_WARNING("Resend Cmd Timeout,can reset\r\n");
 		}
 		else
 		{
 			PFL_WARNING("Resend Cmd :%02X[%d]\r\n",JTCMD_CMD_GET_BLE_EN,gSendCanCmdCnt);
-			Utp_SendCmd(&g_JtUtp, JTCMD_CMD_GET_BLE_EN );
 		}
+		Utp_SendCmd(&g_JtUtp, JTCMD_CMD_GET_BLE_EN );
 	}
 	return UTP_EVENT_RC_SUCCESS;
 }
@@ -261,14 +340,15 @@ UTP_EVENT_RC JT808_cmd_setBleEnable(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVEN
 		PFL_WARNING("Set BLE Enable failed.\r\n");
 		if( ++gSendCanCmdCnt > _RESEND_CMD_COUNT )
 		{
-			PFL_WARNING("Resend Cmd Timeout,reboot\r\n");
-			Boot();
+			gSendCanCmdCnt = 0 ;
+			can0_reset();
+			PFL_WARNING("Resend Cmd Timeout,CAN reset\r\n");
 		}
 		else
 		{
 			PFL_WARNING("Resend Cmd :%02X[%d]\r\n",JTCMD_CMD_SET_BLE_EN,gSendCanCmdCnt);
-			Utp_SendCmd(&g_JtUtp, JTCMD_CMD_SET_BLE_EN );
 		}
+		Utp_SendCmd(&g_JtUtp, JTCMD_CMD_SET_BLE_EN );
 	}
 	return UTP_EVENT_RC_SUCCESS;
 }
@@ -308,12 +388,12 @@ UTP_EVENT_RC JT808_cmd_getBleID(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev
 		g_Jt.bleproperty.BleType = Dt_convertToU16(&g_Jt.bleproperty.BleType,DT_UINT16);
 		
 		gSendCanCmdCnt = 0x00 ;
-		//_JT808_DEBUGMSG("BLE:%02X[%02X%02X%02X%02X%02X%02X]\r\n",
+		//PFL(DL_JT808,"BLE:%02X[%02X%02X%02X%02X%02X%02X]\r\n",
 		//	g_Jt.bleproperty.BleType , 
 		//	g_Jt.bleproperty.BleMac[0],g_Jt.bleproperty.BleMac[1],
 		//	g_Jt.bleproperty.BleMac[2],g_Jt.bleproperty.BleMac[3],
 		//	g_Jt.bleproperty.BleMac[4],g_Jt.bleproperty.BleMac[5]);
-		//_JT808_DEBUGMSG("BLE Ver:%s---%s\r\n",
+		//PFL(DL_JT808,"BLE Ver:%s---%s\r\n",
 		//s	g_Jt.bleproperty.BlehwVer,g_Jt.bleproperty.BlefwVer );
 	}
 	else if ( ev == UTP_REQ_FAILED )	//读取失败，重新读取
@@ -321,14 +401,15 @@ UTP_EVENT_RC JT808_cmd_getBleID(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev
 		PFL_WARNING("Get BLE ID failed.\r\n");
 		if( ++gSendCanCmdCnt > _RESEND_CMD_COUNT )
 		{
-			PFL_WARNING("Resend Cmd Timeout,reboot\r\n");
-			Boot();
+			gSendCanCmdCnt = 0x00;
+			can0_reset();
+			PFL_WARNING("Resend Cmd Timeout,CAN reset\r\n");
 		}
 		else
 		{
 			PFL_WARNING("Resend Cmd :%02X[%d]\r\n", JTCMD_CMD_GET_BLE_ID,gSendCanCmdCnt);
-			Utp_SendCmd(&g_JtUtp,  JTCMD_CMD_GET_BLE_ID );
 		}
+		Utp_SendCmd(&g_JtUtp,  JTCMD_CMD_GET_BLE_ID );
 	}
 	return UTP_EVENT_RC_SUCCESS;
 }
@@ -336,7 +417,7 @@ UTP_EVENT_RC JT808_cmd_getBleID(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev
 
 UTP_EVENT_RC JT808_cmd_getBleCfg(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
-	static int readParamOffset = 0;
+//	static int readParamOffset = 0;
 //	static int i = 0;
 
 	if (ev == UTP_TX_START)		// 上报
@@ -365,21 +446,22 @@ UTP_EVENT_RC JT808_cmd_getBleCfg(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT e
 		PFL_WARNING("Get BLE CFG failed.\r\n");
 		if( ++gSendCanCmdCnt > _RESEND_CMD_COUNT )
 		{
-			PFL_WARNING("Resend Cmd Timeout,reboot\r\n");
-			Boot();
+			gSendCanCmdCnt = 0 ;
+			can0_reset();
+			PFL_WARNING("Resend Cmd Timeout,CAN reset\r\n");
 		}
 		else
 		{
 			PFL_WARNING("Resend Cmd :%02X[%d]\r\n", JTCMD_CMD_GET_BLE_CFG,gSendCanCmdCnt);
-			Utp_SendCmd(&g_JtUtp,  JTCMD_CMD_GET_BLE_CFG );
 		}
+		Utp_SendCmd(&g_JtUtp,  JTCMD_CMD_GET_BLE_CFG );
 	}
 	return UTP_EVENT_RC_SUCCESS;
 }
 
 UTP_EVENT_RC JT808_cmd_getFileInfo(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
-	uint16* paramIDs = (uint16*)pCmd->pExt->transferData;
+//	uint16* paramIDs = (uint16*)pCmd->pExt->transferData;
 	//
 	if (ev == UTP_TX_START)		// 上报
 	{
@@ -398,14 +480,15 @@ UTP_EVENT_RC JT808_cmd_getFileInfo(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT
 		PFL_WARNING("Get UpdateFile Info failed.\r\n");
 		if( ++gSendCanCmdCnt > _RESEND_CMD_COUNT )
 		{
-			PFL_WARNING("Resend Cmd Timeout,reboot\r\n");
-			Boot();
+			gSendCanCmdCnt = 0 ;
+			can0_reset();
+			PFL_WARNING("Resend Cmd Timeout,CAN reset\r\n");
 		}
 		else
 		{
 			PFL_WARNING("Resend Cmd :%02X[%d]\r\n", JTCMD_CMD_GET_FILE_INFO,gSendCanCmdCnt);
-			Utp_SendCmd(&g_JtUtp,  JTCMD_CMD_GET_FILE_INFO );
 		}
+		Utp_SendCmd(&g_JtUtp,  JTCMD_CMD_GET_FILE_INFO );
 	}
 	return UTP_EVENT_RC_SUCCESS;
 }
@@ -413,9 +496,9 @@ UTP_EVENT_RC JT808_cmd_getFileInfo(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT
 
 UTP_EVENT_RC JT808_cmd_setToOpState(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
-	static int readParamOffset = 0;
+//	static int readParamOffset = 0;
 //	static int i = 0;
-	uint16* paramIDs = (uint16*)pCmd->pExt->transferData;
+//	uint16* paramIDs = (uint16*)pCmd->pExt->transferData;
 	//
 	if (ev == UTP_TX_START) 	// 上报
 	{
@@ -430,18 +513,26 @@ UTP_EVENT_RC JT808_cmd_setToOpState(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVEN
 		PFL_WARNING("Set To OpState failed.\r\n");
 		if( ++gSendCanCmdCnt > _RESEND_CMD_COUNT )
 		{
+			gSendCanCmdCnt = 0 ;
+			can0_reset();
 			PFL_WARNING("Resend Cmd Timeout,reboot\r\n");
-			Boot();
 		}
 		else
 		{
 			PFL_WARNING("Resend Cmd :%02X[%d]\r\n", JTCMD_SET_OP_STATE,gSendCanCmdCnt);
-			Utp_SendCmd(&g_JtUtp,  JTCMD_SET_OP_STATE );
+			
 		}
+		Utp_SendCmd(&g_JtUtp,  JTCMD_SET_OP_STATE );
 	}
 	return UTP_EVENT_RC_SUCCESS;
 }
 
+static void _SetOperationState(uint8_t Operation, uint8_t Parameter )
+{
+	g_Jt.setToOpState.OperationState = Operation ;
+	g_Jt.setToOpState.StateParameter = Parameter ;
+	Utp_SendCmd(&g_JtUtp, JTCMD_SET_OP_STATE);
+}
 
 
 // Joe end
@@ -450,38 +541,51 @@ UTP_EVENT_RC JT808_cmd_setToOpState(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVEN
 void JT808_switchState(JT808* pJt, JT_state newState)
 {
 	if (pJt->opState == newState) return;
-
+	
 	switch (newState)
 	{
 		case JT_STATE_INIT:
-		{
-			//发送心跳帧
+			// 发送心跳
 			Utp_SendCmd(&g_JtUtp, JTCMD_MCU_HB);
+			_SetOperationState( JT_STATE_PREOPERATION,
+				_GPRS_LOWMODE | _GPS_LOWMODE | _BLE_LOWMODE );
+
+			// 清除所有状态
+			g_Jt.bleState.bleConnectState = 0x00;
+			g_Jt.devState.cnt = 0x00 ;
 			break;
-		}
 		case JT_STATE_SLEEP:
-		{
+			g_Jt.bleState.bleConnectState = 0x00;
+			g_Jt.devState.cnt = 0x00 ;
 			break;
-		}
 		case JT_STATE_WAKEUP:
-		{
+			// 发送心跳
+			Utp_SendCmd(&g_JtUtp, JTCMD_MCU_HB);
+			_SetOperationState(JT_STATE_PREOPERATION,
+				_GPRS_LOWMODE | _GPS_LOWMODE | _BLE_LOWMODE );
+
+			g_Jt.bleState.bleConnectState = 0x00;
+			g_Jt.devState.cnt = 0x00 ;
+			
 			break;
-		}
 		case JT_STATE_PREOPERATION:
-		{
+			// 发送心跳
+			Utp_SendCmd(&g_JtUtp, JTCMD_MCU_HB);
+			
 			Utp_SendCmd(&g_JtUtp, JTCMD_CMD_GET_SIM_ID);// 0x11
 			Utp_SendCmd(&g_JtUtp, JTCMD_CMD_GET_SIM_CFG);//0x12
 			Utp_SendCmd(&g_JtUtp, JTCMD_CMD_GET_BLE_ID); //0x30
 			Utp_SendCmd(&g_JtUtp, JTCMD_CMD_GET_BLE_CFG); //0x31
 			Utp_SendCmd(&g_JtUtp, JTCMD_CMD_GET_BLE_EN); // 0x33			
 			Utp_SendCmd(&g_JtUtp, JTCMD_CMD_GET_FILE_INFO);//0x16
+
+			g_Jt.bleState.bleConnectState = 0x00;
+			g_Jt.devState.cnt = 0x00 ;
+				
 			break;
-		}
 		case JT_STATE_OPERATION:
-		{
 			Utp_SendCmd(&g_JtUtp, JTCMD_CMD_GET_SIM_CFG);//0x12
 			break;
-		}
 	}
 
 	pJt->fsm = JT808_findFsm(newState);
@@ -495,6 +599,19 @@ UTP_EVENT_RC JT808_event_simHb(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 		//_JT808_DEBUGMSG("SIMHb:%d-%d\r\n",pJt->opState,newOp);
 		JT808_switchState(pJt, newOp);
 	}
+	else if( ev == UTP_CHANGED_AFTER )
+	{
+		// 通信模组状态与 本地保存状态不一至时
+		if( pJt->opState != pJt->setToOpState.OperationState )
+		{
+			pJt->opState = JT_STATE_INIT;
+			_SetOperationState(JT_STATE_PREOPERATION,
+				_GPRS_LOWMODE | _GPS_LOWMODE | _BLE_LOWMODE );
+			g_Jt.bleState.bleConnectState = 0x00;
+			g_Jt.devState.cnt = 0x00 ;
+			//PFL(DL_JT808,"Change OPState[%d-%d]\r\n",pJt->opState ,pJt->setToOpState.OperationState );
+		}
+	}
 	return UTP_EVENT_RC_SUCCESS;
 }
 
@@ -506,24 +623,24 @@ UTP_EVENT_RC JT808_event_devStateChanged(JT808* pJt, const UtpCmd* pCmd, UTP_TXF
 		g_Jt.devState.cnt = Dt_convertToU16(&g_Jt.devState.cnt,DT_UINT16);
 		if( g_Jt.devState.cnt & _NETWORK_CONNECTION_BIT )
 		{
-			Printf("Network Connected\r\n");
+			PFL(DL_JT808,"Network Connected\r\n");
 		}
 		else
 		{
-			Printf("Network disconnect\r\n");
+			PFL(DL_JT808,"Network disconnect\r\n");
 		}
 		if( g_Jt.devState.cnt & _GPS_FIXE_BIT )
 		{
-			Printf("GPS Fixe\r\n");
+			PFL(DL_JT808,"GPS Fixe\r\n");
 		}
 		else
 		{
-			Printf("GPS No Fixe\r\n");
+			PFL(DL_JT808,"GPS No Fixe\r\n");
 		}
 		
 		if( g_Jt.devState.cnt & _SMS_EXIT_BIT )
 		{
-			Printf("Rev SMS\r\n");
+			PFL(DL_JT808,"Rev SMS\r\n");
 			Utp_SendCmd(&g_JtUtp, JTCMD_CMD_GET_SMS );// 获取短信
 		}
 		else
@@ -558,11 +675,12 @@ UTP_EVENT_RC JT808_event_LocationChanged(JT808* pJt, const UtpCmd* pCmd, UTP_TXF
 		g_Jt.locatData.latitude = Dt_convertToU32(&g_Jt.locatData.latitude,DT_UINT32);
 		g_Jt.locatData.longitude = Dt_convertToU32(&g_Jt.locatData.longitude,DT_UINT32);
 		
-		Printf("lat:%d,long:%d\r\n",
+		PFL(DL_JT808,"lat:%d,long:%d\r\n",
 			g_Jt.locatData.latitude,g_Jt.locatData.longitude)
 	}
 	return UTP_EVENT_RC_SUCCESS;
 }
+
 
 
 
@@ -596,10 +714,10 @@ UTP_EVENT_RC JT808_event_rcvFileData(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVE
 
 UTP_EVENT_RC JT808_event_sendSvrData(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
-	static int readParamOffset = 0;
-	static int i = 0;
-	int len = 0;
-	uint16* paramIDs = (uint16*)pCmd->pExt->transferData;
+//	static int readParamOffset = 0;
+//	static int i = 0;
+//	int len = 0;
+//	uint16* paramIDs = (uint16*)pCmd->pExt->transferData;
 
 	if(ev == UTP_TX_START)	
 	{
@@ -661,11 +779,11 @@ UTP_EVENT_RC JT808_event_bleStateChanged(JT808* pJt, const UtpCmd* pCmd, UTP_TXF
 	{
 		if( g_Jt.bleState.bleConnectState & _BLE_CONNECT_BIT )
 		{
-			Printf("BLE Connect\r\n");
+			PFL(DL_JT808,"BLE Connect\r\n");
 		}
 		else
 		{
-			Printf("Ble Disconnect\r\n");
+			PFL(DL_JT808,"Ble Disconnect\r\n");
 		}
 	}
 	return UTP_EVENT_RC_SUCCESS;
@@ -696,10 +814,10 @@ UTP_EVENT_RC JT808_utpEventCb(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 	}
 	else if (pCmd->cmd == JTCMD_CMD_SEND_TO_SVR)
 	{
-		if (ev == UTP_REQ_SUCCESS)
-		{
-			JtTlv0900_updateMirror(&pCmd->pExt->transferData[1], pCmd->pExt->transferLen - 1);
-		}
+		//if (ev == UTP_REQ_SUCCESS)
+		//{
+		//	JtTlv0900_updateMirror(&pCmd->pExt->transferData[1], pCmd->pExt->transferLen - 1);
+		//}
 	}
 
 	return UTP_EVENT_RC_SUCCESS;
@@ -717,8 +835,8 @@ void JT808_fsm_preoperation(uint8_t msgID, uint32_t param1, uint32_t param2)
 		const UtpCmd* pCmd = (UtpCmd*)param1;
 		if (pCmd->cmd == JTCMD_CMD_GET_FILE_INFO)
 		{
-			g_Jt.setToOpState = JT_STATE_OPERATION;
-			Utp_SendCmd(&g_JtUtp, JTCMD_SET_OP_STATE);
+			_SetOperationState(JT_STATE_OPERATION,
+				_GPRS_NORMAL | _GPS_NORMAL | _BLE_NORMAL );
 		}
 	}
 }
@@ -727,7 +845,9 @@ void JT808_fsm_operation(uint8_t msgID, uint32_t param1, uint32_t param2)
 {
 	if (msgID == MSG_RUN)
 	{
-		// update
+		// 更新JtTlv9000数据
+		JtTlv0900_updateStorage();	//
+		
 		if (Utp_isIdle(&g_JtUtp) && (g_Jt.devState.cnt & _NETWORK_CONNECTION_BIT) )	// 空闲 & 连接网络s
 		{
 			int len = JtTlv0900_getChangedTlv(g_txBuf, sizeof(g_txBuf), Null);
@@ -735,6 +855,7 @@ void JT808_fsm_operation(uint8_t msgID, uint32_t param1, uint32_t param2)
 			{
 				g_txlen = len;
 				Utp_SendCmd(&g_JtUtp, JTCMD_CMD_SEND_TO_SVR);
+				PFL(DL_JT808,"Send Bat Info:%d\r\n",len );
 			}
 		}
 	}
@@ -831,11 +952,11 @@ int JT808_txData(uint8_t cmd, const uint8_t* pData, uint32_t len)	//cmd为CAN协议
 		}
 		memcpy(transmit_message.tx_data, pData, send_len);	
 		transmit_message.tx_dlen = send_len;
-		can_message_transmit(CAN0, &transmit_message);
+		can_message_transmit(CAN1, &transmit_message);
 //		rt_thread_mdelay(20);
 		tx_timeout = GET_TICKS();
 		while(
-			CAN_TRANSMIT_PENDING == can_transmit_states(CAN0, CAN_MAILBOX0) &&
+			CAN_TRANSMIT_PENDING == can_transmit_states(CAN1, CAN_MAILBOX0) &&
 			GET_TICKS() - tx_timeout <_CAN_TX_TIMEOUT_MS );
 
 		if(len > 8)
@@ -854,9 +975,11 @@ int JT808_txData(uint8_t cmd, const uint8_t* pData, uint32_t len)	//cmd为CAN协议
 
 
 //xx 从总线上接收数据
+
 void JT808_rxDataProc(const uint8_t* pData, int len)
 {
-	Utp_RxData(&g_JtUtp, pData, len);
+	//Utp_RxData(&g_JtUtp, pData, len);
+	CirBuffPush( &g_JtUtp.rxBuffCirBuff, pData ,len );
 }
 
 // GPS 1s一条,心跳2s一条
@@ -867,16 +990,16 @@ void JT808_timerProc()
 	if( can0_receive_flag == SET )
 	{
 		can0_receive_flag = RESET;
-		JT808_rxDataProc( receive_message.rx_data , receive_message.rx_dlen );
+		//JT808_rxDataProc( receive_message.rx_data , receive_message.rx_dlen );
 		gCanbusRevTimeMS = GET_TICKS();
+		//PFL(DL_JT808,"CAN Rev len:%d\n",receive_message.rx_dlen );
 	}
 	else
 	{
 		if( GET_TICKS() - gCanbusRevTimeMS > _CAN_BUS_REV_TIMEOUT_MS )
 		{
-			PFL_WARNING("Can Rev Timeout.reset can\r\n");
-			Boot();
-			//can0_reset();
+			PFL_WARNING("CAN Rev Timeout.reset can\r\n");
+			can0_reset();
 			gCanbusRevTimeMS = GET_TICKS();
 		}
 	}
@@ -967,8 +1090,8 @@ void JT808_init()
 	ObjList_add(&obj);
 	g_Jt.opState = JT_STATE_UNKNOWN;	//初始化为一个UNKNOWN值
 
-	strcpy(g_Jt.blecfgParam.BleName , "immotor");
-	strcpy(g_Jt.blecfgParam.BleAdvData,"ehuandian.net");
+	strcpy((char*)g_Jt.blecfgParam.BleName , "immotor");
+	strcpy((char*)g_Jt.blecfgParam.BleAdvData,"ehuandian.net");
 	g_Jt.blecfgParam.BleAdvInterval = 30;	
 	g_Jt.bleEnCtrl = 0x01 ;
 

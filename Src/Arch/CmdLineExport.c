@@ -6,7 +6,7 @@
  * 2020-08-27     Allen      first version
  */
 
-#ifdef CONFIG_CMDLINE
+#if 1//def CONFIG_CMDLINE
 
 #include "ArchDef.h"
 #include "Obj.h"
@@ -58,7 +58,7 @@ void CmdLineExport_PrinfVar(const char* name, const char* fmt)
 		{
 			Printf("%s:", var->name);
 			if (fmt == Null || strlen(fmt) == 0) fmt = var->fmt;
-			Dt_printf(var->val, var->valLen, var->type, fmt);
+			Printf(var->val, var->valLen, var->type, fmt);
 			Printf("/t %s\n", var->desc);
 		}
 		return;
@@ -69,7 +69,7 @@ void CmdLineExport_PrinfVar(const char* name, const char* fmt)
 	{
 		if (fmt == Null || strlen(fmt) == 0) fmt = var->fmt;
 		Printf("%s:", var->name);
-		Dt_printf(var->val, var->valLen, var->type, fmt);
+		Printf(var->val, var->valLen, var->type, fmt);
 		Printf("/t %s\n", var->desc);
 	}
 	else
@@ -83,7 +83,6 @@ EXPORT_SHELL_FUNC(CmdLineExport_PrinfVar, PrinfVar(char* name, char* fmt))
 static CmdLine g_cmdLine;
 static char g_cmdLineBuf[128];
 static uint8 g_cmdLineLen;
-
 //Ω” ’√¸¡Ó
 void Shell_rxCmd(const char* str)
 {
@@ -95,6 +94,8 @@ void Shell_rxCmd(const char* str)
 	}
 
 	memcpy(&g_cmdLineBuf[g_cmdLineLen], str, strlen(str));
+	g_cmdLineLen += strlen(str);
+	g_cmdLine.cmdLineLen = g_cmdLineLen;
 }
 
 //÷¥––√¸¡Ó
@@ -102,7 +103,7 @@ void Shell_run(const char* str)
 {
 	if (g_cmdLineLen && g_cmdLineBuf[g_cmdLineLen - 1] == '\n')
 	{
-		CmdLine_AddStr(&g_cmdLine, str);
+		CmdLine_AddStr(&g_cmdLine, g_cmdLineBuf);
 	}
 
 }
@@ -121,7 +122,7 @@ void Shell_init()
 	cmdLineCfg.cmdHandlerArray = g_shellFn;
 	cmdLineCfg.cmdHandlerCount = g_shellFnCount;
 
-	CmdLine_Init(&g_cmdLine, &cmdLineCfg, False);
+	CmdLine_Init(&g_cmdLine, &cmdLineCfg, True);
 }
 
 #endif

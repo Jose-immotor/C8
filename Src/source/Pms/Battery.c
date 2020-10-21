@@ -135,11 +135,37 @@ MOD_EVENT_RC Bat_event(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev)
 	return MOD_EVENT_RC_SUCCESS;
 }
 
+
+MOD_EVENT_RC Bat_event_readBmsID(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev)
+{
+	if (ev == MOD_REQ_SUCCESS)
+	{
+		g_Ble.portState.property[0].nominalVol = bigendian16_get((uint8*)(&pBat->bmsID.bvolt));
+		g_Ble.portState.property[0].nominalCap = bigendian16_get((uint8*)(&pBat->bmsID.bcap));
+		g_Ble.batDesc[0].serialNum[0] = pBat->bmsID.sn34;
+		g_Ble.batDesc[0].serialNum[1] = pBat->bmsID.sn34>>8;
+		g_Ble.batDesc[0].serialNum[2] = pBat->bmsID.sn56;
+		g_Ble.batDesc[0].serialNum[3] = pBat->bmsID.sn56>>8;
+		g_Ble.batDesc[0].serialNum[4] = pBat->bmsID.sn78;
+		g_Ble.batDesc[0].serialNum[5] = pBat->bmsID.sn78>>8;
+		g_Ble.batDesc[0].damage = bigendian16_get((uint8*)(&pBat->bmsID.ltsta));
+
+	}
+	if (ev == MOD_CHANGED_BEFORE)
+	{
+
+	}
+
+	return MOD_EVENT_RC_SUCCESS;
+}
+
 //所有的BMS单个命令的事件回调函数
 MOD_EVENT_RC Bat_event_readBmsInfo(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev)
 {
 	if (ev == MOD_REQ_SUCCESS)
 	{
+		uint16_t tmp_value;
+		
 		if(pBat->presentStatus != BAT_IN)
 		{
 			PFL(DL_PMS,"Battery in!\n");
@@ -149,6 +175,46 @@ MOD_EVENT_RC Bat_event_readBmsInfo(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EV
 			NVC_PLAY(NVC_BAT_PLUG_IN);
 		}			
 		pBat->presentStatus = BAT_IN;
+		g_Ble.portState.property[0].nominalCur = bigendian16_get((uint8*)(&pBat->bmsInfo.dsop));
+		
+		tmp_value = bigendian16_get((uint8*)(&pBat->bmsInfo.soc));
+		if(tmp_value == 0xFFFF)
+        {
+            g_Ble.batDesc[0].SOC = 0xFF;
+        }
+        else
+        {
+            g_Ble.batDesc[0].SOC = tmp_value/10;
+        }
+		g_Ble.batDesc[0].voltage = bigendian16_get((uint8*)(&pBat->bmsInfo.tvolt));
+		g_Ble.batDesc[0].current = bigendian16_get((uint8*)(&pBat->bmsInfo.tcurr));
+		
+		tmp_value = bigendian16_get((uint8*)(&pBat->bmsInfo.htemp));
+		if(tmp_value == 0xFFFF)
+        {
+            g_Ble.batDesc[0].temp = 0xFF;
+        }
+        else
+        {
+            g_Ble.batDesc[0].temp = tmp_value/10;
+        }
+		tmp_value = bigendian16_get((uint8*)(&pBat->bmsInfo.opft1));
+        g_Ble.batDesc[0].fault = 0;
+        if(tmp_value&(1<<0))	g_Ble.batDesc[0].fault |= (1<<0);//过压
+        if(tmp_value&((1<<1)|(1<<2)))	g_Ble.batDesc[0].fault |= (1<<1);//欠压
+        if(tmp_value&((1<<3)|((1<<4)|(1<<5))))	g_Ble.batDesc[0].fault |= (1<<2);//过流
+        if(tmp_value &((1<<6)|(1<<7)|(1<<10)|(1<<11)|(1<<12)))	g_Ble.batDesc[0].fault |= (1<<3);//过温
+        if(tmp_value &((1<<8)|(1<<9)))	g_Ble.batDesc[0].fault |= (1<<4);//低温
+        tmp_value = bigendian16_get((uint8*)(&pBat->bmsInfo.devft1));
+        if((tmp_value &((1<<14)|(1<<15)))||
+            (pBat->bmsInfo.devft1 != 0)||(pBat->bmsInfo.devft2 != 0)||
+            (pBat->bmsInfo.opft1 != 0)|| (pBat->bmsInfo.opft2 != 0)||
+            (pBat->bmsInfo.opwarn1 != 0)||(pBat->bmsInfo.opwarn2 != 0))
+        {
+            //其他
+            g_Ble.batDesc[0].fault |= (1<<5);
+        }
+		g_Ble.batDesc[0].cycleCount = bigendian16_get((uint8*)(&pBat->bmsInfo.cycle));
 	}
 	if (ev == MOD_CHANGED_BEFORE)
 	{

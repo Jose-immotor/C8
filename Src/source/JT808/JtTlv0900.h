@@ -94,7 +94,7 @@ extern "C"{
 	int JtTlv0900_getChangedTlv(uint8* buf, int len, uint8* tlvCount);
 	void JtTlv0900_updateMirror(const uint8* data, int len);
 	void JtTlv0900_updateBatInfo(uint8 port);
-	void JtTlv0900_updateStorage(const uint8* data, int len);
+	void JtTlv0900_updateStorage(void);
 
 #ifdef __cplusplus
 }

@@ -21,7 +21,7 @@ static Bool Utp_VerifyFrame(Utp* pUtp, const JtUtp* pFrame, int frameLen, const 
 	{
 		if (pFrame->cmd != pReq->cmd)
 		{
-			Printf("Cmd[0x%02x, 0x%02x] not match:", pReq->cmd, pFrame->cmd);
+			PFL_WARNING("Cmd[0x%02x, 0x%02x] not match:", pReq->cmd, pFrame->cmd);
 			goto Error;
 		}
 	}
@@ -30,7 +30,7 @@ static Bool Utp_VerifyFrame(Utp* pUtp, const JtUtp* pFrame, int frameLen, const 
 		//ºÏ—È÷°≥§∂»
 		if (frameLen < pUtp->frameCfg->dataByteInd)
 		{
-			Printf("frame len error.(%d)\n", frameLen);
+			PFL_WARNING("frame len error.(%d)\n", frameLen);
 			goto Error;
 		}
 
@@ -39,14 +39,14 @@ static Bool Utp_VerifyFrame(Utp* pUtp, const JtUtp* pFrame, int frameLen, const 
 		dstCheckSum = (uint8_t)CheckSum_Get(&dstCheckSum, &pFrame->vendor, frameLen - 2);
 		if (pFrame->checkSum != dstCheckSum)
 		{
-			Printf("Crc[0x%02x, 0x%02x] error:", pFrame->checkSum, dstCheckSum);
+			PFL_WARNING("Crc[0x%02x, 0x%02x] error:", pFrame->checkSum, dstCheckSum);
 			goto Error;
 		}
 	}
 	return True;
 
 Error:
-	DUMP_BYTE(pFrame, frameLen);
+//	DUMP_BYTE(pFrame, frameLen);
 	return False;
 }
 

@@ -8,7 +8,7 @@
 
 #include "ArchDef.h"
 
-#ifdef CONFIG_CMDLINE
+#if 1//def CONFIG_CMDLINE
 #include "CmdLine.h"
 #include <stdarg.h>
 
@@ -436,6 +436,7 @@ void CmdLine_Init(CmdLine* cmdLine, const CmdLineCfg* cfg, Bool isEcho)
 	memset(cmdLine, 0, sizeof(CmdLine));
 	
 	cmdLine->isEcho = isEcho;
+	cmdLine->cfg = cfg;
 
 	const CmdItem* fn = cfg->cmdHandlerArray;
 	for(i = 0; i < cfg->cmdHandlerCount; i++, fn++)

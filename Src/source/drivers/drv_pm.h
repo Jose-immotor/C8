@@ -13,6 +13,7 @@ typedef enum _WakeupType
 	,WAKEUP_BAT_INSERT
 	,WAKEUP_TAKE_APART
 	,WAKEUP_OVER_TEMP
+	,WAKEUP_CABIN_LOCK
 	,WAKEUP_MAX
 }WakeupType;
 

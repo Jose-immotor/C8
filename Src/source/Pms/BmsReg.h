@@ -80,40 +80,43 @@ typedef struct
 //BMS只读寄存器
 typedef struct
 {
-	uint16_t userId[4];
-	uint16_t state;
-	uint16_t soc;
-	uint16_t tvolt;
-	uint16_t tcurr;
-	uint16_t htemp;
-	uint16_t htnum;
-	uint16_t ltemp;
-	uint16_t ltnum;
-	uint16_t hvolt;
-	uint16_t hvnum;
-	uint16_t lvolt;
-	uint16_t lvnum;
-	uint16_t dsop;
-	uint16_t csop;
-	uint16_t soh;
-	uint16_t cycle;
-	uint16_t rcap;
-	uint16_t fcap;
-	uint16_t fctime;
-	uint16_t prow;
-	uint16_t devft1;
-	uint16_t devft2;
-	uint16_t opft1;
-	uint16_t opft2;
-	uint16_t opwarn1;
-	uint16_t opwarn2;
-	uint16_t cmost;
-	uint16_t dmost;
-	uint16_t pret;
-	uint16_t cont;
-	uint16_t btemp[2];
-	uint16_t bvolt[16];
-	uint16_t balasta;
+	uint16_t userId[4];		//BID
+	uint16_t state;			//STATE
+	uint16_t soc;			//SOC
+	uint16_t tvolt;			//总电压
+	uint16_t tcurr;			//总电流
+	uint16_t htemp;			//最高温度
+	uint16_t htnum;			//最高温度编号
+	uint16_t ltemp;			//最低温度
+	uint16_t ltnum;			//最低温度编号
+	uint16_t hvolt;			//最高单体电压
+	uint16_t hvnum;			//最高单体电压编号
+	uint16_t lvolt;			//电低单体电压
+	uint16_t lvnum;			//电低单体电压编号 
+	uint16_t dsop;			//10s内最大放电电流
+	uint16_t csop;			//10s内最大充电电流
+	uint16_t soh;			//SOH
+	uint16_t cycle;			//循环次数
+	uint16_t rcap;			//剩余容量 
+	uint16_t fcap;			//充满容量
+	uint16_t fctime;		//充满时间
+	uint16_t prow;			//剩余能量
+	uint16_t devft1;		//设备故障1
+	uint16_t devft2;		//设备故障2
+	uint16_t opft1;			//运行故障1
+	uint16_t opft2;			//运行故障2
+	uint16_t opwarn1;		//运行告警1
+	uint16_t opwarn2;		//运行告警2
+	uint16_t cmost;			//充电MOS温度
+	uint16_t dmost;			//放电MOS温度
+	uint16_t pret;			//电量计温度
+	uint16_t cont;			//连接器温度
+	uint16_t btemp[2];		//温度1&2
+	uint16_t bvolt[16];		//单体电压
+	uint16_t balasta;		// 均衡值
+	//Jose add 2020/10/21
+	uint16_t ignore[6];		// 加速度x,y,z,MCU3.3,预放电过载检测,电量计电流
+	//uint16_t 
 }BmsReg_deviceInfo;
 
 //BMS控制寄存器
