@@ -14,6 +14,8 @@
 #include "BleTpu.h"
 #include "TlvIn.h"
 #include "JT808.h"
+#include "debug.h"
+
 
 Ble g_Ble;
 static BleTpu g_BleTpu;
@@ -147,6 +149,7 @@ static Bool Ble_cmdIsAllow(Ble* pBle, uint8 cmd)
 
 UTP_EVENT_RC Ble_utpEventCb(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
+	//PFL(DL_JT808,"%s :%d\r\n", pCmd->cmdName , ev );
 	if (ev == UTP_GET_RSP)
 	{
 		//≈–∂œ√¸¡Ó «∑Ò‘ –Ì
@@ -177,6 +180,7 @@ UTP_EVENT_RC Ble_utpEventCb(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 
 uint8* Ble_ReqProc(const uint8_t* pReq, int frameLen, uint8* rspLen)
 {
+	PFL(DL_JT808,"BLE Read:%d\r\n", frameLen );
 	return BleTpu_ReqProc(&g_BleTpu, pReq, frameLen, rspLen);
 }
 

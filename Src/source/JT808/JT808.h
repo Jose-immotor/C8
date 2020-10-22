@@ -95,7 +95,7 @@ extern "C"{
 		{
 			uint16_t cnt;	// �豸״̬-GPRS,GPS,SMS
 			uint8_t csq;	// GPRS/4G �ź�ǿ��
-			uint8_t snr;	// GPS �����
+			uint8_t snr;	// GPS �����?
 			uint8_t siv;	// GPS �ɼ���
 		}JT_devState;
 		
@@ -130,10 +130,10 @@ extern "C"{
 	// Jose add 2020/09/17
 	typedef struct _JtDevBleCfgParam
 	{
-		char BleName[32];		// �����㲥����
-		uint32 BleAdvInterval ;	// �㲥���(1ms)
+		//char BleName[32];		// �����㲥����
+		uint32 BleAdvInterval ;	// �㲥���?1ms)
 		uint8 BleAdvPower ;		// �ļ����书��
-		uint8 BleAdvData[31];	// �㲥����
+		uint8 BleAdvData[62];	// �㲥����
 	}JtDevBleCfgParam;
 
 	typedef struct 
@@ -234,6 +234,10 @@ extern "C"{
 	extern JT808* g_pJt;
 	extern JT808 g_Jt;
 	void JT808_init();
+
+//BLE name
+#define		_BLE_NAME		"IMT-C7"
+#define		_BLE_COMPY		"30"
 
 #ifdef __cplusplus
 }

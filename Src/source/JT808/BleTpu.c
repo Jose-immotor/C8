@@ -71,7 +71,7 @@ uint8* BleTpu_ReqProc(BleTpu* pBleTpu, const uint8_t* pReq, int frameLen, uint8*
 			pCmd->pExt->transferLen = pCmd->dataLen;
 		}
 		rc = BleTpu_Event(pBleTpu, pCmd, UTP_GET_RSP);
-		if (rc == frameCfg->result_SUCCESS && pCmd->pExt->transferData)
+		if (rc == frameCfg->result_SUCCESS && pCmd->pExt->transferData && pCmd->pExt->transferLen )
 		{
 			memcpy(&txBuf[frameCfg->dataByteInd + 1], pCmd->pExt->transferData, pCmd->pExt->transferLen);
 			dlc += pCmd->pExt->transferLen;

@@ -12,7 +12,7 @@
 #include "Cirbuffer.h"
 #include "debug.h"
 
-
+extern uint16_t gCurRevLen ;
 static Bool Utp_RspProc(Utp* pUtp, const uint8_t* pRsp, int frameLen, UTP_RCV_RSP_RC rspCode);
 static void Utp_RcvRsp(Utp* pUtp, const uint8_t* pRsp, int frameLen, UTP_RCV_RSP_RC rspCode);
 
@@ -282,7 +282,8 @@ static void Utp_ReqProc(Utp* pUtp, const uint8_t* pReq, int frameLen)
 		//传输数据
 		pCmd->pExt->transferData = (uint8*)pData;
 		pCmd->pExt->transferLen = frameLen;
-
+		gCurRevLen = MIN(pCmd->storageLen, frameLen) ;
+		
 		if (pCmd->pStorage && pCmd->storageLen)
 		{
 			if (memcmp(pCmd->pStorage, pData, pCmd->storageLen) != 0)
@@ -290,16 +291,17 @@ static void Utp_ReqProc(Utp* pUtp, const uint8_t* pReq, int frameLen)
 				UTP_EVENT_RC evRc = Utp_Event(pUtp, pCmd, UTP_CHANGED_BEFORE);
 				if (evRc == UTP_EVENT_RC_SUCCESS)
 				{
-					memcpy(pCmd->pStorage, pData, MIN(pCmd->storageLen, frameLen));
+					memcpy(pCmd->pStorage, pData,MIN(pCmd->storageLen, frameLen) );
 					Utp_Event(pUtp, pCmd, UTP_CHANGED_AFTER);
 				}
 			}
 		}
 		//预置默认的应答数据指针
 		pCmd->pExt->transferData = pCmd->pData;
-		pCmd->pExt->transferLen = 0;//pCmd->dataLen;
+		pCmd->pExt->transferLen = pCmd->dataLen;
+		
 		rc = Utp_Event(pUtp, pCmd, UTP_GET_RSP);
-		if (rc == frameCfg->result_SUCCESS && pCmd->pExt->transferData)
+		if (rc == frameCfg->result_SUCCESS && pCmd->pExt->transferData && pCmd->pExt->transferLen )
 		{
 			if (dlc + pCmd->pExt->transferLen <= txBufLen)
 			{
@@ -721,8 +723,12 @@ void Utp_CheckRxFrame(Utp* pUtp)
 	{
 		if( frameLen = _ParapBuff( frameCfg->transcodeBuf ,frameCfg->transcodeBuf, frameLen ) )
 		{
-			//帧处理,去掉帧头和帧尾
-			Utp_RcvFrameHandler(pUtp, &frameCfg->transcodeBuf[1], frameLen-2);
+			if( frameLen == ( frameCfg->transcodeBuf[7] + 9 ) &&
+				frameCfg->FrameVerify(pUtp, &frameCfg->transcodeBuf[1], frameLen-2, Null) )
+			{
+				//帧处理,去掉帧头和帧尾
+				Utp_RcvFrameHandler(pUtp, &frameCfg->transcodeBuf[1], frameLen-2);
+			}
 		}
 	}
 }
