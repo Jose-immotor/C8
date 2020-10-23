@@ -547,7 +547,6 @@ static void _SetOperationState(uint8_t Operation, uint8_t Parameter )
 }
 
 
-// Joe end
 
 
 void JT808_switchState(JT808* pJt, JT_state newState)
@@ -616,7 +615,7 @@ UTP_EVENT_RC JT808_event_simHb(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 		// 通信模组状态与 本地保存状态不一至时
 		if( pJt->opState != pJt->setToOpState.OperationState )
 		{
-			pJt->opState = JT_STATE_INIT;
+			pJt->opState = JT_STATE_INIT;		// 重新开始
 			_SetOperationState(JT_STATE_PREOPERATION,
 				_GPRS_LOWMODE | _GPS_LOWMODE | _BLE_LOWMODE );
 			g_Jt.bleState.bleConnectState = 0x00;
@@ -743,6 +742,7 @@ UTP_EVENT_RC JT808_event_sendSvrData(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVE
 		g_txlen = 0;
 		int len = JtTlv0900_getChangedTlv(g_txBuf, sizeof(g_txBuf), Null);
 		JtTlv0900_updateMirror( g_txBuf , len );
+		PFL(DL_JT808,"0900 UpdataMirror\r\n");
 	}
 
 	return UTP_EVENT_RC_SUCCESS;
@@ -1051,22 +1051,10 @@ void JT808_start()
 static void _UpdataBleAdvData(void)
 {
 	uint8_t _adv[31+31] ={0x00};
-	//uint8_t _adv[31+31] = {
-	//		// 类型
-	//		0x02,0x01,0x05,
-	//		// UUID
-	//		0x11,0x07,0x39,0x23,0xCF,0x40,0x73,0x16,0x42,0x9A,0x5C,0x41,0x7E,0x7D,0xC4,0x9A,0x83,0x14,
-	//		// Company ID
-	//		0x07,0xFF,0x2E,0xCE,0x8C,0x42,0x57,
-	//		// Name
-	//		0x0D,0x09,0x49,0x4D,0x54,0x36,0x30,0x20,0x39,0x30,0x37,0x30,0x34,0x35,
-	//		// Company ID
-	//		0x03,0xFF,0x33,0x30,
-	//		};
 	uint8_t adv_type[] = {0x02,0x01,0x05};
 	uint8_t adv_uuid[] = {0x11,0x07,0x39,0x23,0xCF,0x40,0x73,0x16,0x42,0x9A,0x5C,0x41,0x7E,0x7D,0xC4,0x9A,0x83,0x14};
 	uint8_t adv_comp1[] = {0x07,0xFF,0x2E,0xCE,0x8C,0x42,0x4C,0x57};
-	uint8_t adv_comp2[] = {0x03,0xFF,0x33,0x30};
+	//uint8_t adv_comp2[] = {0x03,0xFF,0x33,0x30};
 	uint8_t i = 0 ;
 	memset( _adv , 0 , sizeof(_adv) );
 

@@ -33,6 +33,7 @@ UTP_EVENT_RC Ble_getSelfTestResult(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT 
 		pResult->_18650Vol = 0;
 		pResult->devState2 = g_cfgInfo.isActive;
 		pResult->batVerify = 0;
+		pCmd->pExt->transferLen = sizeof(SelfTestResult);	// 其实不需要,显示设置一下
 	}
 	return UTP_EVENT_RC_SUCCESS;
 }
@@ -49,6 +50,7 @@ UTP_EVENT_RC Ble_getGpsGprsInfo(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 		pResult->longitude = g_Jt.locatData.longitude;
 		pResult->latitude = g_Jt.locatData.latitude;
 		pResult->speed = 0;
+		pCmd->pExt->transferLen = sizeof(GpsPkt);// 其实不需要,显示设置一下
 	}
 	return UTP_EVENT_RC_SUCCESS;
 }
@@ -66,7 +68,7 @@ UTP_EVENT_RC Ble_getBmsInfo(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 		pResult->fwSubVer = g_Bat[0].bmsID.fwmsv>>8;
 		pResult->fwMinorVer = g_Bat[0].bmsID.fwrev;
 		pResult->buildNum = g_Bat[0].bmsID.fwbnl;
-		pCmd->pExt->transferLen = sizeof(BleGetDevIDPkt);
+		pCmd->pExt->transferLen = sizeof(BleGetDevIDPkt);// 其实不需要,显示设置一下
 		
 	}
 	return UTP_EVENT_RC_SUCCESS;
@@ -149,7 +151,6 @@ static Bool Ble_cmdIsAllow(Ble* pBle, uint8 cmd)
 
 UTP_EVENT_RC Ble_utpEventCb(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
-	//PFL(DL_JT808,"%s :%d\r\n", pCmd->cmdName , ev );
 	if (ev == UTP_GET_RSP)
 	{
 		//判断命令是否允许
@@ -180,8 +181,11 @@ UTP_EVENT_RC Ble_utpEventCb(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 
 uint8* Ble_ReqProc(const uint8_t* pReq, int frameLen, uint8* rspLen)
 {
-	PFL(DL_JT808,"BLE Read:%d\r\n", frameLen );
-	return BleTpu_ReqProc(&g_BleTpu, pReq, frameLen, rspLen);
+	if( g_BleTpu.cfg )
+	{
+		return BleTpu_ReqProc(&g_BleTpu, pReq, frameLen, rspLen);
+	}
+	return Null ;
 }
 
 int Ble_txData(uint8_t cmd, const uint8_t* pData, int len)

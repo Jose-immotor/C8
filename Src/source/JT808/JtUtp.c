@@ -88,7 +88,7 @@ static int Utp_BuildFrame(Utp* pUtp, uint8_t cmd, const void* pData, int len, co
 	return len + pUtp->frameCfg->dataByteInd;
 }
 
-static uint8_t g_JtUtp_txBuff[128*4];			//发送数据缓冲区5
+static uint8_t g_JtUtp_txBuff[128*2];			//发送数据缓冲区5
 static uint8_t g_JtUtp_transcodeBuf[150];	//接收数据的转码缓冲区
 static uint8_t g_JtUtp_rxBuff[128];			//接收数据缓冲区
 static uint8_t g_JtUtp_txRspBuf[128];
