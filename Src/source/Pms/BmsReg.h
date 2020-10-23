@@ -114,9 +114,18 @@ typedef struct
 	uint16_t btemp[2];		//温度1&2
 	uint16_t bvolt[16];		//单体电压
 	uint16_t balasta;		// 均衡值
-	//Jose add 2020/10/21
-	uint16_t ignore[6];		// 加速度x,y,z,MCU3.3,预放电过载检测,电量计电流
-	//uint16_t 
+	//uint16_t ignore[6];		// 加速度x,y,z,MCU3.3,预放电过载检测,电量计电流
+	//uint16_t maxcvolt;		//最大充电电压
+	//uint16_t pretvolt;		//电量计电压
+	//uint16_t tvstemp;		//TVS管温度
+	//uint16_t battempsp1;	//电池1温升速度
+	//uint16_t battempsp2;	//电池2温升速度
+	//uint16_t pretempsp;		//电量计温升速度
+	//uint16_t 					//电芯电压最大下降速度
+	//最近最大充电电流
+	//最近最大放电电流
+	//保险丝温度
+	//Curr_DET_T
 }BmsReg_deviceInfo;
 
 //BMS控制寄存器
