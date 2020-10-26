@@ -100,11 +100,13 @@ static void _getCurBatWork(void)
 		g_tlvBatWorkInfo[i].minCellVol = SWAP16( g_Bat[i].bmsInfo.lvolt);
 		g_tlvBatWorkInfo[i].maxCellNum = SWAP16( g_Bat[i].bmsInfo.hvnum);
 		g_tlvBatWorkInfo[i].minCellNum = SWAP16( g_Bat[i].bmsInfo.lvnum);
-		
-		g_tlvBatWorkInfo[i].maxChgCurr = SWAP16( g_Bat[i].bmsInfo.csop);
-		g_tlvBatWorkInfo[i].maxDischgCurr = SWAP16( g_Bat[i].bmsInfo.dsop) ;
-		g_tlvBatWorkInfo[i].curWorkFeature = SWAP16( g_Bat[i].bmsInfo.fcap) ;
-		//g_tlvBatWorkInfo[i].cycCount = SWAP16( g_Bat[i].bmsInfo.cont) ;
+
+		// bsminfo中暂时没有
+		g_tlvBatWorkInfo[i].maxChgCurr = 0x00;//SWAP16( g_Bat[i].bmsInfo.csop);
+		g_tlvBatWorkInfo[i].maxDischgCurr = 0x00;//SWAP16( g_Bat[i].bmsInfo.dsop) ;
+		g_tlvBatWorkInfo[i].curWorkFeature = 0x00;//SWAP16( g_Bat[i].bmsInfo.fcap) ;
+		//
+		g_tlvBatWorkInfo[i].cycCount = SWAP16( g_Bat[i].bmsInfo.cycle) ;
 	}
 }
 
@@ -122,12 +124,13 @@ static void _getCurBatTemp(void)
 		//
 		g_tlvBatTemp[i].cMostTemp = SWAP16( g_Bat[i].bmsInfo.cmost );	// 充电MOS温度
 		g_tlvBatTemp[i].dMostTemp = SWAP16( g_Bat[i].bmsInfo.dmost );	// 放电MOS温度
-		//g_tlvBatTemp[i].fuelTemp = SWAP16( g_Bat[i].bmsInfo.);	// 电量计温度
-		//g_tlvBatTemp[i].contTemp = SWAP16( g_Bat[i].bmsInfo.cont ) ;	// 连接器温度
-		//g_tlvBatTemp[i].batTemp1 = SWAP16( g_Bat[i].bmsInfo. );	// 电池1温度
-		//g_tlvBatTemp[i].batTemp2 = ;
-		//g_tlvBatTemp[i].tvsTemp = ;	// tvs 温度
-		//g_tlvBatTemp[i].fuseTemp ;	// 保险丝温度
+		g_tlvBatTemp[i].fuelTemp = SWAP16( g_Bat[i].bmsInfo.pret);	// 电量计温度
+		g_tlvBatTemp[i].contTemp = SWAP16( g_Bat[i].bmsInfo.cont ) ;	// 连接器温度
+		g_tlvBatTemp[i].batTemp1 = SWAP16( g_Bat[i].bmsInfo.btemp[0] );	// 电池1温度
+		g_tlvBatTemp[i].batTemp2 = SWAP16( g_Bat[i].bmsInfo.btemp[1] );	// 电池2温度
+		// bmsinof 暂时没有,待添加
+		g_tlvBatTemp[i].tvsTemp = 0 ;	// tvs 温度	
+		g_tlvBatTemp[i].fuseTemp = 0 ;	// 保险丝温度
 	}
 }
 
@@ -176,13 +179,13 @@ void JtTlv0900_init()
 	const static TlvOut g_tlv_0900[TLV_OUT_COUNT] =
 	{
 		{"SMART", &g_tlvBuf_0900Ex[0], TAG_SMART_STATE ,  sizeof(g_smartState), &g_smartState, DT_UINT8, &g_smartState_mirror, Null, 0, 0},
-		{"PMS_STATE", &g_tlvBuf_0900Ex[1], TAG_PMS_STATE , GET_ELEMENT_COUNT(g_tlvPMSState), &g_tlvPMSState[0], DT_STRUCT, &g_tlvPMSState_mirror[0], Null, 0, 0},
+		{"PMS_STATE", &g_tlvBuf_0900Ex[1], TAG_PMS_STATE , MAX_BAT_COUNT * sizeof(TlvPMSState), &g_tlvPMSState[0], DT_STRUCT, &g_tlvPMSState_mirror[0], Null, 0, 0},
 		//
-		{"BAT_INFO", &g_tlvBuf_0900Ex[2], TAG_BAT_INFO		  , GET_ELEMENT_COUNT(g_tlvBatInfo), &g_tlvBatInfo[0]    , DT_STRUCT, &g_tlvBatInfo_mirror[0] , Null, 0, 0},
-		{"BAT_WORK", &g_tlvBuf_0900Ex[3], TAG_BAT_WORK_PARAM ,GET_ELEMENT_COUNT(g_tlvBatWorkInfo), &g_tlvBatWorkInfo[0], DT_STRUCT, &g_tlvBatWorkInfo_mirror[0], Null, 0, 0},
+		{"BAT_INFO", &g_tlvBuf_0900Ex[2], TAG_BAT_INFO		  , MAX_BAT_COUNT * sizeof(TlvBatInfo), &g_tlvBatInfo[0]    , DT_STRUCT, &g_tlvBatInfo_mirror[0] , Null, 0, 0},
+		{"BAT_WORK", &g_tlvBuf_0900Ex[3], TAG_BAT_WORK_PARAM ,MAX_BAT_COUNT * sizeof(TlvBatWorkInfo), &g_tlvBatWorkInfo[0], DT_STRUCT, &g_tlvBatWorkInfo_mirror[0], Null, 0, 0},
 		//
-		{"BAT_TEMP"	, &g_tlvBuf_0900Ex[4], TAG_BAT_TEMP ,GET_ELEMENT_COUNT(g_tlvBatTemp), &g_tlvBatTemp[0], DT_STRUCT, &g_tlvBatTemp_mirror[0], Null, 0, 0},
-		{"BAT_FAULT", &g_tlvBuf_0900Ex[5], TAG_BAT_FAULT , GET_ELEMENT_COUNT(g_tlvBatFault), &g_tlvBatFault[0], DT_STRUCT, &g_tlvBatFault_mirror[0], Null, 0, 0},
+		{"BAT_TEMP"	, &g_tlvBuf_0900Ex[4], TAG_BAT_TEMP ,MAX_BAT_COUNT * sizeof(TlvBatTemp), &g_tlvBatTemp[0], DT_STRUCT, &g_tlvBatTemp_mirror[0], Null, 0, 0},
+		{"BAT_FAULT", &g_tlvBuf_0900Ex[5], TAG_BAT_FAULT , MAX_BAT_COUNT * sizeof(TlvBatFault), &g_tlvBatFault[0], DT_STRUCT, &g_tlvBatFault_mirror[0], Null, 0, 0},
 	};
 
 	TlvOutMgr_init(&g_jtTlvMgr_0900, g_tlv_0900, GET_ELEMENT_COUNT(g_tlv_0900), 1, True);
