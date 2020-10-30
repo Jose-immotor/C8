@@ -16,6 +16,7 @@
 #include "common.h"
 #include "smart_shell.h"
 #include "Shell_CmdLine.h"
+#include "drv_onchipflash.h" 
 
 /*!
  * \brief ´òÓ¡×´Ì¬ÐÅÏ¢
@@ -63,10 +64,17 @@ void Dump(uint8_t ind)
 	
 	if(30 == ind)			 BatteryDump();
 	if(31 == ind)			 NfcCardReaderDump();
+	if(32 == ind)
+	{
+		uint8_t flash_read_buff[6];
+		gd32_flash_read(FLASH_ADDR_UPDATE,flash_read_buff,6);
+		Printf("update flag=%s.\n", flash_read_buff);
+		
+	}
 	
-	Printf("g_ActiveFlag=0x%x\n", g_ActiveFlag);
-	Printf("g_dwDebugLevel = 0x%08x\n", g_dwDebugLevel);
-	Printf("system_ms_tick = %d\n", GET_TICKS());
+	Printf("g_ActiveFlag=0x%x.\n", g_ActiveFlag);
+	Printf("g_dwDebugLevel = 0x%08x.\n", g_dwDebugLevel);
+	Printf("system_ms_tick = %d.\n", GET_TICKS());
 }
 
 
@@ -101,7 +109,11 @@ void Set(uint8 ind, uint32 value)
 	extern void SetAccOn(uint8 on);
 	extern void Cabin_UnLock();
 	extern void LogUser_Reset();
-
+	extern void CgfInfo_Reset();
+	extern void PdoInfo_Reset();
+	extern void DbgInfo_Reset();
+	
+	
 	switch(ind)
 	{
 		case 0: LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_McuReset, value);break;
@@ -111,16 +123,25 @@ void Set(uint8 ind, uint32 value)
 		case 4: SetAccOn(value); NvdsUser_Write(NVDS_PDO_INFO);break;
 		case 5: Rs485Test(value); break;
 		case 6: LogUser_Reset(); break;
-////		case 7: g_Settings.IsAlarmMode=value; Sign_Dump(Null); break;
-		case 8: Cabin_UnLock();break;//g_pdoInfo.isCanbinLock =1;break;
+		case 8: Cabin_UnLock();break;
 		case 9: g_cfgInfo.isActive= value;NvdsUser_Write(NVDS_CFG_INFO);break;
 		case 10: g_pdoInfo.isCanbinLock =value;break;
 		case 11: Nvc_SetVol(value);NvdsUser_Write(NVDS_CFG_INFO);break;
-////		case 12: Fsm_StateKeyOff(MSG_FORCE_POWERDOWN); break;
-//		case 13: Nvc_PlayEx(value); break;
+		case 20: CgfInfo_Reset(); break;
+		case 21: PdoInfo_Reset(); break;
+		case 22: DbgInfo_Reset(); break;
+		case 23: 
+		{
+			uint8_t buff[6];
+			memcpy(&buff[0], "update", 6);
+			gd32_flash_write(FLASH_ADDR_UPDATE,buff,6);
+			break;
+		}
+		case 24: 
+		{		
+			gd32_flash_erase(FLASH_ADDR_UPDATE,6); break;
+		}
 	}
-//		
-	//Nvds_Write_Setting();
 }
 
 void NvcPlay(uint8 audioInd, uint8 maxRepeat, uint8 vol)

@@ -40,6 +40,8 @@ extern "C"{
 #include "Dump.h"
 #include "Ble.h"
 #include "workmode.h"
+#include "ButtonBoard.h"
+
 
 #define CFG_CABIN_LOCK
 

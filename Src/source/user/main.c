@@ -27,6 +27,7 @@
 #include "workmode.h"
 #include "CmdLineExport.h"
 #include "smart_shell.h"
+#include "ButtonBoard.h"
 
 const HwFwVer AppInfo={
 FW_VER_MAIN,
@@ -56,6 +57,7 @@ int main(void)
 	Led_init();
 	hw_can_init(CAN1);
 	JT808_init();
+	Button_init();
 	Pms_init();
 	Gyro_Init();
 	Nvc_Init();

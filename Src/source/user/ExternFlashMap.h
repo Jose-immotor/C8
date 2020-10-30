@@ -12,7 +12,7 @@ extern "C" {
 
 #include "typedef.h"
 
-#define  EX_FLASH_SECTOR_SIZE	2048	//外部的闪存页大小为2KB，擦除的最小单位
+#define  EX_FLASH_SECTOR_SIZE	4096	//外部的闪存页大小为4KB，擦除的最小单位
 
 #define  EX_FLASH_CFG_INFO_ADDR		0
 #define  EX_FLASH_CFG_INFO_SIZE		EX_FLASH_SECTOR_SIZE

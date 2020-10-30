@@ -1,0 +1,11 @@
+1. 打开OtaTool.ini文件，并且准确配置如下参数。
+2. 运行文件OtaTool.exe
+
+BOOT_CODE_SIZE=2048			//Bootloader代码区大小,Byte为单位
+VER_INFO_SIZE=1024			//版本信息区大小,Byte为单位
+APP_CODE_SIZE=30720			//App代码区大小,Byte为单位
+BootFileName=.\BootFileName.bin		//Bootloader路径和文件名
+AppFileName=.\AppFileName.bin		//App路径和文件名
+dstPath=.\				//目标文件的路径
+hwVer=1.1				//硬件版本
+fwVer=1.0.0.1				//软件件版本

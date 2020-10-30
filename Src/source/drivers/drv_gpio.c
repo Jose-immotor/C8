@@ -38,7 +38,9 @@ static DrvIo g_InIOs[] =
 //所有命名包含“ON”表示高电平有效, 包含“OFF”表示低电平有效
 static DrvIo g_OutputIOs[] =
 {
-	//输出配置	
+	//输出配置
+	{IO_18650_PWR_OFF, "18650_PWR_OFF"	, GPIOB, GPIO_PIN_15 ,GPIO_MODE_OUT_PP,
+		NULL,NULL,NULL,NULL,NULL,NULL,True},
 	{CTRL_MCU_LED	, "CTRL_MCU_LED"	, GPIOE, GPIO_PIN_2 ,GPIO_MODE_OUT_PP},
 	{IO_NFC_NPD_A	, "NFC_NPD_A"		, GPIOE, GPIO_PIN_14 ,GPIO_MODE_OUT_PP},
 	{IO_18650BOOST_EN, "BOOST_EN"		, GPIOE, GPIO_PIN_11 ,GPIO_MODE_OUT_PP},
@@ -50,7 +52,7 @@ static DrvIo g_OutputIOs[] =
 	{IO_PWR485_EN	, "PWR485_EN"		, GPIOD, GPIO_PIN_3 ,GPIO_MODE_OUT_PP},
 	{IO_DIR485_CTRL	, "DIR485_CTRL"		, GPIOD, GPIO_PIN_6 ,GPIO_MODE_OUT_PP},
 	{IO_LOCK_EN		, "LOCK_EN"			, GPIOD, GPIO_PIN_10 ,GPIO_MODE_OUT_PP},
-	{IO_18650_PWR_OFF, "18650_PWR_OFF"	, GPIOB, GPIO_PIN_15 ,GPIO_MODE_OUT_PP},
+	
 	{IO_CABIN_12V_ON, "CABIN_12V_ON"	, GPIOD, GPIO_PIN_13 ,GPIO_MODE_OUT_PP},
 	{IO_AT8837_IN1	, "AT8837_IN1"		, GPIOD, GPIO_PIN_14 ,GPIO_MODE_OUT_PP},
 	{IO_AT8837_IN2	, "AT8837_IN2"		, GPIOD, GPIO_PIN_15 ,GPIO_MODE_OUT_PP},
@@ -403,7 +405,7 @@ void IO_PinInit(DrvIo* pDrvIo)
 	/* enable the pin clock */
 	rcu_periph_clock_enable(Rcu_Get(pDrvIo->periph));
 
-	gpio_init(pDrvIo->periph, pDrvIo->mode, GPIO_OSPEED_50MHZ, pDrvIo->pin);
+//	gpio_init(pDrvIo->periph, pDrvIo->mode, GPIO_OSPEED_50MHZ, pDrvIo->pin);
 
 	if(IS_OUT_MODE(pDrvIo->mode))	//Output mode, 设置默认值
 	{
@@ -426,6 +428,7 @@ void IO_PinInit(DrvIo* pDrvIo)
 		pDrvIo->value = PortPin_Read(pDrvIo);
 		if (pDrvIo->pOdValue )*pDrvIo->pOdValue = pDrvIo->value;
 	}
+	gpio_init(pDrvIo->periph, pDrvIo->mode, GPIO_OSPEED_50MHZ, pDrvIo->pin);
 }
 
 uint8 PortPin_Read(const DrvIo* pDrvIo)
@@ -769,7 +772,16 @@ int IO_Init(void)
 		IO_PinInit(&g_OutputIOs[i]);
 	}
 	
-	
+	g_p18650BootEnIO = IO_Get(IO_18650BOOST_EN);
+	PortPin_Set(g_p18650BootEnIO->periph, g_p18650BootEnIO->pin, True);
+	g_pPwr3V3EnIO = IO_Get(IO_PWR3V3_EN);
+	PortPin_Set(g_pPwr3V3EnIO->periph, g_pPwr3V3EnIO->pin, False);
+	g_pPwr485EnIO = IO_Get(IO_PWR485_EN);
+	PortPin_Set(g_pPwr485EnIO->periph, g_pPwr485EnIO->pin, True);
+	g_p18650PwrOffIO = IO_Get(IO_18650_PWR_OFF);
+	PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, True);
+	g_pCanSTBIO = IO_Get(IO_CAN_STB);
+	PortPin_Set(g_pCanSTBIO->periph, g_pCanSTBIO->pin, False);
 	
 	return 0;
 }

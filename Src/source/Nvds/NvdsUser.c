@@ -171,6 +171,18 @@ void NvdsUser_Reset()
 	SectorMgr_Erase(g_NvdsItems[1].sectorMgr);
 	SectorMgr_Erase(g_NvdsItems[2].sectorMgr);
 }
+void CgfInfo_Reset()
+{
+	SectorMgr_Erase(g_NvdsItems[0].sectorMgr);
+}
+void PdoInfo_Reset()
+{
+	SectorMgr_Erase(g_NvdsItems[1].sectorMgr);
+}
+void DbgInfo_Reset()
+{
+	SectorMgr_Erase(g_NvdsItems[2].sectorMgr);
+}
 
 //写入指定的NvdsID
 void NvdsUser_Write(NvdsID id)

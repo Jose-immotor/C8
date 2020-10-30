@@ -26,8 +26,8 @@ extern char __ICFEDIT_region_RAM_end__;
 #define GD32_SRAM_END          &__ICFEDIT_region_RAM_end__
 #else
 
-#define GD32_FLASH_START_ADRESS     ((uint32_t)0x08000000)
-#define GD32_FLASH_SIZE             (128 * 1024)
+#define GD32_FLASH_START_ADRESS     ((uint32_t)0x08006400)
+#define GD32_FLASH_SIZE             (103 * 1024)
 #define GD32_FLASH_END_ADDRESS      ((uint32_t)(GD32_FLASH_START_ADRESS + GD32_FLASH_SIZE))
 
 #define GD32_SRAM_SIZE         32//lane 20200914

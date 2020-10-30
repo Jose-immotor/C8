@@ -898,8 +898,10 @@ int JT808_txData(uint8_t cmd, const uint8_t* pData, uint32_t len)	//cmdÎªCANÐ­Òé
 		}
 		memcpy(transmit_message.tx_data, pData, send_len);	
 		transmit_message.tx_dlen = send_len;
+		transmit_message.tx_efid = 0x00002010;
 		can_message_transmit(CAN1, &transmit_message);
 		PFL(DL_CAN, "CANTx:");
+		PFL(DL_CAN, "%08x ",transmit_message.tx_efid);
 		DUMP_BYTE_LEVEL(DL_CAN,&transmit_message.tx_data,transmit_message.tx_dlen);
 		PFL(DL_CAN, "\n");
 //		rt_thread_mdelay(20);
@@ -938,10 +940,18 @@ void JT808_timerProc()
 	{
 		can0_receive_flag = RESET;
 		PFL(DL_CAN, "CANRx:");
+		PFL(DL_CAN, "%08x ",receive_message.rx_efid);
 		DUMP_BYTE_LEVEL(DL_CAN,&receive_message.rx_data,receive_message.rx_dlen);
 		PFL(DL_CAN, "\n");
-		JT808_rxDataProc( receive_message.rx_data , receive_message.rx_dlen );
-		gCanbusRevTimeMS = GET_TICKS();
+		if(0x00001020 == receive_message.rx_efid)
+		{
+			JT808_rxDataProc( receive_message.rx_data , receive_message.rx_dlen );
+			gCanbusRevTimeMS = GET_TICKS();
+		}
+		else if(0x00001030 == receive_message.rx_efid)
+		{
+		
+		}
 	}
 	else
 	{
