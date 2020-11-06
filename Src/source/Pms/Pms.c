@@ -218,6 +218,11 @@ void Pms_SwitchPort()
 //	g_pActiveBat = pBat;
 }
 
+PmsOpStatus Pms_GetStatus(void)
+{
+	return g_pms.opStatus;
+}
+
 //static 
 void Pms_switchStatus(PmsOpStatus newStatus)
 {
@@ -254,10 +259,18 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	if (msgId == PmsMsg_run)
 	{
 		static uint32 accoff_tick = 0;
+		static uint32 accoffprintf_tick = 0;
 		if ((0/*g_pJt->devState.cnt & _GPS_FIXE_BIT*/)||(SwTimer_isTimerOutEx(g_pms.statusSwitchTicks,PMS_ACC_OFF_ACTIVE_TIME)))
 		{
-			workmode_switchStatus(WM_SLEEP);
-//			Pms_switchStatus(PMS_DEEP_SLEEP);
+//			workmode_switchStatus(WM_SLEEP);
+			if(g_pdoInfo.isLowPow == 0)
+				Pms_switchStatus(PMS_DEEP_SLEEP);
+//			if(GET_TICKS() -accoffprintf_tick >3000 )
+//			{
+//				accoffprintf_tick =GET_TICKS();
+//				PFL(DL_PMS,"pms status acc off.\n");
+//			}
+			
 		}
 		
 		if(((g_Bat[0].bmsInfo.state&0x0300)!=0x0300)&&((GET_TICKS() -accoff_tick) >3000 ))
@@ -266,6 +279,17 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 			Pms_setChg(True);
 			accoff_tick = GET_TICKS();
 		}
+		
+//		if (SwTimer_isTimerOutEx(g_pms.statusSwitchTicks,PMS_ACC_OFF_LOCK_TIME))
+//		{
+//			PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, False);
+//			g_pdoInfo.isWheelLock =0;
+//		}
+//		else
+//		{
+			PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, True);
+			g_pdoInfo.isWheelLock =1;
+//		}
 	}
 	else if (msgId == PmsMsg_accOn)
 	{
@@ -274,13 +298,19 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	else if (msgId == PmsMsg_batPlugIn)
 	{
 		Pms_plugIn((Battery*)param1);
+		if(g_pdoInfo.isRemoteAccOn)
+			Pms_switchStatus(PMS_ACC_ON);
 	}
 	else if (msgId == PmsMsg_batPlugOut)
 	{
 		Pms_plugOut((Battery*)param1);
 	}
-	PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, True);
-	g_pdoInfo.isWheelLock =1;
+	else if (msgId == PmsMsg_GyroIrq)
+	{
+		PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, True);
+		g_pdoInfo.isWheelLock =1;
+		g_pms.statusSwitchTicks = GET_TICKS();
+	}
 }
 
 static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
@@ -325,6 +355,21 @@ static void Pms_fsm_CANErr(PmsMsg msgId, uint32_t param1, uint32_t param2)
 static void Pms_fsm_deepSleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
 	static uint32 accsleep_tick = 0;
+	if (SwTimer_isTimerOutEx(g_pms.statusSwitchTicks,PMS_ACC_DEEPSLEEP_TIME))
+	{
+		workmode_switchStatus(WM_SLEEP);
+	}
+	if (msgId == PmsMsg_GyroIrq)
+	{
+		PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, True);
+		g_pdoInfo.isWheelLock =1;
+		Pms_switchStatus(PMS_ACC_OFF);
+	}
+	else if (msgId == PmsMsg_accOn)
+	{
+		if((g_pdoInfo.isRemoteAccOn)&&(g_Bat[0].presentStatus == BAT_IN))
+			Pms_switchStatus(PMS_ACC_ON);
+	}
 	if(((g_Bat[0].bmsInfo.state&0x0300)!=0x0000)&&((GET_TICKS() -accsleep_tick) >3000 ))
 	{
 		Pms_setDischg(False);
@@ -335,6 +380,8 @@ static void Pms_fsm_deepSleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	{
 		Fsm_SetActiveFlag(AF_PMS, False);
 	}
+	
+	
 	PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, False);
 	g_pdoInfo.isWheelLock =1;
 }

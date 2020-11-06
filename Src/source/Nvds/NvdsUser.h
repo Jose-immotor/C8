@@ -51,7 +51,7 @@ extern "C" {
 			uint8 IsForbidDischarge : 1;//BIT[3]:远程断电/禁止放电
 			uint8 IsBatVerifyEn:1;  //BIT[4]:是否使能电池身份验证
 			uint8 IsAlarmMode:1;	///BIT[5]:是否境界模式/异动报警使能
-			uint8 BatVerifyRet:2;	///BIT[6-7]:电池身份校验结果。0：忽略，不校验。1：合法：2：非法。	
+			uint8 BatVerifyRet:2;	///BIT[6-7]:电池身份校验结果。0：忽略，不校验。1：合法：2：非法。			
 //			uint8 reserved : 5;		//BIT[3-7]:保留
 		};
 		union
@@ -70,7 +70,13 @@ extern "C" {
 		};
 		uint32 resetCounter;	//复位计数器
 		uint32 timeStamp;		//时间戳，1. SM启动时会SM的本地时间同步到该值。2. 系统复位时，要保存该值
-		uint8 Reserved[16];		//保留16个字节
+		
+		struct
+		{
+			uint8 isLowPow : 1;//BIT[0]:18650电量低		
+//			uint8 reserved : 5;		//BIT[3-7]:保留
+		};
+		uint8 Reserved[15];		//保留15个字节
 		uint8 latestByte;		//从存储区读出的字节不等于 EEPROM_LATEST_BYTE，说明该存储区被修改，已经失效
 	}PdoInfo;
 

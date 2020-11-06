@@ -47,34 +47,7 @@ static Bool NfcCardReader_searchPort(NfcCardReader* pReader, int port)
 	pReader->searchTicks = (pReader->port != port) ? 0 : GET_TICKS();
 	pReader->searchCounter = (pReader->port != port) ? 0 : (pReader->searchCounter + 1);
 
-<<<<<<< HEAD
-//	pReader->port = port;
-
-	
-	FM175XX_switchPort(port);
-	g_pdoInfo.isNfcOk = (!FM175XX_SoftReset());
-//	Write_Reg(WaterLevelReg,0x20);//设置FIFOLevel=32字节  
-//	Write_Reg(DivIEnReg,0x80);//引脚IRQ按照标准CMOS输出pad工作
-//	Write_Reg(ComIEnReg,0x2c);//允许RxIEn,HiAlerlEn,LoAlertlEn
-	if (pReader->port)
-	{
-		Set_Rf(1);
-	}
-	else
-	{
-		Set_Rf(2);
-	}
-	Pcd_ConfigISOType(0);
-	PFL(DL_NFC,"NFC port[%d] search start!\n",pReader->port);
-	pReader->latestErr = TypeA_CardActivate(PICC_ATQA, PICC_UID, PICC_SAK);
-
-	if (pReader->latestErr == OK)
-	{
-		pReader->latestErr = TypeA_RATS(0x20, pReader->picc_ats);
-	}
-=======
 	fm175Drv_switchPort(&g_FmDrv, port);
->>>>>>> b61f70d77dd78f5d0ec911fbab0a619377be6bbd
 
 	return (pReader->latestErr == OK);
 }

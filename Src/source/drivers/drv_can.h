@@ -19,8 +19,8 @@ void can0_receive_isr(void);
 void hw_can_init(uint32_t can_periph);
 void can_start(void);
 //void can_run(void);
-void can_sleep(void);
-
+void can0_sleep(void);
+void can0_reset(void);
 
 
 #endif

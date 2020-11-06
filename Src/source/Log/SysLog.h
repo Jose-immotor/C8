@@ -6,7 +6,7 @@ extern "C" {
 #endif	//#ifdef __cplusplus
 #include "Log.h"
 
-#define SYS_LOG_EVT_COUNT 8
+#define SYS_LOG_EVT_COUNT 12
 
 	//系统类别ID定义
 	typedef enum _SysCatID
@@ -30,6 +30,11 @@ extern "C" {
 		SysEvtID_WakeUp,		//唤醒，     	 格式 (SYS_CATID_COMMON, 0, SysEvtID_WakeUp, WakeUpType)
 		SysEvtID_TakeApart,		//拆开，     	 格式 (SYS_CATID_COMMON, 0, SysEvtID_TakeApart, 0)
 		SysEvtID_OverTemp,		//过温，     	 格式 (SYS_CATID_COMMON, 0, SysEvtID_OverTemp, 0)
+		SysEvtID_SetAccOn,		//点火，     	 格式 (SYS_CATID_COMMON, 0, SysEvtID_SetAccOn, 0)
+		SysEvtID_SetAccOff,		//熄火，     	 格式 (SYS_CATID_COMMON, 0, SysEvtID_SetAccOff, 0)
+		SysEvtID_18650LowPower,	//18650电压低，  格式 (SYS_CATID_COMMON, 0, SysEvtID_18650LowPower, 电压)
+		SysEvtID_18650HigPower,	//18650电压高，  格式 (SYS_CATID_COMMON, 0, SysEvtID_18650HigPower, 电压)
+		
 	}SysEvtID;
 
 	extern const LogEvt g_SysLogEvts[];

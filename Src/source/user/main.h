@@ -6,9 +6,9 @@
 #include "typedef.h"
 
 #define FW_VER_MAIN 20
-#define FW_VER_S1 10
-#define FW_VER_S2 29
-#define FW_VER_BUILD 1326
+#define FW_VER_S1 11
+#define FW_VER_S2 4
+#define FW_VER_BUILD 1728
 #define DES_HW_VER_MAIN 5
 #define DES_HW_VER_SUB 0
 

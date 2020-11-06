@@ -69,7 +69,7 @@ void Dump(uint8_t ind)
 		uint8_t flash_read_buff[6];
 		gd32_flash_read(FLASH_ADDR_UPDATE,flash_read_buff,6);
 		Printf("update flag=%s.\n", flash_read_buff);
-		
+
 	}
 	
 	Printf("g_ActiveFlag=0x%x.\n", g_ActiveFlag);
@@ -112,7 +112,7 @@ void Set(uint8 ind, uint32 value)
 	extern void CgfInfo_Reset();
 	extern void PdoInfo_Reset();
 	extern void DbgInfo_Reset();
-	
+	extern void endless_loop_for_wdTest();
 	
 	switch(ind)
 	{
@@ -137,10 +137,11 @@ void Set(uint8 ind, uint32 value)
 			gd32_flash_write(FLASH_ADDR_UPDATE,buff,6);
 			break;
 		}
-		case 24: 
+		case 24:
 		{		
 			gd32_flash_erase(FLASH_ADDR_UPDATE,6); break;
 		}
+		case 30: endless_loop_for_wdTest(); break;
 	}
 }
 

@@ -9,9 +9,6 @@ extern "C"{
 #else
 #endif
 
-//#define CFG_LOG
-//#define USE_NFC_THREAD
-
 #include "ArchDef.h"
 #include "Obj.h"
 #include "Utp.h"
@@ -42,7 +39,9 @@ extern "C"{
 #include "workmode.h"
 #include "ButtonBoard.h"
 
-
+//#define CFG_LOG
+//#define USE_NFC_THREAD
+//#define DGT_CONFIG
 #define CFG_CABIN_LOCK
 
 

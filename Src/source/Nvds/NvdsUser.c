@@ -22,11 +22,13 @@ void SetAccOn(uint8 on)
 	{
 		g_pdoInfo.isRemoteAccOn = 1;
 		Pms_postMsg(PmsMsg_accOn, 0, 0);
+		LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_SetAccOn,1);
 	}
 	else
 	{
 		g_pdoInfo.isRemoteAccOn = 0;
 		Pms_postMsg(PmsMsg_accOff, 0, 0);
+		LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_SetAccOff,1);
 	}
 }
 
@@ -59,6 +61,8 @@ void g_pdoInfo_Dump(void)
 	PRINTF_PDO(isRemoteAccOn);//³µÁ¾Ô¶³Ìµã»ð
 	PRINTF_PDO(isWheelLock);///ÂÖì±Ëø
 	PRINTF_PDO(isCanbinLock);///×ù²ÕËø
+	PRINTF_PDO(isLowPow);
+	
 	
 	PRINTF_PDO(isFlashOk);
 	PRINTF_PDO(isGyroOk);

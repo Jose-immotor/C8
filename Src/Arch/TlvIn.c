@@ -9,6 +9,7 @@
 #include "ArchDef.h"
 #include "Tlv.h"
 #include "TlvIn.h"
+#include "debug.h"
 
 
 void TlvInMgr_dump(const TlvIn* pItem, int tagLen, DType dt)
@@ -50,6 +51,22 @@ TlvInEventRc TlvInMgr_event(TlvInMgr* mgr, const TlvIn* p, TlvInEvent ev)
 	return rc;
 }
 
+/*
+整包数据
+7E E1 01 00 01 01 A0 15 
+01 01 01 
+02 01 01 
+03 01 01 
+04 01 01 
+05 01 01 
+06 01 01 
+07 01 01 
+7E 
+
+pTlvBuf:
+01 01 01 02 01 01 03 01 01 04 01 01 05 01 01 06 01 01 07 01 01
+
+*/
 //更新存储指针值
 void TlvInMgr_updateStorage(TlvInMgr* mgr, const uint8* pTlvBuf, int bufSize)
 {
@@ -57,12 +74,13 @@ void TlvInMgr_updateStorage(TlvInMgr* mgr, const uint8* pTlvBuf, int bufSize)
 	const TlvIn* p = Null;
 	const uint8* pVal = Null;
 	uint32 tag = 0;
+	
 	for (int i = 0; i + mgr->tagLen < bufSize; )
 	{
 		memcpy(&tag, pTlvBuf, mgr->tagLen);
 
 		p = TlvInMgr_find(mgr->itemArray, mgr->itemCount, tag);
-		
+
 		if (p)
 		{
 			int len = MIN(p->len, pTlvBuf[mgr->tagLen]);
@@ -81,7 +99,7 @@ void TlvInMgr_updateStorage(TlvInMgr* mgr, const uint8* pTlvBuf, int bufSize)
 					}
 
 					memcpy(p->storage, pVal, len);
-
+					
 					TlvInMgr_event(mgr, p, TE_CHANGED_AFTER);
 					if(p->mirror)
 						memcpy(p->mirror, p->storage, p->len);

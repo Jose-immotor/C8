@@ -6,56 +6,51 @@
 
 	typedef enum
 	{
-		BUCMD_SIM_HB		= 0x01,
+		BUCMD_BUTT_HB		= 0x01,
 		BUCMD_MCU_HB		= 0x02,
-//		JTCMD_SET_OP_STATE	= 0x03,
+		BUCMD_SET_OP_STATE	= 0x03,
 
-//		JTCMD_CMD_GET_SIM_ID  = 0x11,
-//		JTCMD_CMD_GET_SIM_CFG,
-//		JTCMD_CMD_SET_SIM_CFG,
-//		JTCMD_CMD_GET_SMS,
-//		JTCMD_CMD_SEND_TO_SVR = 0x15,
+		BUTTCMD_SET_DISPLAYCFG  = 0x20,
+		BUTTCMD_GET_DISPLAYCFG  = 0x30,
 
-//		JTCMD_CMD_GET_FILE_INFO = 0X16,
-
-//		JTCMD_CMD_GET_FILE_CONTENT = 0X17,
-//		JTCMD_CMD_SET_LOCATION_EXTRAS = 0x18,
-
-//		JTCMD_CMD_GET_BLE_ID = 0x30,
-//		JTCMD_CMD_GET_BLE_CFG,
-//		JTCMD_CMD_SET_BLE_CFG,
-//		JTCMD_CMD_GET_BLE_EN,
-//		JTCMD_CMD_SET_BLE_EN,
-//		
-//		JTCMD_EVENT_DEV_STATE_CHANGED = 0x80,
-//		JTCMD_EVENT_DEV_STATE_LOCATION,
-
-//		JTCMD_BLE_EVT_AUTH = 0x90,
-//		JTCMD_BLE_EVT_CNT = 0x91,
-//		JTCMD_BLE_EVT_BEACON = 0x92,
-//		JTCMD_BLE_RCV_DAT = 0x93,
-
-//		JTCMD_EVT_RCV_SVR_DATA =  0xA0,
-//		JTCMD_EVT_RCV_FILE_DATA ,
 	}BU_cmd;
 	
 	typedef enum
 	{
-		BU_STATE_INIT			= 0x01,
+		BU_STATE_INIT			,
 		BU_STATE_SLEEP			,//= 0x02,
 		BU_STATE_WAKEUP			,//= 0x03,
-		BU_STATE_PREOPERATION	,//= 0x04,
-		BU_STATE_OPERATION		,//= 0x05,
+		BU_STATE_PREOPERATION	= 0x04,
+		BU_STATE_OPERATION		= 0x05,
 
 		BU_STATE_UNKNOWN		= 0xFF,
 	}BU_state;
+	
+	typedef struct
+	{
+		uint8 Display_content[3];//显示内容显示内容：取值范围[0,9]；高位数据先发送
+		uint8 Display_luminance;//显示亮度：取值范围[0,8]
+		uint16 Display_time;//单位：秒;高位数据先发送
+
+	}BU_DisplayCfg;
+	
 	typedef void (*ButtfsmFn)(uint8_t msgID, uint32_t param1, uint32_t param2);
 typedef struct _Butt
 {
-	BU_state opState;
-	
 	Bool online_sta;//是否在线
 	
+	union
+	{
+		uint8 State_Parameter;//
+		struct
+		{
+			uint8 isStateWork : 1;//BIT0：等于0时设置为睡眠模式;等于1时设置为唤醒模式
+			uint16 reserved01 : 7;//BIT[1-7]:保留
+		};
+	};
+	BU_DisplayCfg DisplayCfg;
+	
+	BU_state opState;
 	ButtfsmFn fsm;	
 }Butt;
 

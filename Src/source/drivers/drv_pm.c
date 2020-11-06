@@ -79,7 +79,7 @@ void Enter_PowerDown()
 	
 
 	PortPin_Set(g_pLedIO->periph, g_pLedIO->pin, True);
-	RTC_TimerStart(24*60*60);
+	RTC_TimerStart(6*60*60);//定时6小时唤醒中控
 
 	//待机模式
 	rcu_periph_clock_enable(RCU_PMU);

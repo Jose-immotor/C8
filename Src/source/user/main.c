@@ -38,8 +38,48 @@ DES_HW_VER_MAIN,
 DES_HW_VER_SUB};
 
 
+//保存WWDG计数器的设置值,默认为最大. 
+//让窗口数值和计数值一样,这样就不用考虑喂狗时间在窗口值~0x3F之间了
+#define WWDG_CNT 0x7f//tr   :T[6:0],计数器值 
+#define WWDG_WR 0x7f//wr   :W[6:0],窗口值
+//Fwwdg=PCLK1/(4096*2^fprer). 
+//初始化窗口看门狗
+//系统时钟72MHz，
+void Mcu_DgInit()
+{
+	rcu_periph_clock_enable(RCU_WWDGT);//   WWDG时钟使能
+
+	wwdgt_deinit();
+	wwdgt_config(WWDG_CNT, WWDG_WR, WWDGT_CFG_PSC_DIV8);               
+
+	wwdgt_flag_clear();//清除提前唤醒中断标志位
+}
+
+void Mcu_DgStart()
+{
+	wwdgt_enable();
+	wwdgt_flag_clear();
+}
+
+//喂窗口看门狗
+void WDOG_Feed(void)
+{   
+	wwdgt_counter_update(WWDG_CNT);	
+}
+
+void endless_loop_for_wdTest()
+{
+	Printf("Wdt test.\n");
+
+	while(1);
+}
+
 int main(void)
 {
+	#ifdef DGT_CONFIG	
+	//DGT在Bootloader初始化和使能
+//	Mcu_DgInit();
+	#endif
 	Printf("\n\nPower up.\n");
 	//MCU硬件初始化
 	//Todo...
@@ -67,8 +107,16 @@ int main(void)
 
 	//对象启动
 	ObjList_start();
+
+	#ifdef DGT_CONFIG
+	Mcu_DgInit();
+	Mcu_DgStart();
+	#endif
     while(1)
 	{
+		#ifdef DGT_CONFIG	
+		WDOG_Feed();
+		#endif
 		//对象运行
 		ObjList_run();
 		rt_thread_mdelay(1);

@@ -19,10 +19,12 @@ void Bat_bmsInfoDump(const Battery* pBat)
 	const uint8_t* pByte = (uint8_t*) & (pBat->bmsID.sn34);
 	Printf("\tPort[%d][%02X%02X%02X%02X%02X%02X]:\n"
 		, pBat->port, pByte[0], pByte[1], pByte[2], pByte[3], pByte[4], pByte[5]);
+	Printf("\t\tstate=0x%04X\r\n", bigendian16_get((uint8*)(&pBat->bmsInfo.state)));
 	Printf("\t\tsoc(0.1)=%d\r\n", bigendian16_get((uint8*)(&pBat->bmsInfo.soc)));
 	Printf("\t\tvolt(0.01V)=%d\r\n", bigendian16_get((uint8*)(&pBat->bmsInfo.tvolt)));
 	Printf("\t\tcurr(0.01A)=%d\r\n", bigendian16_get((uint8*)(&pBat->bmsInfo.tcurr)));
-	Printf("\t\tstate=0x%04X\r\n", bigendian16_get((uint8*)(&pBat->bmsInfo.state)));
+	Printf("\t\ttemp(0.1¡æ)=%d\r\n", bigendian16_get((uint8*)(&pBat->bmsInfo.htemp)));
+	Printf("\t\tcycle=%d\r\n", bigendian16_get((uint8*)(&pBat->bmsInfo.cycle)));
 }
 
 const uint8* Bat_getBID(Battery* pBat)

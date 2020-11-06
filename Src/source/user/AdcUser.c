@@ -13,7 +13,6 @@ static AdcUser g_AdcUser[] =
 AdcUser* g_pLcdTempSensor = &g_AdcUser[0];
 AdcUser* g_pChgrTempSensor = &g_AdcUser[1];
 
-DrvIo* g_p18650ChgIO = Null;
 
 THRESHOLD_EVENT AdcUser_GetTempEvent(uint8 sensor)
 {
@@ -94,11 +93,17 @@ void AdcUser_18650EventChanged(AdcUser* pAdcUser, ThresholdArea* pThreshold, THR
 
 	if (event == DOWN_OVER_THRESHOLD_LOW)
 	{
-		PortPin_Set(g_p18650ChgIO->periph, g_p18650ChgIO->pin, False);
+//		PortPin_Set(g_p18650ChgIO->periph, g_p18650ChgIO->pin, False);
+		g_pdoInfo.isLowPow = 1;
+		PFL(DL_ADC, "\n18650 Low Power!\n");
+		LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_18650LowPower, 0);
 	}
 	else if (event == UP_OVER_THRESHOLD_HIGH)
 	{
-		PortPin_Set(g_p18650ChgIO->periph, g_p18650ChgIO->pin, True);
+//		PortPin_Set(g_p18650ChgIO->periph, g_p18650ChgIO->pin, True);
+		g_pdoInfo.isLowPow = 0;
+		PFL(DL_ADC, "\n18650 High Power!\n");
+		LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_18650HigPower, 0);
 	}
 //	if (pThreshold->thresholdHigh == g_pCfgInfo->temp_thresholdHigh)
 //	{
@@ -122,8 +127,8 @@ void AdcUser_Init()
 	memset(g_threshold, 0, sizeof(g_threshold));
 
 	//如果有多级阈值，高阈值值必须在前，低阈值必须在后
-	g_threshold[0].thresholdHigh = 4100;
-	g_threshold[0].thresholdLow  = 3400;
+	g_threshold[0].thresholdHigh = 4150;
+	g_threshold[0].thresholdLow  = 3600;
 	g_threshold[0].OnChanged     = (ThresholdChangedFn)AdcUser_18650EventChanged;
 
 //	g_threshold[1].thresholdHigh = g_pCfgInfo->temp_thresholdLow;
@@ -137,5 +142,4 @@ void AdcUser_Init()
 		pAdc->OnChanged = (AdcOnChangedFn)AdcUser_OnTempChanged;
 	}
 	
-	g_p18650ChgIO = IO_Get(IO_18650_CHG_EN);
 }

@@ -20,6 +20,8 @@ void Gyro_Isr()
 	
 	g_GyroIsrTicks = GET_TICKS();
 
+	if((Pms_GetStatus() == PMS_DEEP_SLEEP)||(Pms_GetStatus() == PMS_ACC_OFF))
+		Pms_postMsg(PmsMsg_GyroIrq, 0, 0);
 //	if(GPIO_READ(PB, 14))
 //	{
 //		PostMsg(MSG_GYRO_ASSERT);

@@ -9,7 +9,10 @@
 
 #include "ArchDef.h"
 #include "Utp.h"
+#include "Cirbuffer.h"
+#include "debug.h"
 
+extern uint16_t gCurRevLen ;
 static Bool Utp_RspProc(Utp* pUtp, const uint8_t* pRsp, int frameLen, UTP_RCV_RSP_RC rspCode);
 static void Utp_RcvRsp(Utp* pUtp, const uint8_t* pRsp, int frameLen, UTP_RCV_RSP_RC rspCode);
 
@@ -185,7 +188,8 @@ static void Utp_ResetTxBuf(Utp* pUtp)
 
 static void Utp_ResetRxBuf(Utp* pUtp)
 {
-	Queue_reset(&pUtp->rxBufQueue);
+	//Queue_reset(&pUtp->rxBufQueue);
+	CirBuffReset(&pUtp->rxBuffCirBuff);
 	pUtp->searchIndex = 0;
 	pUtp->head = 0;
 	pUtp->rxDataTicks = 0;
@@ -268,6 +272,8 @@ static void Utp_ReqProc(Utp* pUtp, const uint8_t* pReq, int frameLen)
 	const UtpCmd* pCmd = Utp_FindCmdItem(pUtp, pReq[frameCfg->cmdByteInd]);
 	int dlc = 1;
 
+	PFL(DL_JT808,"CAN REQ:%s\n",pCmd->cmdName );
+
 	if( pCmd && (pCmd->type == UTP_EVENT || pCmd->type == UTP_EVENT_NOTIFY ))
 	{
 		rc = frameCfg->result_SUCCESS;
@@ -276,7 +282,8 @@ static void Utp_ReqProc(Utp* pUtp, const uint8_t* pReq, int frameLen)
 		//传输数据
 		pCmd->pExt->transferData = (uint8*)pData;
 		pCmd->pExt->transferLen = frameLen;
-
+		gCurRevLen = MIN(pCmd->storageLen, frameLen) ;
+		
 		if (pCmd->pStorage && pCmd->storageLen)
 		{
 			if (memcmp(pCmd->pStorage, pData, pCmd->storageLen) != 0)
@@ -284,16 +291,17 @@ static void Utp_ReqProc(Utp* pUtp, const uint8_t* pReq, int frameLen)
 				UTP_EVENT_RC evRc = Utp_Event(pUtp, pCmd, UTP_CHANGED_BEFORE);
 				if (evRc == UTP_EVENT_RC_SUCCESS)
 				{
-					memcpy(pCmd->pStorage, pData, MIN(pCmd->storageLen, frameLen));
+					memcpy(pCmd->pStorage, pData,MIN(pCmd->storageLen, frameLen) );
 					Utp_Event(pUtp, pCmd, UTP_CHANGED_AFTER);
 				}
 			}
 		}
 		//预置默认的应答数据指针
 		pCmd->pExt->transferData = pCmd->pData;
-		pCmd->pExt->transferLen = 0;//pCmd->dataLen;
+		pCmd->pExt->transferLen = pCmd->dataLen;
+		
 		rc = Utp_Event(pUtp, pCmd, UTP_GET_RSP);
-		if (rc == frameCfg->result_SUCCESS && pCmd->pExt->transferData)
+		if (rc == frameCfg->result_SUCCESS && pCmd->pExt->transferData && pCmd->pExt->transferLen )
 		{
 			if (dlc + pCmd->pExt->transferLen <= txBufLen)
 			{
@@ -337,7 +345,6 @@ static void Utp_ReqProc(Utp* pUtp, const uint8_t* pReq, int frameLen)
 //接收帧处理
 void Utp_RcvFrameHandler(Utp* pUtp, const uint8* pFrame, int frameLen)
 {
-
 	if (UTP_FSM_WAIT_RSP == pUtp->state)
 	{
 		if (pFrame[pUtp->frameCfg->cmdByteInd] == pUtp->frameCfg->txBuf[pUtp->frameCfg->cmdByteInd])
@@ -436,6 +443,8 @@ static void Utp_RcvRsp(Utp* pUtp, const uint8_t* pRsp, int frameLen, UTP_RCV_RSP
 	pCmd->pExt->transferData = (uint8*)&pRsp[frameCfg->dataByteInd];
 	pCmd->pExt->transferLen = rspDlc;
 	pCmd->pExt->rxRspTicks = GET_TICKS();
+
+	PFL(DL_JT808,"CAN RSP:%s\n",pCmd->cmdName );
 
 	int minlen = MIN(rspDlc, pCmd->storageLen);
 	if(pRsp[frameCfg->dataByteInd] == frameCfg->result_SUCCESS)
@@ -547,6 +556,7 @@ static void Utp_CheckReq(Utp* pUtp)
 	len：数据长度。
 返回值无
 ***************************************/
+#if 0
 void Utp_RxData(Utp* pUtp, const uint8_t* pData, int len)
 {
 	//检查接收数据的间隔是否超时，如果是则必须丢弃之前接收到的数据。
@@ -618,6 +628,113 @@ void Utp_CheckRxFrame(Utp* pUtp)
 		}
 	}
 }
+#else
+
+// 反转义
+static uint16_t _ParapBuff( uint8_t* pInbuff,uint8_t*poutbuff,uint16_t len)
+{
+	uint16_t i = 0 , j = 0 ;
+	if( !pInbuff || !pInbuff || !len ) return 0;
+	//
+	while( j < len )
+	{
+		if( pInbuff[j] == 0x7D )
+		{
+			if( j + 1 < len )
+			{
+				if( pInbuff[j+1] == 0x01 )
+				{
+					poutbuff[i++] = 0x7d ;
+				}
+				else if( pInbuff[j+1] == 0x02 )
+				{
+					poutbuff[i++]= 0x7E ;
+				}
+				else return 0;
+			}
+			else return 0;
+			j += 2 ;
+		}
+        else
+        {
+            poutbuff[i++] = pInbuff[j++];
+        }
+	}
+	return i ;
+}
+
+
+
+// 解出头 尾的包
+static uint16_t _DCodeCirBuff( const UtpFrameCfg *pframeCfg, 
+	pCirBuff pcirbuff, uint8_t *poutbuff , uint16_t size )
+{
+	uint16_t pos = 0 , len = 0 ;
+	if( !pcirbuff || !poutbuff || !size || !pframeCfg ) return 0;
+	//找到头尾的处理
+
+UTP_REDCODE:
+	while( pcirbuff->miHead != pcirbuff->miTail )
+	{
+		if( pcirbuff->mpBuff[pcirbuff->miHead] == pframeCfg->head ) break ;
+		_CIR_LOOP_ADD(pcirbuff->miHead, 1, pcirbuff->miSize );
+	}
+	pos = pcirbuff->miHead ;
+	len = 0 ;
+	while( pos != pcirbuff->miTail && len < size )
+	{
+		poutbuff[len++] = pcirbuff->mpBuff[pos];
+		_CIR_LOOP_ADD(pos, 1, pcirbuff->miSize );
+		
+		if( poutbuff[len-1] == pframeCfg->tail )
+		{
+			if( len > 8 )
+			{
+				pcirbuff->miHead = pos ;
+				return len ;
+			}
+			else if( len > 2 )	// 错误包
+			{
+				_CIR_LOOP_ADD(pcirbuff->miHead, 1, pcirbuff->miSize );
+				goto UTP_REDCODE;
+			}
+		}
+	}
+	// 错误包
+	if( len >= size )	
+	{
+		_CIR_LOOP_ADD(pcirbuff->miHead, 1, pcirbuff->miSize );
+		goto UTP_REDCODE;
+	}
+	return 0 ;
+}
+
+
+
+void Utp_CheckRxFrame(Utp* pUtp)
+{
+	uint16_t frameLen = 0;
+	if( !pUtp ) return ;
+	const UtpFrameCfg* frameCfg = pUtp->frameCfg;
+	//
+	//Printf("[%d-%d]\r\n",
+	//pUtp->rxBuffCirBuff.miHead,pUtp->rxBuffCirBuff.miTail);
+	while( frameLen = _DCodeCirBuff( frameCfg , &pUtp->rxBuffCirBuff ,frameCfg->transcodeBuf , frameCfg->transcodeBufLen ))
+	{
+		if( frameLen = _ParapBuff( frameCfg->transcodeBuf ,frameCfg->transcodeBuf, frameLen ) )
+		{
+			if( frameLen == ( frameCfg->transcodeBuf[7] + 9 ) &&
+				frameCfg->FrameVerify(pUtp, &frameCfg->transcodeBuf[1], frameLen-2, Null) )
+			{
+				//帧处理,去掉帧头和帧尾
+				Utp_RcvFrameHandler(pUtp, &frameCfg->transcodeBuf[1], frameLen-2);
+			}
+		}
+	}
+}
+
+
+#endif //
 
 void Utp_Run(Utp* pUtp)
 {
@@ -628,10 +745,12 @@ void Utp_Run(Utp* pUtp)
 		{
 			if(pUtp->reTxCount >= pUtp->maxTxCount && pUtp->maxTxCount != UTP_ENDLESS)
 			{
+				PFL(DL_JT808,"CAN Send Cmd:0x%02X Timeout\n", pUtp->pWaitRspCmd->cmd);
 				Utp_RspProc(pUtp, Null, 0, RSP_TIMEOUT);
 			}
 			else
 			{
+				PFL(DL_JT808,"CAN Resend Cmd:0x%02X\n", pUtp->pWaitRspCmd->cmd);
 				Utp_SendFrame(pUtp, pUtp->pWaitRspCmd->cmd, pUtp->frameCfg->txBuf, pUtp->txBufLen);
 				
 				pUtp->reTxCount++;
@@ -639,8 +758,10 @@ void Utp_Run(Utp* pUtp)
 			}
 		}
 	}
-//	if(UTP_FSM_WAIT_RSP != pUtp->state) //lane20200929
-	Utp_CheckReq(pUtp);
+	else
+	{
+		Utp_CheckReq(pUtp);
+	}
 }
 
 void Utp_Init(Utp* pUtp, const UtpCfg* cfg, const UtpFrameCfg* frameCfg)
@@ -650,7 +771,8 @@ void Utp_Init(Utp* pUtp, const UtpCfg* cfg, const UtpFrameCfg* frameCfg)
 	pUtp->frameCfg = frameCfg;
 	pUtp->cfg = cfg;
 
-	Queue_init(&pUtp->rxBufQueue, pUtp->frameCfg->rxBuf, 1, pUtp->frameCfg->rxBufLen);
+	//Queue_init(&pUtp->rxBufQueue, pUtp->frameCfg->rxBuf, 1, pUtp->frameCfg->rxBufLen);
+	CirBuffInit(&pUtp->rxBuffCirBuff, pUtp->frameCfg->rxBuf, pUtp->frameCfg->rxBufLen);
 	SwTimer_Init(&pUtp->waitRspTimer, 0, 0);
 }
 

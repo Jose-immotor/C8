@@ -39,6 +39,7 @@ extern "C"{
 
 #include "typedef.h"
 #include "SwTimer.h"
+#include "cirbuffer.h"
 #include "queue.h"
 
 //重发标志，无限次重发
@@ -251,7 +252,8 @@ typedef struct _Utp
 
 	uint16_t txBufLen;		//发送帧长度
 	uint16_t transcodeBufLen;	//转码后的帧长度
-	Queue rxBufQueue;		//管理rxBuf的Queue。
+	//Queue rxBufQueue;		//管理rxBuf的Queue。
+	CirBuff	 rxBuffCirBuff;	// 管理rxBuf的Cirbuff
 
 	//搜索帧头和帧尾变量
 	int    searchIndex;	//搜索偏移
@@ -323,6 +325,10 @@ void Utp_DelaySendCmd(Utp* pUtp, uint8_t cmd, uint32_t delayMs);
 
 //协议栈是否空闲
 Bool Utp_isIdle(const Utp* pUtp);
+
+
+// CirBuff
+static uint16_t Utp_DCodeCirBuff( pCirBuff , uint8_t *poutbuff , uint16_t size );
 
 #ifdef __cplusplus
 }

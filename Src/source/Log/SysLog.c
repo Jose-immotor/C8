@@ -12,7 +12,10 @@ const LogEvt g_SysLogEvts[SYS_LOG_EVT_COUNT] =
 	 {SYS_CATID_COMMON ,0 ,SysEvtID_WakeUp, "SYS-WAKEUP"	 },
 	 {SYS_CATID_COMMON ,0 ,SysEvtID_TakeApart, "TAKE-APART"	 },
 	 {SYS_CATID_COMMON ,0 ,SysEvtID_OverTemp, "OVER-TEMP"	 },
-	 
+	 {SYS_CATID_COMMON ,0 ,SysEvtID_SetAccOn, "ACC-ON"	 },
+	 {SYS_CATID_COMMON ,0 ,SysEvtID_SetAccOff, "ACC-OFF"	 },
+	 {SYS_CATID_COMMON ,0 ,SysEvtID_18650LowPower, "18650-LOWPOWER"	 },
+	 {SYS_CATID_COMMON ,0 ,SysEvtID_18650HigPower, "18650-HIGPOWER"	 },
 };
 
 //Sample£º add a log

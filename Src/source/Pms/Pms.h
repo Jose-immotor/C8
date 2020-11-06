@@ -15,7 +15,8 @@ extern "C" {
 #include "Bit.h"
 
 #define MAX_BAT_COUNT 2
-#define PMS_ACC_OFF_ACTIVE_TIME 5*60*1000//5分钟
+#define PMS_ACC_OFF_ACTIVE_TIME 30*1000//30秒
+#define PMS_ACC_DEEPSLEEP_TIME 5*60*1000//5分钟
 
 	//电池操作状态
 	typedef enum _PmsOpStatus
@@ -42,6 +43,8 @@ extern "C" {
 		PmsMsg_sleep,		//电池浅休眠，消息格式：(BmsMsg_sleep, 0, 0)
 		PmsMsg_deepSleep,	//电池深休眠，消息格式：(BmsMsg_deepSleep, 0, 0)
 		PmsMsg_wakeup,		//电池唤醒，消息格式：(BmsMsg_wakeup, 0, 0)
+		
+		PmsMsg_GyroIrq,		//陀螺仪震动，消息格式：(PmsMsg_GyroIrq, 0, 0)
 	}PmsMsg;
 
 	struct _Pms;
@@ -72,7 +75,7 @@ extern "C" {
 
 	TRANSFER_EVENT_RC Pms_EventCb(Battery* pBat, TRANS_EVENT ev);
 	void Pms_switchStatus(PmsOpStatus newStatus);
-	
+	PmsOpStatus Pms_GetStatus(void);
 #ifdef __cplusplus
 }
 #endif

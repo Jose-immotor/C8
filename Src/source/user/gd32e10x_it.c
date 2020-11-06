@@ -197,10 +197,10 @@ void EXTI5_9_IRQHandler(void)
         exti_interrupt_flag_clear(EXTI_8);
 		Gyro_Isr();
     }
-	if(SET == exti_interrupt_flag_get(EXTI_9)){
-        exti_interrupt_flag_clear(EXTI_9);
-		bat_insert();
-    }
+//	if(SET == exti_interrupt_flag_get(EXTI_9)){
+//        exti_interrupt_flag_clear(EXTI_9);
+//		bat_insert();
+//    }
 }
 
 void EXTI10_15_IRQHandler(void)
@@ -210,17 +210,17 @@ void EXTI10_15_IRQHandler(void)
     }
 }
 
-extern void can0_receive_isr(void);
-void CAN0_RX0_IRQHandler(void)
+extern void can1_receive_isr(void);
+void CAN1_RX1_IRQHandler(void)
 {
     /* check the receive message */
-		can0_receive_isr(); 
+		can1_receive_isr(); 
 }
 
-extern void can0_receive_isr(void);
+extern void can1_receive_isr(void);
 void CAN1_RX0_IRQHandler(void)
 {
     /* check the receive message */
-		can0_receive_isr(); 
+		can1_receive_isr(); 
 }
 
