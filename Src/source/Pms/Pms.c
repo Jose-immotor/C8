@@ -262,14 +262,9 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 		static uint32 accoffprintf_tick = 0;
 		if ((0/*g_pJt->devState.cnt & _GPS_FIXE_BIT*/)||(SwTimer_isTimerOutEx(g_pms.statusSwitchTicks,PMS_ACC_OFF_ACTIVE_TIME)))
 		{
-//			workmode_switchStatus(WM_SLEEP);
-			if(g_pdoInfo.isLowPow == 0)
+			//18650电压高或者电池不在位，进入休眠模式
+			if((g_pdoInfo.isLowPow == 0)||(g_Bat[0].presentStatus != BAT_IN))
 				Pms_switchStatus(PMS_DEEP_SLEEP);
-//			if(GET_TICKS() -accoffprintf_tick >3000 )
-//			{
-//				accoffprintf_tick =GET_TICKS();
-//				PFL(DL_PMS,"pms status acc off.\n");
-//			}
 			
 		}
 		
@@ -489,8 +484,11 @@ void Pms_stop()
 void Pms_run()
 {
 	fm175Drv_run(&g_pms.fmDrv);
-	
+
 	Mod_Run(g_pModBus);
+	#ifdef DGT_CONFIG
+	WDOG_Feed();
+	#endif
 	Bat_run(&g_Bat[0]);
 //	Bat_run(&g_Bat[1]);
 

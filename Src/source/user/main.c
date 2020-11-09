@@ -42,7 +42,7 @@ DES_HW_VER_SUB};
 //让窗口数值和计数值一样,这样就不用考虑喂狗时间在窗口值~0x3F之间了
 #define WWDG_CNT 0x7f//tr   :T[6:0],计数器值 
 #define WWDG_WR 0x7f//wr   :W[6:0],窗口值
-//Fwwdg=PCLK1/(4096*2^fprer). 
+//Fwwdg=PCLK1/(4096*2^fprer). 看门狗超时时间=1/720000000*8*0x40(s)=29ms
 //初始化窗口看门狗
 //系统时钟72MHz，
 void Mcu_DgInit()
@@ -76,10 +76,6 @@ void endless_loop_for_wdTest()
 
 int main(void)
 {
-	#ifdef DGT_CONFIG	
-	//DGT在Bootloader初始化和使能
-//	Mcu_DgInit();
-	#endif
 	Printf("\n\nPower up.\n");
 	//MCU硬件初始化
 	//Todo...
