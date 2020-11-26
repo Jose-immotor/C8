@@ -65,6 +65,8 @@ extern "C" {
 				uint16 isBat0In : 1;//BIT[3]:电池0在位;
 				uint16 isBat1In : 1;//BIT[4]:电池1在位;
 				uint16 isTakeApart : 1;	//BIT[5]:拆开
+				uint16 isRs485Ok : 1;	//BIT[6]:RS485
+				uint16 isCANOk : 1;	//BIT[7]:CAN
 				uint16 reserved01 : 5;		//BIT[3-7]:保留
 			};
 		};

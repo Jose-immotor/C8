@@ -29,7 +29,7 @@ void Gyro_Isr()
 	g_pdoInfo.isGyroOk  = True;
 //	g_Settings.isGyroAssert = True;
 	
-//	PFL(DL_GYRO,"gyro interrupt!\n");
+	PFL(DL_GYRO,"gyro interrupt!\n");
 	
 	rt_interrupt_leave();
 }

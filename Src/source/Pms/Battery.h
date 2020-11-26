@@ -113,10 +113,10 @@ extern "C" {
 		uint16_t 			writeBmsCtrl_mirror;
 		
 		BmsRegCtrl* 		pBmsReg_Ctrl;	//初始化指向 writeBmsCtrl;
-		const ModCfg* cfg;
+		ModCfg* cfg;
 	}Battery;
 
-	void Bat_init(Battery* pBat, int port, const ModCfg* cfg);
+	void Bat_init(Battery* pBat, int port, ModCfg* cfg);
 	void Bat_start(Battery* pBat);
 	void Bat_run(Battery* pBat);
 	const uint8* Bat_getBID(Battery* pBat);

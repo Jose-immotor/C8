@@ -49,7 +49,8 @@ void g_pdoOkInfo_Dump(void)
 		
 	PRINTF_PDO(isFlashOk);
 	PRINTF_PDO(isGyroOk);
-	PRINTF_PDO(isNfcOk);
+	PRINTF_PDO(isRs485Ok);
+	PRINTF_PDO(isCANOk);
 }
 
 void g_pdoInfo_Dump(void)

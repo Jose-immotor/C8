@@ -229,7 +229,7 @@ typedef struct
 
 #define BMS_REG_INFO_ADDR_1 256
 #define BMS_REG_INFO_ADDR_2 285
-#define BMS_REG_INFO_END    322
+#define BMS_REG_INFO_END    316//322
 
 #define BMS_REG_CTRL_ADDR   512
 #define BMS_REG_CFG_ADDR    768

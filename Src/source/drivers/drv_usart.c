@@ -77,7 +77,7 @@ uint32_t usart0_put_byte(uint8_t data)
     uint32_t sta;
 
 	usart_data_transmit(USART0, data);
-	while(RESET == usart_flag_get(USART0, USART_FLAG_TBE));
+	while(RESET == usart_flag_get(USART0, USART_FLAG_TC));
     return sta;   
 }
 #if 1
@@ -120,7 +120,7 @@ uint32_t uart4_put_byte(uint8_t data)
     uint32_t sta;
 
 	usart_data_transmit(UART4, data);
-	while(RESET == usart_flag_get(UART4, USART_FLAG_TBE));
+	while(RESET == usart_flag_get(UART4, USART_FLAG_TC));
     return sta;   
 }
 #endif
@@ -170,7 +170,7 @@ int gd32_hw_usart_init(void)
 	rcu_periph_clock_enable(RCU_GPIOD);
     rcu_periph_clock_enable(RCU_AF);
 
-    /* connect port to USARTx_Tx */t
+    /* connect port to USARTx_Tx */
     gpio_init(GPIOC, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_12);
     /* connect port to USARTx_Rx */
     gpio_init(GPIOD, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, GPIO_PIN_2);

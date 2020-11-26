@@ -31,10 +31,14 @@ Bool fm175Drv_transStart(Fm175Drv* pDrv, FM17522_CMD cmd, uint32 timeOutMs);
 #if 1
 
 static DrvIo* g_pNfcNpdAIO = Null;
+static DrvIo* g_pNfcNpdBIO = Null;
 static DrvIo* g_pNfcPwrOffIO = Null;
 
 #define FM17522_NPD_HIGHT 	PortPin_Set(g_pNfcNpdAIO->periph, g_pNfcNpdAIO->pin, 1)
 #define FM17522_NPD_LOW		PortPin_Set(g_pNfcNpdAIO->periph, g_pNfcNpdAIO->pin, 0)
+
+#define FM17522B_NPD_HIGHT 	PortPin_Set(g_pNfcNpdBIO->periph, g_pNfcNpdBIO->pin, 1)
+#define FM17522B_NPD_LOW	PortPin_Set(g_pNfcNpdBIO->periph, g_pNfcNpdBIO->pin, 0)
 
 /*********************************************/
 /*函数名：	    Pcd_ConfigISOType    */
@@ -131,7 +135,11 @@ Bool Fm175Drv_Anticollision(Fm175Drv* pDrv, unsigned char selcode,unsigned char*
 	send_buff[1] = 0x20;
 
 	result = fm175Drv_SyncTransfer(pDrv, Transceive, send_buff, 2, rece_buff, &rece_bitlen, 1);
-
+	
+	PFL(DL_NFC,"NFC[%02X] Antico:%02X-%02X:%02X%02X%02X%02X%02X\n",
+		pDrv->iicReg.dev_addr,result,rece_bitlen,
+		rece_buff[0],rece_buff[1],rece_buff[2],rece_buff[3],rece_buff[4]);
+		
 	if (result && rece_bitlen == sizeof(rece_buff))
 	{
 		for (i = 0; i < 5; i++)
@@ -230,7 +238,10 @@ Bool Fm175Drv_CardActivate(Fm175Drv* pDrv)
 	unsigned char pSak[3];
 
 	if (!Fm175Drv_Request(pDrv, pTagType)) return False; //寻卡 Standard	 send request command Standard mode
-
+	
+	PFL(DL_NFC,"NFC[%02X] Request:%02X%02X\n",
+		pDrv->iicReg.dev_addr,pTagType[0],pTagType[1]);
+	
 	if ((pTagType[0] & 0xC0) == 0x00)	//一重UID
 	{
 		if (!Fm175Drv_Anticollision(pDrv, 0x93, pSnr))				return False; //1级防冲突
@@ -526,18 +537,25 @@ static void fm175Drv_switchState(Fm175Drv* pDrv, uint8 state)
 	}
 	else if (state == FM_STATE_NPD_LOW)
 	{
-		FM17522_NPD_LOW;
+		
+		if(pDrv->iicReg.dev_addr == FM17522_I2C_ADDR)
+			FM17522_NPD_LOW;
+		else if(pDrv->iicReg.dev_addr == FM17522_I2C_ADDR1)
+			FM17522B_NPD_LOW;
 		SwTimer_Start(&pDrv->timer, 10, 0);
 	}
 	else if (state == FM_STATE_NPD_HIGH)
 	{
-		FM17522_NPD_HIGHT;
+		if(pDrv->iicReg.dev_addr == FM17522_I2C_ADDR)
+			FM17522_NPD_HIGHT;
+		else if(pDrv->iicReg.dev_addr == FM17522_I2C_ADDR1)
+			FM17522B_NPD_HIGHT;
 		SwTimer_Start(&pDrv->timer, 10, 0);
 	}
 	else if (state == FM_STATE_SEARCH_CARD)
 	{
-		Fm175Drv_setRf(pDrv, pDrv->antPort);
-
+		Fm175Drv_setRf(pDrv, ((Battery*)pDrv->obj)->cfg->antselct);
+//		Fm175Drv_setRf(pDrv, pDrv->antPort);
 		//打开TX输出后需要延时等待天线载波信号稳定
 		SwTimer_Start(&pDrv->timer, 1, 0);
 	}
@@ -545,7 +563,8 @@ static void fm175Drv_switchState(Fm175Drv* pDrv, uint8 state)
 	{
 		//进入低功耗
 		Fm175Drv_SoftPowerdown(pDrv);
-		pDrv->antPort = 1;
+		((Battery*)pDrv->obj)->cfg->antselct = 1;
+//		pDrv->antPort = 1;
 	}
 	else if (state == FM_STATE_TRANSFER)
 	{
@@ -615,11 +634,21 @@ void fm175Drv_fsmSearchCard(Fm175Drv* pDrv, FM17522_MSG msg, uint32 param)
 			{
 				fm175Drv_switchState(pDrv, FM_STATE_TRANSFER);
 			}
-			else if (pDrv->antPort == 1)
+//			else if (pDrv->antPort == 1)
+//			{
+//				pDrv->antPort = 2;
+////				fm175Drv_switchState(pDrv, FM_STATE_NPD_LOW);
+//			}
+			else if (((Battery*)pDrv->obj)->cfg->antselct == 1)
 			{
-				pDrv->antPort = 2;
+				((Battery*)pDrv->obj)->cfg->antselct = 2;
 				fm175Drv_switchState(pDrv, FM_STATE_NPD_LOW);
 			}
+//			else if (((Battery*)pDrv->obj)->cfg->antselct == 2)
+//			{
+//				((Battery*)pDrv->obj)->cfg->antselct = 1;
+//				fm175Drv_switchState(pDrv, FM_STATE_NPD_LOW);
+//			}
 			else
 			{
 				fm175Drv_event(pDrv, TRANS_FAILED, TRANS_RESULT_SEARCH_CARD_FAILED);
@@ -698,6 +727,10 @@ void fm175Drv_fsmTransfer(Fm175Drv* pDrv, FM17522_MSG msg, uint32 param)
 			{
 				fm175Drv_irq(pDrv, irq);
 			}
+		}
+		else if (pDrv->transParam.txBufSize == 0)//lane 20201117新加，不加的话读取电池2后回到读电池1，txBufSize会为0，直接就读不到电池了
+		{
+			fm175Drv_event(pDrv, TRANS_FAILED, TRANS_RESULT_FAILED);
 		}
 	}
 	else if (msg == FM_MSG_SWITCH_NFC)
@@ -900,7 +933,7 @@ Bool fm175Drv_SyncTransfer(Fm175Drv* pDrv
 	pDrv->transStatus = TRANSFER_STATUS_IDLE;
 
 	//启动传输并等待结果
-	fm175Drv_transferInit(pDrv, txBuf, txBufSize, rxBuf, *rxBufSize, Null);
+	fm175Drv_transferInit(pDrv, txBuf, txBufSize, rxBuf, *rxBufSize, pDrv->obj);
 	if (fm175Drv_transStart(pDrv, cmd, timeOutMs))
 	{
 		fm175Drv_waitTransDone(pDrv);
@@ -970,6 +1003,8 @@ void fm175Drv_init(Fm175Drv* pDrv, uint8 iicAddr, const TransProtocolCfg* cfg, T
 	
 	rt_hw_i2c_init(NFC_I2C);
 	g_pNfcNpdAIO = IO_Get(IO_NFC_NPD_A);
+	g_pNfcNpdBIO = IO_Get(IO_NFC_NPD_B);
 	g_pNfcPwrOffIO=IO_Get(IO_NFC_PWR_OFF);
+	PortPin_Set(g_pNfcNpdAIO->periph, g_pNfcNpdAIO->pin, False);
 	PortPin_Set(g_pNfcPwrOffIO->periph, g_pNfcPwrOffIO->pin, False);
 }

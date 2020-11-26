@@ -1023,6 +1023,7 @@ void JT808_timerProc()
 		{
 		
 		}
+		g_pdoInfo.isCANOk = 1;
 		//JT808_rxDataProc( receive_message.rx_data , receive_message.rx_dlen );
 		//gCanbusRevTimeMS = GET_TICKS();
 		//PFL(DL_JT808,"CAN Rev len:%d\n",receive_message.rx_dlen );
@@ -1037,6 +1038,7 @@ void JT808_timerProc()
 			// Çå³ýËùÓÐ×´Ì¬
 			g_Jt.bleState.bleConnectState = 0x00;
 			g_Jt.devState.cnt = 0x00 ;
+			g_pdoInfo.isCANOk = 0;
 		}
 	}
 }

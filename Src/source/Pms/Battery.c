@@ -49,11 +49,12 @@ static void Bat_onPlugOut(Battery* pBat)
 	PFL(DL_PMS,"Battery out!\n");
 	LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_BATOUT,0);
 	NVC_PLAY(NVC_BAT_PLUG_OUT);
-//	if (pBat->isActive)
-//	{
-//		Mod_Reset(g_pModBus);
-//	}
-//	else
+	Pms_postMsg(PmsMsg_batPlugOut, (uint32)pBat, 0);
+	if (pBat->isActive)
+	{
+		Mod_Reset(g_pModBus);
+	}
+	else
 	{
 		Mod_ResetCmds(pBat->cfg);
 	}
@@ -174,7 +175,8 @@ MOD_EVENT_RC Bat_event_readBmsInfo(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EV
 			g_pdoInfo.isBat0In =1;
 			LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_BATIN,
 								bigendian16_get((uint8*)&pBat->bmsInfo.soc));
-			NVC_PLAY(NVC_BAT_PLUG_IN);
+			NVC_PLAY(NVC_INFO);
+			Pms_postMsg(PmsMsg_batPlugIn, (uint32)pBat, 0);
 		}			
 		pBat->presentStatus = BAT_IN;
 		g_Ble.portState.property[0].nominalCur = bigendian16_get((uint8*)(&pBat->bmsInfo.dsop));
@@ -318,7 +320,7 @@ void Bat_start(Battery* pBat)
 {
 }
 
-void Bat_init(Battery* pBat, int port, const ModCfg* cfg)
+void Bat_init(Battery* pBat, int port, ModCfg* cfg)
 {
 	memset(pBat, 0, sizeof(Battery));
 

@@ -94,16 +94,24 @@ void AdcUser_18650EventChanged(AdcUser* pAdcUser, ThresholdArea* pThreshold, THR
 	if (event == DOWN_OVER_THRESHOLD_LOW)
 	{
 //		PortPin_Set(g_p18650ChgIO->periph, g_p18650ChgIO->pin, False);
+		if(g_pdoInfo.isLowPow == 0)
+		{
+			PFL(DL_ADC, "\n18650 Low Power!\n");
+			LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_18650LowPower, 0);		
+		}
 		g_pdoInfo.isLowPow = 1;
-		PFL(DL_ADC, "\n18650 Low Power!\n");
-		LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_18650LowPower, 0);
+
 	}
 	else if (event == UP_OVER_THRESHOLD_HIGH)
 	{
 //		PortPin_Set(g_p18650ChgIO->periph, g_p18650ChgIO->pin, True);
+		if(g_pdoInfo.isLowPow == 1)
+		{
+			PFL(DL_ADC, "\n18650 High Power!\n");
+			LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_18650HigPower, 0);	
+		}
 		g_pdoInfo.isLowPow = 0;
-		PFL(DL_ADC, "\n18650 High Power!\n");
-		LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_18650HigPower, 0);
+
 	}
 //	if (pThreshold->thresholdHigh == g_pCfgInfo->temp_thresholdHigh)
 //	{

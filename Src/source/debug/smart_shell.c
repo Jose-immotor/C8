@@ -78,7 +78,7 @@ void Dump(uint8_t ind)
 }
 
 
-extern uint32_t uart4_put_byte(uint8_t data);
+
 void Rs485Test(uint8 value)
 {
 	uint8 i;
@@ -161,13 +161,17 @@ void NvcPlay(uint8 audioInd, uint8 maxRepeat, uint8 vol)
  */
 void SelfTest(uint8 flag)
 {
-	extern void g_pdoOkInfo_Dump(void);
+
 	__IO uint32_t sn0=*(__IO uint32_t*)(0x1FFFF7E8);
 	__IO uint32_t sn1=*(__IO uint32_t*)(0x1FFFF7EC);
 	__IO uint32_t sn2=*(__IO uint32_t*)(0x1FFFF7F0);
 	
 	Printf("\r\nsID: %8X%8X%8X\r\n",sn2,sn1,sn0);
-	g_pdoOkInfo_Dump();	
+	Printf("\tFlash:%s\n"		, g_pdoInfo.isFlashOk ? "pass" : "fail");
+	Printf("\tGyroscope:%s\n"	, g_pdoInfo.isGyroOk  ? "pass" : "fail");
+	Printf("\tRS485Comm:%s\n"	, g_pdoInfo.isRs485Ok  ? "pass" : "fail");
+	Printf("\tCANComm:%s\n"		, g_pdoInfo.isCANOk  ? "pass" : "fail");
+
 }
 
 /*!

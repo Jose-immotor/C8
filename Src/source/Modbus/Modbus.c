@@ -597,7 +597,7 @@ void Mod_Run(Mod * pMod)
 		Fsm_SetActiveFlag(AF_MDB,!Mod_isIdle(pMod));
 }
 
-void Mod_Init(Mod * pMod, const ModCfg * cfg, const ModFrameCfg * frameCfg)
+void Mod_Init(Mod * pMod, ModCfg * cfg, const ModFrameCfg * frameCfg)
 {
 	memset(pMod, 0, sizeof(Mod));
 

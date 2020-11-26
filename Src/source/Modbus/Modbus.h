@@ -169,6 +169,7 @@ extern "C" {
 	typedef struct _ModCfg
 	{
 		uint8_t  port;	//电池端口好，从0开始
+		uint8_t  antselct;	//天线选择
 		int					  cmdCount;	//功能码数组总数
 		const struct _ModCmd* cmdArray;	//功能码数组
 
@@ -275,7 +276,7 @@ extern "C" {
 		const ModFrameCfg* frameCfg;
 	}Mod;
 
-	void Mod_Init(Mod* pMod, const ModCfg* cfg, const ModFrameCfg* frameCfg);
+	void Mod_Init(Mod* pMod, ModCfg* cfg, const ModFrameCfg* frameCfg);
 	void Mod_Run(Mod* pMod);
 
 	/************************************

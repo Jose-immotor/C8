@@ -20,6 +20,8 @@ extern "C" {
 		uint32_t newPwrMA;		//计算出来新的充电电流
 	}Bat;
 
+	void Battery_discharge_process(void);
+	
 #ifdef __cplusplus
 }
 #endif
