@@ -40,7 +40,7 @@ Bool TlvOutMgr_isChanged(TlvOutMgr* mgr, const TlvOut* pItem)
 		isChanged |= (pItem->pEx->flag & TF_OUT_CHANGED); 
 		pItem->pEx->flag &= ~TF_OUT_CHANGED;
 		//每秒检查一下是否发生改变
-		if(!SwTimer_isTimerOutEx(pItem->pEx->ticks, 5000))
+		if(!SwTimer_isTimerOutEx(pItem->pEx->ticks, 10000))
 		{
 			return False;
 		}

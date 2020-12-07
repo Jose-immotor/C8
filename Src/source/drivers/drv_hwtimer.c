@@ -254,7 +254,7 @@
 
 int rt_hw_hwtimer_start(void)
 {
-
+	return 0;
 }
 
 int rt_hw_hwtimer_init(void)

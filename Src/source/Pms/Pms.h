@@ -45,6 +45,11 @@ extern "C" {
 		PmsMsg_wakeup,		//电池唤醒，消息格式：(BmsMsg_wakeup, 0, 0)
 		
 		PmsMsg_GyroIrq,		//陀螺仪震动，消息格式：(PmsMsg_GyroIrq, 0, 0)
+#ifdef CANBUS_MODE_JT808_ENABLE	
+		PmsMsg_GPRSIrq,		// GPRS中断
+#endif
+		PmsMsg_18650Low,	// 18650 低电
+		PmsMsg_18650Normal, // 18650 电量正常
 	}PmsMsg;
 
 	struct _Pms;

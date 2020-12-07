@@ -203,11 +203,18 @@ void EXTI5_9_IRQHandler(void)
 //    }
 }
 
+extern void can1_isr(void);
 void EXTI10_15_IRQHandler(void)
 {
     if(SET == exti_interrupt_flag_get(EXTI_13)){
         exti_interrupt_flag_clear(EXTI_13);
     }
+#ifdef CANBUS_MODE_JT808_ENABLE	
+	if(SET == exti_interrupt_flag_get(EXTI_12)){
+        exti_interrupt_flag_clear(EXTI_12);
+		can1_isr();
+    }
+#endif //
 }
 
 extern void can1_receive_isr(void);

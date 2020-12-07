@@ -4,6 +4,9 @@
 #include "Modbus.h"
 #include "Pms.h"
 
+/*
+	NFC 协议采用小端模式
+*/
 extern Mod* g_pModBus;
 static void Bat_fsm(Battery* pBat, uint8_t msgId, uint32_t param1, uint32_t param2);
 
@@ -46,7 +49,7 @@ static void Bat_onPlugOut(Battery* pBat)
 {
 	pBat->presentStatus = BAT_NOT_IN;
 	g_pdoInfo.isBat0In =0;
-	PFL(DL_PMS,"Battery out!\n");
+	PFL(DL_PMS,"Battery[%d] out!\n",pBat->port);
 	LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_BATOUT,0);
 	NVC_PLAY(NVC_BAT_PLUG_OUT);
 	Pms_postMsg(PmsMsg_batPlugOut, (uint32)pBat, 0);
@@ -99,7 +102,7 @@ MOD_EVENT_RC Bat_event(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev)
 {
 	if (ev == MOD_REQ_SUCCESS)
 	{
-		PFL(DL_NFC,"modbus cmd[%d] req success!\n",pCmd->cmd);
+		PFL(DL_NFC,"modbus[%d] cmd[%d] req success!\n",pBat->port,pCmd->cmd);
 		Bat_fsm(pBat, BmsMsg_cmdDone, pCmd->cmd, ev);
 		if (BMS_WRITE_CTRL == pCmd->cmd)
 		{
@@ -121,7 +124,7 @@ MOD_EVENT_RC Bat_event(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev)
 	}
 	else if (ev == MOD_REQ_FAILED)
 	{
-		PFL(DL_NFC,"modbus cmd[%d] req failed!rsp code:%d\n",pCmd->cmd,pCmd->pExt->rcvRspErr);
+		PFL(DL_NFC,"modbus[%d] cmd[%d] req failed!rsp code:%d\n",pBat->port,pCmd->cmd,pCmd->pExt->rcvRspErr);
 		
 //		if (BMS_READ_ID == pCmd->cmd)
 //		{
@@ -133,7 +136,7 @@ MOD_EVENT_RC Bat_event(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev)
 	}
 	else if (ev == MOD_TX_START)
 	{
-		PFL(DL_NFC,"modbus cmd[%d] start!\n",pCmd->cmd);
+		PFL(DL_NFC,"modbus[%d] cmd[%d] start!\n",pBat->port,pCmd->cmd);
 	}
 	return MOD_EVENT_RC_SUCCESS;
 }
@@ -143,16 +146,28 @@ MOD_EVENT_RC Bat_event_readBmsID(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVEN
 {
 	if (ev == MOD_REQ_SUCCESS)
 	{
-		g_Ble.portState.property[0].nominalVol = bigendian16_get((uint8*)(&pBat->bmsID.bvolt));
-		g_Ble.portState.property[0].nominalCap = bigendian16_get((uint8*)(&pBat->bmsID.bcap));
-		g_Ble.batDesc[0].serialNum[0] = pBat->bmsID.sn34;
-		g_Ble.batDesc[0].serialNum[1] = pBat->bmsID.sn34>>8;
-		g_Ble.batDesc[0].serialNum[2] = pBat->bmsID.sn56;
-		g_Ble.batDesc[0].serialNum[3] = pBat->bmsID.sn56>>8;
-		g_Ble.batDesc[0].serialNum[4] = pBat->bmsID.sn78;
-		g_Ble.batDesc[0].serialNum[5] = pBat->bmsID.sn78>>8;
-		g_Ble.batDesc[0].damage = bigendian16_get((uint8*)(&pBat->bmsID.ltsta));
+#ifdef CANBUS_MODE_JT808_ENABLE			
+		g_Ble.portState.property[pBat->port].nominalVol = bigendian16_get((uint8*)(&pBat->bmsID.bvolt));
+		g_Ble.portState.property[pBat->port].nominalCap = bigendian16_get((uint8*)(&pBat->bmsID.bcap));
+		g_Ble.batDesc[pBat->port].serialNum[0] = pBat->bmsID.sn34;
+		g_Ble.batDesc[pBat->port].serialNum[1] = pBat->bmsID.sn34>>8;
+		g_Ble.batDesc[pBat->port].serialNum[2] = pBat->bmsID.sn56;
+		g_Ble.batDesc[pBat->port].serialNum[3] = pBat->bmsID.sn56>>8;
+		g_Ble.batDesc[pBat->port].serialNum[4] = pBat->bmsID.sn78;
+		g_Ble.batDesc[pBat->port].serialNum[5] = pBat->bmsID.sn78>>8;
+		g_Ble.batDesc[pBat->port].damage = bigendian16_get((uint8*)(&pBat->bmsID.ltsta));
 
+		g_Ble.bmsPkt[pBat->port].protocolVer = pBat->bmsID.prver ;
+		g_Ble.bmsPkt[pBat->port].hwMainVer = pBat->bmsID.hwver;
+		
+		g_Ble.bmsPkt[pBat->port].hwSubVer = pBat->bmsID.fwmsv ;
+		g_Ble.bmsPkt[pBat->port].fwMainVer = pBat->bmsID.fwrev;
+		
+		g_Ble.bmsPkt[pBat->port].fwSubVer = pBat->bmsID.fwbnh ;
+		g_Ble.bmsPkt[pBat->port].buildNum = pBat->bmsID.fwbnl;
+		
+#endif 
+		//PFL(DL_PMS,"Battery[%d] ReadID:%04X\n",pBat->port,pBat->bmsCtrl.ctrl );
 	}
 	if (ev == MOD_CHANGED_BEFORE)
 	{
@@ -171,16 +186,23 @@ MOD_EVENT_RC Bat_event_readBmsInfo(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EV
 		
 		if(pBat->presentStatus != BAT_IN)
 		{
-			PFL(DL_PMS,"Battery in!\n");
-			g_pdoInfo.isBat0In =1;
+			PFL(DL_PMS,"Battery[%d] in!\n",pBat->port);
+			if( pBat->port == 0 )
+			{
+				g_pdoInfo.isBat0In =1;
+			}
+			else if( pBat->port == 1 )
+			{
+				g_pdoInfo.isBat1In =1;
+			}
 			LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_BATIN,
 								bigendian16_get((uint8*)&pBat->bmsInfo.soc));
-			NVC_PLAY(NVC_INFO);
+			NVC_PLAY(NVC_BAT_PLUG_IN);
 			Pms_postMsg(PmsMsg_batPlugIn, (uint32)pBat, 0);
 		}			
 		pBat->presentStatus = BAT_IN;
-		g_Ble.portState.property[0].nominalCur = bigendian16_get((uint8*)(&pBat->bmsInfo.dsop));
-		
+#ifdef CANBUS_MODE_JT808_ENABLE			
+		g_Ble.portState.property[pBat->port].nominalCur = bigendian16_get((uint8*)(&pBat->bmsInfo.dsop));
 		tmp_value = bigendian16_get((uint8*)(&pBat->bmsInfo.soc));
 		if(tmp_value == 0xFFFF)
         {
@@ -190,25 +212,25 @@ MOD_EVENT_RC Bat_event_readBmsInfo(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EV
         {
             g_Ble.batDesc[0].SOC = tmp_value/10;
         }
-		g_Ble.batDesc[0].voltage = bigendian16_get((uint8*)(&pBat->bmsInfo.tvolt));
-		g_Ble.batDesc[0].current = bigendian16_get((uint8*)(&pBat->bmsInfo.tcurr));
+		g_Ble.batDesc[pBat->port].voltage = bigendian16_get((uint8*)(&pBat->bmsInfo.tvolt));
+		g_Ble.batDesc[pBat->port].current = bigendian16_get((uint8*)(&pBat->bmsInfo.tcurr));
 		
 		tmp_value = bigendian16_get((uint8*)(&pBat->bmsInfo.htemp));
 		if(tmp_value == 0xFFFF)
         {
-            g_Ble.batDesc[0].temp = 0xFF;
+            g_Ble.batDesc[pBat->port].temp = 0xFF;
         }
         else
         {
-            g_Ble.batDesc[0].temp = tmp_value/10;
+            g_Ble.batDesc[pBat->port].temp = tmp_value/10;
         }
 		tmp_value = bigendian16_get((uint8*)(&pBat->bmsInfo.opft1));
-        g_Ble.batDesc[0].fault = 0;
-        if(tmp_value&(1<<0))	g_Ble.batDesc[0].fault |= (1<<0);//过压
-        if(tmp_value&((1<<1)|(1<<2)))	g_Ble.batDesc[0].fault |= (1<<1);//欠压
-        if(tmp_value&((1<<3)|((1<<4)|(1<<5))))	g_Ble.batDesc[0].fault |= (1<<2);//过流
-        if(tmp_value &((1<<6)|(1<<7)|(1<<10)|(1<<11)|(1<<12)))	g_Ble.batDesc[0].fault |= (1<<3);//过温
-        if(tmp_value &((1<<8)|(1<<9)))	g_Ble.batDesc[0].fault |= (1<<4);//低温
+        g_Ble.batDesc[pBat->port].fault = 0;
+        if(tmp_value&(1<<0))	g_Ble.batDesc[pBat->port].fault |= (1<<0);//过压
+        if(tmp_value&((1<<1)|(1<<2)))	g_Ble.batDesc[pBat->port].fault |= (1<<1);//欠压
+        if(tmp_value&((1<<3)|((1<<4)|(1<<5))))	g_Ble.batDesc[pBat->port].fault |= (1<<2);//过流
+        if(tmp_value &((1<<6)|(1<<7)|(1<<10)|(1<<11)|(1<<12)))	g_Ble.batDesc[pBat->port].fault |= (1<<3);//过温
+        if(tmp_value &((1<<8)|(1<<9)))	g_Ble.batDesc[pBat->port].fault |= (1<<4);//低温
         tmp_value = bigendian16_get((uint8*)(&pBat->bmsInfo.devft1));
         if((tmp_value &((1<<14)|(1<<15)))||
             (pBat->bmsInfo.devft1 != 0)||(pBat->bmsInfo.devft2 != 0)||
@@ -216,9 +238,11 @@ MOD_EVENT_RC Bat_event_readBmsInfo(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EV
             (pBat->bmsInfo.opwarn1 != 0)||(pBat->bmsInfo.opwarn2 != 0))
         {
             //其他
-            g_Ble.batDesc[0].fault |= (1<<5);
-        }
-		g_Ble.batDesc[0].cycleCount = bigendian16_get((uint8*)(&pBat->bmsInfo.cycle));
+            g_Ble.batDesc[pBat->port].fault |= (1<<5);
+        }		
+		g_Ble.batDesc[pBat->port].cycleCount = bigendian16_get((uint8*)(&pBat->bmsInfo.cycle));
+#endif //
+		//PFL(DL_PMS,"Battery[%d] ReadInfo1:%04X\n",pBat->port,pBat->bmsCtrl.ctrl );
 	}
 	if (ev == MOD_CHANGED_BEFORE)
 	{
@@ -227,6 +251,22 @@ MOD_EVENT_RC Bat_event_readBmsInfo(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EV
 
 	return MOD_EVENT_RC_SUCCESS;
 }
+
+/*
+BmsReg_info 		bmsID;		//信息寄存器
+BmsReg_deviceInfo 	bmsInfo;	//只读寄存器
+BmsReg_ctrl 		bmsCtrl;	//控制寄存器
+*/
+MOD_EVENT_RC Bat_event_readBmsInfo2(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev)
+{
+	return MOD_EVENT_RC_SUCCESS;
+}
+
+MOD_EVENT_RC Bat_event_Ctrl(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev)
+{
+	return MOD_EVENT_RC_SUCCESS;
+}
+
 
 
 static void Bat_fsm_init(Battery* pBat, uint8_t msgId, uint32_t param1, uint32_t param2)

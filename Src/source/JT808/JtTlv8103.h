@@ -25,6 +25,7 @@ extern "C"{
 		uint32 gpsSampFre;
 		uint32 devType;
 		uint32 factoryFlag;
+		uint8  devmodule[8];
 	}JtDevCfgParam;
 
 	
@@ -43,8 +44,9 @@ extern "C"{
 		TAG_URG_LOC_INTERVAL	= 0x2800,	//紧急时汇报时间间隔，单位为秒(s),>0。
 		TAG_DEF_LOC_INTERVAL	= 0x2900,	//默认汇报时间间隔，单位为秒(s),>0。
 		TAG_GPS_SAMPL_FREQUENCY	= 0x2A00,	// GPS采样周期
-		TAG_DEVICE_TYPE		 = 0x3000,				//设备类型。
-		TAG_FACTORY_CFG_FLAG = 0x3100,			//出厂配置标志，0-出厂配置，1-非出厂配置。
+		TAG_DEVICE_TYPE		 = 0x3000,		//设备类型。
+		TAG_FACTORY_CFG_FLAG = 0x3100,		//出厂配置标志，0-出厂配置，1-非出厂配置。
+		TAG_DEVICE_MODLE 	= 0x3200		// 终端型号
 		//未完待续。。。
 	}CMD8103_TLV;
 
@@ -52,6 +54,7 @@ extern "C"{
 	void JtTlv8103_updateMirror(const uint8* data, int len);
 	int JtTlv8103_getChanged(uint8* buf, int len, uint8* tlvCount);
 	void JtTlv8103_updateStorage(const uint8* data, int len);
+	uint32 JtTlv8103_getFactoryCofnig(void);
 
 	extern TlvInMgr  g_jtTlvInMgr_8103;
 	extern TlvOutMgr g_jtTlvOutMgr_8103;

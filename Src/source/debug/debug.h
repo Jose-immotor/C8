@@ -23,6 +23,7 @@ BIT_0 - BIT_3
 #define DL_GYRO		BIT_11
 #define DL_JT808	BIT_12
 #define DL_CABIN	BIT_13
+#define	DL_485		BIT_14
 
 void Debug_Init();
 

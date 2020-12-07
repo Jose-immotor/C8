@@ -9,23 +9,35 @@
 #include "gd32e10x.h"
 #include "Common.h"
 
- FlagStatus can0_receive_flag;
+ FlagStatus modul_receive_flag;
  can_trasnmit_message_struct transmit_message;
  can_receive_message_struct receive_message;
+ #ifdef CANBUS_MODE_JT808_ENABLE
  extern void JT808_rxDataProc(const uint8_t* pData, int len);
+ #endif //
+ extern void Butt_rxDataProc(const uint8_t* pData, int len);
+
  void can1_receive_isr()
 {
 	  /* enter interrupt */
     rt_interrupt_enter();
 	 
 	can_message_receive(CAN1, CAN_FIFO0, &receive_message);   
-    if((CAN_RX_ID == receive_message.rx_efid) && (receive_message.rx_dlen > 0))
+    if( (CAN_RX_ID == receive_message.rx_efid ) && (receive_message.rx_dlen > 0))
     {
+#ifdef CANBUS_MODE_JT808_ENABLE		
     	//JT808_rxDataProc( receive_message.rx_data , receive_message.rx_dlen );
     	JT808_rxDataProc( receive_message.rx_data , receive_message.rx_dlen );
-    	can0_receive_flag = SET; 
+#endif //
+    	modul_receive_flag = SET; 
     }
-	 /* leave interrupt */
+	//Butt_rxDataProc
+	if( (0x1030 == receive_message.rx_efid ) && (receive_message.rx_dlen > 0))
+	{
+		Butt_rxDataProc( receive_message.rx_data , receive_message.rx_dlen );
+    	modul_receive_flag = SET; 
+	}
+	/* leave interrupt */
     rt_interrupt_leave();
 }
 void can_start()
@@ -55,19 +67,20 @@ static void _can_init(void)
 	rcu_periph_clock_enable(RCU_CAN0);
     rcu_periph_clock_enable(RCU_CAN1);
 		rcu_periph_clock_enable(RCU_GPIOB);
-	
+
+	can_struct_para_init(CAN_INIT_STRUCT, &can_init_parameter);
 	can_deinit(CAN1);
 	
 	/* configure CAN1 GPIO */
-	gpio_init(GPIOB,GPIO_MODE_AF_PP,GPIO_OSPEED_50MHZ,GPIO_PIN_13);
-	gpio_init(GPIOB,GPIO_MODE_IPU,GPIO_OSPEED_50MHZ,GPIO_PIN_12);
+	gpio_init(GPIOB,GPIO_MODE_AF_PP,GPIO_OSPEED_50MHZ,GPIO_PIN_13);		// TX
+	gpio_init(GPIOB,GPIO_MODE_IPU,GPIO_OSPEED_50MHZ,GPIO_PIN_12);		// RX
 	/* initialize CAN1 register */
 //	can_struct_para_init(CAN_INIT_STRUCT, &can_init_parameter);
 	/* initialize CAN parameters 	can_init	*/
 	can_init_parameter.time_triggered = DISABLE;
-	can_init_parameter.auto_bus_off_recovery = DISABLE;
-	can_init_parameter.auto_wake_up = DISABLE;
-	can_init_parameter.auto_retrans = DISABLE;
+	can_init_parameter.auto_bus_off_recovery = ENABLE; //DISABLE;
+	can_init_parameter.auto_wake_up = ENABLE;//DISABLE;
+	can_init_parameter.auto_retrans = ENABLE;//DISABLE;
 	can_init_parameter.rec_fifo_overwrite = DISABLE;
 	can_init_parameter.trans_fifo_order = DISABLE;
 	can_init_parameter.working_mode = CAN_NORMAL_MODE;
@@ -133,10 +146,52 @@ void can0_reset(void)
 	//rcu_periph_clock_enable(RCU_GPIOB);
 	can_deinit(CAN1);
 	reset_ms = GET_TICKS();
-	while( GET_TICKS() - reset_ms < 100 );
+	while( GET_TICKS() - reset_ms < 2 );
 	_can_init();
 	can_start();
 }
+
+void can1_isr(void)
+{
+	if(g_isPowerDown)		// 唤醒之
+	{
+		SetWakeUpType(WAKEUP_CAN);
+	}
+	//if((Pms_GetStatus() == PMS_DEEP_SLEEP)||(Pms_GetStatus() == PMS_ACC_OFF))
+	//	Pms_postMsg(PmsMsg_GPRSIrq, 0, 0);
+}
+
+
+void can0_sleep(void)
+{
+	CAN_STB_ENABLE();		// 休眠模式
+	can_working_mode_set( CAN1, CAN_MODE_SLEEP );
+
+	//rcu_periph_clock_disable(RCU_AF);
+    rcu_periph_clock_disable(RCU_CAN1);
+	//rcu_periph_clock_enable(RCU_GPIOB);
+	can_deinit(CAN1);
+	
+// RX B12 中断
+	gpio_init(GPIOB,GPIO_MODE_IPU,GPIO_OSPEED_50MHZ,GPIO_PIN_12);
+
+	nvic_irq_enable( EXTI10_15_IRQn, 2U, 0U);	
+	gpio_exti_source_select( GPIO_PORT_SOURCE_GPIOB, GPIO_PIN_SOURCE_12 );
+	exti_init(EXTI_12, EXTI_INTERRUPT, EXTI_TRIG_FALLING );
+	exti_interrupt_flag_clear( EXTI_12 );
+}
+
+void can0_wakeup(void)
+{
+	exti_interrupt_disable(EXTI_12);
+	
+	CAN_STB_DISABLE();
+	//can_working_mode_set( CAN1, CAN_MODE_NORMAL );
+	can_wakeup( CAN1 );
+	//
+	can0_reset();
+}
+
 
 /*
 void can0_init(void)

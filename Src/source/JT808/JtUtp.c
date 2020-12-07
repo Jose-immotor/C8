@@ -89,8 +89,8 @@ static int Utp_BuildFrame(Utp* pUtp, uint8_t cmd, const void* pData, int len, co
 }
 
 static uint8_t g_JtUtp_txBuff[128*2];			//发送数据缓冲区5
-static uint8_t g_JtUtp_transcodeBuf[150];	//接收数据的转码缓冲区
-static uint8_t g_JtUtp_rxBuff[128];			//接收数据缓冲区
+static uint8_t g_JtUtp_transcodeBuf[128*2];	//接收数据的转码缓冲区
+static uint8_t g_JtUtp_rxBuff[128*2];			//接收数据缓冲区
 static uint8_t g_JtUtp_txRspBuf[128];
 const UtpFrameCfg g_jtFrameCfg =
 {
@@ -119,7 +119,7 @@ const UtpFrameCfg g_jtFrameCfg =
 	.result_UNSUPPORTED = OP_UNSUPPORTED,
 
 	//配置传输参数
-	.waitRspMsDefault = 3000,		// 1000
+	.waitRspMsDefault = 300,		// 1000
 	.rxIntervalMs = 1000,
 	.sendCmdIntervalMs = 10,		// 10ms
 
@@ -127,3 +127,48 @@ const UtpFrameCfg g_jtFrameCfg =
 	.FrameVerify = (UtpFrameVerifyFn)Utp_VerifyFrame,
 	.FrameBuild  = (UtpBuildFrameFn)Utp_BuildFrame,
 };
+
+
+//
+static uint8_t g_JtUtp_txBuff2[128*2];			//发送数据缓冲区5
+static uint8_t g_JtUtp_transcodeBuf2[128*2];	//接收数据的转码缓冲区
+static uint8_t g_JtUtp_rxBuff2[128*2];			//接收数据缓冲区
+static uint8_t g_JtUtp_txRspBuf2[128];
+const UtpFrameCfg g_jtFrameCfg2 =
+{
+	//帧特征配置
+	.head = 0x7E,
+	.tail = 0x7E,
+	.transcode = 0x7D,
+	.transcodeHead = 0x02,
+	.transcodeTail = 0x02,
+	.transcodeShift = 0x01,
+	.cmdByteInd  = 5,
+	.dataByteInd = 7,
+
+	//分配协议缓冲区
+	.txBufLen = sizeof(g_JtUtp_txBuff2),
+	.txBuf	  = g_JtUtp_txBuff2,
+	.rxBufLen = sizeof(g_JtUtp_rxBuff2),
+	.rxBuf	  = g_JtUtp_rxBuff2,
+	.transcodeBufLen = sizeof(g_JtUtp_transcodeBuf2),
+	.transcodeBuf = g_JtUtp_transcodeBuf2,
+	.txRspBuf = g_JtUtp_txRspBuf2,
+	.txRspBufLen = sizeof(g_JtUtp_txRspBuf2),
+
+	//返回码定义
+	.result_SUCCESS = OP_SUCCESS,
+	.result_UNSUPPORTED = OP_UNSUPPORTED,
+
+	//配置传输参数
+	.waitRspMsDefault = 300,		// 1000
+	.rxIntervalMs = 1000,
+	.sendCmdIntervalMs = 10,		// 10ms
+
+	//初始化函数指针
+	.FrameVerify = (UtpFrameVerifyFn)Utp_VerifyFrame,
+	.FrameBuild  = (UtpBuildFrameFn)Utp_BuildFrame,
+};
+
+
+

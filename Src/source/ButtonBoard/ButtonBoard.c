@@ -192,7 +192,7 @@ UTP_EVENT_RC Butt_utpEventCb(Butt* pBu, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 }
 
 extern can_trasnmit_message_struct transmit_message;
-#define	BUCAN_TX_TIMEOUT_MS		(30)
+#define	BUCAN_TX_TIMEOUT_MS		(100)
 int Butt_txData(uint8_t cmd, const uint8_t* pData, uint32_t len)	//cmdÎªCANÐ­ÒéµÄPF
 {
 	uint32_t send_len = 0;
@@ -212,15 +212,15 @@ int Butt_txData(uint8_t cmd, const uint8_t* pData, uint32_t len)	//cmdÎªCANÐ­Òéµ
 		transmit_message.tx_dlen = send_len;
 		transmit_message.tx_efid = 0x00003010;
 		can_message_transmit(CAN1, &transmit_message);
-		PFL(DL_CAN, "CANTx:");
-		PFL(DL_CAN, "%08x ",transmit_message.tx_efid);
-		DUMP_BYTE_LEVEL(DL_CAN,&transmit_message.tx_data,transmit_message.tx_dlen);
-		PFL(DL_CAN, "\n");
+		//PFL(DL_CAN, "CANTx:");
+		//PFL(DL_CAN, "%08x ",transmit_message.tx_efid);
+		//DUMP_BYTE_LEVEL(DL_CAN,&transmit_message.tx_data,transmit_message.tx_dlen);
+		//PFL(DL_CAN, "\n");
 //		rt_thread_mdelay(20);
 		tx_timeout = GET_TICKS();
 		while(
 			CAN_TRANSMIT_PENDING == can_transmit_states(CAN1, CAN_MAILBOX0) &&
-			GET_TICKS() - tx_timeout <BUCAN_TX_TIMEOUT_MS );
+			GET_TICKS() - tx_timeout < BUCAN_TX_TIMEOUT_MS );
 
 		if(len > 8)
 		{
@@ -302,7 +302,7 @@ void Button_init()
 	static const Obj obj = { "BUTTON", Button_start, Button_sleep, Button_run };
 	ObjList_add(&obj);
 	
-	Utp_Init(&g_ButUtp, &g_cfg, &g_jtFrameCfg);
+	Utp_Init(&g_ButUtp, &g_cfg, &g_jtFrameCfg2);
 	
 	_Butt_Param_init();
 }

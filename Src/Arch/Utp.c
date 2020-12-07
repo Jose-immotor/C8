@@ -12,6 +12,7 @@
 #include "Cirbuffer.h"
 #include "debug.h"
 
+
 extern uint16_t gCurRevLen ;
 static Bool Utp_RspProc(Utp* pUtp, const uint8_t* pRsp, int frameLen, UTP_RCV_RSP_RC rspCode);
 static void Utp_RcvRsp(Utp* pUtp, const uint8_t* pRsp, int frameLen, UTP_RCV_RSP_RC rspCode);
@@ -186,6 +187,7 @@ static void Utp_ResetTxBuf(Utp* pUtp)
 	pUtp->reTxCount = 0;
 }
 
+/*
 static void Utp_ResetRxBuf(Utp* pUtp)
 {
 	//Queue_reset(&pUtp->rxBufQueue);
@@ -194,6 +196,7 @@ static void Utp_ResetRxBuf(Utp* pUtp)
 	pUtp->head = 0;
 	pUtp->rxDataTicks = 0;
 }
+*/
 
 /************************************
 函数功能：协议对象复位，
@@ -212,7 +215,7 @@ void Utp_Reset(Utp* pUtp)
 		Utp_RspProc(pUtp, Null, 0, RSP_CANCEL);
 	}
 	
-	Utp_ResetRxBuf(pUtp);
+	//Utp_ResetRxBuf(pUtp);
 	Utp_ResetTxBuf(pUtp);
 	
 	const UtpCmd* pCmd = pUtp->cfg->cmdArray;
@@ -220,7 +223,7 @@ void Utp_Reset(Utp* pUtp)
 	{
 		//停止所有待命令发送
 		pCmd->pExt->sendDelayMs = 0;
-		if(pCmd->type == UTP_WRITE && pCmd->pData && pCmd->pStorage)
+		if(pCmd->type == UTP_WRITE && pCmd->pData && pCmd->pStorage && pCmd->dataLen )
 		{
 			memcpy(pCmd->pData, pCmd->pStorage, pCmd->dataLen);
 		}
@@ -282,8 +285,9 @@ static void Utp_ReqProc(Utp* pUtp, const uint8_t* pReq, int frameLen)
 		//传输数据
 		pCmd->pExt->transferData = (uint8*)pData;
 		pCmd->pExt->transferLen = frameLen;
+#ifdef CANBUS_MODE_JT808_ENABLE			
 		gCurRevLen = MIN(pCmd->storageLen, frameLen) ;
-		
+#endif			
 		if (pCmd->pStorage && pCmd->storageLen)
 		{
 			if (memcmp(pCmd->pStorage, pData, pCmd->storageLen) != 0)
@@ -387,6 +391,9 @@ static Bool Utp_SendReq(Utp* pUtp, const UtpCmd* pCmd)
 
 	pUtp->reTxCount = 1;
 	Utp_SendFrame(pUtp, pCmd->cmd, pUtp->frameCfg->txBuf, pUtp->txBufLen);
+	//Printf("CAN Send:[%X]%d\r\n",pCmd->cmd,pUtp->txBufLen);
+	//
+	if (UTP_EVENT_RC_SUCCESS != Utp_Event(pUtp, pCmd, UTP_TX_DONE)) return False;
 	
 	if(pUtp->waitRspMs)
 	{
@@ -502,6 +509,7 @@ static void Utp_CheckReq(Utp* pUtp)
 		//是否有待发的READ/WRITE命令(pExt->sendDelayMs > 0)
 		if(pExt->sendDelayMs && SwTimer_isTimerOutEx(pExt->rxRspTicks, pExt->sendDelayMs))
 		{
+			//PFL(DL_JT808,"Send CAN %s\r\n",pCmd->cmdName );
 			if (pCmd->type == UTP_READ)
 			{
 				pExt->transferData = pCmd->pData;
@@ -719,14 +727,16 @@ void Utp_CheckRxFrame(Utp* pUtp)
 	//
 	//Printf("[%d-%d]\r\n",
 	//pUtp->rxBuffCirBuff.miHead,pUtp->rxBuffCirBuff.miTail);
-	while( frameLen = _DCodeCirBuff( frameCfg , &pUtp->rxBuffCirBuff ,frameCfg->transcodeBuf , frameCfg->transcodeBufLen ))
+	while( 0 < ( frameLen = _DCodeCirBuff( frameCfg , &pUtp->rxBuffCirBuff ,frameCfg->transcodeBuf , frameCfg->transcodeBufLen )) )
 	{
-		if( frameLen = _ParapBuff( frameCfg->transcodeBuf ,frameCfg->transcodeBuf, frameLen ) )
+		frameLen = _ParapBuff( frameCfg->transcodeBuf ,frameCfg->transcodeBuf, frameLen );
+		if( frameLen )
 		{
 			if( frameLen == ( frameCfg->transcodeBuf[7] + 9 ) &&
 				frameCfg->FrameVerify(pUtp, &frameCfg->transcodeBuf[1], frameLen-2, Null) )
 			{
 				//帧处理,去掉帧头和帧尾
+				//PFL(DL_JT808,"CAN:%x-%d\r\n", frameCfg->transcodeBuf[6],frameLen);
 				Utp_RcvFrameHandler(pUtp, &frameCfg->transcodeBuf[1], frameLen-2);
 			}
 		}
@@ -775,5 +785,6 @@ void Utp_Init(Utp* pUtp, const UtpCfg* cfg, const UtpFrameCfg* frameCfg)
 	CirBuffInit(&pUtp->rxBuffCirBuff, pUtp->frameCfg->rxBuf, pUtp->frameCfg->rxBufLen);
 	SwTimer_Init(&pUtp->waitRspTimer, 0, 0);
 }
+
 
 

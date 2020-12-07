@@ -125,7 +125,8 @@ unsigned short Battery_get_switch_state(unsigned char bms_index)
 
 #define BATTERY_VOLTAGE_SHAKE_CNT_MAX 600
 static uint32_t gl_Battery_voltage_shake_cnt;
-
+static SwTimer gl_Battery_optime_timeout = { 0 };
+// 双电池放电算法
 void Battery_discharge_process(void)
 {
     unsigned short vl_bms_0_ctrl, vl_bms_1_ctrl;
@@ -158,6 +159,10 @@ void Battery_discharge_process(void)
 	
 		vl_bms_0_ctrl = Battery_get_switch_state(0);
         vl_bms_1_ctrl = Battery_get_switch_state(1);
+
+		PFL(DL_NFC,"Bat0:%d-%d-%X,Bat1:%d-%d-%X\n",
+			vl_bms_0_V,vl_bms_0_A,vl_bms_0_ctrl,vl_bms_1_V,vl_bms_1_A,vl_bms_1_ctrl);
+		
 		if(vl_bms_0_V >= vl_bms_1_V)
         {
             vl_voltage_diff = vl_bms_0_V - vl_bms_1_V;
@@ -176,7 +181,7 @@ void Battery_discharge_process(void)
             {
                 gl_Battery_voltage_shake_cnt = GET_TICKS();
             }
-            else if((GET_TICKS() -gl_Battery_voltage_shake_cnt) >BATTERY_VOLTAGE_SHAKE_CNT_MAX )
+            else if((GET_TICKS() -gl_Battery_voltage_shake_cnt) > BATTERY_VOLTAGE_SHAKE_CNT_MAX )
             {
                 // 电压差大于等于6V或者电流差大于25A，变为单个接入
                 sl_supply_state = 2;
@@ -210,7 +215,6 @@ void Battery_discharge_process(void)
             sl_supply_state = 2;
 			sl_both_voltage_equ_flag = 0;
 			sl_both_voltage_diff_flag = 0;
-
         }
 		//两个电池电压接入
         if(1 == sl_supply_state)
@@ -221,6 +225,7 @@ void Battery_discharge_process(void)
 			{
 				Bat_setDischg(&g_Bat[0], True);
 				Bat_setChg(&g_Bat[0], True);
+				PFL(DL_NFC,"Bat[0] Start DisChg&Chg\n");
 			}
 			//打开电池1的充放电开关
 			if(((BMS_STATE_BIT_CHG_SWITCH&vl_bms_1_ctrl) == 0)||
@@ -228,6 +233,7 @@ void Battery_discharge_process(void)
 			{
 				Bat_setDischg(&g_Bat[1], True);
 				Bat_setChg(&g_Bat[1], True);
+				PFL(DL_NFC,"Bat[1] Start DisChg&Chg\n");
 			}
             sl_bms0_vol_cmp_offset = 0;
             sl_bms1_vol_cmp_offset = 0;
@@ -245,21 +251,25 @@ void Battery_discharge_process(void)
                 {
                     //低电压电池的充电开关是导通的，这时要求关闭
                     Bat_setChg(&g_Bat[1], False);
+					PFL(DL_NFC,"Bat[1] Stop Chg\n");
                 }
                 if((vl_bms_0_ctrl & BMS_STATE_BIT_SUPPLY_SWITCH) == 0)
                 {
                     //高电压电池的放电开关是关闭的，这时要求打开
                     Bat_setDischg(&g_Bat[0], True);
+					PFL(DL_NFC,"Bat[0] Start DisChg\n");
                 }                
                 if((vl_bms_1_ctrl & BMS_STATE_BIT_SUPPLY_SWITCH) == 0)
                 {
                     //低电压电池的放电开关是关闭的，这时要求打开
                    Bat_setDischg(&g_Bat[1], True);
+					PFL(DL_NFC,"Bat[1] Start DisChg\n");
                 }                
                 if((vl_bms_0_ctrl & BMS_STATE_BIT_CHG_SWITCH) == 0)
                 {
                     //高电压电池的充电开关是关闭的，这时要求打开
                     Bat_setChg(&g_Bat[0], True);
+					PFL(DL_NFC,"Bat[0] Start Chg\n");
                 }
 			}
 			else
@@ -271,21 +281,25 @@ void Battery_discharge_process(void)
 				{
 					//低电压电池的充电开关是导通的，这时要求关闭
 					Bat_setChg(&g_Bat[0], False); 
+					PFL(DL_NFC,"Bat[0] Stop Chg\n");
 				}
 				if((vl_bms_1_ctrl & BMS_STATE_BIT_SUPPLY_SWITCH) == 0)
 				{
 					//高电压电池的放电开关是关闭的，这时要求打开
 					Bat_setDischg(&g_Bat[1], True);
+					PFL(DL_NFC,"Bat[1] Start DisChg\n");
 				}
 				if((vl_bms_0_ctrl & BMS_STATE_BIT_SUPPLY_SWITCH) == 0)
 				{
 					//低电压电池的放电开关是关闭的，这时要求打开
 					Bat_setDischg(&g_Bat[0], True);
+					PFL(DL_NFC,"Bat[0] Start DisChg\n");
 				}
 				if((vl_bms_1_ctrl & BMS_STATE_BIT_CHG_SWITCH) == 0)
 				{
 					//高电压电池的充电开关是关闭的，这时要求打开
 					Bat_setChg(&g_Bat[1], True);
+					PFL(DL_NFC,"Bat[1] Start Chg\n");
 				}
 			}
 		}
@@ -304,6 +318,7 @@ void Battery_discharge_process(void)
 		{
 			Bat_setDischg(&g_Bat[0], True);
 			Bat_setChg(&g_Bat[0], True);
+			PFL(DL_NFC,"Bat[0] Start DisChg&Chg\n");
         }
     }
 	else if((slave_rs485_is_bat_valid(1))&&(is_battery_A_V_reg_valid(1))&&
@@ -320,6 +335,10 @@ void Battery_discharge_process(void)
 		{
 			Bat_setDischg(&g_Bat[1], True);
 			Bat_setChg(&g_Bat[1], True);
+			PFL(DL_NFC,"Bat[1] Start DisChg&Chg\n");
         }
     }
 }
+
+
+

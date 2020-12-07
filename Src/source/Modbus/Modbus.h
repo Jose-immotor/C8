@@ -154,7 +154,6 @@ extern "C" {
 	//Mod帧配置特征
 	typedef struct _ModFrameCfg
 	{
-
 		int      txBufLen;	//txBuf的长度
 		uint8_t* txBuf;		//存放发送出去数据，转码前
 		int      rxBufLen;	//rxBuf的长度
@@ -163,6 +162,8 @@ extern "C" {
 		uint32_t waitRspMsDefault;	//功能码的默认的等待响应时间，如果功能码要修改为非默认值，可以在功能码的事件函数MOD_TX_START中修改pMod->waitRspMs
 		uint32_t rxIntervalMs;		//接收数据间隔
 		uint32_t sendCmdIntervalMs;	//发送2个功能码之间的间隔时间
+		//
+		
 	}ModFrameCfg;
 
 	//Mod其他配置项

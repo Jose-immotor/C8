@@ -35,9 +35,11 @@ void Dump(uint8_t ind)
 	extern void g_cgfInfo_Dump(void);
 	extern void g_pdoInfo_Dump(void);
 	extern void g_degInfo_Dump(void);
+#ifdef CANBUS_MODE_JT808_ENABLE		
 	extern void Sim_Dump(void);
 	extern void Gprs_Dump(void);
 	extern void Ble_Dump(void);
+#endif 	
 	extern void Cabin_Dump(void);
 	extern void Adc_Dump();
 	extern uint32 g_ActiveFlag;
@@ -45,12 +47,16 @@ void Dump(uint8_t ind)
 	
 	if(1 == ind || 0 == ind) HwFwVer_Dump(Null,&AppInfo,Null);
 	if(2 == ind || 0 == ind) PmsDump();
+#ifdef CANBUS_MODE_JT808_ENABLE		
 	if(3 == ind || 0 == ind) Sim_Dump();
 	if(4 == ind || 0 == ind) Gprs_Dump();
+#endif //	
 	if(5 == ind) 			 Cabin_Dump();
 	if(6 == ind) 			 Adc_Dump();
 	if(7 == ind || 0 == ind) BatteryInfoDump();
+#ifdef CANBUS_MODE_JT808_ENABLE		
 	if(8 == ind || 0 == ind) Ble_Dump();
+#endif //	
 	if(9 == ind || 0 == ind) DateTime_dump(Null);
 	if(10 == ind) 			 SectorMgr_Dump(g_NvdsItems[0].sectorMgr);
 	if(11 == ind) 			 SectorMgr_Dump(g_NvdsItems[1].sectorMgr);

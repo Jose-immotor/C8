@@ -76,12 +76,19 @@ extern "C"{
 #define			_BLE_NORMAL			_BIT(3,4)	// È«ï¿½ï¿½ï¿½ï¿½
 		
 		
-	
-	
+#define			_OPERATION_INIT		_BLE_POWEROFF | _GPS_POWEROFF | _GPRS_POWEROFF	
+#define			_OPERATION_PRE		_BLE_POWEROFF | _GPS_POWEROFF | _GPRS_POWEROFF
+#define			_OPERATION_OPE		_BLE_NORMAL | _GPS_NORMAL | _GPRS_NORMAL
+#define			_OPERATION_WKUP		_BLE_LOWMODE | _GPS_POWEROFF | _GPRS_LOWMODE
+#define			_OPERATION_SLEEP	_BLE_LOWMODE | _GPS_POWEROFF | _GPRS_LOWMODE
+
+
+
 #define			_NETWORK_CONNECTION_BIT			_SET_BIT(0)
 #define			_GPS_FIXE_BIT					_SET_BIT(1)
 #define			_SMS_EXIT_BIT					_SET_BIT(2)
 
+	
 
 #pragma pack(1)
 
@@ -107,7 +114,7 @@ extern "C"{
 		uint16  protocolVer;	//ï¿½ï¿½?ï¿½ï¿½?D-ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½?o?
 		uint32 devClass;	//????ï¿½ï¿½ï¿½ï¿½Dï¿½ï¿½
 		uint8  vendorID[5];	//???ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ID
-		uint8  devModel[20];//????Dï¿½ï¿½o?
+		uint8  devModel[5];//????Dï¿½ï¿½o?
 		char  devId[12];	//???? ID
 		char  iccid[10];	//???? SIM ?ï¿½ï¿½ ICCID
 		char  hwVer[JT_DEV_HW_VER_SIZE];	//????ï¿½ï¿½2?tï¿½ï¿½?ï¿½ï¿½?o?,ï¿½ï¿½?0?ï¿½ï¿½?2
@@ -130,7 +137,7 @@ extern "C"{
 	// Jose add 2020/09/17
 	typedef struct _JtDevBleCfgParam
 	{
-		//char BleName[32];		// ï¿½ï¿½ï¿½ï¿½ï¿½ã²¥ï¿½ï¿½ï¿½ï¿½
+		char BleName[32];		// ï¿½ï¿½ï¿½ï¿½ï¿½ã²¥ï¿½ï¿½ï¿½ï¿½
 		uint32 BleAdvInterval ;	// ï¿½ã²¥ï¿½ï¿½ï¿?1ms)
 		uint8 BleAdvPower ;		// ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ä¹¦ï¿½ï¿½
 		uint8 BleAdvData[62];	// ï¿½ã²¥ï¿½ï¿½ï¿½ï¿½
@@ -146,7 +153,21 @@ extern "C"{
 	{
 		uint8	fileType;
 		uint32 	fileOffset;
-	}FileContent;
+	}FileContentReq;
+
+	typedef struct
+	{
+		uint32 fileOffset ;
+		uint8  fileData[128];
+	}FileContentRsq;
+
+	typedef struct
+	{
+		uint8 fileType ;
+		uint8 fileVerDesc ;
+	}FileVersionDesc;
+
+	
 
 	// ?ï¿½ï¿½??ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½
 	typedef struct
@@ -185,7 +206,7 @@ extern "C"{
 	{
 		uint8 		smsExist;
 		uint8 		smsCount;
-		SMSContext	smsText[_SMS_ARRY_CNT];
+		SMSContext	smsText;//[_SMS_ARRY_CNT];
 	}GetSMSContext;
 
 // ???ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ä¨¬??ï¿½ï¿½ï¿½ï¿½?
@@ -224,7 +245,9 @@ extern "C"{
 		
 		// ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½
 		UpdateFileInfo  updatefileinfo ;
-		FileContent		filecontent ;
+		FileContentReq		filecontentreq ;
+		FileContentRsq		filecontentrsq ;
+		FileVersionDesc fileDesc;
 		//
 
 		JT808fsmFn fsm;
@@ -234,10 +257,30 @@ extern "C"{
 	extern JT808* g_pJt;
 	extern JT808 g_Jt;
 	void JT808_init();
+	void Jt808TaskInit(void);
+
+
+
+
+
+#define		_BLE_TYPE			_SET_BIT(0)	// À¶ÑÀ
+#define		_PMS_TYPE			_SET_BIT(1)	// PMS
+#define		_ACC_TYPE			_SET_BIT(2)	// ÎïÀíµã»ð¼ü
+#define		_LOCL_TYPE			_SET_BIT(3)	// ×ù²ÕËø
+#define		_CABIN_TYPE			_SET_BIT(4)	// ÂÖì±Ëø
+
+// ÖÕ¶ËÀàÐÍ
+#define		_DEV_TYPE			_BLE_TYPE | _PMS_TYPE | _LOCL_TYPE
+// ÖÕ¶ËÐÍºÅ
+#define		_DEV_MODEL		"C8"
+
 
 //BLE name
-#define		_BLE_NAME		"IMT-C7"
+#define		_BLE_NAME		"IMT-%s-%02X%02X%02X"
 #define		_BLE_COMPY		"30"
+
+
+
 
 #ifdef __cplusplus
 }

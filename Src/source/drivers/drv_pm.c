@@ -70,7 +70,7 @@ extern DrvIo* g_p18650PwrOffIO;
 void Enter_PowerDown()
 {	
 	extern DrvIo* g_pLedIO;
-	DrvIo* g_pNfcON = Null;
+	//DrvIo* g_pNfcON = Null;
 	
 	if((g_cfgInfo.isActive == 0)&&(g_Bat[0].presentStatus != BAT_IN))
 		PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, False);
@@ -79,17 +79,26 @@ void Enter_PowerDown()
 	
 
 	PortPin_Set(g_pLedIO->periph, g_pLedIO->pin, True);
-	RTC_TimerStart(6*60*60);//定时6小时唤醒中控
 
+	// 如果是在充电时休眠,则5分钟起来一次，看是否充满
+	if( g_pdoInfo.isLowPow && 
+		( g_Bat[0].presentStatus == BAT_IN || g_Bat[1].presentStatus == BAT_IN ) )	// 非低电时,直接关闭BAT
+	{
+		RTC_TimerStart(5*60);//定时5分钟唤醒中控
+	}
+	else
+	{
+		RTC_TimerStart(6*60*60);//定时6小时唤醒中控
+	}
 	//待机模式
 	rcu_periph_clock_enable(RCU_PMU);
 	pmu_to_deepsleepmode(PMU_LDO_LOWPOWER, WFI_CMD);
 	//停止模式唤醒后，需要重新配置系统时钟
 	SystemInit();
 	rt_thread_mdelay(200);
+	//
 	workmode_switchStatus(WM_ACTIVE);
-//	ObjList_start();
-
+	WorkMode_run();	// 跑一次,,, 放在这里不好看,或者把workmode 当成第一个任务
 }
 
 /*!
@@ -106,6 +115,9 @@ void Mcu_PowerDown()
 	LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_SysSleep, 0);
 	Printf("power down.\n");
 	g_isPowerDown = True;
+	// 清除所有唤醒状态
+	g_WakeupType = WAKEUP_MAX ;
+	
 	Enter_PowerDown();
 	
 	g_isPowerDown = False;
@@ -113,6 +125,16 @@ void Mcu_PowerDown()
 	PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, True);	
 	LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_WakeUp, GetWakeUpType());
 	Printf("wake up reason:%d\n",GetWakeUpType());
+#ifdef SPECIAL_EDITION_AUTOACCON		// 特殊版本
+	if( g_Bat[0].presentStatus == BAT_IN || g_Bat[1].presentStatus == BAT_IN )
+	{
+		Pms_switchStatus(PMS_ACC_ON);
+	}
+	else
+	{
+		Pms_switchStatus(PMS_ACC_OFF);
+	}
+#else
 	if(g_cfgInfo.isAccOn)
 	{
 		Pms_switchStatus(PMS_ACC_ON);
@@ -121,10 +143,10 @@ void Mcu_PowerDown()
 	{
 		Pms_switchStatus(PMS_ACC_OFF);
 	}
+#endif 	
 //	env_nvds_init();
 //	Fsm_Init();
-//	Fsm_Start();
-	
+//	Fsm_Start();	
 }
 /*!
  * \brief MCU休眠

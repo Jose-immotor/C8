@@ -25,7 +25,7 @@ static BmsRegCtrl g_regCtrl;		//电池控制
 DrvIo* g_pLockEnIO = Null;
 
 //以下是命令参数定义
-const static uint8_t g_bmsID_readParam[]    = { 0x00, 0x00, 0x00, 33 };
+const static uint8_t g_bmsID_readParam[]    = { 0x00, 0x00, (uint8)((sizeof(BmsReg_info)/2) >> 8 ), (uint8)(sizeof(BmsReg_info)/2)/*0x00, 33*/ };
 const static uint8_t g_bmsInfo1_readParam[] = { (uint8)(BMS_REG_INFO_ADDR_1 >> 8), (uint8)BMS_REG_INFO_ADDR_1, (uint8)(BMS_REG_INFO_COUNT_1 >> 8), (uint8)BMS_REG_INFO_COUNT_1};
 const static uint8_t g_bmsInfo2_readParam[] = { (uint8)(BMS_REG_INFO_ADDR_2 >> 8), (uint8)BMS_REG_INFO_ADDR_2, (uint8)(BMS_REG_INFO_COUNT_2 >> 8), (uint8)BMS_REG_INFO_COUNT_2};
 const static uint8_t g_bmsCtrl_readParam[]  =  { (uint8)(BMS_REG_CTRL_ADDR >> 8) , (uint8)BMS_REG_CTRL_ADDR  , (uint8)(BMS_REG_CTRL_COUNT >> 8)  , (uint8)BMS_REG_CTRL_COUNT };
@@ -43,7 +43,7 @@ ModCmd g_Bms0Cmds[BMS_CMD_COUNT] =
 	{&g_BmsCmdEx[0], BMS_WRITE_CTRL ,MOD_WRITE,MOD_WEITE_SINGLE_REG,"WriteReg0-Ctrl", &g_Bat[0].writeBmsCtrl , 2				  , (void*)g_bmsCtrl_writeParam, 2,  &g_Bat[0].bmsCtrl},//bmsInfo.state},//&g_Bat[0].writeBmsCtrl_mirror},
 	{&g_BmsCmdEx[1], BMS_READ_ID    ,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms0ID"   , &g_Bat[0].bmsID		 , BMS_REG_ID_SIZE    , (void*)g_bmsID_readParam, 4, Null,(ModEventFn)Bat_event_readBmsID},
 	{&g_BmsCmdEx[2], BMS_READ_INFO_1,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms0Info1", &g_Bat[0].bmsInfo	     , BMS_REG_INFO_SIZE_1, (void*)g_bmsInfo1_readParam, 4, Null, (ModEventFn)Bat_event_readBmsInfo},
-	{&g_BmsCmdEx[3], BMS_READ_INFO_2,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms0Info2", &g_Bat[0].bmsInfo.cmost, BMS_REG_INFO_SIZE_2, (void*)g_bmsInfo2_readParam, 4},
+	{&g_BmsCmdEx[3], BMS_READ_INFO_2,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms0Info2", &g_Bat[0].bmsInfo.cmost, BMS_REG_INFO_SIZE_2, (void*)g_bmsInfo2_readParam, 4,Null,(ModEventFn)Bat_event_readBmsInfo2},
 	{&g_BmsCmdEx[4], BMS_READ_CTRL  ,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms0Ctrl" , &g_Bat[0].bmsCtrl	     , BMS_REG_CTRL_SIZE  , (void*)g_bmsCtrl_readParam, 4},
 	
 };
@@ -64,10 +64,10 @@ static ModCfg g_Bat0Cfg =
 //const static 
 	ModCmd g_Bms1Cmds[BMS_CMD_COUNT] =
 {
-	{&g_BmsCmdEx[0], BMS_WRITE_CTRL, MOD_WRITE,MOD_WEITE_SINGLE_REG,"WriteReg1-Ctrl", &g_Bat[1].writeBmsCtrl, 2, (void*)g_bmsCtrl_writeParam, 2,  &g_Bat[1].writeBmsCtrl_mirror},
-	{&g_BmsCmdEx[1], BMS_READ_ID    ,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms1ID"   , &g_Bat[1].bmsID		 , BMS_REG_ID_SIZE    , (void*)g_bmsID_readParam, 4},
+	{&g_BmsCmdEx[0], BMS_WRITE_CTRL, MOD_WRITE,MOD_WEITE_SINGLE_REG,"WriteReg1-Ctrl", &g_Bat[1].writeBmsCtrl, 2, (void*)g_bmsCtrl_writeParam, 2,  &g_Bat[1].bmsCtrl},
+	{&g_BmsCmdEx[1], BMS_READ_ID    ,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms1ID"   , &g_Bat[1].bmsID		 , BMS_REG_ID_SIZE    , (void*)g_bmsID_readParam, 4,Null,(ModEventFn)Bat_event_readBmsID},
 	{&g_BmsCmdEx[2], BMS_READ_INFO_1,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms1Info1", &g_Bat[1].bmsInfo	     , BMS_REG_INFO_SIZE_1, (void*)g_bmsInfo1_readParam, 4, Null, (ModEventFn)Bat_event_readBmsInfo},
-	{&g_BmsCmdEx[3], BMS_READ_INFO_2,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms1Info2", &g_Bat[1].bmsInfo.cmost, BMS_REG_INFO_SIZE_2, (void*)g_bmsInfo2_readParam,4},
+	{&g_BmsCmdEx[3], BMS_READ_INFO_2,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms1Info2", &g_Bat[1].bmsInfo.cmost, BMS_REG_INFO_SIZE_2, (void*)g_bmsInfo2_readParam,4,Null,(ModEventFn)Bat_event_readBmsInfo2},
 	{&g_BmsCmdEx[4], BMS_READ_CTRL  ,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms1Ctrl" , &g_Bat[1].bmsCtrl	     , BMS_REG_CTRL_SIZE  , (void*)g_bmsCtrl_readParam, 4},
 	
 };
@@ -107,7 +107,7 @@ void BatteryInfoDump(void)
 
 	Printf("Battery info:\n");
 //	BAT_DUMP(batteryCount);
-	for(i = 0; i < 2; i++)
+	for(i = 0; i < MAX_BAT_COUNT; i++)
 	{
 		pPkt = &g_Bat[i];
 		if(pPkt->presentStatus == BAT_IN)
@@ -197,11 +197,13 @@ void Pms_plugOut(Battery* pBat)
 	//Battery* pBat = (port == 0) ? &g_Bat[1] : &g_Bat[0];
 
 	Bat_msg(pBat, BmsMsg_batPlugout, 0, 0);
-
-	if(g_Bat[0].presentStatus != BAT_NOT_IN && g_Bat[1].presentStatus != BAT_NOT_IN)
+	*((uint16*)& g_regCtrl) = 0;
+/*
+	if(g_Bat[0].presentStatus != BAT_NOT_IN )
 	{
-		*((uint16*)& g_regCtrl) = 0;
+		*((uint16*)& g_regCtrl[0]) = 0;
 	}
+*/	
 }
 
 void Pms_SwitchPort()
@@ -224,6 +226,8 @@ void Pms_SwitchPort()
 	//Bat_msg(g_pActiveBat, BmsMsg_active, *((uint32*)& g_regCtrl), 0);
 	
 	g_pActiveBat = pBat;
+
+	PFL(DL_PMS,"NFC Switch Bat[%d]:%x\n",g_pActiveBat->port,g_pms.fmDrv.iicReg.dev_addr );
 }
 
 PmsOpStatus Pms_GetStatus(void)
@@ -266,19 +270,43 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
 	if (msgId == PmsMsg_run)
 	{
-		static uint32 accoff_tick = 0;
+		static uint32 accoff_tick[MAX_BAT_COUNT] = 0 ;
 		static uint32 accoffprintf_tick = 0;
+		uint8 i = 0 ;
 		if ((0/*g_pJt->devState.cnt & _GPS_FIXE_BIT*/)||(SwTimer_isTimerOutEx(g_pms.statusSwitchTicks,PMS_ACC_OFF_ACTIVE_TIME)))
 		{
+			// 不客是否低电量,都要进休眠
 			//18650电压高或者电池不在位，进入休眠模式
-			if((g_pdoInfo.isLowPow == 0)||(g_Bat[0].presentStatus != BAT_IN))
+			//if((g_pdoInfo.isLowPow == 0)||(g_Bat[0].presentStatus != BAT_IN))
 				Pms_switchStatus(PMS_DEEP_SLEEP);
 
 		}
-		Battery_discharge_process();
-		
+		//
+		if( g_pdoInfo.isLowPow )		// 此时为低电,则暂时不要停止放电
+		{
+			if( GET_TICKS() - accoffprintf_tick > 1000 )
+			{
+				Battery_discharge_process();	// 请求开启启动
+				accoffprintf_tick = GET_TICKS();
+			}
+		}
+		else
+		{
+			for(  i = 0 ; i < MAX_BAT_COUNT ; i++ )
+			{
+				if( g_Bat[i].presentStatus == BAT_IN && 
+					(g_Bat[i].bmsInfo.state & 0x0300) != 0x00 &&
+					GET_TICKS() - accoff_tick[i] > 3000 )
+				{
+					Bat_setDischg(&g_Bat[0], False);
+					Bat_setChg(&g_Bat[0], False);
+					accoff_tick[i] = GET_TICKS();
+					PFL(DL_PMS,"ACC Off And 18650 Normal,Bat[%d]:0x%04X Dischg&Chg\n",i,g_Bat[i].bmsInfo.state);
+				}
+			}
+		}
 		PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, True);
-		g_pdoInfo.isWheelLock =1;
+		g_pdoInfo.isWheelLock =1;	// 轮毂锁 锁
 
 	}
 	else if (msgId == PmsMsg_accOn)
@@ -301,13 +329,34 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 		g_pdoInfo.isWheelLock =1;
 		g_pms.statusSwitchTicks = GET_TICKS();
 	}
+	else if( msgId == PmsMsg_18650Low )
+	{
+		//如果当前没有acc ON 则启动放电
+		PFL(DL_PMS,"18650 Low ,Request Charging\n");
+	}
+	else if( msgId == PmsMsg_18650Normal )
+	{
+		//如果当前没有acc on 则关闭放电
+		PFL(DL_PMS,"18650 Normal ,Request to stop charging\n");
+	}
+#ifdef CANBUS_MODE_JT808_ENABLE
+	else if( msgId == PmsMsg_GPRSIrq )
+	{
+		g_pms.statusSwitchTicks = GET_TICKS();		// 刷新时间
+	}
+#endif //
 }
 
 static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
+	static uint32 accoonprintf_tick = 0;
 	if (msgId == PmsMsg_run)
 	{
-		Battery_discharge_process();
+		if( GET_TICKS() - accoonprintf_tick > 1000 )
+		{
+			Battery_discharge_process(); 
+			accoonprintf_tick = GET_TICKS();
+		}
 	}
 	else if (msgId == PmsMsg_accOff)
 	{
@@ -322,8 +371,16 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 		Pms_plugOut((Battery*)param1);
 		Pms_switchStatus(PMS_ACC_OFF);
 	}
+	else if( msgId == PmsMsg_18650Low )
+	{
+		PFL(DL_PMS,"18650 Low ,Request Charging\n");
+	}
+	else if( msgId == PmsMsg_18650Normal )
+	{
+		PFL(DL_PMS,"18650 Normal ,Request to stop charging\n");
+	}
 	PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, False);
-	g_pdoInfo.isWheelLock =0;
+	g_pdoInfo.isWheelLock =0;		// 轮毂锁开
 }
 
 static void Pms_fsm_sleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
@@ -351,9 +408,18 @@ static void Pms_fsm_deepSleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	}
 	else if (msgId == PmsMsg_accOn)
 	{
-		if((g_pdoInfo.isRemoteAccOn)&&(g_Bat[0].presentStatus == BAT_IN))
+		if((g_pdoInfo.isRemoteAccOn)&&
+			(g_Bat[0].presentStatus == BAT_IN || g_Bat[1].presentStatus == BAT_IN))
 			Pms_switchStatus(PMS_ACC_ON);
 	}
+#ifdef CANBUS_MODE_JT808_ENABLE
+	else if( msgId == PmsMsg_GPRSIrq )	// 不要休眠
+	{
+		PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, True);
+		g_pdoInfo.isWheelLock =1;
+		Pms_switchStatus(PMS_ACC_OFF);
+	}
+#endif //	
 //	if(((g_Bat[0].bmsInfo.state&0x0300)!=0x0000)&&((GET_TICKS() -accsleep_tick) >3000 ))
 //	{
 //		Pms_setDischg(False);
@@ -365,7 +431,7 @@ static void Pms_fsm_deepSleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
 //		Fsm_SetActiveFlag(AF_PMS, False);
 //	}
 	
-	
+
 	PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, False);
 	g_pdoInfo.isWheelLock =1;
 }

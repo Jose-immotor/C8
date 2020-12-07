@@ -9,7 +9,7 @@ extern "C"{
 #include "drv_gpio.h"
 // *锁状态：0-关锁、锁上；1-开锁。
 //座舱锁反馈，锁上-低电平。没锁上-高电平
-#define CABIN_IS_LOCK		(IO_Read(IO_CABIN_FB) == RESET)
+#define CABIN_IS_LOCK		(IO_Read(IO_CABIN_FB) == SET)
 
 void Cabin_Run(void);
 void Cabin_UnLock(void);

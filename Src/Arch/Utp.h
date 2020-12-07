@@ -51,7 +51,7 @@ extern "C"{
 typedef enum
 {
 	UTP_TX_START,		//发送命令开始, 可在该事件中配置通信参数：waitRspMs, maxTxCount，transferData, transferLen
-
+	UTP_TX_DONE,		// 发送命令结束，等待回应
 	UTP_CHANGED_BEFORE,	//pStorage值改变之前
 	UTP_CHANGED_AFTER,	//pStorage值改变之后
 	UTP_GET_RSP,		//接收到请求,获取响应，请求的数据在pStorage中，应该在改事件中配置transferData指针，作为RSP

@@ -2,6 +2,8 @@
 #include "Common.h"
 #include "BleTpu.h"
 
+#ifdef CANBUS_MODE_JT808_ENABLE	
+
 static const UtpCmd* BleTpu_FindCmdItem(BleTpu* pBleTpu, uint8_t cmd)
 {
 	const UtpCmd* pCmd = pBleTpu->cfg->cmdArray;
@@ -109,4 +111,8 @@ void BleTpu_Init(BleTpu* pBleTpu, const UtpCfg* cfg, const BleTpuFrameCfg* frame
 	Queue_init(&pBleTpu->rxBufQueue, pBleTpu->frameCfg->rxBuf, 1, pBleTpu->frameCfg->rxBufLen);
 	SwTimer_Init(&pBleTpu->waitRspTimer, 0, 0);
 }
+
+
+#endif // CANBUS_MODE_JT808_ENABLE	
+
 

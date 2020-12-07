@@ -35,6 +35,7 @@ void CirBuffPush( pCirBuff pcirbuff , const uint8_t *pInbuff , uint16_t len )
 {
 	uint16 i = 0 ;
 	if( !pcirbuff || !pInbuff || !len ) return ;
+	if( !pcirbuff->mpBuff )return ;
 	for( i = 0 ; i < len ; i++ )
 	{
 		pcirbuff->mpBuff[pcirbuff->miTail] = pInbuff[i];
@@ -46,6 +47,7 @@ uint16_t CirBuffPop( pCirBuff pcirbuff , uint8_t *poutbuff , uint16_t size )
 {
 	uint16_t len = 0 ;
 	if( !pcirbuff || !poutbuff || !size ) return 0;
+	if( !pcirbuff->mpBuff )return 0;
 	while( pcirbuff->miHead != pcirbuff->miTail && len < size )
 	{
 		poutbuff[len++] = pcirbuff->mpBuff[pcirbuff->miHead];

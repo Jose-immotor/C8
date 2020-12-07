@@ -66,6 +66,10 @@ TlvInEventRc TlvInMgr_event(TlvInMgr* mgr, const TlvIn* p, TlvInEvent ev)
 pTlvBuf:
 01 01 01 02 01 01 03 01 01 04 01 01 05 01 01 06 01 01 07 01 01
 
+
+//
+02 01
+
 */
 //更新存储指针值
 void TlvInMgr_updateStorage(TlvInMgr* mgr, const uint8* pTlvBuf, int bufSize)

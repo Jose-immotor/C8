@@ -159,6 +159,11 @@ static const ModCmd* Mod_GetNextSendCmd(Mod* pMod, Bool isPending)
 		{
 			if (memcmp(pCmd->pStorage, pCmd->mirror, pCmd->storageLen) != 0)
 			{
+				//PFL(DL_PMS, "MOD[%d]",pCmd->storageLen);
+				//DUMP_BYTE_LEVEL(DL_PMS, pCmd->pStorage, pCmd->storageLen );
+				//PFL(DL_PMS, "\n");
+				//DUMP_BYTE_LEVEL(DL_PMS, pCmd->mirror, pCmd->storageLen );
+				//PFL(DL_PMS, "\n");
 				return pCmd;
 			}
 		}
@@ -374,6 +379,7 @@ static Bool Mod_SendReq(Mod * pMod, const ModCmd * pCmd, uint32_t waitMs, uint8_
 	{
 		Mod_ResetTxBuf(pMod);
 	}
+	PFL(DL_PMS,"modbus[%d] Send Cmd:%s\n",pMod->cfg->port,pCmd->cmdName);
 
 	return True;
 }
@@ -555,6 +561,11 @@ void Mod_CheckRxFrame(Mod * pMod)
 		{
 			//Ö¡´¦Àí
 			Mod_RcvFrameHandler(pMod, frameCfg->rxBuf, pMod->rxBufLen);
+			//
+			//PFL(DL_PMS, "Mod[%d]RX(%d):",pMod->cfg->port,pMod->rxBufLen);
+			//DUMP_BYTE_LEVEL(DL_PMS, frameCfg->rxBuf, pMod->rxBufLen );
+			//PFL(DL_PMS, "\n");
+			//
 		}
 		pMod->rxBufLen = 0;
 	}

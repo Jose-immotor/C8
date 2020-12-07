@@ -48,7 +48,7 @@ extern "C"{
 
 #define REQ_ID_SET_ALARM_MODE	0x2C
 #define REQ_ID_GET_RUNPARAM		0x36	
-
+#define	REQ_ID_SET_WHEELLOCK	0x37
 #define REQ_ID_SET_CABINLOCK	0x38
 #define REQ_ID_SET_ACC			0x39
 
@@ -104,18 +104,28 @@ extern "C"{
 		uint32 buildNum;
 	}BleGetDevIDPkt;
 
+	// 0x18 设备能力
+	typedef struct
+	{
+		uint8 protocolVer ;
+		uint32 capacity ;	// 能力描述
+	}DevCapacity ;
+
+	// 0x1b
+	
+
 	//Pms V39及以后的版本的电池描述符长度
 	typedef struct _BatteryDesc
 	{
 		uint8  serialNum[SERIAL_NUM_SIZE];
 		uint8  portId;
 		uint8  SOC;
-		uint16 voltage;
-		int16  current;
-		int8   temp;
-		uint8  fault;
-		uint8  damage;
-		uint16 cycleCount;
+		uint16 voltage;	// 电压
+		int16  current;	// 电流
+		int8   temp;	// 电池温度
+		uint8  fault;	// 电池故障
+		uint8  damage;	// 电池损坏
+		uint16 cycleCount;	// 循环次数
 //		uint16 rateVoltage;
 //		uint16 rateCurrent;
 //		uint16 capacity;
@@ -128,6 +138,13 @@ extern "C"{
 //		uint8  mosState;
 	}BatteryDesc;
 
+	typedef struct _otvItem
+	{
+		uint8_t item ;
+		uint8_t len;
+		uint8_t param ;
+	}otvItem ;
+			
 	typedef struct _GpsPkt
 	{
 		uint8  CSQ;
@@ -156,10 +173,13 @@ extern "C"{
 		uint8  gprsState;
 		uint8  gpsState;
 		uint8  devState;
-		uint16  _18650Vol;
+		uint8  _18650Vol;
 		uint8  devState2;
 		uint8  batVerify;
+		uint8  periheral;
 	}SelfTestResult;
+
+	
 #pragma pack()
 
 	typedef struct _Ble
@@ -178,10 +198,17 @@ extern "C"{
 		GpsPkt gpsPkt;
 		PmsPkt pmsPkt;
 		PmsPortStatePkt portState;
+		//BatteryDesc		batterDesc;
+		DevCapacity		devCapacity ;
+		BleGetDevIDPkt	bmsPkt[MAX_BAT_COUNT] ;
+		uint8			mActiveDevice ;// 激活
+		uint8			BatVerify[2];	// 电池身份验证
+		uint8			wheelLock ;		// 轮毂锁
 	}Ble;
 
 	extern Ble g_Ble;
 	uint8* Ble_ReqProc(const uint8_t* pReq, int frameLen, uint8* rspLen);
+    void Ble_init(uint8* mac);
 
 #ifdef __cplusplus
 }

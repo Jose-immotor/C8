@@ -499,16 +499,16 @@ uint8 IO_Read(IO_ID pin)
 //	}
 //}
 
-//void IO_Set(IO_ID pin, uint8 value)
-//{
-//	DrvIo* p = IO_Get(pin);
-//	PortPin_Set(p->periph, p->pin, value);
-//	p->value = PortPin_Read(p);
+void IO_Set(IO_ID pin, uint8 value)
+{
+	DrvIo* p = IO_Get(pin);
+	PortPin_Set(p->periph, p->pin, value);
+	p->value = PortPin_Read(p);
 
 
-//	//记录当前设置的时间戳
-//	p->ticks = GET_TICKS();
-//}
+	//记录当前设置的时间戳
+	p->ticks = GET_TICKS();
+}
 
 
 void PortPin_Set(uint32 port, uint32 pin, uint8 value)
@@ -659,7 +659,9 @@ void IO_Stop()
 {
 
 	PortPin_Set(g_pPwr485EnIO->periph, g_pPwr485EnIO->pin, False);
-	PortPin_Set(g_pCanSTBIO->periph, g_pCanSTBIO->pin, True);
+#ifndef CANBUS_MODE_JT808_ENABLE		
+	PortPin_Set(g_pCanSTBIO->periph, g_pCanSTBIO->pin, True);		// CAN 由JT808管理
+#endif //	
 	PortPin_Set(g_pPwr3V3EnIO->periph, g_pPwr3V3EnIO->pin, True);
 	
 //	g_isIoStart = False;
@@ -787,7 +789,7 @@ int IO_Init(void)
 	g_pCanSTBIO = IO_Get(IO_CAN_STB);
 	PortPin_Set(g_pCanSTBIO->periph, g_pCanSTBIO->pin, False);
 	g_p18650ChgIO = IO_Get(IO_18650_CHG_EN);
-	PortPin_Set(g_p18650ChgIO->periph, g_p18650ChgIO->pin, False);//引脚低充电
+	//PortPin_Set(g_p18650ChgIO->periph, g_p18650ChgIO->pin, False);//引脚低充电
 	return 0;
 }
 //INIT_BOARD_EXPORT(IO_Init);

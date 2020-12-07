@@ -89,6 +89,7 @@ void Cabin_UnLock()
 
 void Cabin_Run()
 {
+	// 开锁
 	if((g_pdoInfo.isCanbinLock == 1)&&(g_IsForceCabinLock))
 	{
 		Cabin_UnLock();
@@ -124,7 +125,8 @@ void Cabin_Run()
 		Fsm_SetActiveFlag(AF_CABIN, False);
 		g_IsCabinLockFault = g_IsCabinLock;
 	}
-	
+
+	// 锁故障
 	if(g_IsCabinLockFault)
 	{
 		static uint32 tick = 0;
@@ -134,7 +136,8 @@ void Cabin_Run()
 			Nvc_Play(NVC_WARNING, 1);	//告警提示
 		}
 	}
-	
+
+	// 
 	if(SwTimer_isTimerOut(&g_CabinLockStateTimer))
 	{
 		PFL(DL_CABIN,"canbin lock=%d,%d\n", g_IsCabinLockDetected, g_IsCabinLock);

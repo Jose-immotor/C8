@@ -17,9 +17,9 @@ extern "C" {
 #define BMS_REG_ID_SIZE  sizeof(BmsReg_info)
 #define BMS_REG_ID_COUNT (sizeof(BmsReg_info) / 2)
 
-#define BMS_REG_INFO_COUNT_1 ((BMS_REG_INFO_ADDR_2 - BMS_REG_INFO_ADDR_1))
+#define BMS_REG_INFO_COUNT_1 ((BMS_REG_INFO_ADDR_2 - BMS_REG_INFO_ADDR_1) + 1)
 #define BMS_REG_INFO_SIZE_1  (BMS_REG_INFO_COUNT_1 * 2)
-#define BMS_REG_INFO_COUNT_2 (BMS_REG_INFO_END - BMS_REG_INFO_ADDR_2 + 1)
+#define BMS_REG_INFO_COUNT_2  ( sizeof(BmsReg_deviceInfo)/2 - BMS_REG_INFO_COUNT_1 ) //(BMS_REG_INFO_END - BMS_REG_INFO_ADDR_2 + 1)
 #define BMS_REG_INFO_SIZE_2  (BMS_REG_INFO_COUNT_2 * 2)
 
 #define BMS_REG_CTRL_SIZE  sizeof(BmsReg_ctrl)
@@ -141,6 +141,8 @@ extern "C" {
 	MOD_EVENT_RC Bat_event(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev);
 	MOD_EVENT_RC Bat_event_readBmsID(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev);
 	MOD_EVENT_RC Bat_event_readBmsInfo(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev);
+	MOD_EVENT_RC Bat_event_readBmsInfo2(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev);
+	MOD_EVENT_RC Bat_event_Ctrl(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev);
 
 #ifdef __cplusplus
 }

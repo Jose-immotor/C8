@@ -49,7 +49,7 @@ extern "C"{
 	
 
 	UTP_EVENT_RC JtTlv8900_proc(const uint8* data, int len);
-	void JtTlv8900_init();
+	void JtTlv8900_init(void);
 
 
 #ifdef __cplusplus

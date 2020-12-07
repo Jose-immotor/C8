@@ -70,7 +70,7 @@ THRESHOLD_EVENT AdcUser_GetTempEvent(uint8 sensor)
 
 void AdcUser_OnTempChanged(Adc* pAdc, int oldVal, int newVal)
 {
-	uint8 adcId = pAdc->adcId;
+//	uint8 adcId = pAdc->adcId;
 //	if (adcId == ADC_TEMP_LCD)
 //	{
 //		HighTempAlarm_SetEvent(adcId, 0, (newVal >= g_pCfgInfo->lcdAreaTemp));
@@ -80,7 +80,7 @@ void AdcUser_OnTempChanged(Adc* pAdc, int oldVal, int newVal)
 //		HighTempAlarm_SetEvent(adcId, 0, (newVal >= g_pCfgInfo->chgAreaTemp));
 //	}
 }
-
+extern DrvIo* g_p18650ChgIO;
 void AdcUser_18650EventChanged(AdcUser* pAdcUser, ThresholdArea* pThreshold, THRESHOLD_EVENT event)
 {
 	//保存温度传感器事件值
@@ -93,24 +93,30 @@ void AdcUser_18650EventChanged(AdcUser* pAdcUser, ThresholdArea* pThreshold, THR
 
 	if (event == DOWN_OVER_THRESHOLD_LOW)
 	{
-//		PortPin_Set(g_p18650ChgIO->periph, g_p18650ChgIO->pin, False);
+		if( g_p18650ChgIO )
+		PortPin_Set(g_p18650ChgIO->periph, g_p18650ChgIO->pin, False);
 		if(g_pdoInfo.isLowPow == 0)
 		{
 			PFL(DL_ADC, "\n18650 Low Power!\n");
-			LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_18650LowPower, 0);		
+			LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_18650LowPower, 0);
+			//
+			Pms_postMsg(PmsMsg_18650Low,0,0);
 		}
 		g_pdoInfo.isLowPow = 1;
-
+		// 此时如果有电池,但没有点火,且没有处于放电状态,则应该设置为放电
 	}
 	else if (event == UP_OVER_THRESHOLD_HIGH)
 	{
-//		PortPin_Set(g_p18650ChgIO->periph, g_p18650ChgIO->pin, True);
+		if( g_p18650ChgIO )
+		PortPin_Set(g_p18650ChgIO->periph, g_p18650ChgIO->pin, True);
 		if(g_pdoInfo.isLowPow == 1)
 		{
 			PFL(DL_ADC, "\n18650 High Power!\n");
 			LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_18650HigPower, 0);	
+			Pms_postMsg(PmsMsg_18650Normal,0,0);
 		}
 		g_pdoInfo.isLowPow = 0;
+		// 此时如果有电池，但没有点火状态,但已经放电,则应该关闭之
 
 	}
 //	if (pThreshold->thresholdHigh == g_pCfgInfo->temp_thresholdHigh)

@@ -51,7 +51,7 @@ char rt_hw_console_getchar(void)
 	}
 	else
 	{
-		return -1;
+		return (char)-1;
 	}
 	#else
 //	//使用查询方式
@@ -81,14 +81,19 @@ uint32_t usart0_put_byte(uint8_t data)
     return sta;   
 }
 #if 1
-Queue QuenueRs485Rx;
+//Queue QuenueRs485Rx;
+//extern CirBuff gRs485rxBuf;
+//extern CirBuff gTx485txBuf;
+extern void usart_push_data( uint8_t data );
+
 void uart4_isr(void)
 {
 	rt_interrupt_enter();
 	if(usart_interrupt_flag_get(UART4, USART_INT_FLAG_RBNE) != RESET)
     {
 		uint8_t data = usart_data_receive(UART4);
-		
+		usart_push_data( data );
+		/*
 		if(Queue_writeByte(&QuenueRs485Rx, data))
 		{
 		}
@@ -96,10 +101,11 @@ void uart4_isr(void)
 		{
 			//overflow
 		}
+		*/
     }
 	rt_interrupt_leave();
 }
-
+/*
 char rs485_getchar(void)
 {
 	uint8_t* data;
@@ -111,9 +117,10 @@ char rs485_getchar(void)
 	}
 	else
 	{
-		return -1;
+		return (char)-1;
 	}
 }
+*/
 
 uint32_t uart4_put_byte(uint8_t data)
 {    
@@ -184,7 +191,7 @@ int gd32_hw_usart_init(void)
     usart_receive_config(UART4, USART_RECEIVE_ENABLE);
     usart_transmit_config(UART4, USART_TRANSMIT_ENABLE);
 	usart_interrupt_enable(UART4, USART_INT_RBNE);
-	Queue_init(&QuenueRs485Rx, Rs485_rx_buf, 1, RX_BUFF_SIZE);
+	//Queue_init(&QuenueRs485Rx, Rs485_rx_buf, 1, RX_BUFF_SIZE);
     usart_enable(UART4);
 	
 	nvic_irq_enable(UART4_IRQn, 0, 0);

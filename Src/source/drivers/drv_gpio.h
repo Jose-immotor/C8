@@ -57,6 +57,10 @@ extern "C" {
 #define SET_18650BP_ON()  IO_Set(CTRL_18650BP_ON, IO_HIGH)
 #define SET_18650BP_OFF() IO_Set(CTRL_18650BP_ON, IO_LOW)
 
+#define	CAN_STB_ENABLE()	IO_Set(IO_CAN_STB, IO_HIGH)		// CANè¿›å…¥ä½ŽåŠŸè€— 
+#define	CAN_STB_DISABLE()	IO_Set(IO_CAN_STB, IO_LOW)
+
+
 #define BP_START_SOC_THRESHOLD 10	//±¸µçµç³Ø¹¤×÷µçÁ¿ãÐÖµ£¬±ØÐë´óÓÚ¸ÃÖµ²ÅÄÜÕý³£¹¤×÷
 
 //¼ÌµçÆ÷´íÎóÂë¶¨Òå

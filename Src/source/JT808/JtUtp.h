@@ -24,7 +24,7 @@ extern "C"{
 		,OP_NO_RSP = 0xF1	//No response
 		,OP_FAILED			= 0xFF	//Ö´ÐÐÊ§°Ü
 	}OP_CODE;
-
+		
 	typedef struct _JtUtp
 	{
 		uint8_t  checkSum;
@@ -37,6 +37,7 @@ extern "C"{
 	}JtUtp;
 
 	extern const UtpFrameCfg g_jtFrameCfg;
+	extern const UtpFrameCfg g_jtFrameCfg2;
 #ifdef __cplusplus
 }
 #endif

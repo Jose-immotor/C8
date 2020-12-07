@@ -12,7 +12,7 @@
 #include "pms.h"
 #include "Common.h"
 #include "led.h"
-#include "JT808.h"
+
 #include <cm_backtrace.h>
 #include "Debug.h"
 #include "drv_rtc.h"
@@ -29,6 +29,10 @@
 #include "smart_shell.h"
 #include "ButtonBoard.h"
 
+#ifdef CANBUS_MODE_JT808_ENABLE
+#include "JT808.h"
+#endif //CANBUS_MODE_JT808_ENABLE
+
 const HwFwVer AppInfo={
 FW_VER_MAIN,
 FW_VER_S1,
@@ -37,14 +41,21 @@ FW_VER_BUILD,
 DES_HW_VER_MAIN,
 DES_HW_VER_SUB};
 
-
-//保存WWDG计数器的设置值,默认为最大. 
-//让窗口数值和计数值一样,这样就不用考虑喂狗时间在窗口值~0x3F之间了
-#define WWDG_CNT 0x7f//tr   :T[6:0],计数器值 
-#define WWDG_WR 0x7f//wr   :W[6:0],窗口值
-//Fwwdg=PCLK1/(4096*2^fprer). 看门狗超时时间=1/720000000*8*0x40(s)=29ms
-//初始化窗口看门狗
-//系统时钟72MHz，
+/*
+	CANBUS_MODE_JT808_ENABLE : 支持外置模块
+	NON_SHARE_ELECTRIC_VEHICLES : 非运营车辆 
+	Special Edition
+	SPECIAL_EDITION_AUTOACCON	: 特殊版本,放入电池直接放电
+*/
+//
+//
+//锟斤拷锟斤拷WWDG锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷值,默锟斤拷为锟斤拷锟? 
+//锟矫达拷锟斤拷锟斤拷值锟酵硷拷锟斤拷值一锟斤拷,锟斤拷锟斤拷锟酵诧拷锟矫匡拷锟斤拷喂锟斤拷时锟斤拷锟节达拷锟斤拷值~0x3F之锟斤拷锟斤拷
+#define WWDG_CNT 0x7f//tr   :T[6:0],锟斤拷锟斤拷锟斤拷值 
+#define WWDG_WR 0x7f//wr   :W[6:0],锟斤拷锟斤拷值
+//Fwwdg=PCLK1/(4096*2^fprer). 锟斤拷锟脚癸拷锟斤拷时时锟斤拷=1/720000000*8*0x40(s)=29ms
+//锟斤拷始锟斤拷锟斤拷锟节匡拷锟脚癸拷
+//系统时锟斤拷72MHz锟斤拷
 void Mcu_DgInit()
 {
 	rcu_periph_clock_enable(RCU_WWDGT);//   WWDG时钟使能
@@ -76,11 +87,11 @@ void endless_loop_for_wdTest()
 
 int main(void)
 {
-	Printf("\n\nPower up.\n");
-	//MCU硬件初始化
+	__enable_irq();
+	Printf("\n\nPower up\n");
+	//MCU硬锟斤拷锟斤拷始锟斤拷
 	//Todo...
 	HwFwVer_Dump(Null,&AppInfo,Null);
-	//所有对象初始化
 	cm_backtrace_init("C7Pms", "1.0", "1.0");
 	Debug_Init();	
 	LocalTimeInit();	
@@ -91,9 +102,12 @@ int main(void)
 	AdcUser_Init();
 	Adc_init();
 	Led_init();
+#ifdef CANBUS_MODE_JT808_ENABLE	
 	hw_can_init(CAN1);
 	JT808_init();
-	Button_init();
+	//Jt808TaskInit();
+#endif //CANBUS_MODE_JT808_ENABLE
+	//Button_init();
 	Pms_init();
 	Gyro_Init();
 	Nvc_Init();
@@ -102,7 +116,7 @@ int main(void)
 	WorkMode_init();
 	LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_McuReset, 1);
 
-	//对象启动
+	//锟斤拷锟斤拷锟斤拷锟斤拷
 	ObjList_start();
 
 	#ifdef DGT_CONFIG

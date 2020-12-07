@@ -41,50 +41,73 @@ typedef struct _BmsRegCtrl
 //BMS设备信息寄存器
 typedef struct
 {
-	uint16_t prver;
-	uint16_t hwver;
-	uint16_t blver;
-	uint16_t fwmsv;
-	uint16_t fwrev;
-	uint16_t fwbnh;
-	uint16_t fwbnl;
-	uint16_t mcun12;
+	/*
+	Addr 0 ~ 49
+	*/
+	uint16_t prver;		// 协议版本号
+	uint16_t hwver;		// 硬件版本号
+	uint16_t blver;		// Boot 版本号
+	uint16_t fwmsv;		// 固件版本---主次版本号
+	uint16_t fwrev;		// 固件版本---修正版本号
+	uint16_t fwbnh;		// 固件版本---编译版本高字
+	uint16_t fwbnl;		// 固件版本---编译版本低字
+	uint16_t mcun12;	// MCU ID 
 	uint16_t mcun34;
 	uint16_t mcun56;
 	uint16_t mcun78;
-	uint16_t btype;
-	uint16_t bvolt;
-	uint16_t bcap;
-	uint16_t sn12;
+	uint16_t btype;		// 电池类型
+	uint16_t bvolt;		// 额定电压
+	uint16_t bcap;		// 额定电流
+	uint16_t sn12;		// 序列号
 	uint16_t sn34;
 	uint16_t sn56;
 	uint16_t sn78;
-	uint16_t erech;
-	uint16_t erecl;
-	uint16_t lrech;
-	uint16_t lrecl;
-	uint16_t ltsta;
-	uint16_t ltmaxv;
-	uint16_t ltmaxvn;
-	uint16_t ltminv;
-	uint16_t ltminvn;
-	uint16_t ltmaxt;
-	uint16_t ltmaxtn;
-	uint16_t ltmint;
-	uint16_t ltmintn;
-	uint16_t ltmaxcc;
-	uint16_t ltmaxdc;
-	uint16_t df_ver;
+	uint16_t erech;		// 最早记录号 高字
+	uint16_t erecl;		// 最早记录号 低字
+	uint16_t lrech;		// 最近记录号 高字
+	uint16_t lrecl;		// 最近记录号 低字
+	uint16_t ltsta;		// 历史状态
+	uint16_t ltmaxv;	// 历史最高单体电压
+	uint16_t ltmaxvn;	// 历史最高单体电压编号 
+	uint16_t ltminv;	// 历史最低单体电压
+	uint16_t ltminvn;	// 历史最低单体电压编号
+	uint16_t ltmaxt;	// 历史最高温度
+	uint16_t ltmaxtn;	// 历史最低温度编号
+	uint16_t ltmint;	// 历史最低温度
+	uint16_t ltmintn;	// 历史最低温度编号
+	uint16_t ltmaxcc;	// 历史最大充电电流
+	uint16_t ltmaxdc;	// 历史最大放电电流
+	uint16_t df_ver;	// DF版本
+	// 34 - 49 预留
 }BmsReg_info;
 
 //BMS只读寄存器
 typedef struct
 {
+	/*
+	Addr:256 ~ 363
+	*/
 	uint16_t userId[4];		//BID
-	uint16_t state;			//STATE
-	uint16_t soc;			//SOC
-	uint16_t tvolt;			//总电压
-	uint16_t tcurr;			//总电流
+	/*
+		Bit0 : CHG_MOS : 1 :充电MOS打开,0:充电MOS关闭
+		Bit1 ：DIS_MOS ：1：放电MOS打开,0:放电MOS关闭
+		Bit2 : PRE_CHG_MOS : 1 预放电MOS打开,0：关闭
+		Bit3 : G2_SAT : 1:G2有效，0:G2无效
+		Bit4 : BALANCE_STA : 1:电池组正在均衡()
+		Bit5 : DEV_FAULT: 1:设备故障
+		Bit6 : OP_FAULT 1:运行故障
+		Bit7 : OP_WARNING 1:运行告警
+		Bit8 : CERTIFI : BMS验证HOST 1：需要验证，0：验证通过
+		Bit9 : DISASSEN : 1:光敏有效,0:光敏无效
+		Bit10 : EXTERN MODULE :1:外置模块在位，0：外置模块不在位
+		Bit11 ~ Bit13 : 保留
+		BIt14 : CHG_FULL 1:充电满
+		Bit15 :保留
+	*/
+	uint16_t state;			//STATE BMS 状态
+	uint16_t soc;			//SOC	0.1 电池级荷电状态
+	uint16_t tvolt;			//总电压	
+	uint16_t tcurr;			//总电流,放电为负,充电为正
 	uint16_t htemp;			//最高温度
 	uint16_t htnum;			//最高温度编号
 	uint16_t ltemp;			//最低温度
@@ -125,35 +148,85 @@ typedef struct
 	//最近最大充电电流
 	//最近最大放电电流
 	//保险丝温度
-	//Curr_DET_T
+	//Curr_DET_T Bit3-Bit0:大放电电流持续时间,Bit9~Bit4:10s最大放电电流,Bit15~bit10:10s内平均电流
+	// 327~338 预留
+	// 339~342 外置模块数据
+	// 343 -- 单电池17电压
+	// 344 -- AFE采样决电压
+	// 235 -- AFE采样PACK端电压
+	// 246 -- 第17电池均衡状态
+	// 247 -- 电量计 SOC
+	// 248 -- 电量计 SOH
+	// 249 -- 电量计--循环次数
+	// 250 -- 电量计--剩余容量
+	// 251 -- 电量计--充满容量
+	// 252 -- SOX 历史充电容量高位(mAH)
+	// 253 -- SOX 历史充电容量低位(mAH)
+	// 254 -- SOX 历史放电容量高位(mAH)
+	// 255 -- SOX 历史放电容量低位(mAH)
+	// 256 -- 外围模块状态--- Bit0 :1定位,0未定位,Bit1:0未连接服务器,1已连接服务器,Bit2:0无短信,1有短信
+	// 257 - 358 :经度
+	// 359 - 360 :伟度
+	// 361 -- 	GPRS连接时间
+	// 362 -- 	GPRS 发送到接收最长时间
+	// 363 -- GPRS 发送到接收最短时间
+	
+	
 }BmsReg_deviceInfo;
 
 //BMS控制寄存器
 typedef struct
 {
+	/*
+	512 ~ 556
+	*/
+	/*
+		BMS控制字
+		Bit0 : R/W 	 CHG_EN 充电开关控制，1--充电导通,0--充电关闭
+		Bit1 : R/W 	 DIS_EN 放电开关控制，1--放电导通,0--放电关闭
+		Bit2 : R/W	 PRE_CHG_EN :预放电开关控制，1:导通，0:关闭
+		Bit3,Bit4 : R/W	 保留
+		Bit5 : R/W	1:浅休眠,0:电池工作
+		Bit6 : R/W  1:深度休眠,0:电池工作
+		Bit7 : R/W  1:充电器接入,0:充电器未接入
+		Bit8 ~ Bit14:保留
+		Bit15 : 使能均衡测试模式
+	*/
 	uint16_t ctrl;
-	uint16_t bmscer[8];
-	uint16_t hostcer[8];
-	uint16_t afeccal;
-	uint16_t b16vcal;
-	uint16_t yrmo;
-	uint16_t dthr;
-	uint16_t mnsc;
-	uint16_t reset;
-	uint16_t record;
-	uint16_t balctl;
-	uint16_t tctrl;
-	uint16_t tres;
+	uint16_t bmscer[8];  // BMS 验证字，用于BMS验证Host , bmscer[7]:读写此字认为读写16个认证读写完毕
+	uint16_t hostcer[8]; // Host 验证字，用于ｈｏｓｔ　验证ｂｍｓ
+	uint16_t afeccal; // 校准AFE电流增益 0.01A/Bit ,W:写入当前实际电流值开始校准AFE，R：0--校准完毕,others--正在校准
+	uint16_t b16vcal; // 校准第16节电池电压增益
+	uint16_t yrmo;		// 年/月 BCD码
+	uint16_t dthr;		// 日/时 BCD码
+	uint16_t mnsc;		// 分/秒 BCD码
+	uint16_t reset;		// 复位 1s后复位，不回应应答
+	uint16_t record;	// 记录控制(测试)
+	uint16_t balctl;    // 均衡控制(测试)
+	uint16_t tctrl;		// 测试控制
+	uint16_t tres;		// 测试结果 
+	// 539 ~ 554 		保留
+	// 555 	-- B4/B5 BMS使用
+	// 556 --- 第17节电池均衡控制(测试)
 }BmsReg_ctrl;
 
 //BMS配置寄存器
 typedef struct
 {
-	uint16_t nvmcmd;
-	uint16_t rwsn[4];
-	uint16_t sovp;
-	uint16_t sovpr;
-	uint16_t suvp1;
+	/*
+		ADDR:768 ~ 4116
+	*/
+	/*
+	ADDR:768 非易失存储器命令
+	W:
+	0 -- 无效
+	0x1235 -- 
+	*/
+	uint16_t nvmcmd; 
+	uint16_t rwsn[4];  // 序列号
+	uint16_t sovp;		// 单体过压保护值(1s) 1mv/Bit
+	uint16_t sovpr;		// 单体过压保护恢复值 
+	uint16_t suvp1;		// 单体欠压保护
 	uint16_t suvpt1;
 	uint16_t suvpr1;
 	uint16_t suvpsoc1;

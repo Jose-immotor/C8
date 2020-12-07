@@ -393,7 +393,7 @@ void fm175Drv_irq_tx(Fm175Drv* pDrv)
 	remainLen = param->totalLen - param->offset;
 	if (remainLen == 0)
 	{
-		PFL(DL_NFC, "NFC TX(%d) Done.\n", param->transBufOffset);
+		PFL(DL_NFC, "NFC[%X] TX(%d) Done.\n",pDrv->iicReg.dev_addr, param->transBufOffset);
 		param->putBytesInTxFifo = 0;
 		goto TxDone;
 	}
@@ -420,7 +420,7 @@ void fm175Drv_irq_tx(Fm175Drv* pDrv)
 
 	if (param->putBytesInTxFifo)
 	{
-		PFL(DL_NFC, "NFC TX(%d/%d,%d):", param->transBufOffset, param->totalLen, param->putBytesInTxFifo);
+		PFL(DL_NFC, "NFC[%X] TX(%d/%d,%d):",pDrv->iicReg.dev_addr, param->transBufOffset, param->totalLen, param->putBytesInTxFifo);
 		DUMP_BYTE_LEVEL(DL_NFC, & param->txBuf[param->transBufOffset], param->putBytesInTxFifo);
 		PFL(DL_NFC, "\n");
 		
@@ -728,10 +728,12 @@ void fm175Drv_fsmTransfer(Fm175Drv* pDrv, FM17522_MSG msg, uint32 param)
 				fm175Drv_irq(pDrv, irq);
 			}
 		}
+		/*
 		else if (pDrv->transParam.txBufSize == 0)//lane 20201117新加，不加的话读取电池2后回到读电池1，txBufSize会为0，直接就读不到电池了
 		{
 			fm175Drv_event(pDrv, TRANS_FAILED, TRANS_RESULT_FAILED);
 		}
+		*/
 	}
 	else if (msg == FM_MSG_SWITCH_NFC)
 	{

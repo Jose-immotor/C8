@@ -5,7 +5,7 @@
 #include "Bit.h"
 #include "Message.h"
 
-#define WORKMODE_FORCE_SLEEP_TIME 5*1000//5秒
+#define WORKMODE_FORCE_SLEEP_TIME 15*1000//15秒
 
 	//活动标志定义，当该标志被置位时，设备不能进入睡眠。
 	typedef enum _ActiveFlag
@@ -15,6 +15,7 @@
 		,AF_CABIN = BIT_2		//座舱锁处于工作状态
 		,AF_PMS = BIT_3			//PMS处于工作状态
 		,AF_NFC = BIT_4			//NFC处于工作状态
+		,AF_JT808 = BIT_5		//外置模块处于工作状态
 	//	
 	//	,AF_PMS = BIT_16			//PMS
 	//	,AF_BEACON = BIT_17			//BEACON是否连接状态
@@ -46,8 +47,9 @@
 	}workmode;
 
 
-void WorkMode_init();
+void WorkMode_init(void);
 void workmode_switchStatus(WorkmodeOpStatus newStatus);
 void Fsm_SetActiveFlag(ActiveFlag af, Bool isActive);
 uint32 Fsm_ReadActiveFlag(void);
+Bool WorkMode_Sleep(void);
 #endif
