@@ -789,7 +789,7 @@ int IO_Init(void)
 	g_pCanSTBIO = IO_Get(IO_CAN_STB);
 	PortPin_Set(g_pCanSTBIO->periph, g_pCanSTBIO->pin, False);
 	g_p18650ChgIO = IO_Get(IO_18650_CHG_EN);
-	//PortPin_Set(g_p18650ChgIO->periph, g_p18650ChgIO->pin, False);//引脚低充电
+	PortPin_Set(g_p18650ChgIO->periph, g_p18650ChgIO->pin, False);//引脚低充电
 	return 0;
 }
 //INIT_BOARD_EXPORT(IO_Init);

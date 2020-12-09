@@ -33,6 +33,17 @@
 #include "JT808.h"
 #endif //CANBUS_MODE_JT808_ENABLE
 
+
+/*
+General central control
+
+// 
+_GENERAL_CENTRAL_CTL		// 普通中控,接电池就放电
+
+
+
+*/
+
 const HwFwVer AppInfo={
 FW_VER_MAIN,
 FW_VER_S1,

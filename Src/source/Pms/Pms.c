@@ -15,6 +15,12 @@
 #include "workmode.h"
 #include "Bat.h"
 
+#define		PMS_DEBUG_MSG(fmt,...)		Printf(fmt,##__VA_ARGS__)
+
+//#define		PMS_DEBUG_MSG(fmt,...)
+
+
+
 Battery g_Bat[MAX_BAT_COUNT];
 static Pms g_pms;
 Mod* g_pModBus = &g_pms.modBus;
@@ -266,47 +272,45 @@ void Pms_switchStatus(PmsOpStatus newStatus)
 	g_pms.Fsm = Pms_findStatusProcFun(newStatus);
 }
 
+/*
+	acc off 时，不关电，只关锁
+	如果电池未充电时，则等待30s进入deepsleep
+	如果正在充电,则暂时不进入deepsleep
+*/
 static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
 	if (msgId == PmsMsg_run)
 	{
-		static uint32 accoff_tick[MAX_BAT_COUNT] = 0 ;
+		//static uint32 accoff_tick[MAX_BAT_COUNT] = 0 ;
 		static uint32 accoffprintf_tick = 0;
-		uint8 i = 0 ;
+		//uint8 i = 0 ;
 		if ((0/*g_pJt->devState.cnt & _GPS_FIXE_BIT*/)||(SwTimer_isTimerOutEx(g_pms.statusSwitchTicks,PMS_ACC_OFF_ACTIVE_TIME)))
 		{
 			// 不客是否低电量,都要进休眠
-			//18650电压高或者电池不在位，进入休眠模式
-			//if((g_pdoInfo.isLowPow == 0)||(g_Bat[0].presentStatus != BAT_IN))
+			//18650电压高或者电池不在位，进入休眠模式	
+			// 如果正在充电,则暂时不要进入deepsleep
+			
+			if( g_pdoInfo.isLowPow && 
+				( ( g_Bat[0].presentStatus == BAT_IN && g_Bat[0].bmsInfo.state & 0x0200 ) ||
+					g_Bat[1].presentStatus == BAT_IN && g_Bat[1].bmsInfo.state & 0x0200 ) )
+			{
+				// 暂时不进deepsleep
+				PFL(DL_PMS,"Battery Low...\n");
+			}
+			else
+			{
 				Pms_switchStatus(PMS_DEEP_SLEEP);
-
+			}
 		}
 		//
-		if( g_pdoInfo.isLowPow )		// 此时为低电,则暂时不要停止放电
+		if( GET_TICKS() - accoffprintf_tick > 1000 )
 		{
-			if( GET_TICKS() - accoffprintf_tick > 1000 )
-			{
-				Battery_discharge_process();	// 请求开启启动
-				accoffprintf_tick = GET_TICKS();
-			}
+			Battery_discharge_process();
+			accoffprintf_tick = GET_TICKS();
 		}
-		else
-		{
-			for(  i = 0 ; i < MAX_BAT_COUNT ; i++ )
-			{
-				if( g_Bat[i].presentStatus == BAT_IN && 
-					(g_Bat[i].bmsInfo.state & 0x0300) != 0x00 &&
-					GET_TICKS() - accoff_tick[i] > 3000 )
-				{
-					Bat_setDischg(&g_Bat[0], False);
-					Bat_setChg(&g_Bat[0], False);
-					accoff_tick[i] = GET_TICKS();
-					PFL(DL_PMS,"ACC Off And 18650 Normal,Bat[%d]:0x%04X Dischg&Chg\n",i,g_Bat[i].bmsInfo.state);
-				}
-			}
-		}
+		// 锁车
 		PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, True);
-		g_pdoInfo.isWheelLock =1;	// 轮毂锁 锁
+		g_pdoInfo.isWheelLock = 1;	// 轮毂锁 锁
 
 	}
 	else if (msgId == PmsMsg_accOn)
@@ -316,7 +320,9 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	else if (msgId == PmsMsg_batPlugIn)
 	{
 		Pms_plugIn((Battery*)param1);
-		if(g_pdoInfo.isRemoteAccOn)
+#ifndef _GENERAL_CENTRAL_CTL	// 普通中控,检测到电池接入则放电，非普通中控 	
+		if( g_pdoInfo.isRemoteAccOn )
+#endif //			
 			Pms_switchStatus(PMS_ACC_ON);
 	}
 	else if (msgId == PmsMsg_batPlugOut)
@@ -326,7 +332,7 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	else if (msgId == PmsMsg_GyroIrq)
 	{
 		PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, True);
-		g_pdoInfo.isWheelLock =1;
+		g_pdoInfo.isWheelLock = 1;			// 锁车
 		g_pms.statusSwitchTicks = GET_TICKS();
 	}
 	else if( msgId == PmsMsg_18650Low )
@@ -369,7 +375,10 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	else if (msgId == PmsMsg_batPlugOut)
 	{
 		Pms_plugOut((Battery*)param1);
-		Pms_switchStatus(PMS_ACC_OFF);
+		if( g_Bat[0].presentStatus != BAT_IN && g_Bat[1].presentStatus != BAT_IN )
+		{
+			Pms_switchStatus(PMS_ACC_OFF);
+		}
 	}
 	else if( msgId == PmsMsg_18650Low )
 	{
@@ -380,7 +389,7 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 		PFL(DL_PMS,"18650 Normal ,Request to stop charging\n");
 	}
 	PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, False);
-	g_pdoInfo.isWheelLock =0;		// 轮毂锁开
+	g_pdoInfo.isWheelLock = 0;		// 轮毂锁开
 }
 
 static void Pms_fsm_sleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
@@ -396,9 +405,43 @@ static void Pms_fsm_CANErr(PmsMsg msgId, uint32_t param1, uint32_t param2)
 static void Pms_fsm_deepSleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
 	static uint32 accsleep_tick = 0;
+	static uint32 accoffprintf_tick = 0;
+	static uint32 accoff_tick[MAX_BAT_COUNT];
+	uint8 i = 0;
+	// 开锁，防止费电，关闭放电
+	PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, False);
+	g_pdoInfo.isWheelLock = 1;
+
+	//	if(((g_Bat[0].bmsInfo.state&0x0300)!=0x0000)&&((GET_TICKS() -accsleep_tick) >3000 ))
+	//	{
+	//		Pms_setDischg(False);
+	//		Pms_setChg(False);
+	//		accsleep_tick = GET_TICKS();
+	//	}
+	//	if((g_Bat[0].bmsInfo.state&0x0300)==0x0000)
+	//	{
+	//		Fsm_SetActiveFlag(AF_PMS, False);
+	//	}
+
+	
 	if (SwTimer_isTimerOutEx(g_pms.statusSwitchTicks,PMS_ACC_DEEPSLEEP_TIME))
 	{
 		workmode_switchStatus(WM_SLEEP);
+	}
+	if (msgId == PmsMsg_run)
+	{
+		for(  i = 0 ; i < MAX_BAT_COUNT ; i++ )
+		{
+			if( g_Bat[i].presentStatus == BAT_IN && 
+				(g_Bat[i].bmsInfo.state & 0x0300) != 0x00 &&
+				GET_TICKS() - accoff_tick[i] > 3000 )
+			{
+				Bat_setDischg(&g_Bat[i], False);
+				Bat_setChg(&g_Bat[i], False);
+				accoff_tick[i] = GET_TICKS();
+				PFL(DL_PMS,"ACC Off Bat[%d]:0x%04X Dischg&Chg\n",i,g_Bat[i].bmsInfo.state);
+			}
+		}
 	}
 	if (msgId == PmsMsg_GyroIrq)
 	{
@@ -412,28 +455,21 @@ static void Pms_fsm_deepSleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
 			(g_Bat[0].presentStatus == BAT_IN || g_Bat[1].presentStatus == BAT_IN))
 			Pms_switchStatus(PMS_ACC_ON);
 	}
+	else if (msgId == PmsMsg_batPlugIn)
+	{
+		Pms_plugIn((Battery*)param1);
+#ifndef _GENERAL_CENTRAL_CTL	// 普通中控,检测到电池接入则放电，非普通中控 	
+		if(g_pdoInfo.isRemoteAccOn )
+#endif //			
+			Pms_switchStatus(PMS_ACC_ON);
+	}
 #ifdef CANBUS_MODE_JT808_ENABLE
 	else if( msgId == PmsMsg_GPRSIrq )	// 不要休眠
 	{
-		PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, True);
-		g_pdoInfo.isWheelLock =1;
-		Pms_switchStatus(PMS_ACC_OFF);
+		g_pms.statusSwitchTicks = GET_TICKS();
 	}
-#endif //	
-//	if(((g_Bat[0].bmsInfo.state&0x0300)!=0x0000)&&((GET_TICKS() -accsleep_tick) >3000 ))
-//	{
-//		Pms_setDischg(False);
-//		Pms_setChg(False);
-//		accsleep_tick = GET_TICKS();
-//	}
-//	if((g_Bat[0].bmsInfo.state&0x0300)==0x0000)
-//	{
-//		Fsm_SetActiveFlag(AF_PMS, False);
-//	}
-	
+#endif //
 
-	PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, False);
-	g_pdoInfo.isWheelLock =1;
 }
 
 //在任何状态下都要处理的消息函数
@@ -559,13 +595,20 @@ void Pms_run()
 
 void Pms_start()
 {
-	if((g_pdoInfo.isRemoteAccOn)&&(g_Bat[0].presentStatus == BAT_IN))
+#ifdef _GENERAL_CENTRAL_CTL
+	if(g_Bat[0].presentStatus == BAT_IN || g_Bat[1].presentStatus == BAT_IN )
+#else
+	if((g_pdoInfo.isRemoteAccOn)&&(
+		g_Bat[0].presentStatus == BAT_IN || g_Bat[1].presentStatus == BAT_IN))
+#endif //		
 	{
 		Pms_switchStatus(PMS_ACC_ON);
+		PMS_DEBUG_MSG("PMS Start AccOff\n");
 	}
 	else
 	{
 		Pms_switchStatus(PMS_ACC_OFF);
+		PMS_DEBUG_MSG("PMS Start AccOff\n");
 	}
 	g_pms.statusSwitchTicks = GET_TICKS();
 	//查询电池设备信息

@@ -9,7 +9,7 @@
 //static uint8_t g_Rs485modBusTxBuf[128];
 static uint8_t g_Rs485modBusRxBuf[128];
 
-static uint8_t g_Rs485RxBuf[192];
+static uint8_t g_Rs485RxBuf[96];
 static uint8_t g_Rs485TxBuf[192];
 
 CirBuff gRs485rxBuf = {0x00};
@@ -69,7 +69,71 @@ int Rs485_Tx(const uint8_t* pData, int len)
 
 电池数据帧格式：
 [帧长度:1Byte含帧头<64] + [设备地址0x30/0x31] + [协议类型'B'] + [命令字1Byte] + [校验字2Byte] + [命令处理调用 0x16] + [命令返回状态 0] + [数据]
+
+A5 A5 A5 A5 0D A0 FF FF 01 00 00 14 A6
+
+FE FE FE FE 0D 40 01 53 01 01 01 00 A4 
+FE FE FE FE 1B 40 03 40 01 00 00 00 00 02 4C 42 04 48 4B 32 41 14 13 06 0C 02 72
+
+len + 0x30/0x31 + 'B' + 0x10 + sum_0 + sum_1 + 0x16 + 0x00
+
 */
+#if 1
+static uint16_t _Rs485Dcode(uint8_t *poutbuff , uint16_t Osize )
+{
+	uint16_t pos = 0 ;
+	uint16_t len = 0 ;
+	if( !poutbuff || !Osize || !gRs485rxBuf.mpBuff ) return 0 ;
+	//
+_RS485_DCODE:	
+	pos = gRs485rxBuf.miHead ;
+	len = 0 ;
+	while( pos != gRs485rxBuf.miTail && len < Osize )
+	{
+		poutbuff[len++] = gRs485rxBuf.mpBuff[pos];
+		_CIR_LOOP_ADD(pos, 1, gRs485rxBuf.miSize );
+		//
+		if( len > 7 )
+		{
+			if( /*&& ( poutbuff[1] == 0x31 || poutbuff[1] == 0x32 ) */
+				poutbuff[2] == 'B' && poutbuff[3] == 0x10 
+			 	&& poutbuff[6] == 0x16 && poutbuff[7] == 0x00 )
+			{
+				if( len == poutbuff[0]) 
+				{
+					gRs485rxBuf.miHead = pos ;
+					return len ;
+				}
+				else if( poutbuff[0] < len )
+				{
+					//gRs485rxBuf.miHead = pos ;
+					_CIR_LOOP_ADD( gRs485rxBuf.miHead, 1, gRs485rxBuf.miSize );
+					goto _RS485_DCODE ; 
+				}
+			}
+			else
+			{
+				//gRs485rxBuf.miHead = pos ;
+				_CIR_LOOP_ADD( gRs485rxBuf.miHead, 1, gRs485rxBuf.miSize );
+				goto _RS485_DCODE ; 
+			}
+		}	
+	}
+
+	if( len >= Osize )
+	{
+		_CIR_LOOP_ADD( gRs485rxBuf.miHead, 1, gRs485rxBuf.miSize );
+		goto _RS485_DCODE ;
+	}
+	return 0 ;
+	
+}
+
+
+
+
+
+#else
 static uint16_t _Rs485Dcode(uint8_t *poutbuff , uint16_t Osize )
 {
 	uint16_t pos = 0 ;
@@ -105,6 +169,15 @@ _RS485_DCODE:
 					goto _RS485_DCODE ;
 				}
 			}
+			else if( poutbuff[0] == 0xA5 && poutbuff[1] == 0xA5 && 
+				poutbuff[2] == 0xA5 && poutbuff[3] == 0xA5 )		// 控制数据
+			{
+				if( !( poutbuff[4] < 255 && poutbuff[5] == 0x40 ) )	// 长度与地址不对,则认为有误
+				{
+					_CIR_LOOP_ADD( gRs485rxBuf.miSize, 1, gRs485rxBuf.miSize );
+					goto _RS485_DCODE ;
+				}
+			}
 			else													// 电池数据
 			{
 				if( ! ( poutbuff[0] < 255 /*&& ( poutbuff[1] == 0x31 || poutbuff[1] == 0x32 ) */
@@ -115,7 +188,8 @@ _RS485_DCODE:
 				}
 			}
 		}
-		else if( len > 8 )
+
+		if( len >= 8 )
 		{
 			if( poutbuff[0] == 0xF5 && len == poutbuff[4] ) // 仪表数据
 			{
@@ -143,6 +217,8 @@ _RS485_DCODE:
 	return 0 ;
 }
 
+#endif //
+
 /*
 上报数据的条件
 1、电池存在
@@ -153,6 +229,8 @@ _RS485_DCODE:
 static Bool _BatteryIsValid( uint8_t bat )
 {
 	uint16_t sub_curr = 0;
+ 	int16_t curr_0 = 0 , curr_1 = 0;
+	
 	// 如果电池不存在,则不需要上报
 	if( g_Bat[bat].presentStatus != BAT_IN ) return False ;
 	// 如果电池,且两个电池均在放电 
@@ -161,7 +239,11 @@ static Bool _BatteryIsValid( uint8_t bat )
 		// 如果电池均放电,电流相差不大
 		if( g_Bat[0].bmsInfo.state&0x0200 && g_Bat[1].bmsInfo.state&0x0200 )
 		{
-			sub_curr = _SUB( g_Bat[0].bmsInfo.tcurr , g_Bat[1].bmsInfo.tcurr );
+			curr_0 = SWAP16(g_Bat[0].bmsInfo.tcurr);
+			curr_1 = SWAP16(g_Bat[1].bmsInfo.tcurr);
+			
+			sub_curr = _SUB( curr_0, curr_1 );
+			PFL(DL_485,"Bat0:%d,Bat1:%d\n",curr_0,curr_1);
 			if( sub_curr > 100 )	// 如果电流相关大于1A,则电流小的为没接触好
 			{
 				if( g_Bat[0].bmsInfo.tcurr < g_Bat[1].bmsInfo.tcurr )
@@ -364,7 +446,9 @@ static void _Rs485_Cmd10( uint8_t *pinbuff , uint16_t len )
 	
 	pCenterCtrlData pCenterCtrl = (pCenterCtrlData) ( pinbuff + 8 );
 	pBatteryRespond pBatterRes = (pBatteryRespond)(g_Rs485TxBuf+8);
-	
+
+	// 31 对应电池1
+	// 32 对应电池0
 	switch( pinbuff[1] )
 	{
 		case 0x31 :
@@ -377,13 +461,14 @@ static void _Rs485_Cmd10( uint8_t *pinbuff , uint16_t len )
 			g_Rs485TxBuf[tx_len++] = 0x00;	// 校验
 			g_Rs485TxBuf[tx_len++] = 0x16;	// 命令处理调用
 			g_Rs485TxBuf[tx_len++] = 0x00;	// 命令返回状态
-			if(  _BatteryIsValid( pinbuff[1] == 0x31 ? 0x00 : 0x01) )
+			if(  _BatteryIsValid( pinbuff[1] == 0x31 ? 0x01 : 0x00 ) )
 			{
-				pCurBat = pinbuff[1] == 0x31 ? &g_Bat[0] : &g_Bat[1] ;
+				pCurBat = pinbuff[1] == 0x32 ? &g_Bat[0] : &g_Bat[1] ;
 
 				g_Rs485TxBuf[tx_len++] = 0x00 ;	// 预计可行驶距离 
 				g_Rs485TxBuf[tx_len++] = bigendian16_get((uint8_t*)&pCurBat->bmsInfo.soc)/10 ;	// 电量 
 				g_Rs485TxBuf[tx_len++] = 0x00 ;	// 预计充电完成时间
+				
 				PFL(DL_485,"Bat State:%X,%d,%d\n",
 					pCurBat->bmsInfo.state,pCurBat->bmsInfo.tcurr,pCurBat->bmsInfo.tvolt);
 				g_Rs485TxBuf[tx_len++] = pCurBat->bmsInfo.state&0x0100 ? 0x01 : 0x00;	// 1充电中，0:未充电
@@ -391,17 +476,17 @@ static void _Rs485_Cmd10( uint8_t *pinbuff , uint16_t len )
 				tempu32 = bigendian16_get((uint8_t*)&pCurBat->bmsInfo.tcurr);
 				tempu32 -= 30000 ;
 				tempu32 *= 10;
-				g_Rs485TxBuf[tx_len++] = tempu32 >> 24 ;	// 电流 ma
+				g_Rs485TxBuf[tx_len++] = tempu32 & 0xFF ;	// 电流 ma
+				g_Rs485TxBuf[tx_len++] = tempu32 >> 8;	// 电流
 				g_Rs485TxBuf[tx_len++] = tempu32 >> 16 ;	// 电流
-				g_Rs485TxBuf[tx_len++] = tempu32 >> 8 ;	// 电流
-				g_Rs485TxBuf[tx_len++] = tempu32 & 0xFF ;	// 电流
+				g_Rs485TxBuf[tx_len++] = tempu32 >> 24 ;	// 电流
 				//
 				tempu32 = bigendian16_get((uint8_t*)&pCurBat->bmsInfo.tvolt);
 				tempu32 *= 10 ;
-				g_Rs485TxBuf[tx_len++] = tempu32 >> 24 ;	// 电压 mv
-				g_Rs485TxBuf[tx_len++] = tempu32 >> 16 ;	// 电压
+				g_Rs485TxBuf[tx_len++] = tempu32 & 0xFF ;	// 电压 mv
 				g_Rs485TxBuf[tx_len++] = tempu32 >> 8 ;	// 电压
-				g_Rs485TxBuf[tx_len++] = tempu32 & 0xFF ;	// 电压
+				g_Rs485TxBuf[tx_len++] = tempu32 >> 16 ;		// 电压
+				g_Rs485TxBuf[tx_len++] = tempu32 >> 24 ;	// 电压
 				//
 				g_Rs485TxBuf[tx_len++] = bigendian16_get((uint8_t*)&pCurBat->bmsInfo.dmost)/10 - 40 ;	// 温度
 
@@ -467,8 +552,8 @@ static void _Rs485_Cmd10( uint8_t *pinbuff , uint16_t len )
 			}
 			g_Rs485TxBuf[0] = tx_len ;
 			_get_CheckSum(&sum, g_Rs485TxBuf, tx_len);
-			g_Rs485TxBuf[4] = sum >> 8 ;
-			g_Rs485TxBuf[5] = sum & 0xFF ;
+			g_Rs485TxBuf[4] = sum & 0xFF ;
+			g_Rs485TxBuf[5] = sum >> 8 ;
 			break ;
 		default :
 			break ;
@@ -509,22 +594,24 @@ static void RS485_Run(void)
 	uint16_t rlen = 0 ;
 	uint8_t cmd = 0, i = 0 ;
 	uint16_t sum = 0 , data_sum = 0 ;
+	//PFL(DL_485,"RS485:%d-%d\n",gRs485rxBuf.miHead,gRs485rxBuf.miTail);
+	
 	while( rlen = _Rs485Dcode( g_Rs485RxBuf, sizeof(g_Rs485RxBuf) ) )
 	{
-		PFL(DL_485, "485[%d]RX(%d):",rlen);
+		PFL(DL_485, "485 RX(%d):",rlen);
 		DUMP_BYTE_LEVEL(DL_485, g_Rs485RxBuf , rlen );
 		PFL(DL_485, "\n");
 			
-		if( g_Rs485RxBuf[0] == 0xFE || g_Rs485RxBuf[0] == 0xF5 )
-		{
+		//if( g_Rs485RxBuf[0] == 0xFE || g_Rs485RxBuf[0] == 0xF5 )
+		//{
 			//data_sum = ( g_Rs485RxBuf[rlen-1] << 8 ) | g_Rs485RxBuf[rlen-2] ;
 			//g_Rs485RxBuf[rlen-1] = 0x00 ;
 			//g_Rs485RxBuf[rlen-2] = 0x00 ;
 			//_get_CheckSum(&sum, g_Rs485RxBuf, rlen);
-			cmd = g_Rs485RxBuf[6];
-			continue ;
-		}
-		else
+		//	cmd = g_Rs485RxBuf[6];
+		//	continue ;
+		//}
+		//else
 		{
 			data_sum = ( g_Rs485RxBuf[4] << 8 ) | g_Rs485RxBuf[5] ;
 			g_Rs485RxBuf[4] = 0x00 ;

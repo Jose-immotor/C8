@@ -72,7 +72,9 @@ void Enter_PowerDown()
 	extern DrvIo* g_pLedIO;
 	//DrvIo* g_pNfcON = Null;
 	
-	if((g_cfgInfo.isActive == 0)&&(g_Bat[0].presentStatus != BAT_IN))
+	if((g_cfgInfo.isActive == 0)&&(
+		g_Bat[0].presentStatus != BAT_IN || g_Bat[1].presentStatus != BAT_IN
+		))
 		PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, False);
 	else
 		PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, True);

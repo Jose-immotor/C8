@@ -132,6 +132,7 @@ UTP_EVENT_RC Ble_setCabinlock(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 		{
 			case 0x00:	// ×ù²ÕËø¿ªËø
 				g_pdoInfo.isCanbinLock = 1 ;
+				Cabin_UnLock();
 				NvdsUser_Write(NVDS_PDO_INFO);		// ±£´æÖ®
 				PFL(DL_JT808,"BLE_CanbinLock:%d\n",g_pdoInfo.isCanbinLock);
 				break ;

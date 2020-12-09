@@ -5,6 +5,14 @@
 #define BMS_STATE_BIT_CHG_SWITCH (1<<0)
 #define BMS_STATE_BIT_SUPPLY_SWITCH (1<<1)
 
+
+#define		BAT_DEBUG_MSG(fmt,...)		Printf(fmt,##__VA_ARGS__)
+
+//#define		BAT_DEBUG_MSG(fmt,...)
+
+
+
+
 //计算充电电流
 static void Pms_calcChgCur(Bat* pBats, int batCount, uint32 totalPwr)
 {
@@ -54,24 +62,28 @@ unsigned char is_battery_error(unsigned char bms_index)
     vl_value = bigendian16_get((uint8*)(&pBat->bmsInfo.devft1));
     if(vl_value&(~((1<<15)|(1<<14)|(1<<0)|(1<<3)|(1<<6)|(1<<8)|(1<<10))))
     {
+		BAT_DEBUG_MSG("Bat[%d] devft1 :%04X\n",bms_index,vl_value);
         return 1;
     }
 
     vl_value = bigendian16_get((uint8*)(&pBat->bmsInfo.devft2));
     if(vl_value&(~(1<<2)))
     {
+		BAT_DEBUG_MSG("Bat[%d] devft2 :%04X\n",bms_index,vl_value);
         return 1;
     }
 
     vl_value = bigendian16_get((uint8*)(&pBat->bmsInfo.opft1));
     if(vl_value&(~((1<<7)|(1<<8))))
     {
+		BAT_DEBUG_MSG("Bat[%d] opft1 :%04X\n",bms_index,vl_value);
         return 1;
     }
 
     vl_value = bigendian16_get((uint8*)(&pBat->bmsInfo.opft2));
     if(vl_value)
     {
+		BAT_DEBUG_MSG("Bat[%d] opft2 :%04X\n",bms_index,vl_value);
         return 1;
     }
     
@@ -160,8 +172,9 @@ void Battery_discharge_process(void)
 		vl_bms_0_ctrl = Battery_get_switch_state(0);
         vl_bms_1_ctrl = Battery_get_switch_state(1);
 
-		PFL(DL_NFC,"Bat0:%d-%d-%X,Bat1:%d-%d-%X\n",
-			vl_bms_0_V,vl_bms_0_A,vl_bms_0_ctrl,vl_bms_1_V,vl_bms_1_A,vl_bms_1_ctrl);
+		//PFL(DL_NFC,
+		BAT_DEBUG_MSG("Bat0:%d-%d-%X,Bat1:%d-%d-%X |%d\n",
+			vl_bms_0_V,vl_bms_0_A,vl_bms_0_ctrl,vl_bms_1_V,vl_bms_1_A,vl_bms_1_ctrl,sl_supply_state);
 		
 		if(vl_bms_0_V >= vl_bms_1_V)
         {
@@ -175,6 +188,8 @@ void Battery_discharge_process(void)
             //输出电流是负值，输入时正直
             vl_current_diff = vl_bms_0_A - vl_bms_1_A;
         }
+		BAT_DEBUG_MSG("vol_diff:%d,cur_diff:%d\n",vl_voltage_diff,vl_current_diff);
+		
 		if(sl_supply_state == 1)//同时接入
         {
             if((vl_voltage_diff < 600)&&(vl_current_diff < 2500) )
@@ -225,7 +240,7 @@ void Battery_discharge_process(void)
 			{
 				Bat_setDischg(&g_Bat[0], True);
 				Bat_setChg(&g_Bat[0], True);
-				PFL(DL_NFC,"Bat[0] Start DisChg&Chg\n");
+				BAT_DEBUG_MSG("Bat[0] Start DisChg&Chg\n");
 			}
 			//打开电池1的充放电开关
 			if(((BMS_STATE_BIT_CHG_SWITCH&vl_bms_1_ctrl) == 0)||
@@ -233,7 +248,7 @@ void Battery_discharge_process(void)
 			{
 				Bat_setDischg(&g_Bat[1], True);
 				Bat_setChg(&g_Bat[1], True);
-				PFL(DL_NFC,"Bat[1] Start DisChg&Chg\n");
+				BAT_DEBUG_MSG("Bat[1] Start DisChg&Chg\n");
 			}
             sl_bms0_vol_cmp_offset = 0;
             sl_bms1_vol_cmp_offset = 0;
@@ -251,25 +266,25 @@ void Battery_discharge_process(void)
                 {
                     //低电压电池的充电开关是导通的，这时要求关闭
                     Bat_setChg(&g_Bat[1], False);
-					PFL(DL_NFC,"Bat[1] Stop Chg\n");
+					BAT_DEBUG_MSG("Bat[1] Stop Chg\n");
                 }
                 if((vl_bms_0_ctrl & BMS_STATE_BIT_SUPPLY_SWITCH) == 0)
                 {
                     //高电压电池的放电开关是关闭的，这时要求打开
                     Bat_setDischg(&g_Bat[0], True);
-					PFL(DL_NFC,"Bat[0] Start DisChg\n");
+					BAT_DEBUG_MSG("Bat[0] Start DisChg\n");
                 }                
                 if((vl_bms_1_ctrl & BMS_STATE_BIT_SUPPLY_SWITCH) == 0)
                 {
                     //低电压电池的放电开关是关闭的，这时要求打开
                    Bat_setDischg(&g_Bat[1], True);
-					PFL(DL_NFC,"Bat[1] Start DisChg\n");
+					BAT_DEBUG_MSG("Bat[1] Start DisChg\n");
                 }                
                 if((vl_bms_0_ctrl & BMS_STATE_BIT_CHG_SWITCH) == 0)
                 {
                     //高电压电池的充电开关是关闭的，这时要求打开
                     Bat_setChg(&g_Bat[0], True);
-					PFL(DL_NFC,"Bat[0] Start Chg\n");
+					BAT_DEBUG_MSG("Bat[0] Start Chg\n");
                 }
 			}
 			else
@@ -281,25 +296,25 @@ void Battery_discharge_process(void)
 				{
 					//低电压电池的充电开关是导通的，这时要求关闭
 					Bat_setChg(&g_Bat[0], False); 
-					PFL(DL_NFC,"Bat[0] Stop Chg\n");
+					BAT_DEBUG_MSG("Bat[0] Stop Chg\n");
 				}
 				if((vl_bms_1_ctrl & BMS_STATE_BIT_SUPPLY_SWITCH) == 0)
 				{
 					//高电压电池的放电开关是关闭的，这时要求打开
 					Bat_setDischg(&g_Bat[1], True);
-					PFL(DL_NFC,"Bat[1] Start DisChg\n");
+					BAT_DEBUG_MSG("Bat[1] Start DisChg\n");
 				}
 				if((vl_bms_0_ctrl & BMS_STATE_BIT_SUPPLY_SWITCH) == 0)
 				{
 					//低电压电池的放电开关是关闭的，这时要求打开
 					Bat_setDischg(&g_Bat[0], True);
-					PFL(DL_NFC,"Bat[0] Start DisChg\n");
+					BAT_DEBUG_MSG("Bat[0] Start DisChg\n");
 				}
 				if((vl_bms_1_ctrl & BMS_STATE_BIT_CHG_SWITCH) == 0)
 				{
 					//高电压电池的充电开关是关闭的，这时要求打开
 					Bat_setChg(&g_Bat[1], True);
-					PFL(DL_NFC,"Bat[1] Start Chg\n");
+					BAT_DEBUG_MSG("Bat[1] Start Chg\n");
 				}
 			}
 		}
@@ -318,7 +333,7 @@ void Battery_discharge_process(void)
 		{
 			Bat_setDischg(&g_Bat[0], True);
 			Bat_setChg(&g_Bat[0], True);
-			PFL(DL_NFC,"Bat[0] Start DisChg&Chg\n");
+			BAT_DEBUG_MSG("Bat[0] Start DisChg&Chg\n");
         }
     }
 	else if((slave_rs485_is_bat_valid(1))&&(is_battery_A_V_reg_valid(1))&&
@@ -335,7 +350,7 @@ void Battery_discharge_process(void)
 		{
 			Bat_setDischg(&g_Bat[1], True);
 			Bat_setChg(&g_Bat[1], True);
-			PFL(DL_NFC,"Bat[1] Start DisChg&Chg\n");
+			BAT_DEBUG_MSG("Bat[1] Start DisChg&Chg\n");
         }
     }
 }

@@ -107,6 +107,8 @@ void AdcUser_18650EventChanged(AdcUser* pAdcUser, ThresholdArea* pThreshold, THR
 	}
 	else if (event == UP_OVER_THRESHOLD_HIGH)
 	{
+		// ADC 检测有问题
+		
 		if( g_p18650ChgIO )
 		PortPin_Set(g_p18650ChgIO->periph, g_p18650ChgIO->pin, True);
 		if(g_pdoInfo.isLowPow == 1)
@@ -142,7 +144,7 @@ void AdcUser_Init()
 
 	//如果有多级阈值，高阈值值必须在前，低阈值必须在后
 	g_threshold[0].thresholdHigh = 4150;
-	g_threshold[0].thresholdLow  = 3600;
+	g_threshold[0].thresholdLow  = 3700;
 	g_threshold[0].OnChanged     = (ThresholdChangedFn)AdcUser_18650EventChanged;
 
 //	g_threshold[1].thresholdHigh = g_pCfgInfo->temp_thresholdLow;
