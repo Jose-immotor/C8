@@ -30,6 +30,52 @@ void Bat_bmsInfoDump(const Battery* pBat)
 	Printf("\t\tcycle=%d\r\n", bigendian16_get((uint8*)(&pBat->bmsInfo.cycle)));
 }
 
+void Bat_bmsInfoDump2(const Battery* pBat)
+{
+	const uint8_t* pByte = (uint8_t*) & (pBat->bmsID.sn34);
+	Printf("\tPort[%d][%02X%02X%02X%02X%02X%02X]:\n"
+		, pBat->port, pByte[0], pByte[1], pByte[2], pByte[3], pByte[4], pByte[5]);
+	//
+	Printf("\n\tBatInfo\n");
+	Printf("\t%d\n",SWAP16( pBat->bmsID.bvolt ) );
+	Printf("\t%d\n", SWAP16( pBat->bmsID.bcap ) );
+	Printf("\t%x\n",SWAP16( pBat->bmsID.hwver ) );	// 硬件版本
+	Printf("\t%x\n", SWAP16( pBat->bmsID.prver ) ); // 协议版本
+	//
+	Printf("\t%x\n",SWAP16( pBat->bmsID.fwmsv ) );	//固件主版本
+	Printf("\t%x\n", SWAP16( pBat->bmsID.blver ) ); // boot 版本
+	Printf("\t%x\n",SWAP16( pBat->bmsID.fwrev ) );	// 固件修正版本
+	Printf("\t%x\n", ( SWAP16( pBat->bmsID.fwbnh ) << 16 ) | SWAP16( pBat->bmsID.fwbnl )); // 固件编译版本号
+	//
+	Printf("\n\tBatWork\n");
+	Printf("\t%d\n",SWAP16( pBat->bmsInfo.soc )/10 ); // ok
+	Printf("\t%d\n",SWAP16( pBat->bmsInfo.tvolt ) );  // ok
+	Printf("\t%d\n",SWAP16( pBat->bmsInfo.tcurr ) - 30000 ); // ok
+
+	Printf("\t%d\n",SWAP16( pBat->bmsInfo.hvolt ) ); // ok
+	Printf("\t%d\n",SWAP16( pBat->bmsInfo.lvolt ) ); // ok
+	Printf("\t%d\n",SWAP16( pBat->bmsInfo.hvnum ) ); // ok
+	Printf("\t%d\n",SWAP16( pBat->bmsInfo.lvnum ) ); // ok
+
+	Printf("\t%d\n",SWAP16( pBat->bmsInfo.cycle ) ); //ok
+	//
+	Printf("\n\tBatTemp\n");
+	Printf("\t%d\n",SWAP16( pBat->bmsInfo.cmost ) );
+	Printf("\t%d\n",SWAP16( pBat->bmsInfo.dmost ) ); //ok
+	Printf("\t%d\n",SWAP16( pBat->bmsInfo.pret ) );	//ok
+	Printf("\t%d\n",SWAP16( pBat->bmsInfo.cont ) );
+	Printf("\t%d\n",SWAP16( pBat->bmsInfo.btemp[0] ) );
+	Printf("\t%d\n",SWAP16( pBat->bmsInfo.btemp[1] ) );
+	//
+	Printf("\n\tBatFault\n");
+	Printf("\t%d\n",SWAP16( pBat->bmsInfo.devft1 ) );
+	Printf("\t%d\n",SWAP16( pBat->bmsInfo.devft2 ) );
+	Printf("\t%d\n",SWAP16( pBat->bmsInfo.opft1 ) );
+	Printf("\t%d\n",SWAP16( pBat->bmsInfo.opft2 ) );
+	Printf("\t%d\n",SWAP16( pBat->bmsInfo.opwarn1 ) );
+	Printf("\t%d\n",SWAP16( pBat->bmsInfo.opwarn2 ) );
+}
+
 const uint8* Bat_getBID(Battery* pBat)
 {
 	return (uint8*)&pBat->bmsID.sn34;
@@ -149,11 +195,11 @@ MOD_EVENT_RC Bat_event_readBmsID(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVEN
 #ifdef CANBUS_MODE_JT808_ENABLE			
 		g_Ble.portState.property[pBat->port].nominalVol = bigendian16_get((uint8*)(&pBat->bmsID.bvolt));
 		g_Ble.portState.property[pBat->port].nominalCap = bigendian16_get((uint8*)(&pBat->bmsID.bcap));
-		g_Ble.batDesc[pBat->port].serialNum[0] = pBat->bmsID.sn34;
+		g_Ble.batDesc[pBat->port].serialNum[0] = pBat->bmsID.sn34&0xFF;
 		g_Ble.batDesc[pBat->port].serialNum[1] = pBat->bmsID.sn34>>8;
-		g_Ble.batDesc[pBat->port].serialNum[2] = pBat->bmsID.sn56;
+		g_Ble.batDesc[pBat->port].serialNum[2] = pBat->bmsID.sn56&0xFF;
 		g_Ble.batDesc[pBat->port].serialNum[3] = pBat->bmsID.sn56>>8;
-		g_Ble.batDesc[pBat->port].serialNum[4] = pBat->bmsID.sn78;
+		g_Ble.batDesc[pBat->port].serialNum[4] = pBat->bmsID.sn78&0xFF;
 		g_Ble.batDesc[pBat->port].serialNum[5] = pBat->bmsID.sn78>>8;
 		g_Ble.batDesc[pBat->port].damage = bigendian16_get((uint8*)(&pBat->bmsID.ltsta));
 
@@ -165,7 +211,6 @@ MOD_EVENT_RC Bat_event_readBmsID(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVEN
 		
 		g_Ble.bmsPkt[pBat->port].fwSubVer = pBat->bmsID.fwbnh ;
 		g_Ble.bmsPkt[pBat->port].buildNum = pBat->bmsID.fwbnl;
-		
 #endif 
 		//PFL(DL_PMS,"Battery[%d] ReadID:%04X\n",pBat->port,pBat->bmsCtrl.ctrl );
 	}

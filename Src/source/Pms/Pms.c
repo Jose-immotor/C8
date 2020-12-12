@@ -15,9 +15,9 @@
 #include "workmode.h"
 #include "Bat.h"
 
-#define		PMS_DEBUG_MSG(fmt,...)		Printf(fmt,##__VA_ARGS__)
+//#define		PMS_DEBUG_MSG(fmt,...)		Printf(fmt,##__VA_ARGS__)
 
-//#define		PMS_DEBUG_MSG(fmt,...)
+#define		PMS_DEBUG_MSG(fmt,...)
 
 
 
@@ -33,7 +33,7 @@ DrvIo* g_pLockEnIO = Null;
 //以下是命令参数定义
 const static uint8_t g_bmsID_readParam[]    = { 0x00, 0x00, (uint8)((sizeof(BmsReg_info)/2) >> 8 ), (uint8)(sizeof(BmsReg_info)/2)/*0x00, 33*/ };
 const static uint8_t g_bmsInfo1_readParam[] = { (uint8)(BMS_REG_INFO_ADDR_1 >> 8), (uint8)BMS_REG_INFO_ADDR_1, (uint8)(BMS_REG_INFO_COUNT_1 >> 8), (uint8)BMS_REG_INFO_COUNT_1};
-const static uint8_t g_bmsInfo2_readParam[] = { (uint8)(BMS_REG_INFO_ADDR_2 >> 8), (uint8)BMS_REG_INFO_ADDR_2, (uint8)(BMS_REG_INFO_COUNT_2 >> 8), (uint8)BMS_REG_INFO_COUNT_2};
+const static uint8_t g_bmsInfo2_readParam[] = { (uint8)((BMS_REG_INFO_ADDR_2+1) >> 8), (uint8)(BMS_REG_INFO_ADDR_2+1), (uint8)(BMS_REG_INFO_COUNT_2 >> 8), (uint8)BMS_REG_INFO_COUNT_2};
 const static uint8_t g_bmsCtrl_readParam[]  =  { (uint8)(BMS_REG_CTRL_ADDR >> 8) , (uint8)BMS_REG_CTRL_ADDR  , (uint8)(BMS_REG_CTRL_COUNT >> 8)  , (uint8)BMS_REG_CTRL_COUNT };
 const static uint8_t g_bmsCtrl_writeParam[] = { 0x02, 0x00};
 
@@ -122,6 +122,26 @@ void BatteryInfoDump(void)
 		}
 	}
 }
+
+void BatteryDump2(void)
+{
+	int i = 0;
+	Battery* pPkt = Null;
+
+	Printf("Battery info:\n");
+	Printf("NFC:%d:%d\n",BMS_REG_INFO_ADDR_1,BMS_REG_INFO_COUNT_1);
+	Printf("NFC:%d:%d\n",BMS_REG_INFO_ADDR_2+1,BMS_REG_INFO_COUNT_2);
+//	BAT_DUMP(batteryCount);
+	for(i = 0; i < MAX_BAT_COUNT; i++)
+	{
+		pPkt = &g_Bat[i];
+		if(pPkt->presentStatus == BAT_IN)
+		{
+			Bat_bmsInfoDump2(pPkt);
+		}
+	}
+}
+
 
 void BatteryDump(void)
 {
@@ -356,6 +376,7 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
 	static uint32 accoonprintf_tick = 0;
+	static uint32 discarge_tick = 0 ;
 	if (msgId == PmsMsg_run)
 	{
 		if( GET_TICKS() - accoonprintf_tick > 1000 )
@@ -363,6 +384,8 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 			Battery_discharge_process(); 
 			accoonprintf_tick = GET_TICKS();
 		}
+		// 检测到放电电流<2A则进入accoff
+		// 
 	}
 	else if (msgId == PmsMsg_accOff)
 	{
@@ -428,6 +451,7 @@ static void Pms_fsm_deepSleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	{
 		workmode_switchStatus(WM_SLEEP);
 	}
+	
 	if (msgId == PmsMsg_run)
 	{
 		for(  i = 0 ; i < MAX_BAT_COUNT ; i++ )
@@ -442,6 +466,7 @@ static void Pms_fsm_deepSleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
 				PFL(DL_PMS,"ACC Off Bat[%d]:0x%04X Dischg&Chg\n",i,g_Bat[i].bmsInfo.state);
 			}
 		}
+		//
 	}
 	if (msgId == PmsMsg_GyroIrq)
 	{

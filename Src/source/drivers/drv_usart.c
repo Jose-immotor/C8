@@ -169,7 +169,7 @@ int gd32_hw_usart_init(void)
 #ifdef RS485_UART4
 	
 	
-	uint8_t Rs485_rx_buf[RX_BUFF_SIZE];
+	//uint8_t Rs485_rx_buf[RX_BUFF_SIZE];
 	
 	/* enable USART clock */
     rcu_periph_clock_enable(RCU_UART4);

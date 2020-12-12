@@ -28,8 +28,8 @@ extern "C" {
 #define	 EX_FLASH_LOG_AREA_SIZE			0x2000	//8k
 
 //起始地址在14k
-#define	 EX_FLASH_BIN_AREA_ADDR			(EX_FLASH_LOG_AREA_ADDR + EX_FLASH_LOG_AREA_SIZE)
-#define	 EX_FLASH_BIN_AREA_SIZE			0x10000	//64k
+#define	 EX_FLASH_BIN_AREA_ADDR			(EX_FLASH_LOG_AREA_ADDR + EX_FLASH_LOG_AREA_SIZE + 3* EX_FLASH_SECTOR_SIZE )
+#define	 EX_FLASH_BIN_AREA_SIZE			0x20000	//64k
 
 	/*******************************************************************************
 	部Flash空间映射定义

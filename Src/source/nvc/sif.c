@@ -120,7 +120,7 @@ void Sif_Isr(Sif* pSif, uint32 us)
 
 void Sif_Tx(Sif* pSif)
 {
-	Printf("Sif Tx:0x%x\n", pSif->buff[0]);
+	//Printf("Sif Tx:0x%x\n", pSif->buff[0]);
 	Sif_Reset(pSif);
 
 	//∑¢ÀÕFrame head, ¿≠µÕ4∫¡√Î	

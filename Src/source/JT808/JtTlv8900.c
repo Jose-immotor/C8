@@ -55,6 +55,10 @@ TlvInEventRc JtTlv8900_Event(TlvInMgr* mgr, const TlvIn* pItem, TlvInEvent ev)
 			case TAG_SET_CABIN_LOCK :
 				g_pdoInfo.isCanbinLock = g_Jt8900.mCabState;//*pItem->storage;
 				NvdsUser_Write(NVDS_PDO_INFO);
+				if( g_pdoInfo.isCanbinLock )
+				{
+					Cabin_UnLock();
+				}
 				PFL(DL_JT808,"8900_CanbinLock:%d\n",g_Jt8900.mCabState);
 				break ;
 			case TAG_SET_POWER_OFF :

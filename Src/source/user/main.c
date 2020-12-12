@@ -44,13 +44,21 @@ _GENERAL_CENTRAL_CTL		// 普通中控,接电池就放电
 
 */
 
+//#if ( VECT_TAB_OFFSET > 0 )
+
+
+#define     HW_VER_ADDR         ( 0x8004000 - 128 + 8 ) 
+
+
 const HwFwVer AppInfo={
-FW_VER_MAIN,
-FW_VER_S1,
-FW_VER_S2,
-FW_VER_BUILD,
-DES_HW_VER_MAIN,
-DES_HW_VER_SUB};
+	FW_VER_MAIN,
+	FW_VER_S1,
+	FW_VER_S2,
+	FW_VER_BUILD,
+	DES_HW_VER_MAIN,
+	DES_HW_VER_SUB
+};
+
 
 /*
 	CANBUS_MODE_JT808_ENABLE : 支持外置模块
@@ -102,7 +110,7 @@ int main(void)
 	Printf("\n\nPower up\n");
 	//MCU硬锟斤拷锟斤拷始锟斤拷
 	//Todo...
-	HwFwVer_Dump(Null,&AppInfo,Null);
+	HwFwVer_Dump("C8",&AppInfo,Null);
 	cm_backtrace_init("C7Pms", "1.0", "1.0");
 	Debug_Init();	
 	LocalTimeInit();	

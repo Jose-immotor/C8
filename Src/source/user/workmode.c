@@ -42,6 +42,7 @@ static void workmode_fsm_active(/*workmode* pworkmode,*/ uint8_t msgId, uint32_t
 	}
 }
 
+/*
 static Bool _BatteryNeedSleep(void)
 {
 	if( g_Bat[0].presentStatus == BAT_NOT_IN &&
@@ -52,6 +53,7 @@ static Bool _BatteryNeedSleep(void)
 	if( g_Bat[1].presentStatus == BAT_IN && g_Bat[1].bmsInfo.state&0x0300 != 0x0000 ) return False ;
 	return True ;
 }
+*/
 
 static void workmode_fsm_sleep(/*workmode* pworkmode,*/ uint8_t msgId, uint32_t param1, uint32_t param2)
 {
@@ -69,7 +71,7 @@ static void workmode_fsm_sleep(/*workmode* pworkmode,*/ uint8_t msgId, uint32_t 
 	if(((!g_ActiveFlag)&&((g_Bat[0].bmsInfo.state&0x0300)==0x0000))||
 		(SwTimer_isTimerOutEx(g_workmode.statusSwitchTicks,WORKMODE_FORCE_SLEEP_TIME)))
 	*/
-	if( ( g_ActiveFlag && _BatteryNeedSleep() )||
+	if( ( !g_ActiveFlag /*&& _BatteryNeedSleep()*/ )||
 		(SwTimer_isTimerOutEx(g_workmode.statusSwitchTicks,WORKMODE_FORCE_SLEEP_TIME)))
 	{
 		Printf("g_ActiveFlag= 0x%08x.\n",g_ActiveFlag);

@@ -77,7 +77,8 @@ static void _getCurPMSAttr(void)
 	g_tlvPMSAttr.FwMainVer = FW_VER_MAIN;
 	g_tlvPMSAttr.FwSubver = FW_VER_S1;
 	g_tlvPMSAttr.FwRevVer = FW_VER_S2;
-	g_tlvPMSAttr.FwBuildNunber = FW_VER_BUILD;
+	g_tlvPMSAttr.FwBuildNunber =  FW_VER_BUILD ;
+	g_tlvPMSAttr.FwBuildNunber = SWAP32( g_tlvPMSAttr.FwBuildNunber );
 }
 
 
@@ -128,15 +129,27 @@ static void _getCurBatInfo(void)
 			//
 			g_tlvBatInfo[i].port = i ;	//								// 电池槽位号
 			g_tlvBatInfo[i].nominalVol = _SWAP_16( g_Bat[i].bmsID.bvolt ) ;	// 额定电压
-			g_tlvBatInfo[i].nominalCur = _SWAP_16( g_Bat[i].bmsID.bcap ) - 30000 ;	// 额定电流
+			g_tlvBatInfo[i].nominalCur = _SWAP_16( g_Bat[i].bmsID.bcap ) ;	// 额定电流
 
+			/*
+			Printf("\t%x\n",SWAP16( pBat->bmsID.hwver ) );	// 硬件版本
+			Printf("\t%x\n", SWAP16( pBat->bmsID.prver ) ); // 协议版本
 			//
-			g_tlvBatInfo[i].HwMainVer = _SWAP_16(g_Bat[i].bmsID.hwver) ;
-			g_tlvBatInfo[i].HwSubVer = _SWAP_16(g_Bat[i].bmsID.prver) ;
-			g_tlvBatInfo[i].FwMainVer = _SWAP_16(g_Bat[i].bmsID.fwmsv) ;
-			g_tlvBatInfo[i].FwSubver = _SWAP_16(g_Bat[i].bmsID.blver) ;
-			g_tlvBatInfo[i].FwRevVer = _SWAP_16(g_Bat[i].bmsID.fwrev) ;
-			g_tlvBatInfo[i].FwBuildNunber = ( _SWAP_16(g_Bat[i].bmsID.fwbnh) << 16 ) | _SWAP_16(g_Bat[i].bmsID.fwbnl) ;
+			Printf("\t%x\n",SWAP16( pBat->bmsID.fwmsv ) );	//固件主版本
+			Printf("\t%x\n", SWAP16( pBat->bmsID.blver ) ); // boot 版本
+			Printf("\t%x\n",SWAP16( pBat->bmsID.fwrev ) );	// 固件修正版本
+			Printf("\t%x\n", ( SWAP16( pBat->bmsID.fwbnh ) << 16 ) | SWAP16( pBat->bmsID.fwbnl )); // 固件编译版本号
+			//
+			*/
+			g_tlvBatInfo[i].HwMainVer = SWAP16(g_Bat[i].bmsID.hwver) >> 8 ;
+			g_tlvBatInfo[i].HwSubVer = SWAP16(g_Bat[i].bmsID.hwver) & 0xFF;
+			
+			g_tlvBatInfo[i].FwMainVer = SWAP16(g_Bat[i].bmsID.fwmsv) >> 8 ;
+			g_tlvBatInfo[i].FwSubver = SWAP16(g_Bat[i].bmsID.fwmsv) & 0xFF;
+			
+			g_tlvBatInfo[i].FwRevVer = SWAP16(g_Bat[i].bmsID.fwrev) & 0xFF;
+			g_tlvBatInfo[i].FwBuildNunber = ( SWAP16(g_Bat[i].bmsID.fwbnh) << 16 ) | ( SWAP16(g_Bat[i].bmsID.fwbnl) ) ;
+			g_tlvBatInfo[i].FwBuildNunber = SWAP32(g_tlvBatInfo[i].FwBuildNunber);
 		}
 		else
 		{
@@ -169,8 +182,9 @@ static void _getCurBatWork(void)
 			//
 			g_tlvBatWorkInfo[i].maxCellVol = _SWAP_16( g_Bat[i].bmsInfo.hvolt );
 			g_tlvBatWorkInfo[i].minCellVol = _SWAP_16( g_Bat[i].bmsInfo.lvolt);
-			g_tlvBatWorkInfo[i].maxCellNum = _SWAP_16( g_Bat[i].bmsInfo.hvnum);
-			g_tlvBatWorkInfo[i].minCellNum = _SWAP_16( g_Bat[i].bmsInfo.lvnum);
+			
+			g_tlvBatWorkInfo[i].maxCellNum = ( SWAP16( g_Bat[i].bmsInfo.hvnum) ) & 0xFF;
+			g_tlvBatWorkInfo[i].minCellNum = ( SWAP16( g_Bat[i].bmsInfo.lvnum) ) & 0xFF;
 
 			// bsminfo中暂时没有
 			g_tlvBatWorkInfo[i].maxChgCurr = 0x00;//SWAP16( g_Bat[i].bmsInfo.csop);

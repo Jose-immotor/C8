@@ -62,6 +62,9 @@ static DrvIo g_OutputIOs[] =
 	{IO_AT8837_IN2	, "AT8837_IN2"		, GPIOD, GPIO_PIN_15 ,GPIO_MODE_OUT_PP},
 	{IO_AT8837_nSLEEP, "AT8837_nSLEEP"	, GPIOD, GPIO_PIN_12 ,GPIO_MODE_OUT_PP},
 	{IO_CAN_STB		, "CAN_STB"			, GPIOB, GPIO_PIN_14 ,GPIO_MODE_OUT_PP},
+	// test
+	//{IO_CAN1_RX		, "CAN1_Rx"			, GPIOB, GPIO_PIN_12 ,GPIO_MODE_OUT_PP},
+	//{IO_CAN1_TX		, "CAN1_Tx"			, GPIOB, GPIO_PIN_13 ,GPIO_MODE_OUT_PP},
 };
 
 ////=============================================
@@ -692,6 +695,18 @@ void IO_Start()
 //	g_isIoStart = True;
 	IO_IRQEnable(True);
 }
+
+// CAN1 rx tx
+/*
+void CAN1_TxRx( uint8_t io )
+{
+	DrvIo* can1_rx = IO_Get(IO_CAN1_RX);
+	DrvIo* can1_tx = IO_Get(IO_CAN1_TX);
+	//
+	PortPin_Set(can1_rx->periph, can1_rx->pin, io ?  True :False);
+	PortPin_Set(can1_tx->periph, can1_tx->pin, io ?  True :False);
+}
+*/
 
 ////检查IO状态，是否发生改变
 //void IO_CheckIOState()

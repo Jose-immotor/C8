@@ -58,6 +58,9 @@ void can_sleep()
     //return True;
 }
 
+// CAN1 B12 - Rx B13 - Tx
+// CAN0 A11 - Rx A12 - Tx
+
 static void _can_init(void)
 {
 	can_parameter_struct can_init_parameter;
@@ -72,8 +75,11 @@ static void _can_init(void)
 	can_deinit(CAN1);
 	
 	/* configure CAN1 GPIO */
-	gpio_init(GPIOB,GPIO_MODE_AF_PP,GPIO_OSPEED_50MHZ,GPIO_PIN_13);		// TX
+	
+	gpio_init(GPIOB,GPIO_MODE_AF_PP,GPIO_OSPEED_50MHZ,GPIO_PIN_13);	// TX
 	gpio_init(GPIOB,GPIO_MODE_IPU,GPIO_OSPEED_50MHZ,GPIO_PIN_12);		// RX
+
+	//gpio_pin_remap_config(GPIO_CAN1_REMAP,ENABLE);
 	/* initialize CAN1 register */
 //	can_struct_para_init(CAN_INIT_STRUCT, &can_init_parameter);
 	/* initialize CAN parameters 	can_init	*/
@@ -116,7 +122,7 @@ static void _can_init(void)
 
 	/* initialize CAN */
 	can_init(CAN1, &can_init_parameter);
-   
+  
     /* initialize filter */ 
     can_filter_parameter.filter_number=14;
     can_filter_parameter.filter_mode = CAN_FILTERMODE_MASK;

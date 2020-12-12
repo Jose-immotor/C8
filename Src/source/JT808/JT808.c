@@ -95,7 +95,12 @@ void Sim_Dump(void)
 	PRINTF_SIMID(protocolVer);
 	PRINTF_SIMID(devClass);
 	
-	Printf("\tICCID = %s\n", g_Jt.property.iccid);
+	Printf("\tICCID = %02X%02X%02X%02X%02X%02X%02X%02X%02X%02X\n", 
+		g_Jt.property.iccid[0],g_Jt.property.iccid[1],
+		g_Jt.property.iccid[2],g_Jt.property.iccid[3],
+		g_Jt.property.iccid[4],g_Jt.property.iccid[5],
+		g_Jt.property.iccid[6],g_Jt.property.iccid[7],
+		g_Jt.property.iccid[8],g_Jt.property.iccid[9]);
 	Printf("\tSimhwVer = %s\n", g_Jt.property.hwVer);
 	Printf("\tSimfwVer = %s\n", g_Jt.property.fwVer);
 	Printf("\tID = %s\n", g_Jt.property.devId);
@@ -131,14 +136,17 @@ void Ble_Dump(void)
 	Printf("\tBlehwVer = %s\n", g_Jt.bleproperty.BlehwVer);
 	Printf("\tBlefwVer = %s\n", g_Jt.bleproperty.BlefwVer);	
 	PRINTF_BLEDEVSTA(BleType);
-	Printf("\tMAC = [%s]\n", g_Jt.bleproperty.BleMac);
+	Printf("\tMAC = [%02X%02X%02X%02X%02X%02X]\n",
+		g_Jt.bleproperty.BleMac[5],g_Jt.bleproperty.BleMac[4],
+		g_Jt.bleproperty.BleMac[3],g_Jt.bleproperty.BleMac[2],
+		g_Jt.bleproperty.BleMac[1],g_Jt.bleproperty.BleMac[0]);
 
 	//Printf("\tBleName = %s\n", g_Jt.blecfgParam.BleName);
 	
 	PRINTF_BLEDEVCFG(BleAdvInterval);
 	PRINTF_BLEDEVCFG(BleAdvPower);
 	
-	Printf("\tbleState=%d\n",g_Jt.bleState.bleConnectState);
+	Printf("\tbleState=%X\n",g_Jt.bleState.bleConnectState);
 	Printf("\tbleConnectMAC=%s\n",g_Jt.bleState.bleConnectMAC);
 	
 	
@@ -916,7 +924,7 @@ static Bool _CheckFirmwareUpdate(void)
 {
 	// 没有放电 & 电池电量不要低
 	if( g_pdoInfo.isLowPow ) return false;
-	if( g_pdoInfo.isRemoteAccOn ) return false ;	
+	//if( g_pdoInfo.isRemoteAccOn ) return false ;	
 	return true ;
 }
 

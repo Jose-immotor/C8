@@ -67,6 +67,7 @@ void ResetStop()
  * \return NONE 
  */
 extern DrvIo* g_p18650PwrOffIO;
+extern void WorkMode_run();
 void Enter_PowerDown()
 {	
 	extern DrvIo* g_pLedIO;
@@ -83,12 +84,12 @@ void Enter_PowerDown()
 	PortPin_Set(g_pLedIO->periph, g_pLedIO->pin, True);
 
 	// 如果是在充电时休眠,则5分钟起来一次，看是否充满
-	if( g_pdoInfo.isLowPow && 
-		( g_Bat[0].presentStatus == BAT_IN || g_Bat[1].presentStatus == BAT_IN ) )	// 非低电时,直接关闭BAT
-	{
-		RTC_TimerStart(5*60);//定时5分钟唤醒中控
-	}
-	else
+	//if( g_pdoInfo.isLowPow && 
+	//	( g_Bat[0].presentStatus == BAT_IN || g_Bat[1].presentStatus == BAT_IN ) )	// 非低电时,直接关闭BAT
+	//{
+	//	RTC_TimerStart(5*60);//定时5分钟唤醒中控
+	//}
+	//else
 	{
 		RTC_TimerStart(6*60*60);//定时6小时唤醒中控
 	}

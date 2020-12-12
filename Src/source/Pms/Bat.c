@@ -6,9 +6,9 @@
 #define BMS_STATE_BIT_SUPPLY_SWITCH (1<<1)
 
 
-#define		BAT_DEBUG_MSG(fmt,...)		Printf(fmt,##__VA_ARGS__)
+//#define		BAT_DEBUG_MSG(fmt,...)		Printf(fmt,##__VA_ARGS__)
 
-//#define		BAT_DEBUG_MSG(fmt,...)
+#define		BAT_DEBUG_MSG(fmt,...)
 
 
 

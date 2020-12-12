@@ -22,4 +22,21 @@ typedef struct
 #pragma pack(pop)
 
 
+
+static Bool IsExFlashAppUpdate( uint32_t exflash_addr , uint32_t size );	// 外部是否有升级的Flash
+static Bool UpdateFirmware(  uint32_t exflash_addr , uint32_t inflash_addr, uint32_t firmware_size );
+static void DelExFlashAppFlag(uint32_t exflash_addr );
+static void DelInFlashAppFlag(uint32_t inflash_addr );
+static Bool CheckAppIsOK( uint32_t inflash_addr , uint32_t app_size , uint32_t app_crc );
+
+
+static void ExFlash_Test(void);
+static void ExInFlash_Test( uint32_t , uint32_t ,uint32_t size);
+
+#define		_IS_APP_STACK(x)		(  ( (x) & 0x2FFE0000 ) == 0x20000000 )
+
+
+
+
+
 #endif

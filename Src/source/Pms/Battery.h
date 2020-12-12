@@ -122,6 +122,7 @@ extern "C" {
 	const uint8* Bat_getBID(Battery* pBat);
 	void Bat_dump(const Battery* pBat);
 	void Bat_bmsInfoDump(const Battery* pBat);
+	void Bat_bmsInfoDump2(const Battery* pBat);
 
 	//电池信息有效
 	Bool Bat_isReady(Battery* pBat);

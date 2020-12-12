@@ -57,7 +57,7 @@ extern "C" {
 #define SET_18650BP_ON()  IO_Set(CTRL_18650BP_ON, IO_HIGH)
 #define SET_18650BP_OFF() IO_Set(CTRL_18650BP_ON, IO_LOW)
 
-#define	CAN_STB_ENABLE()	IO_Set(IO_CAN_STB, IO_HIGH)		// CAN进入低功耗 
+#define	CAN_STB_ENABLE()	IO_Set(IO_CAN_STB, IO_HIGH)		// CAN进入低功�?
 #define	CAN_STB_DISABLE()	IO_Set(IO_CAN_STB, IO_LOW)
 
 
@@ -101,6 +101,8 @@ typedef enum
 	IO_AT8837_IN2,
 	IO_AT8837_nSLEEP,
 	IO_CAN_STB,
+	//IO_CAN1_RX,
+	//IO_CAN1_TX
 }IO_ID;
 
 #define RM_POWER_FUN DET_12V_3

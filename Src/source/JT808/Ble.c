@@ -19,12 +19,16 @@
 #ifdef CANBUS_MODE_JT808_ENABLE	
 
 
+//spCmd->pExt->transferData && pCmd->pExt->transferLen 
+
+
 Ble g_Ble;
 static BleTpu g_BleTpu;
 //extern uint8_t Rs485TestSendFlag ;
 extern Battery g_Bat[MAX_BAT_COUNT];
 UTP_EVENT_RC Ble_getSelfTestResult(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
+	//PFL(DL_JT808,"BLE_GetSelfTest:%d\n",ev );
 	if (ev == UTP_GET_RSP)
 	{
 		SelfTestResult*  pResult = (SelfTestResult*)pCmd->pExt->transferData;
@@ -37,7 +41,7 @@ UTP_EVENT_RC Ble_getSelfTestResult(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT 
 		pResult->devState2 = g_cfgInfo.isActive;
 		pResult->batVerify = 0;
 		// 485测试
-		//pResult->periheral = Rs485TestSendFlag == 0x00 ? 0x01 : 0x02 ;	// 485
+		pResult->periheral = g_pdoInfo.isRs485Ok == 0x00 ? 0x01 : 0x02 ;	// 485
 		
 		pCmd->pExt->transferLen = sizeof(SelfTestResult);	// 其实不需要,显示设置一下
 	}

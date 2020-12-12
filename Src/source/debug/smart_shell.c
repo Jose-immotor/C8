@@ -35,6 +35,7 @@ void Dump(uint8_t ind)
 	extern void g_cgfInfo_Dump(void);
 	extern void g_pdoInfo_Dump(void);
 	extern void g_degInfo_Dump(void);
+	extern void BatteryDump2(void);
 #ifdef CANBUS_MODE_JT808_ENABLE		
 	extern void Sim_Dump(void);
 	extern void Gprs_Dump(void);
@@ -77,6 +78,7 @@ void Dump(uint8_t ind)
 		Printf("update flag=%s.\n", flash_read_buff);
 
 	}
+	if(40 == ind)			BatteryDump2();		
 	
 	Printf("g_ActiveFlag=0x%x.\n", g_ActiveFlag);
 	Printf("g_dwDebugLevel = 0x%08x.\n", g_dwDebugLevel);
@@ -119,7 +121,7 @@ void Set(uint8 ind, uint32 value)
 	extern void PdoInfo_Reset();
 	extern void DbgInfo_Reset();
 	extern void endless_loop_for_wdTest();
-	
+	//extern void CAN1_TxRx( uint8_t io );
 	switch(ind)
 	{
 		case 0: LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_McuReset, value);break;
@@ -148,6 +150,7 @@ void Set(uint8 ind, uint32 value)
 			gd32_flash_erase(FLASH_ADDR_UPDATE,6); break;
 		}
 		case 30: endless_loop_for_wdTest(); break;
+		//case 32: CAN1_TxRx(value) ;break;
 	}
 }
 

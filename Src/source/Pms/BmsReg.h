@@ -87,7 +87,7 @@ typedef struct
 	/*
 	Addr:256 ~ 363
 	*/
-	uint16_t userId[4];		//BID
+	uint16_t userId[4];		//BID 256,257,258,259
 	/*
 		Bit0 : CHG_MOS : 1 :充电MOS打开,0:充电MOS关闭
 		Bit1 ：DIS_MOS ：1：放电MOS打开,0:放电MOS关闭
@@ -104,33 +104,34 @@ typedef struct
 		BIt14 : CHG_FULL 1:充电满
 		Bit15 :保留
 	*/
-	uint16_t state;			//STATE BMS 状态
-	uint16_t soc;			//SOC	0.1 电池级荷电状态
-	uint16_t tvolt;			//总电压	
-	uint16_t tcurr;			//总电流,放电为负,充电为正
-	uint16_t htemp;			//最高温度
-	uint16_t htnum;			//最高温度编号
-	uint16_t ltemp;			//最低温度
-	uint16_t ltnum;			//最低温度编号
-	uint16_t hvolt;			//最高单体电压
-	uint16_t hvnum;			//最高单体电压编号
-	uint16_t lvolt;			//电低单体电压
-	uint16_t lvnum;			//电低单体电压编号 
-	uint16_t dsop;			//10s内最大放电电流
-	uint16_t csop;			//10s内最大充电电流
-	uint16_t soh;			//SOH
-	uint16_t cycle;			//循环次数
-	uint16_t rcap;			//剩余容量 
-	uint16_t fcap;			//充满容量
-	uint16_t fctime;		//充满时间
-	uint16_t prow;			//剩余能量
-	uint16_t devft1;		//设备故障1
-	uint16_t devft2;		//设备故障2
-	uint16_t opft1;			//运行故障1
-	uint16_t opft2;			//运行故障2
-	uint16_t opwarn1;		//运行告警1
-	uint16_t opwarn2;		//运行告警2
-	uint16_t cmost;			//充电MOS温度
+	uint16_t state;			//STATE BMS 状态 260
+	uint16_t soc;			//SOC	0.1 电池级荷电状态 261
+	uint16_t tvolt;			//总电压	262
+	uint16_t tcurr;			//总电流,放电为负,充电为正,0.01A单位 + 30000偏移 263
+	uint16_t htemp;			//最高温度 264
+	uint16_t htnum;			//最高温度编号 265
+	uint16_t ltemp;			//最低温度 266 
+	uint16_t ltnum;			//最低温度编号 267
+	uint16_t hvolt;			//最高单体电压 268
+	uint16_t hvnum;			//最高单体电压编号 269
+	uint16_t lvolt;			//电低单体电压 270
+	uint16_t lvnum;			//电低单体电压编号 271
+	uint16_t dsop;			//10s内最大放电电流   272
+	uint16_t csop;			//10s内最大充电电流 273
+	uint16_t soh;			//SOH 274
+	uint16_t cycle;			//循环次数 275
+	uint16_t rcap;			//剩余容量 276
+	uint16_t fcap;			//充满容量 277
+	uint16_t fctime;		//充满时间 278
+	uint16_t prow;			//剩余能量 279
+	uint16_t devft1;		//设备故障1 280
+	uint16_t devft2;		//设备故障2 281
+	uint16_t opft1;			//运行故障1 282
+	uint16_t opft2;			//运行故障2 283
+	uint16_t opwarn1;		//运行告警1 284
+	uint16_t opwarn2;		//运行告警2 285
+	//
+	uint16_t cmost;			//充电MOS温度 286
 	uint16_t dmost;			//放电MOS温度
 	uint16_t pret;			//电量计温度
 	uint16_t cont;			//连接器温度
