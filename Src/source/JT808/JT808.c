@@ -718,7 +718,6 @@ void JT808_switchState(JT808* pJt, JT_state newState)
 			can0_sleep();
 			Utp_Reset(&g_JtUtp);
 			Fsm_SetActiveFlag(AF_JT808, False);		// 设置状态
-			
 			break;
 		case JT_STATE_WAKEUP:
 			{
@@ -1136,6 +1135,7 @@ UTP_EVENT_RC JT808_event_bleStateChanged(JT808* pJt, const UtpCmd* pCmd, UTP_TXF
 	{
 		if( g_Jt.bleState.bleConnectState & _BLE_CONNECT_BIT )
 		{
+			Ble_Logout();	// 清除之
 			PFL(DL_JT808,"BLE Connect[%02X:%02X:%02X:%02X:%02X:%02X]\r\n",
 				g_Jt.bleState.bleConnectMAC[0],g_Jt.bleState.bleConnectMAC[1],
 				g_Jt.bleState.bleConnectMAC[2],g_Jt.bleState.bleConnectMAC[3],
@@ -1144,6 +1144,7 @@ UTP_EVENT_RC JT808_event_bleStateChanged(JT808* pJt, const UtpCmd* pCmd, UTP_TXF
 		else
 		{
 			PFL(DL_JT808,"Ble Disconnect\r\n");
+			Ble_Logout();	// 清除之
 		}
 	}
 	return UTP_EVENT_RC_SUCCESS;
@@ -1415,6 +1416,10 @@ static void JT808_Work(void)
 #define		_SLEEP_TIMEOUT_MS			(15*1000)			// 15*1000 模块休眠
 #define		_WAKEUP_TIMEOUT_MS			(30*1000)			// 15*1000	模块唤醒超时
 
+
+extern JT808ExtStatus gJT808ExtStatus ;
+
+
 void JT808_run(void)
 {
 	if( ComModeSleep() )	// 模块已经休眠---检测是否需要唤醒处理
@@ -1432,14 +1437,14 @@ void JT808_run(void)
 		}
 		else
 		{
-			if( !WorkMode_Sleep() /*g_isPowerDown == False*/ )	// 外围唤醒
+			if( !WorkMode_Sleep() && _JT808_EXT_SLEEP != gJT808ExtStatus )	// 外围唤醒
 			{
 				gModuleWakupIngTimeoutCnt = GET_TICKS();	// 计时
 
 				can0_wakeup();
 				Utp_Reset(&g_JtUtp);
 				SetComModeWakeup();
-				PFL(DL_JT808,"GPRS/GPS Wakeup...\r\n");
+				PFL(DL_JT808,"GPRS/GPS Wakeup[%d]...\r\n",gJT808ExtStatus );
 
 				JT808_Work();
 			}
@@ -1458,6 +1463,37 @@ void JT808_run(void)
 				SetComModeSleep();	// 准备进入休眠
 				gModuleSleepIngTimeoutCnt = GET_TICKS();
 				PFL_WARNING("GPRS/GPS Sleep Timeout\r\n");
+			}
+		}
+		else 					// 没有休眠检测是否需要进休眠
+		{
+			if( _JT808_EXT_SLEEP == gJT808ExtStatus )
+			{
+				SetComModeSleep();	// 准备进入休眠
+				gModuleSleepIngTimeoutCnt = GET_TICKS();		// 计时
+			}
+			else if(_JT808_EXT_BRIEF_WAKUP == gJT808ExtStatus )	// 临时唤醒 定位30s后,或者启动5分钟后进休眠
+			{
+				// 超时15s后休眠
+				//gModuleWakupIngTimeoutCnt
+				if( g_Jt.devState.cnt & _NETWORK_CONNECTION_BIT &&
+					g_Jt.devState.cnt & _GPS_FIXE_BIT &&
+					GET_TICKS() - gModuleWakupIngTimeoutCnt > 3*60*1000  )
+				{
+					SetComModeSleep();	// 准备进入休眠
+					gModuleSleepIngTimeoutCnt = GET_TICKS();		// 计时
+					PFL(DL_JT808,"JT808 BRIEF Wakeup GPRS&GPS fix,Sleep\n");
+
+					gJT808ExtStatus = _JT808_EXT_SLEEP;	// 清除之
+				}
+				else if( GET_TICKS() - gModuleWakupIngTimeoutCnt > 5*60*1000 )
+				{
+					SetComModeSleep();	// 准备进入休眠
+					gModuleSleepIngTimeoutCnt = GET_TICKS();		// 计时
+					PFL(DL_JT808,"JT808 BRIEF Wakeup timeout > 5min,Sleep\n");
+
+					gJT808ExtStatus = _JT808_EXT_SLEEP;	// 清除之
+				}
 			}
 		}
 		//else // 没有准备进入休眠,则检测是否需要进休眠
@@ -1480,7 +1516,7 @@ Bool JT808_sleep(void)
 	return True;
 }
 
-void JT808_start()
+void JT808_start(void)
 {
 	//锟斤拷锟斤拷硬锟斤拷锟斤拷使锟斤拷锟叫讹拷
 	JT808_switchState(g_pJt, JT_STATE_INIT);
@@ -1521,14 +1557,15 @@ static void _UpdataBleAdvData(uint8_t mac[6])
 		_adv[i++] = 1 + sizeof(_BLE_COMPY) - 1 + 6;
 		_adv[i++] = 0xFF;
 		//_adv[i++] = 
-		memcpy( _adv + i , _BLE_COMPY , sizeof(_BLE_COMPY) - 1 );
-		i += sizeof(_BLE_COMPY) - 1;
 		_adv[i++] = mac[5];
 		_adv[i++] = mac[4];
 		_adv[i++] = mac[3];
 		_adv[i++] = mac[2];
 		_adv[i++] = mac[1];
 		_adv[i++] = mac[0];
+
+		memcpy( _adv + i , _BLE_COMPY , sizeof(_BLE_COMPY) - 1 );
+		i += sizeof(_BLE_COMPY) - 1;
 	}
 	// UUID
 	memcpy( _adv + i , _adv_uuid , sizeof(_adv_uuid) );

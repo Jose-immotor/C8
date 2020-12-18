@@ -233,9 +233,12 @@ _RS485_DCODE:
 */
 
 
-#if 1
+/*
 
+1、当两电池均放电时，如果一个电池 > 15A，则认为另外一个电池接触不良
+2、
 
+*/
 static Bool _BatteryIsValid( uint8_t bat )
 {
 	int16_t curr_0 = 0 , curr_1 = 0;
@@ -243,7 +246,7 @@ static Bool _BatteryIsValid( uint8_t bat )
 	if( g_Bat[bat].presentStatus != BAT_IN ) return False ;
 	//
 	// 如果电池,且两个电池均在放电 
-	if( g_Bat[0].presentStatus  == BAT_IN && g_Bat[1].presentStatus == BAT_IN )
+	if( g_Bat[0].presentStatus == BAT_IN && g_Bat[1].presentStatus == BAT_IN )
 	{
 		// 如果电池均放电,但有一上电池放电电流 > 15A
 		if( g_Bat[0].bmsInfo.state&0x0200 && g_Bat[1].bmsInfo.state&0x0200 )
@@ -266,45 +269,7 @@ static Bool _BatteryIsValid( uint8_t bat )
 }
 
 
-#else
 
-#define		_SUB(a,b)			( (a) > (b) ? ( (a) - (b) ) : ( (b) - (a)) )
-
-static Bool _BatteryIsValid( uint8_t bat )
-{
-	uint16_t sub_curr = 0;
- 	int16_t curr_0 = 0 , curr_1 = 0;
-	
-	// 如果电池不存在,则不需要上报
-	if( g_Bat[bat].presentStatus != BAT_IN ) return False ;
-	// 如果电池,且两个电池均在放电 
-	if( g_Bat[0].presentStatus  == BAT_IN && g_Bat[1].presentStatus == BAT_IN )
-	{
-		// 如果电池均放电,电流相差不大
-		if( g_Bat[0].bmsInfo.state&0x0200 && g_Bat[1].bmsInfo.state&0x0200 )
-		{
-			curr_0 = SWAP16(g_Bat[0].bmsInfo.tcurr);
-			curr_1 = SWAP16(g_Bat[1].bmsInfo.tcurr);
-			sub_curr = _SUB( curr_0, curr_1 );
-			PFL(DL_485,"Bat0:%d,Bat1:%d\n",curr_0,curr_1);
-			if( sub_curr > 100 )	// 如果电流相关大于1A,则电流小的为没接触好
-			{
-				if( g_Bat[0].bmsInfo.tcurr < g_Bat[1].bmsInfo.tcurr )
-				{
-					if ( bat == 0 ) return False ;
-				}
-				else
-				{
-					if( bat == 1 ) return False ;
-				}
-			}
-		
-		}
-	}
-	return True ;
-}
-
-#endif 	
 
 
 //命令 5：读取信息 读信息命令：38 字节 18+20 SN+VER
@@ -484,6 +449,11 @@ static uint16_t _getCenterCtlOperation( Battery *pBat , uint8_t cmd , uint8_t *p
 
 // 486 指令列表
 static uint8_t _last_addr = 0 ;
+
+extern uint8_t g_Bat0_State ;
+extern uint8_t g_Bat1_State ;
+
+
 static void _Rs485_Cmd10( uint8_t *pinbuff , uint16_t len )
 {
 	//先检测地址是不是给电池的
@@ -499,6 +469,7 @@ static void _Rs485_Cmd10( uint8_t *pinbuff , uint16_t len )
 	
 	// 31 对应电池1
 	// 32 对应电池0
+	// 如果电池没接 or 电池没放电 or 电池 接触不良，则不要上报此电池
 	switch( pinbuff[1] )
 	{
 		case 0x31 :
@@ -511,10 +482,23 @@ static void _Rs485_Cmd10( uint8_t *pinbuff , uint16_t len )
 			g_Rs485TxBuf[tx_len++] = 0x00;	// 校验
 			g_Rs485TxBuf[tx_len++] = 0x16;	// 命令处理调用
 			g_Rs485TxBuf[tx_len++] = 0x00;	// 命令返回状态
-
-			//if(  _BatteryIsValid( pinbuff[1] == 0x31 ? 0x01 : 0x00 ) )
-			if( pCurBat->presentStatus == BAT_IN )
+			
+			if( pCurBat->presentStatus == BAT_IN )	// 如果存在
 			{
+				// 1、如果些电池没有放电 
+				if( !( pCurBat->bmsInfo.state & 0x0200 ) )
+				{
+					break ;
+				}
+				if( pinbuff[1] == 0x31 )		// Bat1
+				{
+					if( !g_Bat1_State ) break ;
+				}
+				else if( pinbuff[1] == 0x32 )	// Bat0
+				{
+					if( !g_Bat0_State ) break ;
+				}
+				
 				g_Rs485TxBuf[tx_len++] = 0x00 ;	// 预计可行驶距离 
 				g_Rs485TxBuf[tx_len++] = bigendian16_get((uint8_t*)&pCurBat->bmsInfo.soc)/10 ;	// 电量 
 				g_Rs485TxBuf[tx_len++] = 0x00 ;	// 预计充电完成时间
@@ -610,18 +594,17 @@ static void _Rs485_Cmd10( uint8_t *pinbuff , uint16_t len )
 				g_Rs485TxBuf[tx_len++] = ( pCenterCtrl->miOperation << 4 ) | 0x01 ;
 				// 附加数据
 				tx_len += _getCenterCtlOperation( pCurBat , pCenterCtrl->miOperation , g_Rs485TxBuf + tx_len );
-
-				// sum
 			}
 			else
 			{
 				//电池不存在 or 接触不良 ---不处理数据
 			}
+			// sum
 			g_Rs485TxBuf[0] = tx_len ;
 			_get_CheckSum(&sum, g_Rs485TxBuf, tx_len);
 			g_Rs485TxBuf[4] = sum & 0xFF ;
 			g_Rs485TxBuf[5] = sum >> 8 ;
-
+				
 			// 测试用
 			_last_addr |= ( pinbuff[1] - 0x30 ) ;
 			if( _last_addr == 3 )

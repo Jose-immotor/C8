@@ -261,12 +261,70 @@ PmsOpStatus Pms_GetStatus(void)
 	return g_pms.opStatus;
 }
 
+#ifdef _GENERAL_CENTRAL_CTL		// C8 普通中控
+
+#ifdef CANBUS_MODE_JT808_ENABLE
+JT808ExtStatus gJT808ExtStatus = _JT808_EXT_WAKUP;
+#endif 
+
+static uint32 g_batlowcur_tick_24h = 0;
+static uint32 g_batlowcur_tick_12h = 0;
+static uint32 g_batlowcur_tick_5m = 0;
+static uint32 g_higcurr_tick = 0;
+
+
+/*
+工作休眠逻辑:
+//
+1、接电池后，开始放电
+2、放电时检测到总放电 电流< 2A 持续 5分钟则 外置模块休眠,中控正常工作，大电池接着放电 
+3、放电电流 < 2A 持续 2天后，中控进入休眠，关闭大电池放电 
+4、在上述2天期间，间隔12小时唤醒外置模块上报位置数据，然后外置模块接着休眠
+5、当无电池时，5分钟后 中控休眠
+6、休眠后（有无电池均一样）定时12小时唤醒中控 & 外置模块上报位置如果电池状态无变化,接着休眠
+7、休眠后，检测到电池插入,则立刻开始放电
+*/
+
+
+/*
+	电池放电电流过小( < 2A )
+*/
+static Bool Bat_Discharge_Current_Low(void)
+{
+	uint8_t i = 0 ;
+	uint16_t t_cur = 0 ;
+	uint16_t cur = 0; 
+	for( i = 0 ; i < MAX_BAT_COUNT; i++ )
+	{
+		cur = SWAP16( g_Bat[i].bmsInfo.tcurr );
+		if( g_Bat[i].presentStatus == BAT_IN &&
+			cur < 30000 )
+		{
+			t_cur = 30000 - cur ;	//总电流,放电为负,充电为正,0.01A单位 + 30000偏移
+			//PFL(DL_PMS,"Bat[%d] Curr:%d:%d\n",i,cur,t_cur);
+		}
+	}
+	
+	return t_cur < PMS_LOW_CURRENT_2A ? True : False ;
+}
+
+#endif
+
+
 //static 
 void Pms_switchStatus(PmsOpStatus newStatus)
 {
 	if (newStatus == g_pms.opStatus) return;
 
 	g_pms.statusSwitchTicks = GET_TICKS();
+
+
+#ifdef _GENERAL_CENTRAL_CTL		// C8 普通中控
+	g_batlowcur_tick_24h = g_pms.statusSwitchTicks;
+	g_batlowcur_tick_12h = g_pms.statusSwitchTicks;
+	g_batlowcur_tick_5m = g_pms.statusSwitchTicks;
+	g_higcurr_tick = g_pms.statusSwitchTicks;
+#endif //	
 
 	if (newStatus == PMS_ACC_OFF)
 	{
@@ -292,21 +350,14 @@ void Pms_switchStatus(PmsOpStatus newStatus)
 	g_pms.Fsm = Pms_findStatusProcFun(newStatus);
 }
 
-/*
-	acc off 时，不关电，只关锁
-	如果电池未充电时，则等待30s进入deepsleep
-	如果正在充电,则暂时不进入deepsleep
-*/
 static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
 	if (msgId == PmsMsg_run)
 	{
-		//static uint32 accoff_tick[MAX_BAT_COUNT] = 0 ;
 		static uint32 accoffprintf_tick = 0;
 		//uint8 i = 0 ;
 		if ((0/*g_pJt->devState.cnt & _GPS_FIXE_BIT*/)||(SwTimer_isTimerOutEx(g_pms.statusSwitchTicks,PMS_ACC_OFF_ACTIVE_TIME)))
 		{
-			// 不客是否低电量,都要进休眠
 			//18650电压高或者电池不在位，进入休眠模式	
 			// 如果正在充电,则暂时不要进入deepsleep
 			
@@ -315,7 +366,7 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 					g_Bat[1].presentStatus == BAT_IN && g_Bat[1].bmsInfo.state & 0x0200 ) )
 			{
 				// 暂时不进deepsleep
-				PFL(DL_PMS,"Battery Low...\n");
+				//PFL(DL_PMS,"Battery Low...\n");
 			}
 			else
 			{
@@ -328,6 +379,20 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 			Battery_discharge_process();
 			accoffprintf_tick = GET_TICKS();
 		}
+#ifdef _GENERAL_CENTRAL_CTL
+		if( Bat_Discharge_Current_Low() )
+		{
+			g_higcurr_tick = GET_TICKS();
+		}
+		else if( GET_TICKS() - g_higcurr_tick > 3* 1000)
+		{
+			Pms_switchStatus(PMS_ACC_ON);
+#if defined ( CANBUS_MODE_JT808_ENABLE ) && defined ( _GENERAL_CENTRAL_CTL )
+			gJT808ExtStatus = _JT808_EXT_WAKUP ;
+#endif //			
+			PMS_DEBUG_MSG("Acc Off,Hig Curr,Enter Acc On,Wakeup Jt808\n");
+		}
+#endif
 		// 锁车
 		PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, True);
 		g_pdoInfo.isWheelLock = 1;	// 轮毂锁 锁
@@ -336,6 +401,9 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	else if (msgId == PmsMsg_accOn)
 	{
 		Pms_switchStatus(PMS_ACC_ON);
+#if defined ( CANBUS_MODE_JT808_ENABLE ) && defined ( _GENERAL_CENTRAL_CTL )
+		gJT808ExtStatus = _JT808_EXT_WAKUP ;
+#endif //		
 	}
 	else if (msgId == PmsMsg_batPlugIn)
 	{
@@ -344,6 +412,13 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 		if( g_pdoInfo.isRemoteAccOn )
 #endif //			
 			Pms_switchStatus(PMS_ACC_ON);
+#if defined ( CANBUS_MODE_JT808_ENABLE ) && defined ( _GENERAL_CENTRAL_CTL )
+			gJT808ExtStatus = _JT808_EXT_WAKUP ;
+#endif //
+
+#ifdef _GENERAL_CENTRAL_CTL	
+			ClearWakeupType();
+#endif //
 	}
 	else if (msgId == PmsMsg_batPlugOut)
 	{
@@ -366,10 +441,10 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 		PFL(DL_PMS,"18650 Normal ,Request to stop charging\n");
 	}
 #ifdef CANBUS_MODE_JT808_ENABLE
-	else if( msgId == PmsMsg_GPRSIrq )
-	{
-		g_pms.statusSwitchTicks = GET_TICKS();		// 刷新时间
-	}
+	//else if( msgId == PmsMsg_GPRSIrq )
+	//{
+	//	g_pms.statusSwitchTicks = GET_TICKS();		// 刷新时间
+	//}
 #endif //
 }
 
@@ -377,6 +452,7 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
 	static uint32 accoonprintf_tick = 0;
 	static uint32 discarge_tick = 0 ;
+	
 	if (msgId == PmsMsg_run)
 	{
 		if( GET_TICKS() - accoonprintf_tick > 1000 )
@@ -384,8 +460,48 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 			Battery_discharge_process(); 
 			accoonprintf_tick = GET_TICKS();
 		}
-		// 检测到放电电流<2A则进入accoff
-		// 
+#ifdef _GENERAL_CENTRAL_CTL
+		if( Bat_Discharge_Current_Low() )		// 如果小电流
+		{
+			// 持续了48小时---进入休眠
+			if( GET_TICKS() - g_batlowcur_tick_24h > PMS_ACC_DEPSLEEP_TIME )	// 48小时
+			{
+				PMS_DEBUG_MSG("Low Current,Enterl Acc Off And Sleep JT808 \n");
+				Pms_switchStatus(PMS_ACC_OFF);
+				gJT808ExtStatus = _JT808_EXT_SLEEP ;
+			}
+			// 持续12小时---唤醒
+			if( GET_TICKS() - g_batlowcur_tick_12h > PMS_ACC_OFF_MODE_WAKUP_TIME )	// 48小时
+			{
+				g_batlowcur_tick_12h = GET_TICKS();
+				PMS_DEBUG_MSG("Low Current 12h,Wakeup JT808\n");
+				gJT808ExtStatus = _JT808_EXT_BRIEF_WAKUP ;
+			}
+			// 持续 5分钟
+			if( GET_TICKS() - g_batlowcur_tick_5m > PMS_ACC_OFF_TIME &&
+				gJT808ExtStatus == _JT808_EXT_WAKUP )
+			{
+				if( GetWakeUpType() )		// 如果是MCU唤醒后,则此时理科进休眠
+				{
+					PMS_DEBUG_MSG("Low Current 5Min & MCU Wakeup,Entern Acc Off\n");
+					Pms_switchStatus(PMS_ACC_OFF);
+					gJT808ExtStatus = _JT808_EXT_SLEEP ;
+				}
+				else
+				{
+					PMS_DEBUG_MSG("Low Current 5Min,Sleep JT808\n");
+					gJT808ExtStatus = _JT808_EXT_SLEEP ;
+				}
+			}
+		}
+		else
+		{
+			g_batlowcur_tick_24h = GET_TICKS();
+			g_batlowcur_tick_12h = g_batlowcur_tick_24h;
+			g_batlowcur_tick_5m = g_batlowcur_tick_24h;
+			ClearWakeupType();
+		}
+#endif //
 	}
 	else if (msgId == PmsMsg_accOff)
 	{
@@ -394,6 +510,15 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	else if (msgId == PmsMsg_batPlugIn)
 	{
 		Pms_plugIn((Battery*)param1);
+		// 刷新时间
+#ifdef _GENERAL_CENTRAL_CTL		
+		gJT808ExtStatus = _JT808_EXT_WAKUP ;
+		g_batlowcur_tick_24h = GET_TICKS();
+		g_batlowcur_tick_12h = g_batlowcur_tick_24h;
+		g_batlowcur_tick_5m = g_batlowcur_tick_24h;
+		//
+		ClearWakeupType();
+#endif //
 	}
 	else if (msgId == PmsMsg_batPlugOut)
 	{
@@ -411,6 +536,16 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	{
 		PFL(DL_PMS,"18650 Normal ,Request to stop charging\n");
 	}
+#ifdef CANBUS_MODE_JT808_ENABLE
+	else if( msgId == PmsMsg_GPRSIrq )
+	{
+		g_pms.statusSwitchTicks = GET_TICKS();		// 刷新时间
+		//gJT808ExtStatus = _JT808_EXT_WAKUP ;
+		g_batlowcur_tick_24h = GET_TICKS();
+		g_batlowcur_tick_12h = g_batlowcur_tick_24h;
+		g_batlowcur_tick_5m = g_batlowcur_tick_24h;
+	}
+#endif //	
 	PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, False);
 	g_pdoInfo.isWheelLock = 0;		// 轮毂锁开
 }
@@ -485,17 +620,28 @@ static void Pms_fsm_deepSleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
 		Pms_plugIn((Battery*)param1);
 #ifndef _GENERAL_CENTRAL_CTL	// 普通中控,检测到电池接入则放电，非普通中控 	
 		if(g_pdoInfo.isRemoteAccOn )
+		{
 #endif //			
 			Pms_switchStatus(PMS_ACC_ON);
+#if defined ( CANBUS_MODE_JT808_ENABLE ) && defined ( _GENERAL_CENTRAL_CTL )
+			gJT808ExtStatus = _JT808_EXT_WAKUP ;
+#endif //
+
+#ifndef _GENERAL_CENTRAL_CTL
+		}
+#endif
+
 	}
 #ifdef CANBUS_MODE_JT808_ENABLE
-	else if( msgId == PmsMsg_GPRSIrq )	// 不要休眠
-	{
-		g_pms.statusSwitchTicks = GET_TICKS();
-	}
+	//else if( msgId == PmsMsg_GPRSIrq )	// 不要休眠
+	//{
+	////	g_pms.statusSwitchTicks = GET_TICKS();
+	//}
 #endif //
 
 }
+
+
 
 //在任何状态下都要处理的消息函数
 static void Pms_fsm_anyStatusDo(PmsMsg msgId, uint32_t param1, uint32_t param2)
@@ -579,6 +725,10 @@ TRANSFER_EVENT_RC Pms_EventCb(Battery* pBat, TRANS_EVENT ev)
 	}
 	else if (ev == TRANS_SUCCESS)
 	{
+		PFL(DL_NFC, "NFC[%d] RX(%d):",pBat->port, param->totalLen);
+		DUMP_BYTE_LEVEL(DL_NFC, param->rxBuf, param->totalLen );
+		PFL(DL_NFC, "\n");
+		
 		Pms_Rx(pBat, param->rxBuf, param->totalLen);
 		PFL(DL_NFC,"Bat[0x%x] NFC port[%d] rx date success!\n", fmDrv->iicReg.dev_addr,((Battery*)fmDrv->obj)->cfg->antselct);
 	}
@@ -629,6 +779,9 @@ void Pms_start()
 	{
 		Pms_switchStatus(PMS_ACC_ON);
 		PMS_DEBUG_MSG("PMS Start AccOff\n");
+#if defined ( CANBUS_MODE_JT808_ENABLE ) && defined ( _GENERAL_CENTRAL_CTL )
+		gJT808ExtStatus = _JT808_EXT_WAKUP ;
+#endif //		
 	}
 	else
 	{

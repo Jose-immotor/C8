@@ -70,6 +70,11 @@ UTP_EVENT_RC Ble_getBatteryInfo(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 	return UTP_EVENT_RC_SUCCESS;
 }
 
+void Ble_Logout(void)
+{
+	BleUser_logout( &g_Ble.user );
+}
+
 
 UTP_EVENT_RC Ble_authent(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
@@ -382,9 +387,9 @@ uint8* Ble_ReqProc(const uint8_t* pReq, int frameLen, uint8* rspLen)
 {
 	if( g_BleTpu.cfg )
 	{
-		PFL(DL_JT808, "BLE Rx[%d]:",frameLen);
-		DUMP_BYTE_LEVEL(DL_JT808, pReq , frameLen );
-		PFL(DL_JT808, "\n");
+		//PFL(DL_JT808, "BLE Rx[%d]:",frameLen);
+		//DUMP_BYTE_LEVEL(DL_JT808, pReq , frameLen );
+		//PFL(DL_JT808, "\n");
 		return BleTpu_ReqProc(&g_BleTpu, pReq, frameLen, rspLen);
 	}
 	return Null ;

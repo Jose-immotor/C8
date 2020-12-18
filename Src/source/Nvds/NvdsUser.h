@@ -35,6 +35,7 @@ extern "C" {
 		uint8 isAccOn:1;			//远程控制ACC  ！！取消，用下面的
 		uint8 reserved0:7;
 		uint8 Reserved[14];	//保留15个字节
+		uint8 SN[32];		// SN Jose 添加
 		uint8 latestByte;	//从存储区读出的字节不等于 EEPROM_LATEST_BYTE，说明该存储区被修改，已经失效
 	}CfgInfo;
 

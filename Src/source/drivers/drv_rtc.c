@@ -97,9 +97,12 @@ void RTC_IRQHandler(void)
 	rt_interrupt_enter();
 	if (rtc_flag_get(RTC_FLAG_ALARM) != RESET)
 	{
-//		SetWakeUpType(WAKEUP_RTC);
 		/* Clear Interrupt pending bit */
 		rtc_flag_clear(RTC_FLAG_ALARM);
+		if(g_isPowerDown)
+		{
+			SetWakeUpType(WAKEUP_RTC);
+		}
 	}
 	rt_interrupt_leave();
 }

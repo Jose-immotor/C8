@@ -138,6 +138,10 @@ unsigned short Battery_get_switch_state(unsigned char bms_index)
 #define BATTERY_VOLTAGE_SHAKE_CNT_MAX 600
 static uint32_t gl_Battery_voltage_shake_cnt;
 static SwTimer gl_Battery_optime_timeout = { 0 };
+
+// RS485 两电池状态 0:不上报,1上报
+uint8_t g_Bat0_State = 0;
+uint8_t g_Bat1_State = 0;
 // 双电池放电算法
 void Battery_discharge_process(void)
 {
@@ -252,6 +256,27 @@ void Battery_discharge_process(void)
 			}
             sl_bms0_vol_cmp_offset = 0;
             sl_bms1_vol_cmp_offset = 0;
+
+			if( vl_bms_0_A > 1500 ) 
+			{
+				g_Bat0_State = 1 ;
+				g_Bat1_State = 0 ;
+			}
+			else if( vl_bms_0_A > 1500 )
+			{
+				g_Bat0_State = 0 ;
+				g_Bat1_State = 1 ;
+			}
+			//
+			if( vl_bms_0_A > 500 && vl_bms_0_A < 12 )
+			{
+				g_Bat0_State = 0 ;
+			}
+			else if( vl_bms_1_A > 500 && vl_bms_1_A < 12 )
+			{
+				g_Bat1_State = 1 ;
+			}
+		
         }
         else if(2 == sl_supply_state)//单电池接入
         {             
@@ -286,6 +311,8 @@ void Battery_discharge_process(void)
                     Bat_setChg(&g_Bat[0], True);
 					BAT_DEBUG_MSG("Bat[0] Start Chg\n");
                 }
+				g_Bat0_State = 1 ;
+				g_Bat1_State = 0 ;
 			}
 			else
 			{            
@@ -316,6 +343,8 @@ void Battery_discharge_process(void)
 					Bat_setChg(&g_Bat[1], True);
 					BAT_DEBUG_MSG("Bat[1] Start Chg\n");
 				}
+				g_Bat0_State = 0 ;
+				g_Bat1_State = 1 ;
 			}
 		}
 	}
@@ -335,6 +364,9 @@ void Battery_discharge_process(void)
 			Bat_setChg(&g_Bat[0], True);
 			BAT_DEBUG_MSG("Bat[0] Start DisChg&Chg\n");
         }
+		//
+		g_Bat0_State = 1 ;
+		g_Bat1_State = 0 ;
     }
 	else if((slave_rs485_is_bat_valid(1))&&(is_battery_A_V_reg_valid(1))&&
 	       (0 == is_battery_error(1)))
@@ -352,8 +384,45 @@ void Battery_discharge_process(void)
 			Bat_setChg(&g_Bat[1], True);
 			BAT_DEBUG_MSG("Bat[1] Start DisChg&Chg\n");
         }
+		g_Bat0_State = 0 ;
+		g_Bat1_State = 1 ;
     }
 }
+
+/*
+	检测双电时，是否处于接触不良的状态
+	1、当双电放电，且其中某个电池放电电流 > 15A，则认为另外一个电池接触不良
+	2、当双电放电，两电流放电电流 < 15A，且其中每个电流电流 > 500mA，则认为接触良
+	
+
+	true :表示接触不良,false表示正常
+
+
+Bool Bat_LooseContact( uint8_t bat )
+{
+	Battery* pBat = Null;
+	uint16_t t_cur0 = 0 , t_cur1 = 0 ;
+	// 电池接入 & 放电 
+	if( g_Bat[0].presentStatus == BAT_IN && g_Bat[1].presentStatus == BAT_IN )
+	{
+		if( ( g_Bat[0].bmsInfo.state&0x0200 ) &&  ( g_Bat[1].bmsInfo.state&0x0200 ) )
+		{
+			t_cur0 = SWAP16( g_Bat[0].bmsInfo.tcurr );
+			t_cur1 = SWAP16( g_Bat[1].bmsInfo.tcurr );
+			// 接触不良
+			// 两电池均放电，如果其中某个电流放电  > 15A，则另一个电池接触不良
+			// 两电池均放电，如果其中一个电池放电电流 < 500ma，则认为其接触不良
+			if( t_cur0 > 1500 && bat == 1 ) return True ;
+			if( t_cur1 > 1500 && bat == 0 ) return True ;
+			if( t_cur0 < 50 && bat == 0 ) return True ;
+			if( t_cur1 < 50 && bat == 1 ) return True ;
+		}
+	}
+	return False ; 
+}
+
+*/
+
 
 
 

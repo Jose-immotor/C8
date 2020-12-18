@@ -78,7 +78,8 @@ void Dump(uint8_t ind)
 		Printf("update flag=%s.\n", flash_read_buff);
 
 	}
-	if(40 == ind)			BatteryDump2();		
+	if(40 == ind)			BatteryDump2();
+	if(41 == ind)			Printf("SN=%s\n", g_cfgInfo.SN );
 	
 	Printf("g_ActiveFlag=0x%x.\n", g_ActiveFlag);
 	Printf("g_dwDebugLevel = 0x%08x.\n", g_dwDebugLevel);
@@ -175,7 +176,7 @@ void SelfTest(uint8 flag)
 	__IO uint32_t sn1=*(__IO uint32_t*)(0x1FFFF7EC);
 	__IO uint32_t sn2=*(__IO uint32_t*)(0x1FFFF7F0);
 	
-	Printf("\r\nsID: %8X%8X%8X\r\n",sn2,sn1,sn0);
+	Printf("\r\nsID: %08X%08X%08X\r\n",sn2,sn1,sn0);
 	Printf("\tFlash:%s\n"		, g_pdoInfo.isFlashOk ? "pass" : "fail");
 	Printf("\tGyroscope:%s\n"	, g_pdoInfo.isGyroOk  ? "pass" : "fail");
 	Printf("\tRS485Comm:%s\n"	, g_pdoInfo.isRs485Ok  ? "pass" : "fail");
@@ -222,6 +223,16 @@ void Log_DumpInd(int ind, int count)
 	Log_DumpByInd(g_plogMgr,ind, count);
 }
 
+
+void Set_SN(const char *pSN)
+{
+	uint8 len = strlen(pSN);
+	memset( g_cfgInfo.SN , 0 , 32 );
+	memcpy( g_cfgInfo.SN , pSN , len > 12 ? 12 : len );
+	NvdsUser_Write(NVDS_CFG_INFO);
+	Printf("Write SN: %s\n",g_cfgInfo.SN );
+}
+
 extern char rt_hw_console_getchar(void);
 void Smart_Shell_run()
 {
@@ -251,6 +262,7 @@ void Smart_shell_init()
 		  ,{(void*)NvcPlay      	, "NvcPlay(uint8 audioInd, uint8 maxRepeat, uint8 vol)"}
 		  ,{(void*)Log_DumpCount 	,"Log_DumpCount(int count)"}
 		  ,{(void*)Log_DumpInd  	,"Log_DumpInd(int ind, int count)"}
+		  ,{(void*)Set_SN			,"Set_SN(sn)",1}
 	};
 	SCmdLine_Init(g_CmdTable,sizeof(g_CmdTable)/sizeof(SFnDef), TRUE ,(OutPutFun)printf);
 }

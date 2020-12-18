@@ -66,10 +66,11 @@ void JtTlv0900_updateBatInfo(uint8 port)
 	Smart 板运行状态
 */
 static void _getCurSmart(void){}
-
+extern CfgInfo	g_cfgInfo;
 static void _getCurPMSAttr(void)
 {
-	//g_tlvPMSAttr.PMSId = ;
+	memcpy( g_tlvPMSAttr.PMSId, g_cfgInfo.SN ,12 );
+	
 	g_tlvPMSAttr.Capacity = 0x02000000;//0x02;	// 支持最大2个电池
 
 	g_tlvPMSAttr.HwMainVer = DES_HW_VER_MAIN;

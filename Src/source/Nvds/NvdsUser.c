@@ -13,7 +13,7 @@ static PdoInfo g_pdoInfo_mirror;
 static DbgInfo g_dbgInfo_mirror;
 
 //上面多个存储变量的公用的交换缓冲区，长度取最大值
-static uint8_t		g_exchBuf[sizeof(PdoInfo)];
+static uint8_t		g_exchBuf[sizeof(CfgInfo)];
 static SectorMgr    g_nvdsSecMgr[NVDS_ITEM_COUNT];
 
 void SetAccOn(uint8 on)
@@ -213,7 +213,7 @@ void NvdsUser_Init()
 	}
 	if(!g_cfgInfo.vol)
 	{
-		g_cfgInfo.vol=2;//默认音量为2
+		g_cfgInfo.vol=5;//默认音量为5
 	}
 //	if(!g_pdoInfo.isRemoteAccOn)
 //	{

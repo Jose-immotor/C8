@@ -20,14 +20,18 @@ void Boot(void)
 }
 volatile bool g_isPowerDown = False;//休眠标志，False-没有休眠，True-休眠
 
-WakeupType g_WakeupType;
+static WakeupType g_WakeupType;
 WakeupType GetWakeUpType()
 {
 	return g_WakeupType;
 }
 void SetWakeUpType(WakeupType type)
 {
-	g_WakeupType = type;
+	g_WakeupType |= type;
+}
+void ClearWakeupType(void)
+{
+	g_WakeupType = 0x00;
 }
 
 //处理延时复位功能，主要用于响应一些外部命令，执行后需要应答，然后执行MCU复位操作
@@ -68,6 +72,11 @@ void ResetStop()
  */
 extern DrvIo* g_p18650PwrOffIO;
 extern void WorkMode_run();
+#ifdef CANBUS_MODE_JT808_ENABLE
+extern JT808ExtStatus gJT808ExtStatus ;
+#endif 
+
+
 void Enter_PowerDown()
 {	
 	extern DrvIo* g_pLedIO;
@@ -83,16 +92,8 @@ void Enter_PowerDown()
 
 	PortPin_Set(g_pLedIO->periph, g_pLedIO->pin, True);
 
-	// 如果是在充电时休眠,则5分钟起来一次，看是否充满
-	//if( g_pdoInfo.isLowPow && 
-	//	( g_Bat[0].presentStatus == BAT_IN || g_Bat[1].presentStatus == BAT_IN ) )	// 非低电时,直接关闭BAT
-	//{
-	//	RTC_TimerStart(5*60);//定时5分钟唤醒中控
-	//}
-	//else
-	{
-		RTC_TimerStart(6*60*60);//定时6小时唤醒中控
-	}
+	RTC_TimerStart(12*60*60);			//定时12小时唤醒中控
+	
 	//待机模式
 	rcu_periph_clock_enable(RCU_PMU);
 	pmu_to_deepsleepmode(PMU_LDO_LOWPOWER, WFI_CMD);
@@ -103,6 +104,7 @@ void Enter_PowerDown()
 	workmode_switchStatus(WM_ACTIVE);
 	WorkMode_run();	// 跑一次,,, 放在这里不好看,或者把workmode 当成第一个任务
 }
+
 
 /*!
  * \brief MCU待机模式
@@ -119,7 +121,7 @@ void Mcu_PowerDown()
 	Printf("power down.\n");
 	g_isPowerDown = True;
 	// 清除所有唤醒状态
-	g_WakeupType = WAKEUP_MAX ;
+	g_WakeupType = 0x0000 ;
 	
 	Enter_PowerDown();
 	
@@ -127,16 +129,24 @@ void Mcu_PowerDown()
  	Printf("\nPower up.\n");
 	PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, True);	
 	LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_WakeUp, GetWakeUpType());
-	Printf("wake up reason:%d\n",GetWakeUpType());
-#ifdef SPECIAL_EDITION_AUTOACCON		// 特殊版本
-	if( g_Bat[0].presentStatus == BAT_IN || g_Bat[1].presentStatus == BAT_IN )
+	Printf("wake up reason:%X\n",GetWakeUpType());
+	
+#ifdef _GENERAL_CENTRAL_CTL		// 普通中控
+	// 唤醒后,如果没有大电流,则直接上报数据后休眠
+	//if( ( g_Bat[0].presentStatus == BAT_IN || g_Bat[1].presentStatus == BAT_IN ) )
 	{
 		Pms_switchStatus(PMS_ACC_ON);
+#if defined ( CANBUS_MODE_JT808_ENABLE ) && defined ( _GENERAL_CENTRAL_CTL )
+		gJT808ExtStatus = _JT808_EXT_WAKUP ;	// 唤醒外置模块
+#endif //		
 	}
-	else
-	{
-		Pms_switchStatus(PMS_ACC_OFF);
-	}
+	//else
+	//{
+	//	Pms_switchStatus(PMS_ACC_OFF);
+//#if defined ( CANBUS_MODE_JT808_ENABLE ) && defined ( _GENERAL_CENTRAL_CTL )
+		//gJT808ExtStatus = _JT808_EXT_WAKUP ;	// 唤醒外置模块
+//#endif //		
+//	}
 #else
 	if(g_cfgInfo.isAccOn)
 	{

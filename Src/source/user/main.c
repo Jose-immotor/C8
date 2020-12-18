@@ -111,7 +111,7 @@ int main(void)
 	//MCUӲ����ʼ��
 	//Todo...
 	HwFwVer_Dump("C8",&AppInfo,Null);
-	cm_backtrace_init("C7Pms", "1.0", "1.0");
+	cm_backtrace_init("C8Pms", "1.0", "1.0");
 	Debug_Init();	
 	LocalTimeInit();	
 	NvdsUser_Init();

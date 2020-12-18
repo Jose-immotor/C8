@@ -197,10 +197,10 @@ void EXTI5_9_IRQHandler(void)
         exti_interrupt_flag_clear(EXTI_8);
 		Gyro_Isr();
     }
-//	if(SET == exti_interrupt_flag_get(EXTI_9)){
-//        exti_interrupt_flag_clear(EXTI_9);
-//		bat_insert();
-//    }
+	if(SET == exti_interrupt_flag_get(EXTI_9)){
+        exti_interrupt_flag_clear(EXTI_9);
+		bat_insert();
+    }
 }
 
 extern void can1_isr(void);

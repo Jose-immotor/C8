@@ -209,6 +209,7 @@ extern "C"{
 	extern Ble g_Ble;
 	uint8* Ble_ReqProc(const uint8_t* pReq, int frameLen, uint8* rspLen);
     void Ble_init(uint8* mac);
+	void Ble_Logout(void);
 
 #ifdef __cplusplus
 }

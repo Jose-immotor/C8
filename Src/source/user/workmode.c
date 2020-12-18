@@ -63,14 +63,6 @@ static void workmode_fsm_sleep(/*workmode* pworkmode,*/ uint8_t msgId, uint32_t 
 		g_workmode.sleep_flag = 1;
 		Printf("Stop All Objlist\n");
 	}
-	/*
-	1、电池有接入并没有充放电
-	2、电池都不存在
-	*/
-	/*
-	if(((!g_ActiveFlag)&&((g_Bat[0].bmsInfo.state&0x0300)==0x0000))||
-		(SwTimer_isTimerOutEx(g_workmode.statusSwitchTicks,WORKMODE_FORCE_SLEEP_TIME)))
-	*/
 	if( ( !g_ActiveFlag /*&& _BatteryNeedSleep()*/ )||
 		(SwTimer_isTimerOutEx(g_workmode.statusSwitchTicks,WORKMODE_FORCE_SLEEP_TIME)))
 	{
