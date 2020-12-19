@@ -7,10 +7,10 @@
 
 #if 1
 //static uint8_t g_Rs485modBusTxBuf[128];
-static uint8_t g_Rs485modBusRxBuf[128];
+static uint8_t g_Rs485modBusRxBuf[256];
 
 static uint8_t g_Rs485RxBuf[96];
-static uint8_t g_Rs485TxBuf[192];
+static uint8_t g_Rs485TxBuf[128];
 
 CirBuff gRs485rxBuf = {0x00};
 //CirBuff gTx485txBuf = {0x00};
@@ -239,6 +239,7 @@ _RS485_DCODE:
 2、
 
 */
+/*
 static Bool _BatteryIsValid( uint8_t bat )
 {
 	int16_t curr_0 = 0 , curr_1 = 0;
@@ -267,6 +268,7 @@ static Bool _BatteryIsValid( uint8_t bat )
 	}
 	return True ;
 }
+*/
 
 
 
@@ -465,7 +467,7 @@ static void _Rs485_Cmd10( uint8_t *pinbuff , uint16_t len )
 	pCenterCtrlData pCenterCtrl = (pCenterCtrlData) ( pinbuff + 8 );
 	pBatteryRespond pBatterRes = (pBatteryRespond)(g_Rs485TxBuf+8);
 
-	pCurBat = pinbuff[1] == 0x32 ? &g_Bat[0] : &g_Bat[1] ;
+	pCurBat = pinbuff[1] == 0x32 ? &g_Bat[0] : &g_Bat[1] ;		// 0x32-Bat0
 	
 	// 31 对应电池1
 	// 32 对应电池0
@@ -569,9 +571,9 @@ static void _Rs485_Cmd10( uint8_t *pinbuff , uint16_t len )
 				}
 				if( tempu32 & 0x02 )	// 放电 -- 如果其中一个电池放电 > 15A，则另外一个为接触不良
 				{
-					//g_Rs485TxBuf[tx_len] |= 0x02;
-					g_Rs485TxBuf[tx_len] |= 
-						_BatteryIsValid( pinbuff[1] == 0x31 ? 0x01 : 0x00 ) ? 0x20 : 0x00 ;
+					g_Rs485TxBuf[tx_len] |= 0x02;
+					//g_Rs485TxBuf[tx_len] |= 
+					//	_BatteryIsValid( pinbuff[1] == 0x31 ? 0x01 : 0x00 ) ? 0x20 : 0x00 ;
 				}
 				// 电流大则认为充电,<0则认放电
 				tempu32 = bigendian16_get((uint8_t*)&pCurBat->bmsInfo.tcurr);
@@ -599,25 +601,26 @@ static void _Rs485_Cmd10( uint8_t *pinbuff , uint16_t len )
 			{
 				//电池不存在 or 接触不良 ---不处理数据
 			}
-			// sum
-			g_Rs485TxBuf[0] = tx_len ;
-			_get_CheckSum(&sum, g_Rs485TxBuf, tx_len);
-			g_Rs485TxBuf[4] = sum & 0xFF ;
-			g_Rs485TxBuf[5] = sum >> 8 ;
-				
-			// 测试用
-			_last_addr |= ( pinbuff[1] - 0x30 ) ;
-			if( _last_addr == 3 )
-			g_pdoInfo.isRs485Ok = 1;
-			
 			break ;
 		default :
 			tx_len = 0x00 ;
 			break ;
 	}
-	//
+	
+		
+	// 测试用
+	_last_addr |= ( pinbuff[1] - 0x30 ) ;
+	if( _last_addr == 3 )
+	g_pdoInfo.isRs485Ok = 1;
+			
 	if( tx_len )
 	{
+		// sum
+		g_Rs485TxBuf[0] = tx_len ;
+		_get_CheckSum(&sum, g_Rs485TxBuf, tx_len);
+		g_Rs485TxBuf[4] = sum & 0xFF ;
+		g_Rs485TxBuf[5] = sum >> 8 ;
+	
 		Rs485_Tx( g_Rs485TxBuf, tx_len );
 		tx_len = 0 ;
 	}

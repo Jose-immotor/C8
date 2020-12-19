@@ -23,7 +23,7 @@ extern "C" {
 
 #define	PMS_ACC_OFF_TIME				(5*60*1000)		// 放电电流小于2A持续 5分钟，则关闭外置模块
 #define	PMS_ACC_OFF_MODE_WAKUP_TIME		(12*60*60*1000) //(10*60*1000)//	// 12小时后，唤醒外置模块
-#define	PMS_ACC_DEPSLEEP_TIME			(48*60*60*1000)	// (15*60*1000)// // 放电电流小于2A持续 2天,关闭电池,休眠之
+#define	PMS_ACC_DEPSLEEP_TIME			(48*60*60*1000)	//(15*60*1000)//  // 放电电流小于2A持续 2天,关闭电池,休眠之
 
 
 

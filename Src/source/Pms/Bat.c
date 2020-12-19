@@ -62,28 +62,28 @@ unsigned char is_battery_error(unsigned char bms_index)
     vl_value = bigendian16_get((uint8*)(&pBat->bmsInfo.devft1));
     if(vl_value&(~((1<<15)|(1<<14)|(1<<0)|(1<<3)|(1<<6)|(1<<8)|(1<<10))))
     {
-		BAT_DEBUG_MSG("Bat[%d] devft1 :%04X\n",bms_index,vl_value);
+		//BAT_DEBUG_MSG("Bat[%d] devft1 :%04X\n",bms_index,vl_value);
         return 1;
     }
 
     vl_value = bigendian16_get((uint8*)(&pBat->bmsInfo.devft2));
     if(vl_value&(~(1<<2)))
     {
-		BAT_DEBUG_MSG("Bat[%d] devft2 :%04X\n",bms_index,vl_value);
+		//BAT_DEBUG_MSG("Bat[%d] devft2 :%04X\n",bms_index,vl_value);
         return 1;
     }
 
     vl_value = bigendian16_get((uint8*)(&pBat->bmsInfo.opft1));
     if(vl_value&(~((1<<7)|(1<<8))))
     {
-		BAT_DEBUG_MSG("Bat[%d] opft1 :%04X\n",bms_index,vl_value);
+		//BAT_DEBUG_MSG("Bat[%d] opft1 :%04X\n",bms_index,vl_value);
         return 1;
     }
 
     vl_value = bigendian16_get((uint8*)(&pBat->bmsInfo.opft2));
     if(vl_value)
     {
-		BAT_DEBUG_MSG("Bat[%d] opft2 :%04X\n",bms_index,vl_value);
+		//BAT_DEBUG_MSG("Bat[%d] opft2 :%04X\n",bms_index,vl_value);
         return 1;
     }
     
@@ -235,6 +235,8 @@ void Battery_discharge_process(void)
 			sl_both_voltage_equ_flag = 0;
 			sl_both_voltage_diff_flag = 0;
         }
+		BAT_DEBUG_MSG("sl:%d,Bat0:%d,Bat1:%d\n",sl_supply_state,g_Bat0_State,g_Bat1_State);
+		
 		//两个电池电压接入
         if(1 == sl_supply_state)
         {
@@ -257,26 +259,30 @@ void Battery_discharge_process(void)
             sl_bms0_vol_cmp_offset = 0;
             sl_bms1_vol_cmp_offset = 0;
 
-			if( vl_bms_0_A > 1500 ) 
+			if( vl_bms_0_A < -1500 || vl_bms_1_A < -1500 )
 			{
-				g_Bat0_State = 1 ;
-				g_Bat1_State = 0 ;
+				if( vl_bms_0_A < -1500 ) 
+				{
+					g_Bat0_State = 1 ;
+					g_Bat1_State = 0 ;
+				}
+				else if( vl_bms_1_A < -1500 )
+				{
+					g_Bat0_State = 0 ;
+					g_Bat1_State = 1 ;
+				}
 			}
-			else if( vl_bms_0_A > 1500 )
+			else
 			{
-				g_Bat0_State = 0 ;
-				g_Bat1_State = 1 ;
+				if( vl_bms_0_A < -500 && vl_bms_0_A > -1200 )
+				{
+					g_Bat0_State = 1 ;
+				}
+				if( vl_bms_1_A < -500 && vl_bms_1_A > -1200 )
+				{
+					g_Bat1_State = 1 ;
+				}
 			}
-			//
-			if( vl_bms_0_A > 500 && vl_bms_0_A < 12 )
-			{
-				g_Bat0_State = 0 ;
-			}
-			else if( vl_bms_1_A > 500 && vl_bms_1_A < 12 )
-			{
-				g_Bat1_State = 1 ;
-			}
-		
         }
         else if(2 == sl_supply_state)//单电池接入
         {             

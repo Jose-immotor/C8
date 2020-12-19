@@ -68,7 +68,7 @@ static ModCfg g_Bat0Cfg =
 
 /*电池槽位1的命令配置表*******************************************************************/
 //const static 
-	ModCmd g_Bms1Cmds[BMS_CMD_COUNT] =
+ModCmd g_Bms1Cmds[BMS_CMD_COUNT] =
 {
 	{&g_BmsCmdEx[0], BMS_WRITE_CTRL, MOD_WRITE,MOD_WEITE_SINGLE_REG,"WriteReg1-Ctrl", &g_Bat[1].writeBmsCtrl, 2, (void*)g_bmsCtrl_writeParam, 2,  &g_Bat[1].bmsCtrl},
 	{&g_BmsCmdEx[1], BMS_READ_ID    ,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms1ID"   , &g_Bat[1].bmsID		 , BMS_REG_ID_SIZE    , (void*)g_bmsID_readParam, 4,Null,(ModEventFn)Bat_event_readBmsID},
@@ -350,6 +350,14 @@ void Pms_switchStatus(PmsOpStatus newStatus)
 	g_pms.Fsm = Pms_findStatusProcFun(newStatus);
 }
 
+#ifdef CANBUS_MODE_JT808_ENABLE
+void CAN_Wakeup(void)
+{
+	gJT808ExtStatus = _JT808_EXT_WAKUP ;
+	Pms_postMsg(PmsMsg_GPRSIrq, 0, 0);
+}
+#endif //
+
 static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
 	if (msgId == PmsMsg_run)
@@ -390,7 +398,7 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 #if defined ( CANBUS_MODE_JT808_ENABLE ) && defined ( _GENERAL_CENTRAL_CTL )
 			gJT808ExtStatus = _JT808_EXT_WAKUP ;
 #endif //			
-			PMS_DEBUG_MSG("Acc Off,Hig Curr,Enter Acc On,Wakeup Jt808\n");
+			PFL(DL_PMS,"Acc Off,Hig Curr,Enter Acc On,Wakeup Jt808\n");
 		}
 #endif
 		// 锁车
@@ -441,10 +449,12 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 		PFL(DL_PMS,"18650 Normal ,Request to stop charging\n");
 	}
 #ifdef CANBUS_MODE_JT808_ENABLE
-	//else if( msgId == PmsMsg_GPRSIrq )
-	//{
-	//	g_pms.statusSwitchTicks = GET_TICKS();		// 刷新时间
-	//}
+	else if( msgId == PmsMsg_GPRSIrq )
+	{
+		Pms_switchStatus(PMS_ACC_ON);
+		//g_pms.statusSwitchTicks = GET_TICKS();		// 刷新时间
+		gJT808ExtStatus = _JT808_EXT_WAKUP ;
+	}
 #endif //
 }
 
@@ -461,45 +471,58 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 			accoonprintf_tick = GET_TICKS();
 		}
 #ifdef _GENERAL_CENTRAL_CTL
-		if( Bat_Discharge_Current_Low() )		// 如果小电流
+		if( g_Bat[0].presentStatus == BAT_IN || g_Bat[1].presentStatus == BAT_IN )
 		{
-			// 持续了48小时---进入休眠
-			if( GET_TICKS() - g_batlowcur_tick_24h > PMS_ACC_DEPSLEEP_TIME )	// 48小时
+			if( Bat_Discharge_Current_Low() )		// 如果小电流
 			{
-				PMS_DEBUG_MSG("Low Current,Enterl Acc Off And Sleep JT808 \n");
-				Pms_switchStatus(PMS_ACC_OFF);
-				gJT808ExtStatus = _JT808_EXT_SLEEP ;
-			}
-			// 持续12小时---唤醒
-			if( GET_TICKS() - g_batlowcur_tick_12h > PMS_ACC_OFF_MODE_WAKUP_TIME )	// 48小时
-			{
-				g_batlowcur_tick_12h = GET_TICKS();
-				PMS_DEBUG_MSG("Low Current 12h,Wakeup JT808\n");
-				gJT808ExtStatus = _JT808_EXT_BRIEF_WAKUP ;
-			}
-			// 持续 5分钟
-			if( GET_TICKS() - g_batlowcur_tick_5m > PMS_ACC_OFF_TIME &&
-				gJT808ExtStatus == _JT808_EXT_WAKUP )
-			{
-				if( GetWakeUpType() )		// 如果是MCU唤醒后,则此时理科进休眠
+				// 持续了48小时---进入休眠
+				if( GET_TICKS() - g_batlowcur_tick_24h > PMS_ACC_DEPSLEEP_TIME )	// 48小时
 				{
-					PMS_DEBUG_MSG("Low Current 5Min & MCU Wakeup,Entern Acc Off\n");
+					PFL(DL_PMS,"Low Current,Enterl Acc Off And Sleep JT808 \n");
 					Pms_switchStatus(PMS_ACC_OFF);
 					gJT808ExtStatus = _JT808_EXT_SLEEP ;
 				}
-				else
+				// 持续12小时---唤醒
+				if( GET_TICKS() - g_batlowcur_tick_12h > PMS_ACC_OFF_MODE_WAKUP_TIME )	// 48小时
 				{
-					PMS_DEBUG_MSG("Low Current 5Min,Sleep JT808\n");
-					gJT808ExtStatus = _JT808_EXT_SLEEP ;
+					g_batlowcur_tick_12h = GET_TICKS();
+					PFL(DL_PMS,"Low Current 12h,Wakeup JT808\n");
+					gJT808ExtStatus = _JT808_EXT_BRIEF_WAKUP ;
 				}
+				// 持续 5分钟
+				if( GET_TICKS() - g_batlowcur_tick_5m > PMS_ACC_OFF_TIME &&
+					gJT808ExtStatus == _JT808_EXT_WAKUP )
+				{
+					if( GetWakeUpType() )		// 如果是MCU唤醒后,则此时理科进休眠
+					{
+						PFL(DL_PMS,"Low Current 5Min & MCU Wakeup,Entern Acc Off\n");
+						Pms_switchStatus(PMS_ACC_OFF);
+						gJT808ExtStatus = _JT808_EXT_SLEEP ;
+					}
+					else
+					{
+						PFL(DL_PMS,"Low Current 5Min,Sleep JT808\n");
+						gJT808ExtStatus = _JT808_EXT_SLEEP ;
+					}
+				}
+			}
+			else
+			{
+				g_batlowcur_tick_24h = GET_TICKS();
+				g_batlowcur_tick_12h = g_batlowcur_tick_24h;
+				g_batlowcur_tick_5m = g_batlowcur_tick_24h;
+				ClearWakeupType();
+				gJT808ExtStatus = _JT808_EXT_WAKUP ;		// 唤醒模块
 			}
 		}
 		else
 		{
-			g_batlowcur_tick_24h = GET_TICKS();
-			g_batlowcur_tick_12h = g_batlowcur_tick_24h;
-			g_batlowcur_tick_5m = g_batlowcur_tick_24h;
-			ClearWakeupType();
+			if( GET_TICKS() - g_pms.statusSwitchTicks > PMS_ACC_OFF_TIME )	// 48小时
+			{
+				PFL(DL_PMS,"Not Bat,Enter ACC OFF\n");
+				Pms_switchStatus(PMS_ACC_OFF);
+				gJT808ExtStatus = _JT808_EXT_SLEEP ;
+			}
 		}
 #endif //
 	}
@@ -633,10 +656,12 @@ static void Pms_fsm_deepSleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
 
 	}
 #ifdef CANBUS_MODE_JT808_ENABLE
-	//else if( msgId == PmsMsg_GPRSIrq )	// 不要休眠
-	//{
-	////	g_pms.statusSwitchTicks = GET_TICKS();
-	//}
+	else if( msgId == PmsMsg_GPRSIrq )	// 不要休眠
+	{
+		Pms_switchStatus(PMS_ACC_ON);
+		gJT808ExtStatus = _JT808_EXT_WAKUP ;
+		//g_pms.statusSwitchTicks = GET_TICKS();
+	}
 #endif //
 
 }

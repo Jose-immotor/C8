@@ -156,13 +156,17 @@ void can0_reset(void)
 	_can_init();
 	can_start();
 }
-
+//extern JT808ExtStatus gJT808ExtStatus ;
+extern void CAN_Wakeup(void);
 void can1_isr(void)
 {
 	if(g_isPowerDown)		// »½ÐÑÖ®
 	{
 		SetWakeUpType(WAKEUP_CAN);
 	}
+	CAN_Wakeup();
+	//modul_receive_flag = SET; 
+	
 	//if((Pms_GetStatus() == PMS_DEEP_SLEEP)||(Pms_GetStatus() == PMS_ACC_OFF))
 	//	Pms_postMsg(PmsMsg_GPRSIrq, 0, 0);
 }

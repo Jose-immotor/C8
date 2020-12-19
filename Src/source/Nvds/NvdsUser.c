@@ -213,7 +213,7 @@ void NvdsUser_Init()
 	}
 	if(!g_cfgInfo.vol)
 	{
-		g_cfgInfo.vol=5;//默认音量为5
+		g_cfgInfo.vol= 7 ;//默认音量为7
 	}
 //	if(!g_pdoInfo.isRemoteAccOn)
 //	{

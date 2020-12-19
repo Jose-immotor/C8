@@ -137,9 +137,9 @@ void Ble_Dump(void)
 	Printf("\tBlefwVer = %s\n", g_Jt.bleproperty.BlefwVer);	
 	PRINTF_BLEDEVSTA(BleType);
 	Printf("\tMAC = [%02X%02X%02X%02X%02X%02X]\n",
-		g_Jt.bleproperty.BleMac[5],g_Jt.bleproperty.BleMac[4],
-		g_Jt.bleproperty.BleMac[3],g_Jt.bleproperty.BleMac[2],
-		g_Jt.bleproperty.BleMac[1],g_Jt.bleproperty.BleMac[0]);
+		g_Jt.bleproperty.BleMac[0],g_Jt.bleproperty.BleMac[1],
+		g_Jt.bleproperty.BleMac[2],g_Jt.bleproperty.BleMac[3],
+		g_Jt.bleproperty.BleMac[4],g_Jt.bleproperty.BleMac[5]);
 
 	//Printf("\tBleName = %s\n", g_Jt.blecfgParam.BleName);
 	
@@ -1419,7 +1419,10 @@ static void JT808_Work(void)
 
 extern JT808ExtStatus gJT808ExtStatus ;
 
-
+/*
+	JT808休眠时---主MCU可能休眠( WorkMode_Sleep() ),也可能不休眠( !WorkMode_Sleep())
+	JT808可能被以下情况是唤醒：外围模块主动唤醒,被MCU唤醒(MCU未休眠时唤醒,MCU休眠时唤醒)
+*/
 void JT808_run(void)
 {
 	if( ComModeSleep() )	// 模块已经休眠---检测是否需要唤醒处理
