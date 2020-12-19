@@ -351,10 +351,10 @@ void Pms_switchStatus(PmsOpStatus newStatus)
 }
 
 #ifdef CANBUS_MODE_JT808_ENABLE
-void CAN_Wakeup(void)
+void CAN_Wakeup(void)		
 {
 	gJT808ExtStatus = _JT808_EXT_WAKUP ;
-	Pms_postMsg(PmsMsg_GPRSIrq, 0, 0);
+	//Pms_postMsg(PmsMsg_GPRSIrq, 0, 0);
 }
 #endif //
 

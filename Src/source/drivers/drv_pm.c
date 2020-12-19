@@ -74,6 +74,7 @@ extern DrvIo* g_p18650PwrOffIO;
 extern void WorkMode_run();
 #ifdef CANBUS_MODE_JT808_ENABLE
 extern JT808ExtStatus gJT808ExtStatus ;
+extern void JT808CAN_Sleep(void);
 #endif 
 
 
@@ -87,8 +88,10 @@ void Enter_PowerDown()
 		))
 		PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, False);
 	else
-		PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, True);
-	
+		PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, True);					
+#ifdef CANBUS_MODE_JT808_ENABLE
+	JT808CAN_Sleep();
+#endif 
 
 	PortPin_Set(g_pLedIO->periph, g_pLedIO->pin, True);
 

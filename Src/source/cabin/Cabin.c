@@ -133,7 +133,7 @@ void Cabin_Run()
 		if(SwTimer_isTimerOutEx(tick, 2000))
 		{
 			tick = GET_TICKS();
-			Nvc_Play(NVC_WARNING, 1);	//告警提示
+			//Nvc_Play(NVC_WARNING, 1);	//告警提示
 		}
 	}
 

@@ -64,6 +64,7 @@ uint16_t gCurRevLen = 0 ;
 // GPS 1s一锟斤拷,锟斤拷锟斤拷2s一锟斤拷
 #define			_CAN_BUS_REV_TIMEOUT_MS			(1000*5)
 
+void JT808CAN_Sleep(void);
 
 extern void can0_reset(void);
 
@@ -590,9 +591,7 @@ UTP_EVENT_RC JT808_cmd_setToOpState(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVEN
 				pJt->devState.cnt = 0x00 ;
 				//gModuleSleepCnt = GET_TICKS();
 
-				can0_sleep();	// CAN 休眠
-				Utp_Reset(&g_JtUtp);
-				Fsm_SetActiveFlag(AF_JT808, False);		// 设置状态
+				JT808CAN_Sleep();
 				break;
 			case JT_STATE_WAKEUP:
 				//pJt->bleState.bleConnectState = 0x00;
@@ -715,9 +714,7 @@ void JT808_switchState(JT808* pJt, JT_state newState)
 			g_Jt.devState.cnt = 0x00 ;
 
 			// 锟截憋拷CAN 锟斤拷锟斤拷锟斤拷
-			can0_sleep();
-			Utp_Reset(&g_JtUtp);
-			Fsm_SetActiveFlag(AF_JT808, False);		// 设置状态
+			JT808CAN_Sleep();
 			break;
 		case JT_STATE_WAKEUP:
 			{
@@ -1411,6 +1408,13 @@ static void JT808_Work(void)
 }
 
 
+void JT808CAN_Sleep(void)
+{
+	can0_sleep();	// CAN 休眠
+	Utp_Reset(&g_JtUtp);
+	Fsm_SetActiveFlag(AF_JT808, False);		// 设置状态
+}
+
 
 
 #define		_SLEEP_TIMEOUT_MS			(15*1000)			// 15*1000 模块休眠
@@ -1434,7 +1438,7 @@ void JT808_run(void)
 				//超时也没办法，只能重启CAN
 				can0_reset();
 				gModuleWakupIngTimeoutCnt = GET_TICKS();		// 重新开始
-				PFL_WARNING("GPRS/GPS Wakeup Timeout\r\n");
+				PFL_WARNING("GPRS/GPS Wakeup Timeout,Sleep CAN\r\n");
 			}
 			JT808_Work();
 		}
@@ -1465,7 +1469,7 @@ void JT808_run(void)
 				Utp_Reset(&g_JtUtp);
 				SetComModeSleep();	// 准备进入休眠
 				gModuleSleepIngTimeoutCnt = GET_TICKS();
-				PFL_WARNING("GPRS/GPS Sleep Timeout\r\n");
+				PFL_WARNING("GPRS/GPS Sleep Timeout,CAN Sleep\r\n");
 			}
 		}
 		else 					// 没有休眠检测是否需要进休眠
@@ -1499,7 +1503,6 @@ void JT808_run(void)
 				}
 			}
 		}
-		//else // 没有准备进入休眠,则检测是否需要进休眠
 		JT808_Work();
 	}
 }
@@ -1511,7 +1514,7 @@ Bool JT808_wakeup(void)
 	return True;
 }
 
-Bool JT808_sleep(void)
+Bool JT808_Sleep(void)
 {
 	// 休眠之
 	SetComModeSleep();	// 准备进入休眠
@@ -1633,7 +1636,7 @@ void JT808_init()
 		.pCbObj = &g_Jt,
 	};
 
-	static const Obj obj = { "JT808", JT808_start, (ObjFn)JT808_sleep, JT808_run };
+	static const Obj obj = { "JT808", JT808_start, (ObjFn)JT808_Sleep, JT808_run };
 	ObjList_add(&obj);
 	g_Jt.opState = JT_STATE_UNKNOWN;	//锟斤拷始锟斤拷为一锟斤拷UNKNOWN值
 
