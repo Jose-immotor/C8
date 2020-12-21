@@ -487,7 +487,7 @@ static void _Rs485_Cmd10( uint8_t *pinbuff , uint16_t len )
 			
 			if( pCurBat->presentStatus == BAT_IN )	// 如果存在
 			{
-				// 1、如果些电池没有放电 
+				// 1、如果些电池没有放电
 				if( !( pCurBat->bmsInfo.state & 0x0200 ) )
 				{
 					break ;
@@ -507,24 +507,29 @@ static void _Rs485_Cmd10( uint8_t *pinbuff , uint16_t len )
 				
 				PFL(DL_485,"Bat State:%X,%d,%d\n",
 					pCurBat->bmsInfo.state,pCurBat->bmsInfo.tcurr,pCurBat->bmsInfo.tvolt);
-				
-				g_Rs485TxBuf[tx_len++] = pCurBat->bmsInfo.state&0x0100 ? 0x01 : 0x00;	// 1充电中，0:未充电
 
+				// 充电标志
+				//g_Rs485TxBuf[tx_len++] = pCurBat->bmsInfo.state&0x0100 ? 0x01 : 0x00;	// 1充电中，0:未充电
+				g_Rs485TxBuf[tx_len++] = 0x00;	// 防止显示充电
+
+				// 电流
 				tempu32 = bigendian16_get((uint8_t*)&pCurBat->bmsInfo.tcurr);
 				tempu32 -= 30000 ;
 				tempu32 *= 10;
 				g_Rs485TxBuf[tx_len++] = tempu32 & 0xFF ;	// 电流 ma
-				g_Rs485TxBuf[tx_len++] = tempu32 >> 8;	// 电流
+				g_Rs485TxBuf[tx_len++] = tempu32 >> 8;		// 电流
 				g_Rs485TxBuf[tx_len++] = tempu32 >> 16 ;	// 电流
 				g_Rs485TxBuf[tx_len++] = tempu32 >> 24 ;	// 电流
 				//
+				// 电压
 				tempu32 = bigendian16_get((uint8_t*)&pCurBat->bmsInfo.tvolt);
 				tempu32 *= 10 ;
-				g_Rs485TxBuf[tx_len++] = tempu32 & 0xFF ;	// 电压 mv
-				g_Rs485TxBuf[tx_len++] = tempu32 >> 8 ;	// 电压
+				g_Rs485TxBuf[tx_len++] = tempu32 & 0xFF ;		// 电压 mv
+				g_Rs485TxBuf[tx_len++] = tempu32 >> 8 ;			// 电压
 				g_Rs485TxBuf[tx_len++] = tempu32 >> 16 ;		// 电压
-				g_Rs485TxBuf[tx_len++] = tempu32 >> 24 ;	// 电压
-				//
+				g_Rs485TxBuf[tx_len++] = tempu32 >> 24 ;		// 电压
+
+				// 温度
 				g_Rs485TxBuf[tx_len++] = bigendian16_get((uint8_t*)&pCurBat->bmsInfo.dmost)/10 - 40 ;	// 温度
 
 				// 运行状态
@@ -553,6 +558,7 @@ static void _Rs485_Cmd10( uint8_t *pinbuff , uint16_t len )
 				g_Rs485TxBuf[tx_len++] = 0x00;
 				g_Rs485TxBuf[tx_len++] = 0x00;//pCurBat->bmsInfo.balasta >> 8;
 				g_Rs485TxBuf[tx_len++] = 0x00;//pCurBat->bmsInfo.balasta & 0xFF;
+				
 				/*
 				绑定状态
 				//Bit0：1：已绑定 0：未绑定
