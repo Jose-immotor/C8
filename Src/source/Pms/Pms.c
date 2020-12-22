@@ -354,7 +354,8 @@ void Pms_switchStatus(PmsOpStatus newStatus)
 void CAN_Wakeup(void)		
 {
 	gJT808ExtStatus = _JT808_EXT_WAKUP ;
-	//Pms_postMsg(PmsMsg_GPRSIrq, 0, 0);
+	if( !g_isPowerDown )	// 主机没休眠时,发送指令
+		Pms_postMsg(PmsMsg_GPRSIrq, 0, 0);
 }
 #endif //
 
