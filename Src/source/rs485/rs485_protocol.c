@@ -47,6 +47,7 @@ int Rs485_Tx(const uint8_t* pData, int len)
 {
 	int i;
 	DrvIo* g_Rs485DirCtrlIO = Null;
+	const uint8 *p = pData ;
 	
 	//CirBuffPush( &gTx485txBuf, pData, len);
 		
@@ -57,6 +58,10 @@ int Rs485_Tx(const uint8_t* pData, int len)
 		uart4_put_byte(*pData++);
 	}
 	PortPin_Set(g_Rs485DirCtrlIO->periph, g_Rs485DirCtrlIO->pin, False);
+
+	PFL(DL_485, "485 TX(%d):",len);
+	DUMP_BYTE_LEVEL(DL_485, p , len );
+	PFL(DL_485, "\n");
 	
 	return 0;
 }

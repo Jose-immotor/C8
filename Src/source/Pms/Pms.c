@@ -209,7 +209,7 @@ void Pms_postMsg(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	}
 	else
 	{
-		PFL_WARNING("Pms msg queue is full.\n");
+		PFL_WARNING("Pms msg queue is full.[%d]\n",msgId);
 	}
 }
 
@@ -354,8 +354,8 @@ void Pms_switchStatus(PmsOpStatus newStatus)
 void CAN_Wakeup(void)		
 {
 	gJT808ExtStatus = _JT808_EXT_WAKUP ;
-	if( !g_isPowerDown )	// 主机没休眠时,发送指令
-		Pms_postMsg(PmsMsg_GPRSIrq, 0, 0);
+	//if( !g_isPowerDown )	// 主机没休眠时,发送指令
+	//	Pms_postMsg(PmsMsg_GPRSIrq, 0, 0);
 }
 #endif //
 

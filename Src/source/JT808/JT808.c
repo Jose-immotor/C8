@@ -1426,84 +1426,111 @@ extern JT808ExtStatus gJT808ExtStatus ;
 /*
 	JT808休眠时---主MCU可能休眠( WorkMode_Sleep() ),也可能不休眠( !WorkMode_Sleep())
 	JT808可能被以下情况是唤醒：外围模块主动唤醒,被MCU唤醒(MCU未休眠时唤醒,MCU休眠时唤醒)
+
+	// 还有一种可能,模块没有接 or 模块坏了
 */
 void JT808_run(void)
 {
-	if( ComModeSleep() )	// 模块已经休眠---检测是否需要唤醒处理
+	static JT808ExtStatus last_status = 0xFF;
+	if( g_Jt.opState == JT_STATE_INIT )	// 模块没有接
 	{
-		if( ComModeWakeupIng() )	// 正在被唤醒
+		if( last_status != gJT808ExtStatus )
 		{
-			if( GET_TICKS() - gModuleWakupIngTimeoutCnt > _WAKEUP_TIMEOUT_MS )
+			if( _JT808_EXT_SLEEP == gJT808ExtStatus )	// 休眠
 			{
-				//超时也没办法，只能重启CAN
-				can0_reset();
-				gModuleWakupIngTimeoutCnt = GET_TICKS();		// 重新开始
-				PFL_WARNING("GPRS/GPS Wakeup Timeout,Sleep CAN\r\n");
+				Utp_Reset(&g_JtUtp);
+				SetComModeSleep();	// 准备进入休眠
 			}
-			JT808_Work();
-		}
-		else
-		{
-			if( !WorkMode_Sleep() && _JT808_EXT_SLEEP != gJT808ExtStatus )	// 外围唤醒
+			else
 			{
-				gModuleWakupIngTimeoutCnt = GET_TICKS();	// 计时
-
 				can0_wakeup();
 				Utp_Reset(&g_JtUtp);
 				SetComModeWakeup();
-				PFL(DL_JT808,"GPRS/GPS Wakeup[%d]...\r\n",gJT808ExtStatus );
-
+			}
+		}
+		last_status = gJT808ExtStatus ;
+		JT808_Work();
+	}
+	else		// 模块接了
+	{
+		if( ComModeSleep() )	// 模块已经休眠---检测是否需要唤醒处理
+		{
+			if( ComModeWakeupIng() )	// 正在被唤醒
+			{
+				if( GET_TICKS() - gModuleWakupIngTimeoutCnt > _WAKEUP_TIMEOUT_MS )
+				{
+					//超时也没办法，只能重启CAN
+					can0_reset();
+					gModuleWakupIngTimeoutCnt = GET_TICKS();		// 重新开始
+					PFL_WARNING("GPRS/GPS Wakeup Timeout,Sleep CAN\r\n");
+				}
 				JT808_Work();
 			}
-		}
-	}
-	else					// 如果未休眠,则检测是否需要休眠
-	{
-		if( ComModeSleepIng() )		// 正在进入休眠
-		{
-			//检测进休眠是否超时
-			if( GET_TICKS() - gModuleSleepIngTimeoutCnt > _SLEEP_TIMEOUT_MS )
+			else
 			{
-				//超时也没办法，只能重启CAN
-				can0_reset();
-				Utp_Reset(&g_JtUtp);
-				SetComModeSleep();	// 准备进入休眠
-				gModuleSleepIngTimeoutCnt = GET_TICKS();
-				PFL_WARNING("GPRS/GPS Sleep Timeout,CAN Sleep\r\n");
-			}
-		}
-		else 					// 没有休眠检测是否需要进休眠
-		{
-			if( _JT808_EXT_SLEEP == gJT808ExtStatus )
-			{
-				SetComModeSleep();	// 准备进入休眠
-				gModuleSleepIngTimeoutCnt = GET_TICKS();		// 计时
-			}
-			else if(_JT808_EXT_BRIEF_WAKUP == gJT808ExtStatus )	// 临时唤醒 定位30s后,或者启动5分钟后进休眠
-			{
-				// 超时15s后休眠
-				//gModuleWakupIngTimeoutCnt
-				if( g_Jt.devState.cnt & _NETWORK_CONNECTION_BIT &&
-					g_Jt.devState.cnt & _GPS_FIXE_BIT &&
-					GET_TICKS() - gModuleWakupIngTimeoutCnt > 3*60*1000  )
+				if( !WorkMode_Sleep() && _JT808_EXT_SLEEP != gJT808ExtStatus )	// 外围唤醒
 				{
-					SetComModeSleep();	// 准备进入休眠
-					gModuleSleepIngTimeoutCnt = GET_TICKS();		// 计时
-					PFL(DL_JT808,"JT808 BRIEF Wakeup GPRS&GPS fix,Sleep\n");
+					gModuleWakupIngTimeoutCnt = GET_TICKS();	// 计时
 
-					gJT808ExtStatus = _JT808_EXT_SLEEP;	// 清除之
-				}
-				else if( GET_TICKS() - gModuleWakupIngTimeoutCnt > 5*60*1000 )
-				{
-					SetComModeSleep();	// 准备进入休眠
-					gModuleSleepIngTimeoutCnt = GET_TICKS();		// 计时
-					PFL(DL_JT808,"JT808 BRIEF Wakeup timeout > 5min,Sleep\n");
+					can0_wakeup();
+					Utp_Reset(&g_JtUtp);
+					SetComModeWakeup();
+					PFL(DL_JT808,"GPRS/GPS Wakeup[%d]...\r\n",gJT808ExtStatus );
 
-					gJT808ExtStatus = _JT808_EXT_SLEEP;	// 清除之
+					JT808_Work();
+
+					Pms_postMsg(PmsMsg_GPRSIrq, 0, 0);
 				}
 			}
 		}
-		JT808_Work();
+		else					// 如果未休眠,则检测是否需要休眠
+		{
+			if( ComModeSleepIng() )		// 正在进入休眠
+			{
+				//检测进休眠是否超时
+				if( GET_TICKS() - gModuleSleepIngTimeoutCnt > _SLEEP_TIMEOUT_MS )
+				{
+					//超时也没办法，只能重启CAN
+					can0_reset();
+					Utp_Reset(&g_JtUtp);
+					SetComModeSleep();	// 准备进入休眠
+					gModuleSleepIngTimeoutCnt = GET_TICKS();
+					PFL_WARNING("GPRS/GPS Sleep Timeout,CAN Sleep\r\n");
+				}
+			}
+			else 					// 没有休眠检测是否需要进休眠
+			{
+				if( _JT808_EXT_SLEEP == gJT808ExtStatus )
+				{
+					SetComModeSleep();	// 准备进入休眠
+					gModuleSleepIngTimeoutCnt = GET_TICKS();		// 计时
+				}
+				else if(_JT808_EXT_BRIEF_WAKUP == gJT808ExtStatus )	// 临时唤醒 定位30s后,或者启动5分钟后进休眠
+				{
+					// 超时15s后休眠
+					//gModuleWakupIngTimeoutCnt
+					if( g_Jt.devState.cnt & _NETWORK_CONNECTION_BIT &&
+						g_Jt.devState.cnt & _GPS_FIXE_BIT &&
+						GET_TICKS() - gModuleWakupIngTimeoutCnt > 3*60*1000  )
+					{
+						SetComModeSleep();	// 准备进入休眠
+						gModuleSleepIngTimeoutCnt = GET_TICKS();		// 计时
+						PFL(DL_JT808,"JT808 BRIEF Wakeup GPRS&GPS fix,Sleep\n");
+
+						gJT808ExtStatus = _JT808_EXT_SLEEP;	// 清除之
+					}
+					else if( GET_TICKS() - gModuleWakupIngTimeoutCnt > 5*60*1000 )
+					{
+						SetComModeSleep();	// 准备进入休眠
+						gModuleSleepIngTimeoutCnt = GET_TICKS();		// 计时
+						PFL(DL_JT808,"JT808 BRIEF Wakeup timeout > 5min,Sleep\n");
+
+						gJT808ExtStatus = _JT808_EXT_SLEEP;	// 清除之
+					}
+				}
+			}
+			JT808_Work();
+		}
 	}
 }
 
@@ -1524,6 +1551,7 @@ Bool JT808_Sleep(void)
 
 void JT808_start(void)
 {
+	Utp_Reset(&g_JtUtp);		// 清除所有发送数据
 	//锟斤拷锟斤拷硬锟斤拷锟斤拷使锟斤拷锟叫讹拷
 	JT808_switchState(g_pJt, JT_STATE_INIT);
 
