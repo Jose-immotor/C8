@@ -5,9 +5,12 @@
 #include "TlvOut.h"
 #include "NvdsUser.h"
 #include "Pms.h"
+#include "Dbg.h"
 
 #ifdef CANBUS_MODE_JT808_ENABLE
 
+extern void Cabin_UnLock(void);
+extern void CtrlBLE( uint16_t ctrl );
 
 static TlvInMgr g_jtTlvInMgr_8900;
 
@@ -85,6 +88,17 @@ TlvInEventRc JtTlv8900_Event(TlvInMgr* mgr, const TlvIn* pItem, TlvInEvent ev)
 					g_Jt8900.mBatVerify.BatBid[2],g_Jt8900.mBatVerify.BatBid[3],
 					g_Jt8900.mBatVerify.BatBid[4],g_Jt8900.mBatVerify.BatBid[5]);
 				break ;
+			case TAG_CTL_BLE_SCAN :
+				if( g_Jt8900.mBleScanEnable )		// 蓝牙扫描
+				{
+					CtrlBLE( 0x01 );		// 使能扫描
+				}
+				else
+				{
+					CtrlBLE(0x00);			//停止扫描
+				}
+				PFL(DL_JT808,"8900_BleScanEnable:%d\n",g_Jt8900.mBleScanEnable);
+				break ;
 			default :break ;
 		}
 	}
@@ -111,6 +125,7 @@ void JtTlv8900_init()
 		{"SET_BAT_IDEN"		, TAG_SET_BAT_IDEN_EN,	1, &g_Jt8900.mBatIDEnable,DT_UINT8,Null,Null},
 		{"SET_BAT_ALAMEN"	, TAG_SET_BAT_ALAM_EN,	1, &g_Jt8900.mBatAlamEnable,DT_UINT8,Null,Null},
 		{"SET_BAT_BID"		, TAG_SET_BAT_BID,		1, (uint8_t*)&g_Jt8900.mBatVerify,DT_STRUCT,Null,Null},
+		{"SCAN_BLE"			, TAG_CTL_BLE_SCAN,		1, &g_Jt8900.mBleScanEnable,DT_UINT8,Null,Null},
 	};
 	TlvInMgr_init(&g_jtTlvInMgr_8900, g_tlvIn_8900, GET_ELEMENT_COUNT(g_tlvIn_8900), 1, (TlvInEventFn)JtTlv8900_Event, False);
 }

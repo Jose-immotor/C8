@@ -29,9 +29,9 @@ int gd32_flash_write(uint32_t addr, uint8_t *buf, uint16_t size)
 {
 	typedef enum {FAILED = 0, PASSED = !FAILED} test_state;
 
-	uint8_t result = 0;
+	int8_t result = 0;
 	uint32_t end_addr = addr + size;
-	uint32_t wp_value = 0xFFFFFFFF, protected_pages = 0x0;
+	uint32_t wp_value = 0xFFFFFFFF;//, protected_pages = 0x0;
 	uint32_t Address = 0x0;
 	uint8_t *data;
 	__IO fmc_state_enum fmc_state = FMC_READY;
@@ -114,7 +114,7 @@ int gd32_flash_write(uint32_t addr, uint8_t *buf, uint16_t size)
  */
 int gd32_flash_erase(uint32_t addr, uint16_t size)
 {
-    uint8_t result = 0;
+    int8_t result = 0;
 	
 	__IO fmc_state_enum fmc_state = FMC_READY;
     uint32_t FirstSector = 0, NbOfSectors = 0;

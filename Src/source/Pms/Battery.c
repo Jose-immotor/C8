@@ -228,6 +228,9 @@ MOD_EVENT_RC Bat_event_readBmsInfo(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EV
 	if (ev == MOD_REQ_SUCCESS)
 	{
 		uint16_t tmp_value;
+		// == 0 表示有接入
+		// 如果
+		if( IO_Read(IO_BAT_INSERT) ) return MOD_EVENT_RC_SUCCESS;
 		
 		if(pBat->presentStatus != BAT_IN)
 		{

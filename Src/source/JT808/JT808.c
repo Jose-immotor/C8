@@ -11,6 +11,8 @@
 #include "drv_can.h"
 #include "string.h"
 #include "FirmwareUpdata.h"
+#include "Dbg.h"
+#include "drv_adc.h"
 
 
 /*
@@ -46,7 +48,7 @@ static uint32_t gCanbusRevTimeMS = 0;
 static uint32 	gGPSTimeCnt ;		// 
 static uint32 	gGPSFixCnt;			// GPS 锟斤拷时时锟斤拷
 // GPRS时锟斤拷---锟斤拷锟皆硷拷录GPRS锟接凤拷锟酵碉拷锟斤拷锟斤拷时锟斤拷
-static uint32 	gGPRSSendTimeCnt;
+//static uint32 	gGPRSSendTimeCnt;
 static uint32 	gGPRSConTimeCnt ;		// 锟斤拷锟斤拷锟斤拷时时锟斤拷
 static uint32	gGPRSConCnt;			// GPRS 锟斤拷锟斤拷时锟斤拷
 
@@ -56,10 +58,18 @@ static uint32  gModuleSleepIngTimeoutCnt ;		// 模块请求进休眠超时计时
 //static uint32  gModuleSleepCnt;					// 模块休眠计时
 // wakeup 
 static uint32  gModuleWakupIngTimeoutCnt;		// 模块请求wakeup超时计时
-static uint32  gModuleWakeupCnt;				// 模块唤醒计时
+//static uint32  gModuleWakeupCnt;				// 模块唤醒计时
+
+Bool gJT808UpdateFirmware = false ;	// 清除之
 
 
 uint16_t gCurRevLen = 0 ;
+
+// Beacon更新
+static uint32 gBeaconTick = 0;
+static Bool gBeaconUpdate = False ;
+static uint8 gBleAdvCntextCnt = 0;
+static Beacon gBeaconCntext[10];	// 16个
 
 // GPS 1s一锟斤拷,锟斤拷锟斤拷2s一锟斤拷
 #define			_CAN_BUS_REV_TIMEOUT_MS			(1000*5)
@@ -83,6 +93,7 @@ void JT808_fsm(uint8_t msgID, uint32_t param1, uint32_t param2);
 static JT808fsmFn JT808_findFsm(JT_state state);
 
 static void _SetOperationState(uint8_t Operation, uint8_t Parameter );
+void CtrlBLE( uint16_t ctrl );
 
 void Sim_Dump(void)
 {
@@ -629,6 +640,15 @@ static void _SetOperationState(uint8_t Operation, uint8_t Parameter )
 	g_Jt.setToOpState.StateParameter = Parameter ;
 	Utp_SendCmd(&g_JtUtp, JTCMD_SET_OP_STATE);
 }
+
+void CtrlBLE( uint16_t ctrl )
+{
+	g_Jt.bleEnCtrl = ctrl ;
+	Utp_SendCmd(&g_JtUtp, JTCMD_CMD_SET_BLE_EN );
+	PFL(DL_JT808,"Ctrl BLE:%x\r\n",ctrl);
+}
+
+
 void JT808_CheckResetSerAddr(void)
 {
 	Utp_SendCmd(&g_JtUtp, JTCMD_CMD_GET_SIM_CFG);
@@ -918,10 +938,16 @@ UTP_EVENT_RC JT808_event_rcvSvrData(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVEN
 */
 static Bool _CheckFirmwareUpdate(void)
 {
-	// 没有放电 & 电池电量不要低
-	if( g_pdoInfo.isLowPow ) return false;
-	//if( g_pdoInfo.isRemoteAccOn ) return false ;	
-	return true ;
+	Adc* pAdc =  Adc_Get( ADC_18650_VOLTAGE );
+
+	PFL(DL_JT808,"Check Firmware Updat,18650:%dmv\n",pAdc->newValue);
+
+	return pAdc->newValue > 3900 ? true : false ;	// > 3.9v 则可以升级
+	
+	// 只要电量 > 3.9v 则可以开始升级
+	//if( g_pdoInfo.isLowPow ) return false;
+	
+	//return true ;
 }
 
 
@@ -1024,23 +1050,16 @@ UTP_EVENT_RC JT808_cmd_getFileContent(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EV
 		{
 			// 写Flash
 			WriteFirmware( pJt->filecontentrsq.fileOffset,pJt->filecontentrsq.fileData , 128 );
-			// test
-			//{
-			//	uint8 buff[128];
-			//	ReadFirmware( pJt->filecontentrsq.fileOffset , buff , 128 );
-			//	if( 0 != memcmp( pJt->filecontentrsq.fileData , buff , sizeof(buff)) )
-			//	{
-			//		PFL_WARNING("Write File Error:%x\r\n",pJt->filecontentrsq.fileOffset);
-			//	}
-			//}
 			
 			pJt->filecontentreq.fileOffset += 128 ;			
 			if( pJt->filecontentreq.fileOffset >= pJt->updatefileinfo.Updatefilelength )
 			{
 				if( CheckFirmware( pJt->updatefileinfo.Updatefilelength ) )
 				{
-					PFL(DL_JT808,"Check File OK ,Entern bootloader\r\n");
-					NVIC_SystemReset();
+					gJT808UpdateFirmware = true ;	// 请求升级
+					//PFL(DL_JT808,"Check File OK ,Entern bootloader\r\n");
+					//NVIC_SystemReset();
+					PFL(DL_JT808,"Check File OK ,Wait bootloader...\r\n");
 				}
 				else
 				{
@@ -1091,7 +1110,143 @@ UTP_EVENT_RC JT808_event_setLocationExtras(JT808* pJt, const UtpCmd* pCmd, UTP_T
 	return UTP_EVENT_RC_SUCCESS;
 }
 
+/*
+	收到Beacon数据,收到Beacon数据之后的500ms开始更新数据
+	UUID
+	Major
+	Minor
+	RSSI
+	SOC
+	Voltage
 
+	LTV[02 01 05]
+
+
+	苹果的Beacon 格式：0xFF
+	1a ff 4c 00 02 15 fd a5 06 93 a4 e2 4f b1 af cf c6 eb 07 64 78 25 27 11 4c b9 c5
+	:::
+	4c 00 :苹果公司
+	02 15  : TLV : 02表示Beacon 15表示数据长度
+	fd a5 06 93 a4 e2 4f b1 af cf c6 eb 07 64 78 25 // UUID
+	27 11 											// Major
+	4c b9 											// Minor
+	c5												// twPower
+
+	
+*/
+
+//4c 00 02 15 fd a5 06 93 a4 e2 4f b1 af cf c6 eb 07 64 78 25 27 11 4c b9 c5
+static Bool _ConvertIbeacon( int8_t rssi ,uint8_t *pAdv , BeaconCell *pBecaon )
+{
+	if( !pAdv || !pBecaon ) return False ;
+	memcpy( pBecaon->miUUID , pAdv + 4 , 16 );
+	pBecaon->miMajor = ( pAdv[21] << 8 ) | pAdv[22] ;
+	pBecaon->miMinor = ( pAdv[23] << 8 ) | pAdv[24] ;
+	pBecaon->miVoltage = pAdv[25];
+	pBecaon->miRSSI = rssi ;
+	return True ;
+}
+
+static Bool _ConvertBleAdvToBeacon(BLEAdvContext *pAdvCntext, BeaconCell *pBecaon )
+{
+	uint8_t t = 0 , l = 0 , i = 0 ;
+	if( !pAdvCntext || !pBecaon ) return False ;
+	//
+	for( i = 0 ; i < 62 ; )
+	{
+		l = pAdvCntext->mADV[i++];
+		t = pAdvCntext->mADV[i++];
+		switch ( t )
+		{
+			case 0xFF :	// 查看是否为苹果的Ibeacon
+				if( l == 0x1A /*&& pAdvCntext->mADV[i+0] == 0x4C &&
+					pAdvCntext->mADV[i+1] == 0x00 */&& pAdvCntext->mADV[i+2] == 0x02 && 
+					pAdvCntext->mADV[i+3] == 0x15 )
+				{
+					return _ConvertIbeacon( pAdvCntext->miRSSI ,&pAdvCntext->mADV[i] , pBecaon );
+				}
+				break;
+			case 0x16 :	// 查看是否为google的Beacon
+				break ;
+			case 0x2B :	// 查看是否为Mesh的Beacon
+				break ;
+			default :
+				break ;
+		}
+		i += (l-1) ;
+	}
+	return False ;
+}
+
+static Bool _ChecBeaconUUID( BeaconCell *pBeacon )
+{
+	uint8 i = 0 ;
+	if( !pBeacon ) return False ;
+
+	for( i = 0 ; i < 16 ; i++ )
+	{
+		if( g_cfgInfo.BeaconUUID[i] != 0 ) break ;
+	}
+	if( i >= 16 ) return True ;
+
+	for( i = 0 ; i < 16 ; i++ )
+	{
+		if( g_cfgInfo.BeaconUUID[i] != pBeacon->miUUID[i] ) break ;
+	}
+
+	return i >= 16 ? True : False ;
+}
+
+// 如果有更新
+static void _UpdateBeacon( BeaconCell *pBeacon )
+{
+	uint8 i = 0 ;
+	if( !pBeacon ) return ;
+
+	// 查找相同的 Beacon
+	for( i = 0 ; i < gBleAdvCntextCnt ; i++ )
+	{
+		if( pBeacon->miMajor == gBeaconCntext[i].Major &&
+			pBeacon->miMinor == gBeaconCntext[i].Minor )
+		{
+			break ;
+		}
+	}
+	if( i < sizeof(gBeaconCntext)/sizeof(Beacon) )
+	{
+		memcpy( &gBeaconCntext[i] , pBeacon , sizeof(BeaconCell) );
+	}
+}
+
+UTP_EVENT_RC JT808_event_BeaconEvent(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
+{
+	uint8 i = 0 ;
+	BLEAdvContext *pAdvCntext = Null ;
+	BeaconCell becaonCell = { 0x00 };
+	if( ev == UTP_CHANGED_AFTER )
+	{
+		//
+	}
+	else if( ev == UTP_GET_RSP )
+	{
+		// 启动定时器,开始发送
+		if( !gBeaconUpdate ) gBleAdvCntextCnt = 0 ;
+		gBeaconUpdate = True ;
+		gBeaconTick = GET_TICKS();
+		for( i = 0 ; i < pJt->bleBeaconCntext.BeaconCntextLen/sizeof(BLEAdvContext) ; i++ )
+		{
+			pAdvCntext = &pJt->bleBeaconCntext.BeaconADV[i];
+			if( _ConvertBleAdvToBeacon( pAdvCntext , &becaonCell ) )
+			{
+				if( _ChecBeaconUUID( &becaonCell ) )
+				{
+					_UpdateBeacon( &becaonCell );
+				}
+			}
+		}
+	}
+	return UTP_EVENT_RC_SUCCESS;
+}
 
 
 UTP_EVENT_RC JT808_event_rcvBleData(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
@@ -1197,11 +1352,21 @@ void JT808_fsm_preoperation(uint8_t msgID, uint32_t param1, uint32_t param2)
 		}
 	}
 }
-
+extern void JTTlv0900_updateBeacon(Beacon *pBeacon , uint8 bleCnt);
 void JT808_fsm_operation(uint8_t msgID, uint32_t param1, uint32_t param2)
 {
 	if (msgID == MSG_RUN)
 	{
+		// Beacon数据
+		if( gBeaconUpdate )
+		{
+			if( GET_TICKS() - gBeaconTick > 500 )		// 500ms没更新,则认为更新完成
+			{
+				gBeaconUpdate = False ;
+				JTTlv0900_updateBeacon( gBeaconCntext ,gBleAdvCntextCnt  );
+				gBleAdvCntextCnt = 0x00;
+			}
+		}
 		// 锟斤拷锟斤拷JtTlv9000锟斤拷锟斤拷
 		JtTlv0900_updateStorage();	//
 		
@@ -1279,7 +1444,7 @@ void JTcmd(int argc, char** argv)
 		//case JTCMD_SET_OP_STATE: printf("receive Utpcmd3!\r\n");rt_thread_mdelay(1); Utp_SendCmd(&g_JtUtp, cmdCode);break;
 		case 80: printf("receive Utpcmd80!\r\n");rt_thread_mdelay(1); Utp_SendCmd(&g_JtUtp, 0x80);break;
 		case 160: printf("receive UtpcmdA0!\r\n");rt_thread_mdelay(1); Utp_SendCmd(&g_JtUtp, 0xA0);break;
-		case 15: printf("receive Utpcmd15!\r\n");rt_thread_mdelay(1); g_txlen = sprintf(g_txBuf,"Hello Server"); ;Utp_SendCmd(&g_JtUtp, 0x15);break;
+		case 15: printf("receive Utpcmd15!\r\n");rt_thread_mdelay(1); g_txlen = sprintf((char*)g_txBuf,"Hello Server"); ;Utp_SendCmd(&g_JtUtp, 0x15);break;
 	}
  
 }
@@ -1431,7 +1596,9 @@ extern JT808ExtStatus gJT808ExtStatus ;
 */
 void JT808_run(void)
 {
+	/*
 	static JT808ExtStatus last_status = 0xFF;
+	
 	if( g_Jt.opState == JT_STATE_INIT )	// 模块没有接
 	{
 		if( last_status != gJT808ExtStatus )
@@ -1452,6 +1619,7 @@ void JT808_run(void)
 		JT808_Work();
 	}
 	else		// 模块接了
+	*/
 	{
 		if( ComModeSleep() )	// 模块已经休眠---检测是否需要唤醒处理
 		{
@@ -1462,6 +1630,8 @@ void JT808_run(void)
 					//超时也没办法，只能重启CAN
 					can0_reset();
 					gModuleWakupIngTimeoutCnt = GET_TICKS();		// 重新开始
+					Utp_Reset(&g_JtUtp);
+					SetComModeWakeup();
 					PFL_WARNING("GPRS/GPS Wakeup Timeout,Sleep CAN\r\n");
 				}
 				JT808_Work();
@@ -1478,8 +1648,6 @@ void JT808_run(void)
 					PFL(DL_JT808,"GPRS/GPS Wakeup[%d]...\r\n",gJT808ExtStatus );
 
 					JT808_Work();
-
-					Pms_postMsg(PmsMsg_GPRSIrq, 0, 0);
 				}
 			}
 		}
@@ -1508,7 +1676,6 @@ void JT808_run(void)
 				else if(_JT808_EXT_BRIEF_WAKUP == gJT808ExtStatus )	// 临时唤醒 定位30s后,或者启动5分钟后进休眠
 				{
 					// 超时15s后休眠
-					//gModuleWakupIngTimeoutCnt
 					if( g_Jt.devState.cnt & _NETWORK_CONNECTION_BIT &&
 						g_Jt.devState.cnt & _GPS_FIXE_BIT &&
 						GET_TICKS() - gModuleWakupIngTimeoutCnt > 3*60*1000  )
@@ -1617,7 +1784,7 @@ void JT808_init()
 /************************************************
 *锟斤拷锟铰憋拷锟斤拷锟斤拷协锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟叫拷锟绞癸拷锟?************************************************/
 	
-	#define JT_CMD_SIZE 23
+	#define JT_CMD_SIZE 24
 	static uint8_t g_protocolVer = 1;	//锟斤拷锟斤拷协锟斤拷姹撅拷锟?	//static uint8_t g_updatefiletype = 1; // 锟叫匡拷
 	static uint8_t g_rxBuf[192];	
 	static UtpCmdEx g_JtCmdEx[JT_CMD_SIZE];
@@ -1651,8 +1818,10 @@ void JT808_init()
 		// 锟斤拷锟斤拷
 		{&g_JtCmdEx[20],UTP_EVENT, JTCMD_BLE_EVT_AUTH, "BleAuth", (uint8_t*)g_rxBuf, sizeof(g_rxBuf), Null , 0 , (UtpEventFn)JT808_event_bleAuthChanged },
 		{&g_JtCmdEx[21],UTP_EVENT, JTCMD_BLE_EVT_CNT, "BleCnt", (uint8_t*)&g_Jt.bleState, sizeof(Jt_BleState) , Null , 0 , (UtpEventFn)JT808_event_bleStateChanged },
-		// 
-		{&g_JtCmdEx[22],UTP_EVENT, JTCMD_BLE_RCV_DAT, "BleRcvDat", (uint8_t*)g_rxBuf, sizeof(g_rxBuf), (uint8_t*)g_txBuf, 0/*sizeof(g_txBuf)*/, (UtpEventFn)JT808_event_rcvBleData},
+		//
+		
+		{&g_JtCmdEx[22],UTP_EVENT, JTCMD_BLE_EVT_BEACON, "BleBeacon", (uint8_t*)&g_Jt.bleBeaconCntext, sizeof(BeaconCntext), Null, 0, (UtpEventFn)JT808_event_BeaconEvent},
+		{&g_JtCmdEx[23],UTP_EVENT, JTCMD_BLE_RCV_DAT, "BleRcvDat", (uint8_t*)g_rxBuf, sizeof(g_rxBuf), (uint8_t*)g_txBuf, 0/*sizeof(g_txBuf)*/, (UtpEventFn)JT808_event_rcvBleData},
 	}; 
 	
 	static const UtpCfg g_cfg =

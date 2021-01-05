@@ -14,10 +14,10 @@
 
 
 //计算充电电流
-static void Pms_calcChgCur(Bat* pBats, int batCount, uint32 totalPwr)
-{
+//static void Pms_calcChgCur(Bat* pBats, int batCount, uint32 totalPwr)
+//{
 
-}
+//}
 
 unsigned char slave_rs485_is_bat_valid(unsigned char bms_index)
 {	
@@ -137,7 +137,7 @@ unsigned short Battery_get_switch_state(unsigned char bms_index)
 
 #define BATTERY_VOLTAGE_SHAKE_CNT_MAX 600
 static uint32_t gl_Battery_voltage_shake_cnt;
-static SwTimer gl_Battery_optime_timeout = { 0 };
+//static SwTimer gl_Battery_optime_timeout = { 0 };
 
 // RS485 两电池状态 0:不上报,1上报
 uint8_t g_Bat0_State = 0;
@@ -373,6 +373,9 @@ void Battery_discharge_process(void)
 		//
 		g_Bat0_State = 1 ;
 		g_Bat1_State = 0 ;
+
+		gl_Battery_voltage_shake_cnt = GET_TICKS();
+        sl_supply_state = 2;
     }
 	else if((slave_rs485_is_bat_valid(1))&&(is_battery_A_V_reg_valid(1))&&
 	       (0 == is_battery_error(1)))
@@ -392,6 +395,9 @@ void Battery_discharge_process(void)
         }
 		g_Bat0_State = 0 ;
 		g_Bat1_State = 1 ;
+
+		gl_Battery_voltage_shake_cnt = GET_TICKS();
+        sl_supply_state = 2;
     }
 }
 

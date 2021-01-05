@@ -31,7 +31,7 @@ Bool fm175Drv_transStart(Fm175Drv* pDrv, FM17522_CMD cmd, uint32 timeOutMs);
 #if 1
 
 static DrvIo* g_pNfcNpdAIO = Null;
-static DrvIo* g_pNfcNpdBIO = Null;
+DrvIo* g_pNfcNpdBIO = Null;
 static DrvIo* g_pNfcPwrOffIO = Null;
 
 #define FM17522_NPD_HIGHT 	PortPin_Set(g_pNfcNpdAIO->periph, g_pNfcNpdAIO->pin, 1)
@@ -942,7 +942,7 @@ Bool fm175Drv_SyncTransfer(Fm175Drv* pDrv
 	}
 	else
 	{
-		pDrv->latestErr == TRANS_RESULT_FAILED;
+		pDrv->latestErr = TRANS_RESULT_FAILED;
 		rc = False;
 		goto End; 
 	}

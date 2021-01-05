@@ -615,7 +615,15 @@ void bat_insert(void)
 	if(g_isPowerDown)
 	{
 		SetWakeUpType(WAKEUP_BAT_INSERT);
-	}	
+	}
+	if(IO_Read(IO_BAT_INSERT) == RESET)
+	{
+		// PlugIn
+	}
+	else
+	{
+		// PlugOut
+	}
 //	if(GPIO_READ(PB, 14))
 //	{
 //		PostMsg(MSG_GYRO_ASSERT);

@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>C7Pms</TargetName>
+      <TargetName>C8Pms</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <pCCUsed>5060750::V5.06 update 6 (build 750)::.\ARMCC</pCCUsed>
@@ -16,7 +16,7 @@
         <TargetCommonOption>
           <Device>GD32E103VB</Device>
           <Vendor>GigaDevice</Vendor>
-          <PackID>GigaDevice.GD32E10x_DFP.1.1.0</PackID>
+          <PackID>GigaDevice.GD32E10x_DFP.1.0.3</PackID>
           <PackURL>http://gd32mcu.com/data/documents/pack/</PackURL>
           <Cpu>IRAM(0x20000000,0x08000) IROM(0x08000000,0x020000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>

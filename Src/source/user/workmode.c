@@ -96,7 +96,7 @@ static WorkMode_FsmFn WorkMode_findStatusProcFun(WorkmodeOpStatus status)
 
 	//程序不可能运行到这里
 	Assert(False);
-	return Null;
+	return (WorkMode_FsmFn)Null;
 }
 
 void workmode_switchStatus(WorkmodeOpStatus newStatus)

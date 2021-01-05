@@ -19,7 +19,8 @@
 
 #define		PMS_DEBUG_MSG(fmt,...)
 
-
+extern void ClearWakeupType(void);
+extern WakeupType GetWakeUpType(void);
 
 Battery g_Bat[MAX_BAT_COUNT];
 static Pms g_pms;
@@ -105,6 +106,19 @@ const static ModFrameCfg g_frameCfg =
 };
 
 
+#ifdef _GENERAL_CENTRAL_CTL		// C8 普通中控
+
+#ifdef CANBUS_MODE_JT808_ENABLE
+JT808ExtStatus gJT808ExtStatus = _JT808_EXT_WAKUP;
+#endif 
+
+static uint32 g_batlowcur_tick_24h = 0;
+static uint32 g_batlowcur_tick_12h = 0;
+static uint32 g_batlowcur_tick_5m = 0;
+static uint32 g_higcurr_tick = 0;
+#endif
+
+
 
 void BatteryInfoDump(void)
 {
@@ -170,6 +184,13 @@ void PmsDump()
 	
 	PRINTF_PMS(opStatus);
 	PRINTF_PMS(statusSwitchTicks);
+#ifdef _GENERAL_CENTRAL_CTL
+	Printf("5min:%d\n12hour:%d\n48hour:%d\nhigcurr:%d\n",
+		g_batlowcur_tick_5m,
+		g_batlowcur_tick_12h,
+		g_batlowcur_tick_24h,
+		g_higcurr_tick );
+#endif 
 }
 
 /********************************************************************/
@@ -263,14 +284,14 @@ PmsOpStatus Pms_GetStatus(void)
 
 #ifdef _GENERAL_CENTRAL_CTL		// C8 普通中控
 
-#ifdef CANBUS_MODE_JT808_ENABLE
-JT808ExtStatus gJT808ExtStatus = _JT808_EXT_WAKUP;
-#endif 
+//#ifdef CANBUS_MODE_JT808_ENABLE
+//JT808ExtStatus gJT808ExtStatus = _JT808_EXT_WAKUP;
+//#endif 
 
-static uint32 g_batlowcur_tick_24h = 0;
-static uint32 g_batlowcur_tick_12h = 0;
-static uint32 g_batlowcur_tick_5m = 0;
-static uint32 g_higcurr_tick = 0;
+//static uint32 g_batlowcur_tick_24h = 0;
+//static uint32 g_batlowcur_tick_12h = 0;
+//static uint32 g_batlowcur_tick_5m = 0;
+//static uint32 g_higcurr_tick = 0;
 
 
 /*
@@ -353,8 +374,12 @@ void Pms_switchStatus(PmsOpStatus newStatus)
 #ifdef CANBUS_MODE_JT808_ENABLE
 void CAN_Wakeup(void)		
 {
+	if( gJT808ExtStatus != _JT808_EXT_WAKUP )
+	{
+		Pms_postMsg(PmsMsg_GPRSIrq, 0, 0);
+	}
 	gJT808ExtStatus = _JT808_EXT_WAKUP ;
-	//if( !g_isPowerDown )	// 主机没休眠时,发送指令
+	//if( !g_isPowerDown )				// 主机没休眠时,发送指令
 	//	Pms_postMsg(PmsMsg_GPRSIrq, 0, 0);
 }
 #endif //
@@ -458,11 +483,11 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	}
 #endif //
 }
-
+extern Bool gJT808UpdateFirmware ;
 static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
 	static uint32 accoonprintf_tick = 0;
-	static uint32 discarge_tick = 0 ;
+	//static uint32 discarge_tick = 0 ;
 	
 	if (msgId == PmsMsg_run)
 	{
@@ -476,10 +501,16 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 		{
 			if( Bat_Discharge_Current_Low() )		// 如果小电流
 			{
+				if( gJT808UpdateFirmware && GET_TICKS()- g_pms.statusSwitchTicks > 3*60*1000 )
+				{
+					gJT808UpdateFirmware = false ;
+					NVIC_SystemReset();
+					Printf("System Update,Entern bootloader(%d)\r\n",g_pms.statusSwitchTicks);
+				}
 				// 持续了48小时---进入休眠
 				if( GET_TICKS() - g_batlowcur_tick_24h > PMS_ACC_DEPSLEEP_TIME )	// 48小时
 				{
-					PFL(DL_PMS,"Low Current,Enterl Acc Off And Sleep JT808 \n");
+					PFL(DL_PMS,"Low Current,Enterl Acc Off And Sleep JT808(%d)\n",g_batlowcur_tick_24h);
 					Pms_switchStatus(PMS_ACC_OFF);
 					gJT808ExtStatus = _JT808_EXT_SLEEP ;
 				}
@@ -487,7 +518,7 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 				if( GET_TICKS() - g_batlowcur_tick_12h > PMS_ACC_OFF_MODE_WAKUP_TIME )	// 48小时
 				{
 					g_batlowcur_tick_12h = GET_TICKS();
-					PFL(DL_PMS,"Low Current 12h,Wakeup JT808\n");
+					PFL(DL_PMS,"Low Current 12h,Wakeup JT808(%d)\n",g_batlowcur_tick_12h);
 					gJT808ExtStatus = _JT808_EXT_BRIEF_WAKUP ;
 				}
 				// 持续 5分钟
@@ -496,13 +527,13 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 				{
 					if( GetWakeUpType() )		// 如果是MCU唤醒后,则此时理科进休眠
 					{
-						PFL(DL_PMS,"Low Current 5Min & MCU Wakeup,Entern Acc Off\n");
+						PFL(DL_PMS,"Low Current 5Min & MCU Wakeup,Entern Acc Off(%d)\n",g_batlowcur_tick_5m);
 						Pms_switchStatus(PMS_ACC_OFF);
 						gJT808ExtStatus = _JT808_EXT_SLEEP ;
 					}
 					else
 					{
-						PFL(DL_PMS,"Low Current 5Min,Sleep JT808\n");
+						PFL(DL_PMS,"Low Current 5Min,Sleep JT808(%d)\n",g_batlowcur_tick_5m);
 						gJT808ExtStatus = _JT808_EXT_SLEEP ;
 					}
 				}
@@ -514,6 +545,7 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 				g_batlowcur_tick_5m = g_batlowcur_tick_24h;
 				ClearWakeupType();
 				gJT808ExtStatus = _JT808_EXT_WAKUP ;		// 唤醒模块
+				PFL(DL_PMS,"High Current Clear timeout & Wakeup \n");
 			}
 		}
 		else
@@ -536,6 +568,7 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 		Pms_plugIn((Battery*)param1);
 		// 刷新时间
 #ifdef _GENERAL_CENTRAL_CTL		
+		g_pms.statusSwitchTicks = GET_TICKS();		// 刷新时间
 		gJT808ExtStatus = _JT808_EXT_WAKUP ;
 		g_batlowcur_tick_24h = GET_TICKS();
 		g_batlowcur_tick_12h = g_batlowcur_tick_24h;
@@ -586,8 +619,8 @@ static void Pms_fsm_CANErr(PmsMsg msgId, uint32_t param1, uint32_t param2)
 
 static void Pms_fsm_deepSleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
-	static uint32 accsleep_tick = 0;
-	static uint32 accoffprintf_tick = 0;
+	//static uint32 accsleep_tick = 0;
+	//static uint32 accoffprintf_tick = 0;
 	static uint32 accoff_tick[MAX_BAT_COUNT];
 	uint8 i = 0;
 	// 开锁，防止费电，关闭放电

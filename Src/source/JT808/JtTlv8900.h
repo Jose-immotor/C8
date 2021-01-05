@@ -19,6 +19,7 @@ extern "C"{
 		TAG_SET_BAT_IDEN_EN,	// 电池身份校验使能
 		TAG_SET_BAT_ALAM_EN,	// 电池报警使能
 		TAG_SET_BAT_BID,		// 电池身份
+		TAG_CTL_BLE_SCAN,		// 信标扫描
 	}CMD8900_TLV;
 
 
@@ -41,6 +42,7 @@ extern "C"{
 		uint8		mPowerOff ;
 		uint8		mBatIDEnable;
 		uint8 		mBatAlamEnable;
+		uint8		mBleScanEnable;
 		TagBatVerify		mBatVerify ;
 	}Jt8900;
 

@@ -111,14 +111,14 @@ extern "C"{
 #define JT_DEV_FW_VER_SIZE 20
 	typedef struct _JtDevProperty
 	{
-		uint16  protocolVer;	//ï¿½ï¿½?ï¿½ï¿½?D-ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½?o?
-		uint32 devClass;	//????ï¿½ï¿½ï¿½ï¿½Dï¿½ï¿½
-		uint8  vendorID[5];	//???ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ID
-		uint8  devModel[5];//????Dï¿½ï¿½o?
-		char  devId[12];	//???? ID
-		char  iccid[10];	//???? SIM ?ï¿½ï¿½ ICCID
-		char  hwVer[JT_DEV_HW_VER_SIZE];	//????ï¿½ï¿½2?tï¿½ï¿½?ï¿½ï¿½?o?,ï¿½ï¿½?0?ï¿½ï¿½?2
-		char  fwVer[JT_DEV_FW_VER_SIZE];	//????1ï¿½ï¿½?tï¿½ï¿½?ï¿½ï¿½?o?,ï¿½ï¿½?0?ï¿½ï¿½?2
+		uint16_t  protocolVer;	//Ð­Òé°æ±¾ºÅ
+		uint32_t devClass;	//ÖÕ¶ËÀàÐÍ
+		uint8_t  vendorID[5];	//ÖÆÔìÉÌID
+		uint8_t  devModel[8];// [8] ÖÕ¶ËÐÍºÅ
+		uint8_t  devId[12];	//ÖÕ¶ËID
+		uint8_t  iccid[10];	//ICCID
+		uint8_t  hwVer[JT_DEV_HW_VER_SIZE];	//Ó²¼þ°æ±¾ºÅ
+		uint8_t  fwVer[JT_DEV_FW_VER_SIZE];	//¹Ì¼þ°æ±¾ºÅ
 	}JtDevProperty;
 	// Jose add 2020/09/17
 	// ????ï¿½ï¿½??ï¿½ï¿½
@@ -210,10 +210,38 @@ extern "C"{
 	}GetSMSContext;
 
 // ???ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ä¨¬??ï¿½ï¿½ï¿½ï¿½?
+//
+#define		_BLE_CTL_SCAN			BIT(0)	// É¨ÃèÐÅ±ê
+#define		_BLE_CTL_RESET			BIT(1)	// ÖØÆô
+#define		_BLE_CTL_FILTER			BIT(2)	// ÐÅ±ê¹ýÂÇ 
 
 
 
+// Beacon
+	typedef struct
+	{
+		int8		miRSSI;		// ÐÅºÅÇ¿¶È
+		uint8		mADV[62];	// ¹ã²¥Êý¾Ý
+	}BLEAdvContext;	
+
+#define		_BLE_BEACON_CNT			(4)
+	typedef struct
+	{
+		uint8 			BeaconCntextLen;
+		BLEAdvContext	BeaconADV[_BLE_BEACON_CNT];
+	}BeaconCntext ;
 	// Jose add end
+
+
+	// beacon
+	typedef struct
+	{
+		uint8_t 	miUUID[16];
+		uint16_t 	miMajor;
+		uint16_t 	miMinor;
+		int8_t		miRSSI;
+		uint16_t 	miVoltage;
+	}BeaconCell;
 	
 #pragma pack()
 
@@ -240,7 +268,7 @@ extern "C"{
 		uint16_t 		bleEnCtrl;
 		JtDevBleProperty bleproperty ;
 		JtDevBleCfgParam blecfgParam ;
-		
+		BeaconCntext	 bleBeaconCntext;
 		GetSMSContext	smsContext ;
 		
 		// ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½

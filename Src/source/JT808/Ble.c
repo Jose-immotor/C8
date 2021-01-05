@@ -18,6 +18,7 @@
 
 #ifdef CANBUS_MODE_JT808_ENABLE	
 
+extern void Cabin_UnLock(void);
 
 //spCmd->pExt->transferData && pCmd->pExt->transferLen 
 
@@ -64,7 +65,7 @@ UTP_EVENT_RC Ble_getBatteryInfo(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 				
 			default :
 				return (UTP_EVENT_RC)0x0C;
-				break ;
+				//break ;
 		}
 	}
 	return UTP_EVENT_RC_SUCCESS;
@@ -149,7 +150,7 @@ UTP_EVENT_RC Ble_setCabinlock(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 				break ;
 			default :
 				return (UTP_EVENT_RC)ERR_PARA_INVALID ;
-				break ;
+				//break ;
 		}
 	}
 	return UTP_EVENT_RC_SUCCESS;
@@ -170,7 +171,7 @@ UTP_EVENT_RC Ble_setActiveDev(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 				break ;
 			default :
 				return (UTP_EVENT_RC)ERR_PARA_INVALID ;
-				break ;
+				//break ;
 		}
 	}
 	return UTP_EVENT_RC_SUCCESS;
@@ -192,7 +193,7 @@ UTP_EVENT_RC Ble_BatteryVerify(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 				break ;
 			default :
 				return (UTP_EVENT_RC)ERR_PARA_INVALID ;
-				break ;
+				//break ;
 		}
 	}
 	return UTP_EVENT_RC_SUCCESS;
@@ -223,7 +224,7 @@ UTP_EVENT_RC Ble_setWheelLock(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 				break ;
 			default :
 				return (UTP_EVENT_RC)ERR_PARA_INVALID ;
-				break ;
+				//break ;
 		}
 	}
 	return UTP_EVENT_RC_SUCCESS;
@@ -256,7 +257,7 @@ UTP_EVENT_RC Ble_setACC(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 			break ;
 			default :
 				return (UTP_EVENT_RC)ERR_PARA_INVALID ;
-				break ;
+				//break ;
 		}
 	}
 	return UTP_EVENT_RC_SUCCESS;
@@ -274,11 +275,13 @@ UTP_EVENT_RC Ble_getNvds(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 		switch ( pCmd->pStorage[0] )
 		{
 			case 0x10 :
-				otvItem*  pResult = (otvItem*)pCmd->pExt->transferData;
-				pResult->item = 0x10;
-				pResult->len = 0x01 ;
-				pResult->param = gCurServerIndex;
-				pCmd->pExt->transferLen = 3;
+				{
+					otvItem*  pResult = (otvItem*)pCmd->pExt->transferData;
+					pResult->item = 0x10;
+					pResult->len = 0x01 ;
+					pResult->param = gCurServerIndex;
+					pCmd->pExt->transferLen = 3;
+				}
 				break ;
 			default :
 				break ;
@@ -387,9 +390,7 @@ uint8* Ble_ReqProc(const uint8_t* pReq, int frameLen, uint8* rspLen)
 {
 	if( g_BleTpu.cfg )
 	{
-		//PFL(DL_JT808, "BLE Rx[%d]:",frameLen);
-		//DUMP_BYTE_LEVEL(DL_JT808, pReq , frameLen );
-		//PFL(DL_JT808, "\n");
+		//Éý¼¶
 		return BleTpu_ReqProc(&g_BleTpu, pReq, frameLen, rspLen);
 	}
 	return Null ;
@@ -505,7 +506,6 @@ void Ble_init(uint8* mac)
 	BIT[11-31]£º±£Áô
 	*/
 	g_Ble.devCapacity.capacity = BIT(1) | BIT(2) | BIT(7) | BIT(8) | BIT(9) | BIT(10);
-	
 	
 	
 	BleTpu_Init(&g_BleTpu, &cfg, &g_BleFrameCfg);

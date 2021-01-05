@@ -21,7 +21,7 @@ void Boot(void)
 volatile bool g_isPowerDown = False;//休眠标志，False-没有休眠，True-休眠
 
 static WakeupType g_WakeupType;
-WakeupType GetWakeUpType()
+WakeupType GetWakeUpType(void)
 {
 	return g_WakeupType;
 }
@@ -75,6 +75,7 @@ extern void WorkMode_run();
 #ifdef CANBUS_MODE_JT808_ENABLE
 extern JT808ExtStatus gJT808ExtStatus ;
 extern void JT808CAN_Sleep(void);
+extern DrvIo* g_pNfcNpdBIO ;
 #endif 
 
 
@@ -92,6 +93,9 @@ void Enter_PowerDown()
 #ifdef CANBUS_MODE_JT808_ENABLE
 	JT808CAN_Sleep();
 #endif 
+	// NFC NPD-LED
+	if(g_pNfcNpdBIO)
+	PortPin_Set(g_pNfcNpdBIO->periph, g_pNfcNpdBIO->pin, False);
 
 	PortPin_Set(g_pLedIO->periph, g_pLedIO->pin, True);
 
@@ -131,25 +135,19 @@ void Mcu_PowerDown()
 	g_isPowerDown = False;
  	Printf("\nPower up.\n");
 	PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, True);	
+	// NFC NPD-LED-H
+	PortPin_Set(g_pNfcNpdBIO->periph, g_pNfcNpdBIO->pin, True);
+		
 	LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_WakeUp, GetWakeUpType());
 	Printf("wake up reason:%X\n",GetWakeUpType());
 	
 #ifdef _GENERAL_CENTRAL_CTL		// 普通中控
-	// 唤醒后,如果没有大电流,则直接上报数据后休眠
-	//if( ( g_Bat[0].presentStatus == BAT_IN || g_Bat[1].presentStatus == BAT_IN ) )
 	{
 		Pms_switchStatus(PMS_ACC_ON);
 #if defined ( CANBUS_MODE_JT808_ENABLE ) && defined ( _GENERAL_CENTRAL_CTL )
 		gJT808ExtStatus = _JT808_EXT_WAKUP ;	// 唤醒外置模块
 #endif //		
 	}
-	//else
-	//{
-	//	Pms_switchStatus(PMS_ACC_OFF);
-//#if defined ( CANBUS_MODE_JT808_ENABLE ) && defined ( _GENERAL_CENTRAL_CTL )
-		//gJT808ExtStatus = _JT808_EXT_WAKUP ;	// 唤醒外置模块
-//#endif //		
-//	}
 #else
 	if(g_cfgInfo.isAccOn)
 	{

@@ -5,6 +5,8 @@
 #include "NvdsUser.h"
 #include "Pms.h"
 #include "Battery.h"
+#include "Dbg.h"
+
 
 #ifdef CANBUS_MODE_JT808_ENABLE
 
@@ -69,7 +71,24 @@ static void _getCurSmart(void){}
 extern CfgInfo	g_cfgInfo;
 static void _getCurPMSAttr(void)
 {
-	memcpy( g_tlvPMSAttr.PMSId, g_cfgInfo.SN ,12 );
+	__IO uint32_t sn0=*(__IO uint32_t*)(0x1FFFF7E8);
+	__IO uint32_t sn1=*(__IO uint32_t*)(0x1FFFF7EC);
+	__IO uint32_t sn2=*(__IO uint32_t*)(0x1FFFF7F0);
+
+	g_tlvPMSAttr.PMSId[0] = sn0 >> 24 ;
+	g_tlvPMSAttr.PMSId[1] = sn0 >> 16;
+	g_tlvPMSAttr.PMSId[2] = sn0 >> 8;
+	g_tlvPMSAttr.PMSId[3] = sn0 & 0xFF;
+	g_tlvPMSAttr.PMSId[4] = sn1 >> 24;
+	g_tlvPMSAttr.PMSId[5] = sn1 >> 16;
+	g_tlvPMSAttr.PMSId[6] = sn1 >> 8;
+	g_tlvPMSAttr.PMSId[7] = sn1 & 0xFF;
+	g_tlvPMSAttr.PMSId[8] = sn2 >> 24;
+	g_tlvPMSAttr.PMSId[9] = sn2 >> 16;
+	g_tlvPMSAttr.PMSId[10] = sn2 >> 8;
+	g_tlvPMSAttr.PMSId[11] = sn2 & 0xFF;
+	//Printf("\r\nsID: %08X%08X%08X\r\n",sn2,sn1,sn0);
+	//memcpy( g_tlvPMSAttr.PMSId, g_cfgInfo.SN ,12 );
 	
 	g_tlvPMSAttr.Capacity = 0x02000000;//0x02;	// 支持最大2个电池
 
@@ -280,10 +299,22 @@ void JtTlv0900_updateStorage( void )		//
 	_getCurBatFault();
 }
 
+/*
+	更新Beacon
+*/
+void JTTlv0900_updateBeacon(Beacon *pBeacon , uint8 bleCnt)
+{
+	if( !pBeacon || !bleCnt) return ;
+	// 如果里面有,则更新之
+	// 如果里没有,则添加之
+	// 如果里面已经满了,则清除信号最弱的
+	memset( &g_tlvBeacondes , 0 , sizeof(g_tlvBeacondes) );
+	g_tlvBeacondes.beaconCnt = bleCnt ;
+	memcpy( g_tlvBeacondes.beaconArry , pBeacon , bleCnt * sizeof(Beacon) );
+}
+
 void JtTlv0900_Cache( uint8* pdata ,uint8 len )	// 获取缓存数据
 {
-	//static uint8 	gCacheBuff[256] = {0x00};
-	//static uint8	gCacheLen = 0 ;
 	gCacheLen = len > sizeof(gCacheBuff) ? sizeof(gCacheBuff) : len ;
 	memcpy( gCacheBuff , pdata , gCacheLen );
 }

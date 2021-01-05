@@ -73,7 +73,7 @@ void Mcu_CabinLockIsr()
 	rt_interrupt_leave();
 }
 
-void Cabin_UnLock()
+void Cabin_UnLock(void)
 {
 	g_IsForceCabinLock = False;
 	if(!g_CabinTimer.m_isStart)
@@ -87,7 +87,7 @@ void Cabin_UnLock()
 	}
 }
 
-void Cabin_Run()
+void Cabin_Run(void)
 {
 	// ¿ªËø
 	if((g_pdoInfo.isCanbinLock == 1)&&(g_IsForceCabinLock))

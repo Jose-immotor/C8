@@ -17,6 +17,7 @@
 #include "smart_shell.h"
 #include "Shell_CmdLine.h"
 #include "drv_onchipflash.h" 
+#include "drv_usart.h"
 
 /*!
  * \brief ´òÓ¡×´Ì¬ÐÅÏ¢
@@ -79,7 +80,8 @@ void Dump(uint8_t ind)
 
 	}
 	if(40 == ind)			BatteryDump2();
-	if(41 == ind)			Printf("SN=%s\n", g_cfgInfo.SN );
+	//if(41 == ind)			Printf("SN=%s\n", g_cfgInfo.SN );
+	//if(42 == ind )			Printf("Bat_Insert IO:%d\n",IO_Read(IO_BAT_INSERT));
 	
 	Printf("g_ActiveFlag=0x%x.\n", g_ActiveFlag);
 	Printf("g_dwDebugLevel = 0x%08x.\n", g_dwDebugLevel);
@@ -122,6 +124,7 @@ void Set(uint8 ind, uint32 value)
 	extern void PdoInfo_Reset();
 	extern void DbgInfo_Reset();
 	extern void endless_loop_for_wdTest();
+	extern void CtrlBLE( uint16_t ctrl );
 	//extern void CAN1_TxRx( uint8_t io );
 	switch(ind)
 	{
@@ -139,19 +142,20 @@ void Set(uint8 ind, uint32 value)
 		case 20: CgfInfo_Reset(); break;
 		case 21: PdoInfo_Reset(); break;
 		case 22: DbgInfo_Reset(); break;
-		case 23: 
-		{
-			uint8_t buff[6];
-			memcpy(&buff[0], "update", 6);
-			gd32_flash_write(FLASH_ADDR_UPDATE,buff,6);
-			break;
-		}
-		case 24:
-		{		
-			gd32_flash_erase(FLASH_ADDR_UPDATE,6); break;
-		}
+		//case 23: 
+		//{
+		//	uint8_t buff[6];
+		//	memcpy(&buff[0], "update", 6);
+		//	gd32_flash_write(FLASH_ADDR_UPDATE,buff,6);
+		//	break;
+		//}
+		//case 24:
+		//{		
+		//	gd32_flash_erase(FLASH_ADDR_UPDATE,6); break;
+		//}
 		case 30: endless_loop_for_wdTest(); break;
 		//case 32: CAN1_TxRx(value) ;break;
+		case 33 :CtrlBLE( value == 1 ? 1 : 0 ); break ;
 	}
 }
 
@@ -226,11 +230,11 @@ void Log_DumpInd(int ind, int count)
 
 void Set_SN(const char *pSN)
 {
-	uint8 len = strlen(pSN);
-	memset( g_cfgInfo.SN , 0 , 32 );
-	memcpy( g_cfgInfo.SN , pSN , len > 12 ? 12 : len );
-	NvdsUser_Write(NVDS_CFG_INFO);
-	Printf("Write SN: %s\n",g_cfgInfo.SN );
+	//uint8 len = strlen(pSN);
+	//memset( g_cfgInfo.SN , 0 , 32 );
+	//memcpy( g_cfgInfo.SN , pSN , len > 12 ? 12 : len );
+	//NvdsUser_Write(NVDS_CFG_INFO);
+	//Printf("Write SN: %s\n",g_cfgInfo.SN );
 }
 
 extern char rt_hw_console_getchar(void);

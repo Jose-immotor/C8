@@ -32,11 +32,11 @@
     	modul_receive_flag = SET; 
     }
 	//Butt_rxDataProc
-	if( (0x1030 == receive_message.rx_efid ) && (receive_message.rx_dlen > 0))
-	{
-		Butt_rxDataProc( receive_message.rx_data , receive_message.rx_dlen );
-    	modul_receive_flag = SET; 
-	}
+	//if( (0x1030 == receive_message.rx_efid ) && (receive_message.rx_dlen > 0))
+	//{
+	//	Butt_rxDataProc( receive_message.rx_data , receive_message.rx_dlen );
+    //	modul_receive_flag = SET; 
+	//}
 	/* leave interrupt */
     rt_interrupt_leave();
 }
