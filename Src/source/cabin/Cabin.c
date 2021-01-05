@@ -86,6 +86,17 @@ void Cabin_UnLock(void)
 		Fsm_SetActiveFlag(AF_CABIN, True);
 	}
 }
+static void Cabin_Stop(void)
+{
+	CABIN_nSLEEP_L();//µç»úËø
+	CABIN_IN1_L();
+	CABIN_IN2_L();
+}
+
+static void Cabin_Start(void)
+{
+}
+
 
 void Cabin_Run(void)
 {
@@ -163,6 +174,8 @@ void Cabin_Init()
 	const static Obj obj = {
 	.name = "Cabin",
 	.Run = Cabin_Run,
+	.Stop = Cabin_Stop,
+	.Start = Cabin_Start,
 	};
 
 	ObjList_add(&obj);

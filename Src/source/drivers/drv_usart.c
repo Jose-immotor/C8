@@ -131,6 +131,25 @@ uint32_t uart4_put_byte(uint8_t data)
     return sta;   
 }
 #endif
+void gd32_hw_usart_deinit(void)
+{
+#ifdef SHELL_USART0	
+	rcu_periph_clock_disable(RCU_USART0);
+	// A9 A10
+	gpio_init(GPIOA, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, GPIO_PIN_9);
+	gpio_init(GPIOA, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, GPIO_PIN_10);
+#endif
+
+#ifdef RS485_UART4
+	rcu_periph_clock_disable(RCU_UART4);
+	// C12 D12
+	gpio_init(GPIOA, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, GPIO_PIN_9);
+	gpio_init(GPIOA, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, GPIO_PIN_10);
+#endif
+
+}
+
+
 /*!
  * \brief usart0作为调试串口，只使用接收中断.使用发送中断会出现Hard Fault
  *		  

@@ -159,9 +159,26 @@ void Nvc_Reset()
 //	Fsm_SetActiveFlag(AF_NVC, False);
 }
 
-void Nvc_Start()
+static void Nvc_Start(void)
 {
 //	timer_enable(TIMER3);
+
+	NVC_PWR_ON();
+
+	Sif_Init(&g_Sif, Nvc_Done);
+
+	SwTimer_Init(&g_NvcTimer, 0, 0);
+	g_pNvcItem = Null;
+	g_failedCounter = 0;
+	rt_hw_hwtimer_init();
+
+}
+
+static void Nvc_Stop(void)
+{
+	NVC_PWR_OFF();
+    timer_deinit(TIMER3);
+	rcu_periph_clock_disable(RCU_TIMER3);
 }
 
 void Nvc_SendNvcItem(NvcItem* pNvcItem)
@@ -224,6 +241,7 @@ void Nvc_Init()
 	static NvcItem g_NvcItem[5];
 	const static Obj obj = {
 	.name = "NVC",
+	.Stop = Nvc_Stop,
 	.Start = Nvc_Start,
 	.Run = Nvc_Run,
 	};
@@ -233,13 +251,6 @@ void Nvc_Init()
 	Queue_init(&g_NvcQueue,g_NvcItem, sizeof(NvcItem), GET_ELEMENT_COUNT(g_NvcItem));
 	
 	g_pPwrNvcEnIO = IO_Get(IO_NVC_PWR);
-	NVC_PWR_ON();
-
-	Sif_Init(&g_Sif, Nvc_Done);
-
-	SwTimer_Init(&g_NvcTimer, 0, 0);
-	g_pNvcItem = Null;
-	g_failedCounter = 0;
-	rt_hw_hwtimer_init();
+	
 	
 }

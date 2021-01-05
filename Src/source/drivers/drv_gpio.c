@@ -62,9 +62,6 @@ static DrvIo g_OutputIOs[] =
 	{IO_AT8837_IN2	, "AT8837_IN2"		, GPIOD, GPIO_PIN_15 ,GPIO_MODE_OUT_PP},
 	{IO_AT8837_nSLEEP, "AT8837_nSLEEP"	, GPIOD, GPIO_PIN_12 ,GPIO_MODE_OUT_PP},
 	{IO_CAN_STB		, "CAN_STB"			, GPIOB, GPIO_PIN_14 ,GPIO_MODE_OUT_PP},
-	// test
-	//{IO_CAN1_RX		, "CAN1_Rx"			, GPIOB, GPIO_PIN_12 ,GPIO_MODE_OUT_PP},
-	//{IO_CAN1_TX		, "CAN1_Tx"			, GPIOB, GPIO_PIN_13 ,GPIO_MODE_OUT_PP},
 };
 
 ////=============================================

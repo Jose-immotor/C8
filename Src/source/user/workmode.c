@@ -61,7 +61,7 @@ static void workmode_fsm_sleep(/*workmode* pworkmode,*/ uint8_t msgId, uint32_t 
 	{
 		ObjList_stop();
 		g_workmode.sleep_flag = 1;
-		Printf("Stop All Objlist\n");
+		Printf("Stop All Objlist:%X\n",g_ActiveFlag);
 	}
 	if( ( !g_ActiveFlag /*&& _BatteryNeedSleep()*/ )||
 		(SwTimer_isTimerOutEx(g_workmode.statusSwitchTicks,WORKMODE_FORCE_SLEEP_TIME)))

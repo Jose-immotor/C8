@@ -384,11 +384,44 @@ void Adc_Stop()
 {
 	PFL(DL_ADC, "Adc Stop.");
 	timer_disable(TIMER1);
+
+	
+
+	// dma
+	/* ADC_DMA_channel deinit */
+	dma_deinit(DMA0, DMA_CH0);
+
+	dma_circulation_disable(DMA0, DMA_CH0);
+
+	/* enable DMA channel */
+	dma_channel_disable(DMA0, DMA_CH0);
+
+
+
+	/* enable DMA clock */
+	rcu_periph_clock_disable(RCU_DMA0);
+	/* enable ADC0 clock */
+	rcu_periph_clock_disable(RCU_ADC0);
+    /* enable TIMER1 clock */
+    rcu_periph_clock_disable(RCU_TIMER1);
+	
 }
 
 void Adc_Start()
 {
 	PFL(DL_ADC, "Adc Start.\n");
+	/* system clocks configuration */
+	rcu_config();
+	/* GPIO configuration */
+	gpio_config();
+	/* TIMER configuration */
+	timer_config();
+	/* DMA configuration */
+	dma_config();
+	/* ADC configuration */
+	adc_config();
+
+//	g_pAdc_18650Votage = Adc_Get(ADC_18650_VOLTAGE);
 	/* enable TIMER1 */
 	timer_enable(TIMER1);
 }
@@ -428,17 +461,6 @@ void Adc_init()
 			adc1Count++;
 		}
 	}
-	/* system clocks configuration */
-	rcu_config();
-	/* GPIO configuration */
-	gpio_config();
-	/* TIMER configuration */
-	timer_config();
-	/* DMA configuration */
-	dma_config();
-	/* ADC configuration */
-	adc_config();
-
-//	g_pAdc_18650Votage = Adc_Get(ADC_18650_VOLTAGE);
+	
 }
 

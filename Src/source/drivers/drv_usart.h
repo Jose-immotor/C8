@@ -30,4 +30,8 @@ uint8_t usart0_send(void *buffer, uint8_t cnt);
 
 char rs485_getchar(void);
 uint32_t uart4_put_byte(uint8_t data);
+
+int gd32_hw_usart_init(void);
+void gd32_hw_usart_deinit(void);
+
 #endif

@@ -184,7 +184,9 @@ void can0_sleep(void)
 	
 // RX B12 中断
 	gpio_init(GPIOB,GPIO_MODE_IPU,GPIO_OSPEED_50MHZ,GPIO_PIN_12);
-
+	// TX 也设置成输入--低功耗
+	gpio_init(GPIOB,GPIO_MODE_IPU,GPIO_OSPEED_50MHZ,GPIO_PIN_13);
+	
 	nvic_irq_enable( EXTI10_15_IRQn, 2U, 0U);	
 	gpio_exti_source_select( GPIO_PORT_SOURCE_GPIOB, GPIO_PIN_SOURCE_12 );
 	exti_init(EXTI_12, EXTI_INTERRUPT, EXTI_TRIG_FALLING );

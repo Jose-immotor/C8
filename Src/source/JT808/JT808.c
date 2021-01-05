@@ -1718,6 +1718,7 @@ Bool JT808_Sleep(void)
 
 void JT808_start(void)
 {
+	can0_wakeup();
 	Utp_Reset(&g_JtUtp);		// Çå³ýËùÓÐ·¢ËÍÊý¾Ý
 	//ï¿½ï¿½ï¿½ï¿½Ó²ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½Ð¶ï¿½
 	JT808_switchState(g_pJt, JT_STATE_INIT);

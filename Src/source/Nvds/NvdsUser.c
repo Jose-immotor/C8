@@ -42,7 +42,15 @@ void g_cgfInfo_Dump(void)
 //	PRINTF_CFG(isAccOn);
 
 }
+/*
+uint8 vol;					//音量
+		uint8 isAccOn:1;			//远程控制ACC  ！！取消，用下面的
+		uint8 reserved0:7;
+		uint8 Reserved[14];	//保留15个字节
+		//uint8 SN[32];		// SN Jose 添加
+		uint8 BeaconUUID[16];
 
+*/
 void g_pdoOkInfo_Dump(void)
 {
 	#define PRINTF_PDO(_field) Printf("\t%s=%d\n", #_field, g_pdoInfo._field);
@@ -141,7 +149,7 @@ static Bool DbgInfo_Event(DbgInfo* p, NvdsEventID eventId)
 
 		//不能再这里打印输出，如果UART没初始化，会导致程序堵塞
 		//默认只打开主要的调试开关
-		g_dwDebugLevel = 0xF | DL_NFC;
+		//g_dwDebugLevel = 0xF | DL_NFC;
 	}
 	else if (eventId == BE_DATA_OK)
 	{

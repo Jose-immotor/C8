@@ -31,7 +31,7 @@ Bool fm175Drv_transStart(Fm175Drv* pDrv, FM17522_CMD cmd, uint32 timeOutMs);
 #if 1
 
 static DrvIo* g_pNfcNpdAIO = Null;
-DrvIo* g_pNfcNpdBIO = Null;
+static DrvIo* g_pNfcNpdBIO = Null;
 static DrvIo* g_pNfcPwrOffIO = Null;
 
 #define FM17522_NPD_HIGHT 	PortPin_Set(g_pNfcNpdAIO->periph, g_pNfcNpdAIO->pin, 1)
@@ -532,6 +532,8 @@ static void fm175Drv_switchState(Fm175Drv* pDrv, uint8 state)
 //	uint8 rc = 0;
 	if (pDrv->state == state) return;
 
+	PFL(DL_NFC, "NFC[%X] switch %d to %d\n",pDrv->iicReg.dev_addr,pDrv->state , state);
+
 	if (state == FM_STATE_INIT)
 	{
 	}
@@ -561,6 +563,11 @@ static void fm175Drv_switchState(Fm175Drv* pDrv, uint8 state)
 	}
 	else if (state == FM_STATE_SLEEP)
 	{
+		SwTimer_Stop(&pDrv->timer);
+		if(pDrv->iicReg.dev_addr == FM17522_I2C_ADDR)
+			FM17522_NPD_LOW;
+		else if(pDrv->iicReg.dev_addr == FM17522_I2C_ADDR1)
+			FM17522B_NPD_LOW;
 		//½øÈëµÍ¹¦ºÄ
 		Fm175Drv_SoftPowerdown(pDrv);
 		((Battery*)pDrv->obj)->cfg->antselct = 1;
@@ -668,15 +675,19 @@ void fm175Drv_fsmSleep(Fm175Drv* pDrv, FM17522_MSG msg, uint32 param)
 	if (msg == FM_MSG_RUN)
 	{
 		//PortPin_Set(g_pNfcPwrOffIO->periph, g_pNfcPwrOffIO->pin, False);
-		if (pDrv->transParam.txBufSize && pDrv->transStatus == TRANSFER_STATUS_PENDING_TX)
+		if(Fsm_ReadActiveFlag() & AF_PMS)
 		{
-			fm175Drv_switchState(pDrv, FM_STATE_NPD_LOW);
+			if (pDrv->transParam.txBufSize && pDrv->transStatus == TRANSFER_STATUS_PENDING_TX)
+			{
+				fm175Drv_switchState(pDrv, FM_STATE_NPD_LOW);
+			}
 		}
 	}
 	else if (msg == FM_MSG_SWITCH_NFC)
 	{
 		//PortPin_Set(g_pNfcPwrOffIO->periph, g_pNfcPwrOffIO->pin, False);
 		pDrv->iicReg.dev_addr = (uint8)param;
+		//if(Fsm_ReadActiveFlag() & AF_PMS)
 		fm175Drv_switchState(pDrv, FM_STATE_NPD_LOW);
 	}
 	else if (msg == FM_MSG_STOP)

@@ -92,10 +92,16 @@ void Enter_PowerDown()
 		PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, True);					
 #ifdef CANBUS_MODE_JT808_ENABLE
 	JT808CAN_Sleep();
+	gJT808ExtStatus = _JT808_EXT_SLEEP ;	// 唤醒外置模块
 #endif 
 	// NFC NPD-LED
-	if(g_pNfcNpdBIO)
-	PortPin_Set(g_pNfcNpdBIO->periph, g_pNfcNpdBIO->pin, False);
+	//if(g_pNfcNpdBIO)
+	//PortPin_Set(g_pNfcNpdBIO->periph, g_pNfcNpdBIO->pin, False);
+	//if( g_pNfcNpdAIO )
+	//PortPin_Set(g_pNfcNpdAIO->periph, g_pNfcNpdAIO->pin, False );
+
+	gd32_hw_usart_deinit();
+
 
 	PortPin_Set(g_pLedIO->periph, g_pLedIO->pin, True);
 
@@ -108,6 +114,7 @@ void Enter_PowerDown()
 	SystemInit();
 	rt_thread_mdelay(200);
 	//
+	gd32_hw_usart_init();
 	workmode_switchStatus(WM_ACTIVE);
 	WorkMode_run();	// 跑一次,,, 放在这里不好看,或者把workmode 当成第一个任务
 }
@@ -136,7 +143,7 @@ void Mcu_PowerDown()
  	Printf("\nPower up.\n");
 	PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, True);	
 	// NFC NPD-LED-H
-	PortPin_Set(g_pNfcNpdBIO->periph, g_pNfcNpdBIO->pin, True);
+	//PortPin_Set(g_pNfcNpdBIO->periph, g_pNfcNpdBIO->pin, True);
 		
 	LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_WakeUp, GetWakeUpType());
 	Printf("wake up reason:%X\n",GetWakeUpType());

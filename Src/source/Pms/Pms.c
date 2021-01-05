@@ -269,10 +269,16 @@ void Pms_SwitchPort()
 	
 	Mod_SwitchCfg(g_pModBus, (g_pActiveBat->port == 0) ? &g_Bat1Cfg : &g_Bat0Cfg);
 	fm175Drv_switchNfc(&g_pms.fmDrv, (g_pActiveBat->port == 0) ? FM17522_I2C_ADDR1 : FM17522_I2C_ADDR);
+
+	if(Fsm_ReadActiveFlag() & AF_PMS )
 	Bat_msg(pBat, BmsMsg_active, *((uint32*)& g_regCtrl), 0);
 	//Bat_msg(g_pActiveBat, BmsMsg_active, *((uint32*)& g_regCtrl), 0);
 	
 	g_pActiveBat = pBat;
+	if(!(Fsm_ReadActiveFlag() & AF_PMS))
+	{
+		fm175Drv_stop(&g_pms.fmDrv);
+	}
 
 	PFL(DL_PMS,"NFC Switch Bat[%d]:%x\n",g_pActiveBat->port,g_pms.fmDrv.iicReg.dev_addr );
 }
@@ -386,6 +392,10 @@ void CAN_Wakeup(void)
 
 static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
+	if( msgId != PmsMsg_run )
+	{
+		PFL(DL_PMS,"acc off msg::%d:%d-%d\n",msgId,param1,param2);
+	}
 	if (msgId == PmsMsg_run)
 	{
 		static uint32 accoffprintf_tick = 0;
@@ -804,6 +814,7 @@ void Pms_stop()
 {
 	Pms_switchStatus(PMS_DEEP_SLEEP);
 	//fm175Drv_stop(&g_pms.fmDrv);
+	Fsm_SetActiveFlag(AF_PMS, False);
 }	
 
 void Pms_run()
