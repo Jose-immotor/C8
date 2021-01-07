@@ -14,6 +14,7 @@
  can_receive_message_struct receive_message;
  #ifdef CANBUS_MODE_JT808_ENABLE
  extern void JT808_rxDataProc(const uint8_t* pData, int len);
+ extern Bool gJT808Disconnect ;
  #endif //
  extern void Butt_rxDataProc(const uint8_t* pData, int len);
 
@@ -29,9 +30,10 @@
     	//JT808_rxDataProc( receive_message.rx_data , receive_message.rx_dlen );
     	JT808_rxDataProc( receive_message.rx_data , receive_message.rx_dlen );
 #endif //
-    	modul_receive_flag = SET; 
     }
-	//Butt_rxDataProc
+	modul_receive_flag = SET; 
+	gJT808Disconnect = False ;
+
 	//if( (0x1030 == receive_message.rx_efid ) && (receive_message.rx_dlen > 0))
 	//{
 	//	Butt_rxDataProc( receive_message.rx_data , receive_message.rx_dlen );
@@ -90,6 +92,17 @@ static void _can_init(void)
 	can_init_parameter.rec_fifo_overwrite = DISABLE;
 	can_init_parameter.trans_fifo_order = DISABLE;
 	can_init_parameter.working_mode = CAN_NORMAL_MODE;
+
+	/*
+		CAN 波特率，采样点
+
+		波特率: CAN时钟/((1+BS1+BS2) * Prescaler) 
+		采样点: (1+BS1)/(1+BS1+BS2)
+
+		波特率: 24M /( ( 1 + 3 + 2) * 18 ) = 250K
+		采样点：( 1 + 3)/( 1 + 3 + 2 ) = 66%
+	*/
+	
 	can_init_parameter.resync_jump_width = CAN_BT_SJW_1TQ;
 	can_init_parameter.time_segment_1 = CAN_BT_BS1_4TQ;
 	can_init_parameter.time_segment_2 = CAN_BT_BS2_3TQ;
@@ -165,6 +178,7 @@ void can1_isr(void)
 		SetWakeUpType(WAKEUP_CAN);
 	}
 	CAN_Wakeup();
+	gJT808Disconnect = False ;
 	//modul_receive_flag = SET; 
 	
 	//if((Pms_GetStatus() == PMS_DEEP_SLEEP)||(Pms_GetStatus() == PMS_ACC_OFF))

@@ -16,7 +16,7 @@ extern "C" {
 
 #define MAX_BAT_COUNT 2
 #define PMS_ACC_OFF_ACTIVE_TIME 	(30*1000)//30秒
-#define PMS_ACC_DEEPSLEEP_TIME 		(10*1000)//(5*60*1000)//5分钟
+#define PMS_ACC_DEEPSLEEP_TIME 		(5*60*1000)//5分钟
 
 //
 #define	PMS_LOW_CURRENT_2A				(200)	// 实际为 2A
@@ -64,6 +64,8 @@ typedef enum
 		PmsMsg_GyroIrq,		//陀螺仪震动，消息格式：(PmsMsg_GyroIrq, 0, 0)
 #ifdef CANBUS_MODE_JT808_ENABLE	
 		PmsMsg_GPRSIrq,		// GPRS中断
+		PmsMsg_GPRSPlugIn,
+		pmsMsg_GPRSPlugOut,
 #endif
 		PmsMsg_18650Low,	// 18650 低电
 		PmsMsg_18650Normal, // 18650 电量正常

@@ -380,22 +380,16 @@ void Pms_switchStatus(PmsOpStatus newStatus)
 #ifdef CANBUS_MODE_JT808_ENABLE
 void CAN_Wakeup(void)		
 {
-	if( gJT808ExtStatus != _JT808_EXT_WAKUP )
-	{
-		Pms_postMsg(PmsMsg_GPRSIrq, 0, 0);
-	}
-	gJT808ExtStatus = _JT808_EXT_WAKUP ;
-	//if( !g_isPowerDown )				// 主机没休眠时,发送指令
+	//if( gJT808ExtStatus != _JT808_EXT_WAKUP )
+	//{
 	//	Pms_postMsg(PmsMsg_GPRSIrq, 0, 0);
+	//}
+	gJT808ExtStatus = _JT808_EXT_WAKUP ;
 }
 #endif //
 
 static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
-	if( msgId != PmsMsg_run )
-	{
-		PFL(DL_PMS,"acc off msg::%d:%d-%d\n",msgId,param1,param2);
-	}
 	if (msgId == PmsMsg_run)
 	{
 		static uint32 accoffprintf_tick = 0;
@@ -488,8 +482,18 @@ static void Pms_fsm_accOff(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	else if( msgId == PmsMsg_GPRSIrq )
 	{
 		Pms_switchStatus(PMS_ACC_ON);
-		//g_pms.statusSwitchTicks = GET_TICKS();		// 刷新时间
 		gJT808ExtStatus = _JT808_EXT_WAKUP ;
+		PFL(DL_PMS,"CAN Get GPRS/BLE data\n");
+	}
+	else if( msgId == pmsMsg_GPRSPlugOut )
+	{
+		PFL(DL_PMS,"CAN Plug out\n");
+	}
+	else if( msgId == PmsMsg_GPRSPlugIn )
+	{
+		Pms_switchStatus(PMS_ACC_ON);
+		gJT808ExtStatus = _JT808_EXT_WAKUP ;
+		PFL(DL_PMS,"CAN Plug in\n");
 	}
 #endif //
 }
@@ -578,7 +582,7 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 		Pms_plugIn((Battery*)param1);
 		// 刷新时间
 #ifdef _GENERAL_CENTRAL_CTL		
-		g_pms.statusSwitchTicks = GET_TICKS();		// 刷新时间
+		//g_pms.statusSwitchTicks = GET_TICKS();		// 刷新时间
 		gJT808ExtStatus = _JT808_EXT_WAKUP ;
 		g_batlowcur_tick_24h = GET_TICKS();
 		g_batlowcur_tick_12h = g_batlowcur_tick_24h;
@@ -606,11 +610,24 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 #ifdef CANBUS_MODE_JT808_ENABLE
 	else if( msgId == PmsMsg_GPRSIrq )
 	{
-		g_pms.statusSwitchTicks = GET_TICKS();		// 刷新时间
+		//g_pms.statusSwitchTicks = GET_TICKS();		// 刷新时间
 		//gJT808ExtStatus = _JT808_EXT_WAKUP ;
 		g_batlowcur_tick_24h = GET_TICKS();
 		g_batlowcur_tick_12h = g_batlowcur_tick_24h;
 		g_batlowcur_tick_5m = g_batlowcur_tick_24h;
+		PFL(DL_PMS,"CAN Get GPRS/BLE data\n");
+	}
+	else if( msgId == pmsMsg_GPRSPlugOut )
+	{
+		PFL(DL_PMS,"CAN Plug out\n");
+	}
+	else if( msgId == PmsMsg_GPRSPlugIn )
+	{
+		gJT808ExtStatus = _JT808_EXT_WAKUP ;
+		g_batlowcur_tick_24h = GET_TICKS();
+		g_batlowcur_tick_12h = g_batlowcur_tick_24h;
+		g_batlowcur_tick_5m = g_batlowcur_tick_24h;
+		PFL(DL_PMS,"CAN Plug in\n");
 	}
 #endif //	
 	PortPin_Set(g_pLockEnIO->periph, g_pLockEnIO->pin, False);
@@ -704,7 +721,17 @@ static void Pms_fsm_deepSleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	{
 		Pms_switchStatus(PMS_ACC_ON);
 		gJT808ExtStatus = _JT808_EXT_WAKUP ;
-		//g_pms.statusSwitchTicks = GET_TICKS();
+		PFL(DL_PMS,"CAN Get GPRS/BLE data\n");
+	}
+	else if( msgId == pmsMsg_GPRSPlugOut )
+	{
+		PFL(DL_PMS,"CAN Plug out\n");
+	}
+	else if( msgId == PmsMsg_GPRSPlugIn )
+	{
+		Pms_switchStatus(PMS_ACC_ON);
+		gJT808ExtStatus = _JT808_EXT_WAKUP ;
+		PFL(DL_PMS,"CAN Plug in\n");
 	}
 #endif //
 
