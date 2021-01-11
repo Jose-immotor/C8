@@ -925,7 +925,8 @@ UTP_EVENT_RC JT808_event_rcvSvrData(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVEN
 	 {
 	 	PFL(DL_JT808, "8900 Rx[%d]:",pCmd->pExt->transferLen);
 		DUMP_BYTE_LEVEL(DL_JT808, pCmd->pExt->transferData, pCmd->pExt->transferLen );
-		PFL(DL_JT808, "\n");	 	
+		PFL(DL_JT808, "\n");
+		Pms_postMsg(PmsMsg_GPRSIrq, 0, 0);
 	  	JtTlv8900_proc(pCmd->pExt->transferData, pCmd->pExt->transferLen);
 	 }
 	 else if (ev == UTP_GET_RSP)
@@ -1608,6 +1609,7 @@ static void MouduleWork(void)
 		}
 		else
 		{
+			// 外置模块主动唤醒 or 主MCU唤醒
 			if( !WorkMode_Sleep() && _JT808_EXT_SLEEP != gJT808ExtStatus )	// 外围唤醒
 			{
 				gModuleWakupIngTimeoutCnt = GET_TICKS();	// 计时
@@ -1616,6 +1618,10 @@ static void MouduleWork(void)
 				SetComModeWakeup();
 				PFL(DL_JT808,"GPRS/GPS Wakeup[%d]...\r\n",gJT808ExtStatus );
 				JT808_Work();
+				if( gJT808ExtStatus == _JT808_EXT_WAKUP_IRQ )	// 外置模块主动唤醒
+				{
+					Pms_postMsg(PmsMsg_GPRSIrq, 0, 0);
+				}
 			}
 		}
 	}
@@ -1719,19 +1725,25 @@ Bool JT808_wakeup(void)
 Bool JT808_Sleep(void)
 {
 	// 休眠之
-	SetComModeSleep();	// 准备进入休眠
-	gModuleSleepIngTimeoutCnt = GET_TICKS();		// 计时
+	if( !gJT808Disconnect )
+	{
+		SetComModeSleep();	// 准备进入休眠
+		gModuleSleepIngTimeoutCnt = GET_TICKS();		// 计时
+	}
 	return True;
 }
 
 void JT808_start(void)
 {
-	can0_wakeup();
-	Utp_Reset(&g_JtUtp);		// 清除所有发送数据
-	//锟斤拷锟斤拷硬锟斤拷锟斤拷使锟斤拷锟叫讹拷
-	JT808_switchState(g_pJt, JT_STATE_INIT);
+	if( !gJT808Disconnect )
+	{
+		can0_wakeup();
+		Utp_Reset(&g_JtUtp);		// 清除所有发送数据
+		//锟斤拷锟斤拷硬锟斤拷锟斤拷使锟斤拷锟叫讹拷
+		JT808_switchState(g_pJt, JT_STATE_INIT);
 
-	gCanbusRevTimeMS = GET_TICKS();			
+		gCanbusRevTimeMS = GET_TICKS();	
+	}
 }
 
 /*

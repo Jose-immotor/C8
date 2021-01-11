@@ -116,6 +116,9 @@ static uint32 g_batlowcur_tick_24h = 0;
 static uint32 g_batlowcur_tick_12h = 0;
 static uint32 g_batlowcur_tick_5m = 0;
 static uint32 g_higcurr_tick = 0;
+static uint32 g_lowcurr_tick = 0 ;	// 小电流时间
+static uint32 g_nobat_tick = 0 ;	// 无电池时间
+
 #endif
 
 
@@ -351,6 +354,9 @@ void Pms_switchStatus(PmsOpStatus newStatus)
 	g_batlowcur_tick_12h = g_pms.statusSwitchTicks;
 	g_batlowcur_tick_5m = g_pms.statusSwitchTicks;
 	g_higcurr_tick = g_pms.statusSwitchTicks;
+	// 默认设置为当前时间
+	g_lowcurr_tick = g_pms.statusSwitchTicks ;	// 小电流时间
+	g_nobat_tick = g_pms.statusSwitchTicks ;	// 无电池时间
 #endif //	
 
 	if (newStatus == PMS_ACC_OFF)
@@ -384,7 +390,7 @@ void CAN_Wakeup(void)
 	//{
 	//	Pms_postMsg(PmsMsg_GPRSIrq, 0, 0);
 	//}
-	gJT808ExtStatus = _JT808_EXT_WAKUP ;
+	gJT808ExtStatus = _JT808_EXT_WAKUP_IRQ ;
 }
 #endif //
 
@@ -502,6 +508,10 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 {
 	static uint32 accoonprintf_tick = 0;
 	//static uint32 discarge_tick = 0 ;
+	//static uint32 batlowcurr_tick = 0 ;	// 小电流时间
+	//static uint32 nobat_tick = 0 ;		// 无电池时间
+	//g_lowcurr_tick = g_pms.statusSwitchTicks ;	// 小电流时间
+	//g_nobat_tick = g_pms.statusSwitchTicks ;	// 无电池时间
 	
 	if (msgId == PmsMsg_run)
 	{
@@ -515,7 +525,7 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 		{
 			if( Bat_Discharge_Current_Low() )		// 如果小电流
 			{
-				if( gJT808UpdateFirmware && GET_TICKS()- g_pms.statusSwitchTicks > 3*60*1000 )
+				if( gJT808UpdateFirmware && GET_TICKS()- g_lowcurr_tick > 3*60*1000 )
 				{
 					gJT808UpdateFirmware = false ;
 					NVIC_SystemReset();
@@ -558,13 +568,22 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 				g_batlowcur_tick_12h = g_batlowcur_tick_24h;
 				g_batlowcur_tick_5m = g_batlowcur_tick_24h;
 				ClearWakeupType();
+				g_lowcurr_tick = GET_TICKS();
 				gJT808ExtStatus = _JT808_EXT_WAKUP ;		// 唤醒模块
-				PFL(DL_PMS,"High Current Clear timeout & Wakeup \n");
+				//PFL(DL_PMS,"High Current Clear timeout & Wakeup \n");
 			}
+			g_nobat_tick = GET_TICKS();
 		}
 		else
 		{
-			if( GET_TICKS() - g_pms.statusSwitchTicks > PMS_ACC_OFF_TIME )	// 48小时
+			//
+			if( gJT808UpdateFirmware && GET_TICKS()- g_lowcurr_tick > 3*60*1000 )
+			{
+				gJT808UpdateFirmware = false ;
+				NVIC_SystemReset();
+				Printf("System Update,Entern bootloader(%d)\r\n",g_pms.statusSwitchTicks);
+			}
+			if( GET_TICKS() - g_nobat_tick > PMS_ACC_OFF_TIME )	// 48小时
 			{
 				PFL(DL_PMS,"Not Bat,Enter ACC OFF\n");
 				Pms_switchStatus(PMS_ACC_OFF);
@@ -597,6 +616,8 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 		if( g_Bat[0].presentStatus != BAT_IN && g_Bat[1].presentStatus != BAT_IN )
 		{
 			Pms_switchStatus(PMS_ACC_OFF);
+			gJT808ExtStatus = _JT808_EXT_SLEEP ;
+			g_nobat_tick = GET_TICKS();	// 更新之
 		}
 	}
 	else if( msgId == PmsMsg_18650Low )
@@ -611,7 +632,7 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 	else if( msgId == PmsMsg_GPRSIrq )
 	{
 		//g_pms.statusSwitchTicks = GET_TICKS();		// 刷新时间
-		//gJT808ExtStatus = _JT808_EXT_WAKUP ;
+		gJT808ExtStatus = _JT808_EXT_WAKUP ;
 		g_batlowcur_tick_24h = GET_TICKS();
 		g_batlowcur_tick_12h = g_batlowcur_tick_24h;
 		g_batlowcur_tick_5m = g_batlowcur_tick_24h;
@@ -713,6 +734,7 @@ static void Pms_fsm_deepSleep(PmsMsg msgId, uint32_t param1, uint32_t param2)
 
 #ifndef _GENERAL_CENTRAL_CTL
 		}
+		ClearWakeupType();
 #endif
 
 	}

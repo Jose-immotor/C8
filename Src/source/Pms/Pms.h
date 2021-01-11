@@ -16,7 +16,7 @@ extern "C" {
 
 #define MAX_BAT_COUNT 2
 #define PMS_ACC_OFF_ACTIVE_TIME 	(30*1000)//30秒
-#define PMS_ACC_DEEPSLEEP_TIME 		(5*60*1000)//5分钟
+#define PMS_ACC_DEEPSLEEP_TIME 		(10*1000)//5分钟
 
 //
 #define	PMS_LOW_CURRENT_2A				(200)	// 实际为 2A
@@ -30,8 +30,9 @@ extern "C" {
 typedef enum
 {
 	_JT808_EXT_SLEEP = 0,
-	_JT808_EXT_BRIEF_WAKUP,
-	_JT808_EXT_WAKUP
+	_JT808_EXT_BRIEF_WAKUP,	// 临时唤醒 12小时
+	_JT808_EXT_WAKUP,		// MCU唤醒外置模块
+	_JT808_EXT_WAKUP_IRQ	// 外置模块自己唤醒
 }JT808ExtStatus;
 
 

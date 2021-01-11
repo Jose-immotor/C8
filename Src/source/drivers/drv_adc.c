@@ -384,9 +384,6 @@ void Adc_Stop()
 {
 	PFL(DL_ADC, "Adc Stop.");
 	timer_disable(TIMER1);
-
-	
-
 	// dma
 	/* ADC_DMA_channel deinit */
 	dma_deinit(DMA0, DMA_CH0);
@@ -395,8 +392,6 @@ void Adc_Stop()
 
 	/* enable DMA channel */
 	dma_channel_disable(DMA0, DMA_CH0);
-
-
 
 	/* enable DMA clock */
 	rcu_periph_clock_disable(RCU_DMA0);

@@ -59,6 +59,7 @@ extern "C" {
 
 		MOD_WEITE_MULTI_COIL = 0x0F,	//写多个线圈
 		MOD_WEITE_MULTI_REG = 0x10,			//写多个寄存器
+		
 	}MOD_CMD;
 
 	/***************
