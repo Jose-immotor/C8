@@ -89,19 +89,14 @@ void Enter_PowerDown()
 		))
 		PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, False);
 	else
-		PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, True);					
+		PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, True);	
+	
 #ifdef CANBUS_MODE_JT808_ENABLE
 	JT808CAN_Sleep();
 	gJT808ExtStatus = _JT808_EXT_SLEEP ;	// »½ÐÑÍâÖÃÄ£¿é
 #endif 
-	// NFC NPD-LED
-	//if(g_pNfcNpdBIO)
-	//PortPin_Set(g_pNfcNpdBIO->periph, g_pNfcNpdBIO->pin, False);
-	//if( g_pNfcNpdAIO )
-	//PortPin_Set(g_pNfcNpdAIO->periph, g_pNfcNpdAIO->pin, False );
 
 	gd32_hw_usart_deinit();
-
 
 	PortPin_Set(g_pLedIO->periph, g_pLedIO->pin, True);
 
@@ -142,9 +137,6 @@ void Mcu_PowerDown()
 	g_isPowerDown = False;
  	Printf("\nPower up.\n");
 	PortPin_Set(g_p18650PwrOffIO->periph, g_p18650PwrOffIO->pin, True);	
-	// NFC NPD-LED-H
-	//PortPin_Set(g_pNfcNpdBIO->periph, g_pNfcNpdBIO->pin, True);
-		
 	LOG_TRACE1(LogModuleID_SYS, SYS_CATID_COMMON, 0, SysEvtID_WakeUp, GetWakeUpType());
 	Printf("wake up reason:%X\n",GetWakeUpType());
 	

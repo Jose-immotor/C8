@@ -265,7 +265,7 @@ static void Rs485Mod_ReqProc(Mod * pMod, const uint8_t * pReq, int frameLen)
 {
 	const ModFrameCfg* frameCfg = pMod->frameCfg;
 	//uint8_t rc = frameCfg->result_UNSUPPORTED;
-	uint8_t* txBuf = frameCfg->txBuf;
+//	uint8_t* txBuf = frameCfg->txBuf;
 //	const uint8_t* pData = &pReq[MODBUS_READDATA_IND];
 //	const ModCmd* pCmd = Mod_FindCmdItem(pMod->cfg->cmdArray, pMod->cfg->cmdCount, pMod->pWaitRspCmd->cmd);
 //	const ModCmd* pCmd = Mod_FindCmdItem(pMod->cfg->cmdArray, pMod->cfg->cmdCount, pReq[MODBUS_CMD_IND]);

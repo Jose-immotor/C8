@@ -316,6 +316,28 @@ extern const BmsReg_ctrl* g_bmsIICReg_ctrl_addrMap;
 extern const BmsReg_cfg* g_bmsIICReg_cfg_addrMap;
 extern const BmsReg_user* g_bmsIICReg_info_addrMap;
 
+
+
+// хож╓
+// bms to pms
+typedef struct
+{
+	uint8_t		AckRandom[5];		// ack[0] + random[1~4]
+}PmsBmsAuthRsq1;
+
+typedef struct
+{
+	uint8_t		Ack;			// ack[0]
+}PmsBmsAuthRsq2;
+
+
+typedef struct
+{
+	uint8_t 	AckDigest[33];	// ack[0] + digest[1~32]
+}BmsPmsAuthRsq;
+
+
+
 #pragma pack()
 #endif
 

@@ -208,8 +208,8 @@ UTP_EVENT_RC Ble_setWheelLock(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 		pCmd->pExt->transferLen = 0;
 		switch ( pCmd->pStorage[0] )
 		{
-			case 0x00:	// ×ù²ÕËø¿ªËø
-			case 0x01:	// ×ù²ÕËø¹ØËø
+			case 0x00:	// ÂÖì±Ëø¿ªËø
+			case 0x01:	// ÂÖì±Ëø¹ØËø
 				g_pdoInfo.isWheelLock = pCmd->pStorage[0];
 				if( g_pdoInfo.isWheelLock == 0 )
 				{

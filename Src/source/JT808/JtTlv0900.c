@@ -75,18 +75,18 @@ static void _getCurPMSAttr(void)
 	__IO uint32_t sn1=*(__IO uint32_t*)(0x1FFFF7EC);
 	__IO uint32_t sn2=*(__IO uint32_t*)(0x1FFFF7F0);
 
-	g_tlvPMSAttr.PMSId[0] = sn0 >> 24 ;
-	g_tlvPMSAttr.PMSId[1] = sn0 >> 16;
-	g_tlvPMSAttr.PMSId[2] = sn0 >> 8;
-	g_tlvPMSAttr.PMSId[3] = sn0 & 0xFF;
+	g_tlvPMSAttr.PMSId[0] = sn2 >> 24 ;
+	g_tlvPMSAttr.PMSId[1] = sn2 >> 16;
+	g_tlvPMSAttr.PMSId[2] = sn2 >> 8;
+	g_tlvPMSAttr.PMSId[3] = sn2 & 0xFF;
 	g_tlvPMSAttr.PMSId[4] = sn1 >> 24;
 	g_tlvPMSAttr.PMSId[5] = sn1 >> 16;
 	g_tlvPMSAttr.PMSId[6] = sn1 >> 8;
 	g_tlvPMSAttr.PMSId[7] = sn1 & 0xFF;
-	g_tlvPMSAttr.PMSId[8] = sn2 >> 24;
-	g_tlvPMSAttr.PMSId[9] = sn2 >> 16;
-	g_tlvPMSAttr.PMSId[10] = sn2 >> 8;
-	g_tlvPMSAttr.PMSId[11] = sn2 & 0xFF;
+	g_tlvPMSAttr.PMSId[8] = sn0 >> 24;
+	g_tlvPMSAttr.PMSId[9] = sn0 >> 16;
+	g_tlvPMSAttr.PMSId[10] = sn0 >> 8;
+	g_tlvPMSAttr.PMSId[11] = sn0 & 0xFF;
 	//Printf("\r\nsID: %08X%08X%08X\r\n",sn2,sn1,sn0);
 	//memcpy( g_tlvPMSAttr.PMSId, g_cfgInfo.SN ,12 );
 	

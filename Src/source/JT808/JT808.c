@@ -962,9 +962,10 @@ UTP_EVENT_RC JT808_event_rcvFileData(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVE
 	 	switch( pJt->fileDesc.fileType )
 	 	{
 			case 0x01 :
-				PFL(DL_JT808,"C7 Update File:%d\r\n",pJt->fileDesc.fileVerDesc);
+				PFL(DL_JT808,"C8 Update File:%d\r\n",pJt->fileDesc.fileVerDesc);
 				if( _CheckFirmwareUpdate() )
 				{
+					Pms_postMsg(PmsMsg_GPRSIrq, 0, 0);
 					Utp_SendCmd(&g_JtUtp, JTCMD_CMD_GET_FILE_INFO);
 					PFL(DL_JT808,"Start Get Update File Info\r\n");
 				}
@@ -1360,16 +1361,6 @@ void JT808_fsm_operation(uint8_t msgID, uint32_t param1, uint32_t param2)
 {
 	if (msgID == MSG_RUN)
 	{
-		// BeaconÊý¾Ý
-		if( gBeaconUpdate )
-		{
-			if( GET_TICKS() - gBeaconTick > 500 )		// 500msÃ»¸üÐÂ,ÔòÈÏÎª¸üÐÂÍê³É
-			{
-				gBeaconUpdate = False ;
-				JTTlv0900_updateBeacon( gBeaconCntext ,gBleAdvCntextCnt  );
-				gBleAdvCntextCnt = 0x00;
-			}
-		}
 		// ï¿½ï¿½ï¿½ï¿½JtTlv9000ï¿½ï¿½ï¿½ï¿½
 		JtTlv0900_updateStorage();	//
 		
@@ -1384,8 +1375,17 @@ void JT808_fsm_operation(uint8_t msgID, uint32_t param1, uint32_t param2)
 				// save 
 				JtTlv0900_Cache( g_txBuf , len );
 			}
+			// Beaconï¿½ï¿½ï¿½ï¿½
+			if( gBeaconUpdate )
+			{
+				if( GET_TICKS() - gBeaconTick > 500 )		// 500msÃ»ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?				{
+					gBeaconUpdate = False ;
+					JTTlv0900_updateBeacon( gBeaconCntext ,gBleAdvCntextCnt  );
+					gBleAdvCntextCnt = 0x00;
+					PFL(DL_JT808,"Send Beacon Info:%d\r\n",len );
+				}
+			}
 		}
-	}
 }
 
 
@@ -1579,7 +1579,7 @@ void JT808CAN_Sleep(void)
 {
 	can0_sleep();	// CAN ÐÝÃß
 	Utp_Reset(&g_JtUtp);
-	Fsm_SetActiveFlag(AF_JT808, False);		// ÉèÖÃ×´Ì¬
+	Fsm_SetActiveFlag(AF_JT808, False);		// ï¿½ï¿½ï¿½ï¿½×´Ì¬
 }
 
 
@@ -1689,6 +1689,7 @@ void JT808_run(void)
 		if( !lastJT808Disconnect )	// ¶Ï¿ª
 		{
 			// can½øÐÝÃß
+			Utp_Reset(&g_JtUtp);
 			can0_sleep();
 			Fsm_SetActiveFlag(AF_JT808, False);
 			Pms_postMsg(pmsMsg_GPRSPlugOut, 0, 0);

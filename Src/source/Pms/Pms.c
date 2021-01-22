@@ -37,10 +37,14 @@ const static uint8_t g_bmsInfo1_readParam[] = { (uint8)(BMS_REG_INFO_ADDR_1 >> 8
 const static uint8_t g_bmsInfo2_readParam[] = { (uint8)((BMS_REG_INFO_ADDR_2+1) >> 8), (uint8)(BMS_REG_INFO_ADDR_2+1), (uint8)(BMS_REG_INFO_COUNT_2 >> 8), (uint8)BMS_REG_INFO_COUNT_2};
 const static uint8_t g_bmsCtrl_readParam[]  =  { (uint8)(BMS_REG_CTRL_ADDR >> 8) , (uint8)BMS_REG_CTRL_ADDR  , (uint8)(BMS_REG_CTRL_COUNT >> 8)  , (uint8)BMS_REG_CTRL_COUNT };
 const static uint8_t g_bmsCtrl_writeParam[] = { 0x02, 0x00};
+// 认证
+const static uint8_t g_bmspmsAuth_req1[3] = {0x01,0x01,0x00};
+static uint8_t 		 g_bmspsmAuth_req2[32+2] = {0x02,32,0x00};
+static uint8_t 		 g_pmsbsmAuth_req[4+2] = {0x03,4,0x00};
 
 static int Pms_Tx(const uint8_t* pData, int len);
 
-#define BMS_CMD_COUNT 5
+#define BMS_CMD_COUNT 8
 static ModCmdEx g_BmsCmdEx[BMS_CMD_COUNT];
 //ModCmdEx g_BmsCmdEx[BMS_CMD_COUNT];
 /*电池槽位0的命令配置表*******************************************************************/
@@ -52,8 +56,13 @@ ModCmd g_Bms0Cmds[BMS_CMD_COUNT] =
 	{&g_BmsCmdEx[2], BMS_READ_INFO_1,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms0Info1", &g_Bat[0].bmsInfo	     , BMS_REG_INFO_SIZE_1, (void*)g_bmsInfo1_readParam, 4, Null, (ModEventFn)Bat_event_readBmsInfo},
 	{&g_BmsCmdEx[3], BMS_READ_INFO_2,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms0Info2", &g_Bat[0].bmsInfo.cmost, BMS_REG_INFO_SIZE_2, (void*)g_bmsInfo2_readParam, 4,Null,(ModEventFn)Bat_event_readBmsInfo2},
 	{&g_BmsCmdEx[4], BMS_READ_CTRL  ,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms0Ctrl" , &g_Bat[0].bmsCtrl	     , BMS_REG_CTRL_SIZE  , (void*)g_bmsCtrl_readParam, 4},
-	
+	//
+	{&g_BmsCmdEx[5], BMS_AUTH_BMS_PMS_REG	,MOD_READ, MOD_AUTH_REG, "BmsPmsAuth1" , &g_Bat[0].pmsbmsRsq1.AckRandom[0] 	 , 5  , (void*)g_bmspmsAuth_req1, sizeof(g_bmspmsAuth_req1),Null,(ModEventFn)Bat_event_AuthBmsPmsRsq1},
+	{&g_BmsCmdEx[6], BMS_AUTH_BMS_PMS_DIGEST	,MOD_READ, MOD_AUTH_REG, "BmsPmsAuth2" , &g_Bat[0].pmsbmsRsq2.Ack 	 , 1  , (void*)g_bmspsmAuth_req2, sizeof(g_bmspsmAuth_req2),Null,(ModEventFn)Bat_event_AuthBmsPmsRsq2},
+	{&g_BmsCmdEx[7], BMS_AUTH_PMS_BMS_REG	,MOD_READ, MOD_AUTH_REG, "PmsBmsAuth" , &g_Bat[0].bmspmsRsq.AckDigest[0] 	 , 33  , (void*)g_pmsbsmAuth_req, sizeof(g_pmsbsmAuth_req),Null,(ModEventFn)Bat_event_AuthPmsBmsRsq},
 };
+
+
 
 //const 
 static ModCfg g_Bat0Cfg =
@@ -76,7 +85,10 @@ ModCmd g_Bms1Cmds[BMS_CMD_COUNT] =
 	{&g_BmsCmdEx[2], BMS_READ_INFO_1,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms1Info1", &g_Bat[1].bmsInfo	     , BMS_REG_INFO_SIZE_1, (void*)g_bmsInfo1_readParam, 4, Null, (ModEventFn)Bat_event_readBmsInfo},
 	{&g_BmsCmdEx[3], BMS_READ_INFO_2,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms1Info2", &g_Bat[1].bmsInfo.cmost, BMS_REG_INFO_SIZE_2, (void*)g_bmsInfo2_readParam,4,Null,(ModEventFn)Bat_event_readBmsInfo2},
 	{&g_BmsCmdEx[4], BMS_READ_CTRL  ,MOD_READ, MOD_READ_HOLDING_REG, "ReadBms1Ctrl" , &g_Bat[1].bmsCtrl	     , BMS_REG_CTRL_SIZE  , (void*)g_bmsCtrl_readParam, 4},
-	
+	//
+	{&g_BmsCmdEx[5], BMS_AUTH_BMS_PMS_REG	,MOD_READ, MOD_AUTH_REG, "BmsPmsAuth1" , &g_Bat[1].pmsbmsRsq1.AckRandom[0] 	 , 5  , (void*)g_bmspmsAuth_req1, sizeof(g_bmspmsAuth_req1),Null,(ModEventFn)Bat_event_AuthBmsPmsRsq1},
+	{&g_BmsCmdEx[6], BMS_AUTH_BMS_PMS_DIGEST	,MOD_READ, MOD_AUTH_REG, "BmsPmsAuth2" , &g_Bat[1].pmsbmsRsq2.Ack 	 , 1  , (void*)g_bmspsmAuth_req2, sizeof(g_bmspsmAuth_req2),Null,(ModEventFn)Bat_event_AuthBmsPmsRsq2},
+	{&g_BmsCmdEx[7], BMS_AUTH_PMS_BMS_REG	,MOD_READ, MOD_AUTH_REG, "PmsBmsAuth" , &g_Bat[1].bmspmsRsq.AckDigest[0] 	 , 33  , (void*)g_pmsbsmAuth_req, sizeof(g_pmsbsmAuth_req),Null,(ModEventFn)Bat_event_AuthPmsBmsRsq},
 };
 //const 
 static ModCfg g_Bat1Cfg =
@@ -106,7 +118,7 @@ const static ModFrameCfg g_frameCfg =
 };
 
 
-#ifdef _GENERAL_CENTRAL_CTL		// C8 普通中控
+#ifdef _GENERAL_CENTRAL_CTL
 
 #ifdef CANBUS_MODE_JT808_ENABLE
 JT808ExtStatus gJT808ExtStatus = _JT808_EXT_WAKUP;
@@ -119,8 +131,7 @@ static uint32 g_higcurr_tick = 0;
 static uint32 g_lowcurr_tick = 0 ;	// 小电流时间
 static uint32 g_nobat_tick = 0 ;	// 无电池时间
 
-#endif
-
+#endif //
 
 
 void BatteryInfoDump(void)

@@ -470,7 +470,7 @@ static void _Rs485_Cmd10( uint8_t *pinbuff , uint16_t len )
 	uint32_t tempu32 = 0;
 	
 	pCenterCtrlData pCenterCtrl = (pCenterCtrlData) ( pinbuff + 8 );
-	pBatteryRespond pBatterRes = (pBatteryRespond)(g_Rs485TxBuf+8);
+	//pBatteryRespond pBatterRes = (pBatteryRespond)(g_Rs485TxBuf+8);
 
 	pCurBat = pinbuff[1] == 0x32 ? &g_Bat[0] : &g_Bat[1] ;		// 0x32-Bat0
 	

@@ -32,8 +32,9 @@
 #endif //
     }
 	modul_receive_flag = SET; 
+#ifdef CANBUS_MODE_JT808_ENABLE		
 	gJT808Disconnect = False ;
-
+#endif 
 	//if( (0x1030 == receive_message.rx_efid ) && (receive_message.rx_dlen > 0))
 	//{
 	//	Butt_rxDataProc( receive_message.rx_data , receive_message.rx_dlen );
@@ -177,8 +178,10 @@ void can1_isr(void)
 	{
 		SetWakeUpType(WAKEUP_CAN);
 	}
+#ifdef CANBUS_MODE_JT808_ENABLE		
 	CAN_Wakeup();
 	gJT808Disconnect = False ;
+#endif //	
 	//modul_receive_flag = SET; 
 	
 	//if((Pms_GetStatus() == PMS_DEEP_SLEEP)||(Pms_GetStatus() == PMS_ACC_OFF))

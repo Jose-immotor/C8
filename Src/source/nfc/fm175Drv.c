@@ -135,11 +135,7 @@ Bool Fm175Drv_Anticollision(Fm175Drv* pDrv, unsigned char selcode,unsigned char*
 	send_buff[1] = 0x20;
 
 	result = fm175Drv_SyncTransfer(pDrv, Transceive, send_buff, 2, rece_buff, &rece_bitlen, 1);
-	
-	PFL(DL_NFC,"NFC[%02X] Antico:%02X-%02X:%02X%02X%02X%02X%02X\n",
-		pDrv->iicReg.dev_addr,result,rece_bitlen,
-		rece_buff[0],rece_buff[1],rece_buff[2],rece_buff[3],rece_buff[4]);
-		
+
 	if (result && rece_bitlen == sizeof(rece_buff))
 	{
 		for (i = 0; i < 5; i++)
@@ -238,10 +234,7 @@ Bool Fm175Drv_CardActivate(Fm175Drv* pDrv)
 	unsigned char pSak[3];
 
 	if (!Fm175Drv_Request(pDrv, pTagType)) return False; //Ñ°¿¨ Standard	 send request command Standard mode
-	
-	PFL(DL_NFC,"NFC[%02X] Request:%02X%02X\n",
-		pDrv->iicReg.dev_addr,pTagType[0],pTagType[1]);
-	
+
 	if ((pTagType[0] & 0xC0) == 0x00)	//Ò»ÖØUID
 	{
 		if (!Fm175Drv_Anticollision(pDrv, 0x93, pSnr))				return False; //1¼¶·À³åÍ»
@@ -532,8 +525,6 @@ static void fm175Drv_switchState(Fm175Drv* pDrv, uint8 state)
 //	uint8 rc = 0;
 	if (pDrv->state == state) return;
 
-	PFL(DL_NFC, "NFC[%X] switch %d to %d\n",pDrv->iicReg.dev_addr,pDrv->state , state);
-
 	if (state == FM_STATE_INIT)
 	{
 	}
@@ -578,7 +569,7 @@ static void fm175Drv_switchState(Fm175Drv* pDrv, uint8 state)
 		SwTimer_Start(&pDrv->sleepWdTimer, 60000, 0);
 		fm175Drv_event(pDrv, SEARCH_CARD_DONE, TRANS_RESULT_SUCCESS);
 	}
-
+	PFL(DL_NFC, "NFC status from %d to %d\n",pDrv->state,state );
 	pDrv->state = state;
 	pDrv->fsm = fm175Drv_findFsm(state);
 }

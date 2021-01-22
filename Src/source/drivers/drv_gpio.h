@@ -101,8 +101,6 @@ typedef enum
 	IO_AT8837_IN2,
 	IO_AT8837_nSLEEP,
 	IO_CAN_STB,
-	//IO_CAN1_RX,
-	//IO_CAN1_TX
 }IO_ID;
 
 #define RM_POWER_FUN DET_12V_3

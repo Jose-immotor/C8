@@ -701,18 +701,6 @@ void IO_Start()
 	IO_IRQEnable(True);
 }
 
-// CAN1 rx tx
-/*
-void CAN1_TxRx( uint8_t io )
-{
-	DrvIo* can1_rx = IO_Get(IO_CAN1_RX);
-	DrvIo* can1_tx = IO_Get(IO_CAN1_TX);
-	//
-	PortPin_Set(can1_rx->periph, can1_rx->pin, io ?  True :False);
-	PortPin_Set(can1_tx->periph, can1_tx->pin, io ?  True :False);
-}
-*/
-
 ////检查IO状态，是否发生改变
 //void IO_CheckIOState()
 //{

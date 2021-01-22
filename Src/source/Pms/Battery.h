@@ -49,6 +49,9 @@ extern "C" {
 		BMS_READ_CTRL,		//读BMS控制寄存器
 
 		BMS_WRITE_CTRL, 	//写控制寄存器
+		BMS_AUTH_BMS_PMS_REG,	// BMS 认证 PMS ,PMS 请求
+		BMS_AUTH_BMS_PMS_DIGEST,// BMS 认证 PMS ,PMS 发送digest
+		BMS_AUTH_PMS_BMS_REG,	// PMS 认证 BMS
 	}BmsCmd;
 
 	//电池消息定义
@@ -76,6 +79,7 @@ extern "C" {
 		BmsStatus_idle,		//空闲，等待下一次轮询
 		BmsStatus_sleep,	//浅休眠，轮询电池状态
 		BmsStatus_deepSleep,//深度休眠，不轮询电池状态
+		BmsStatus_auth,		// 认证
 	}BmsOpStatus;
 
 	//电池在位状态
@@ -104,6 +108,12 @@ extern "C" {
 		BmsReg_info 		bmsID;		//信息寄存器
 		BmsReg_deviceInfo 	bmsInfo;	//只读寄存器
 		BmsReg_ctrl 		bmsCtrl;	//控制寄存器
+		// 认证
+		PmsBmsAuthRsq1		pmsbmsRsq1;
+		PmsBmsAuthRsq2		pmsbmsRsq2;
+		BmsPmsAuthRsq		bmspmsRsq;
+		
+		//
 
 		//需要写到BMS寄存器BmsRegCtrl的值
 		uint16_t   			writeBmsCtrl;
@@ -144,6 +154,10 @@ extern "C" {
 	MOD_EVENT_RC Bat_event_readBmsInfo(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev);
 	MOD_EVENT_RC Bat_event_readBmsInfo2(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev);
 	MOD_EVENT_RC Bat_event_Ctrl(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev);
+
+	MOD_EVENT_RC Bat_event_AuthBmsPmsRsq1(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev);
+	MOD_EVENT_RC Bat_event_AuthBmsPmsRsq2(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev);
+	MOD_EVENT_RC Bat_event_AuthPmsBmsRsq(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev);
 
 #ifdef __cplusplus
 }

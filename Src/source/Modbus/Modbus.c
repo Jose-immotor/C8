@@ -52,7 +52,7 @@ uint8_t* Mod_getRspData(const ModCmd* pCmd, const uint8_t* pRsp, int len, uint8_
 		{MOD_WEITE_SINGLE_REG, -1, 7, 2},
 	};
 
-	if (pRsp[4] > 0x80)
+	if (pRsp[4] > 0x80)		// 不支持的指令
 	{
 		*dlc = len - 2;
 		return (uint8_t*)&pRsp[5];
@@ -433,18 +433,18 @@ static void Mod_RcvRsp(Mod * pMod, const uint8_t * pRsp, int frameLen, MOD_RSP_R
 	int minlen = MIN(rspDlc, pCmd->storageLen);
 	if (pRsp[MODBUS_CMD_IND] == pCmd->modCmd)
 	{
-		if (pRsp && pCmd->pStorage && pCmd->storageLen)
+		if (pRsp && pCmd->pStorage && pCmd->storageLen && pCmd->pExt )
 		{
 			const uint8_t* pRspData = pCmd->pExt->transferData;
 			if (Mod_getCmdType(pCmd) == MOD_WRITE)
 			{
-				if (rspDlc && pCmd->mirror)
+				if (rspDlc && pCmd->mirror && pRspData )
 				{
 					//更新storage值
 					memcpy(pCmd->mirror, pRspData, MIN(rspDlc, pCmd->paramLen));
 				}
 			}
-			else if (pCmd->pStorage)
+			else if (pCmd->pStorage && pRspData)
 			{
 				if (memcmp(pCmd->pStorage, pRspData, minlen) != 0)
 				{
@@ -459,7 +459,6 @@ static void Mod_RcvRsp(Mod * pMod, const uint8_t * pRsp, int frameLen, MOD_RSP_R
 				if (pCmd->mirror) memcpy(pCmd->mirror, pCmd->pStorage, pCmd->storageLen);
 			}
 		}
-
 		Mod_Event(pMod, pCmd, MOD_REQ_SUCCESS);
 	}
 	else

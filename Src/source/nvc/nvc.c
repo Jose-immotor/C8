@@ -95,9 +95,12 @@ void Nvc_Add(uint8 audioInd, uint8 maxRepeat)
 		Nvc_RemovedItem();
 	}
 	
-	Queue_write(&g_NvcQueue, &nvcItem, sizeof(nvcItem));
+	if( Queue_write(&g_NvcQueue, &nvcItem, sizeof(nvcItem)) )
+	{
+		Fsm_SetActiveFlag(AF_NVC, True);
 
-	Fsm_SetActiveFlag(AF_NVC, True);
+		//Printf("Nvc Add:%d\n",audioInd );
+	}
 }
 
 #define CONVERT_TO_VOL(x) (x-1 + 0xE0)
@@ -179,6 +182,7 @@ static void Nvc_Stop(void)
 	NVC_PWR_OFF();
     timer_deinit(TIMER3);
 	rcu_periph_clock_disable(RCU_TIMER3);
+	Fsm_SetActiveFlag(AF_NVC, False);
 }
 
 void Nvc_SendNvcItem(NvcItem* pNvcItem)
@@ -209,6 +213,7 @@ void Nvc_Run()
 		{
 			Nvc_SendNvcItem(g_pNvcItem);
 			Queue_pop(&g_NvcQueue);
+			rt_thread_mdelay(20);		// µÈ´ý NVC_IS_BSY()
 		}
 		else if(Nvc_IsPwrOn())
 		{

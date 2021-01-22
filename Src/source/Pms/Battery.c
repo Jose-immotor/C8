@@ -10,6 +10,9 @@
 extern Mod* g_pModBus;
 static void Bat_fsm(Battery* pBat, uint8_t msgId, uint32_t param1, uint32_t param2);
 
+const char *sl_authority_secret = "sb.l34&@,alwvc9^t!sUDRGUN427zosp";
+
+
 void Bat_dump(const Battery* pBat)
 {
 	Printf("Battery[%d]:\n", pBat->port);
@@ -314,6 +317,55 @@ MOD_EVENT_RC Bat_event_Ctrl(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev)
 {
 	return MOD_EVENT_RC_SUCCESS;
 }
+
+//
+MOD_EVENT_RC Bat_event_AuthBmsPmsRsq1(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev)
+{
+	//
+	return MOD_EVENT_RC_SUCCESS;
+}
+
+MOD_EVENT_RC Bat_event_AuthBmsPmsRsq2(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev)
+{
+	//
+	return MOD_EVENT_RC_SUCCESS;
+}
+
+MOD_EVENT_RC Bat_event_AuthPmsBmsRsq(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVENT ev)
+{
+	//
+	return MOD_EVENT_RC_SUCCESS;
+}
+#if 0
+// 发起Auth 
+static void Bat_Auth_BmsPmsReq1(Battery* pBat)
+{
+	//const ModCfg *cfg = pBat->cfg ;
+	//const ModCmd* pCmd = Mod_FindCmdItem(cfg->cmdArray, cfg->cmdCount, BMS_AUTH_BMS_PMS_REG );
+	Bat_sendCmd(pBat, BMS_AUTH_BMS_PMS_REG);
+}
+
+static void Bat_Auth_BmsPmsReq2(Battery* pBat,uint8_t digest[32])
+{
+	const ModCfg *cfg = pBat->cfg ;
+	const ModCmd* pCmd = Mod_FindCmdItem(cfg->cmdArray, cfg->cmdCount, BMS_AUTH_BMS_PMS_DIGEST );
+	memcpy( (uint8*)pCmd->pParam + 2 , digest , 32 ) ;
+	Bat_sendCmd(pBat, BMS_AUTH_BMS_PMS_DIGEST);
+}
+
+/*
+	PMS验证BMS流程
+	1、pms发起 pms验证bms请求 Random[4Byte]
+	2、bms返回Ack[1Byte] + Digest[32Byte]
+*/
+static void Bat_Auth_PmsBmsReq(Battery* pBat,uint8_t random[4])
+{
+	const ModCfg *cfg = pBat->cfg ;
+	const ModCmd* pCmd = Mod_FindCmdItem(cfg->cmdArray, cfg->cmdCount, BMS_AUTH_PMS_BMS_REG );
+	memcpy( (uint8*)pCmd->pParam + 2 , random , 4 ) ;
+	Bat_sendCmd(pBat, BMS_AUTH_PMS_BMS_REG);
+}
+#endif //
 
 
 
