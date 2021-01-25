@@ -549,14 +549,15 @@ static void Pms_fsm_accOn(PmsMsg msgId, uint32_t param1, uint32_t param2)
 					Pms_switchStatus(PMS_ACC_OFF);
 					gJT808ExtStatus = _JT808_EXT_SLEEP ;
 				}
-				// 持续12小时---唤醒
-				if( GET_TICKS() - g_batlowcur_tick_12h > PMS_ACC_OFF_MODE_WAKUP_TIME )	// 48小时
+				// 持续12小时 or ---唤醒
+				if( GET_TICKS() - g_batlowcur_tick_12h > PMS_ACC_OFF_MODE_WAKUP_TIME ||
+					GET_TICKS() - g_batlowcur_tick_24h == PMS_ACC_DEPSLEEP_TIME - 5 * 60 * 1000 )	// 48小时
 				{
 					g_batlowcur_tick_12h = GET_TICKS();
 					PFL(DL_PMS,"Low Current 12h,Wakeup JT808(%d)\n",g_batlowcur_tick_12h);
 					gJT808ExtStatus = _JT808_EXT_BRIEF_WAKUP ;
 				}
-				// 持续 5分钟
+				// 持续 5分钟 
 				if( GET_TICKS() - g_batlowcur_tick_5m > PMS_ACC_OFF_TIME &&
 					gJT808ExtStatus == _JT808_EXT_WAKUP )
 				{

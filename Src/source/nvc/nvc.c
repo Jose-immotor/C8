@@ -213,7 +213,7 @@ void Nvc_Run()
 		{
 			Nvc_SendNvcItem(g_pNvcItem);
 			Queue_pop(&g_NvcQueue);
-			rt_thread_mdelay(20);		// µÈ´ý NVC_IS_BSY()
+			//rt_thread_mdelay(20);		// µÈ´ý NVC_IS_BSY()
 		}
 		else if(Nvc_IsPwrOn())
 		{

@@ -89,6 +89,21 @@ unsigned char is_battery_error(unsigned char bms_index)
     
     return 0;
 }
+// 检测是否有霍尔开关
+unsigned char is_battery_g2(unsigned char bms_index)
+{
+    unsigned short vl_value;
+	Battery* pBat = Null;
+	
+	pBat = &g_Bat[bms_index];
+	vl_value = bigendian16_get((uint8*)(&pBat->bmsInfo.state));
+	if( vl_value & (1<<3 ) )
+	{
+		return 1 ;
+	}
+	return 0 ;
+}
+
 
 unsigned short Battery_get_voltage(unsigned char bms_index)
 {
@@ -163,8 +178,8 @@ void Battery_discharge_process(void)
     static unsigned char sl_both_voltage_equ_flag = 0;
     static unsigned char sl_both_voltage_diff_flag = 0;
 
-    if(((slave_rs485_is_bat_valid(0))&&(is_battery_A_V_reg_valid(0))&&(0 == is_battery_error(0)))&&
-	   ((slave_rs485_is_bat_valid(1))&&(is_battery_A_V_reg_valid(1))&&(0 == is_battery_error(1))))
+    if(((slave_rs485_is_bat_valid(0))&&(is_battery_A_V_reg_valid(0))&&(0 == is_battery_error(0)) && (is_battery_g2(0)))&&
+	   ((slave_rs485_is_bat_valid(1))&&(is_battery_A_V_reg_valid(1))&&(0 == is_battery_error(1)) && (is_battery_g2(1))))
 	{
 	    //两个电池都在线
         vl_bms_0_V = Battery_get_voltage(0);
@@ -355,7 +370,7 @@ void Battery_discharge_process(void)
 		}
 	}
 	else if((slave_rs485_is_bat_valid(0))&&(is_battery_A_V_reg_valid(0))&&
-	        (0 == is_battery_error(0)))
+	        (0 == is_battery_error(0)) && is_battery_g2(0) )
     {
 		//电池0可用
 //        vl_bms_0_A = Battery_get_current(0);
@@ -378,7 +393,7 @@ void Battery_discharge_process(void)
         sl_supply_state = 2;
     }
 	else if((slave_rs485_is_bat_valid(1))&&(is_battery_A_V_reg_valid(1))&&
-	       (0 == is_battery_error(1)))
+	       (0 == is_battery_error(1)) && is_battery_g2(1) )
     {
 		//电池1可用
 //        vl_bms_1_A = Battery_get_current(1);
