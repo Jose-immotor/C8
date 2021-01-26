@@ -114,12 +114,15 @@ Bool Nvds_Verify(const LogItem* pItem)
 	return True;
 }
 
+
 static Bool CfgInfo_Event(CfgInfo* p, NvdsEventID eventId)
 {
 	//从Flash读取的数据错误，设定默认值
 	if (eventId == BE_DATA_ERROR)
 	{
 		memset(p, 0, sizeof(CfgInfo));
+		p->vol = 7;	// 默认音量
+		p->isActive = 1 ; // 默认激活
 	}
 
 	return True;
@@ -219,12 +222,4 @@ void NvdsUser_Init()
 		LocalTimeSync(&localDt);
 		//DateTime_dump(&localDt);
 	}
-	if(!g_cfgInfo.vol)
-	{
-		g_cfgInfo.vol= 7 ;//默认音量为7
-	}
-//	if(!g_pdoInfo.isRemoteAccOn)
-//	{
-//		g_pdoInfo.isRemoteAccOn=1;
-//	}
 }

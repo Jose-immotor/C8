@@ -50,6 +50,19 @@ void Nvc_RemovedItem()
 	}
 	g_pNvcItem = Null;
 }
+void Nvc_RemovedItem_2()
+{	
+	SwTimer_Stop(&g_NvcTimer);
+	
+	g_failedCounter = 0;
+	//if(g_pNvcItem == Queue_Read(&g_NvcQueue))
+	//{
+	//	Queue_reset(&g_NvcQueue);
+	//}
+	g_pNvcItem = Null;
+}
+
+
 
 void Nvc_SetPower(Bool isOn)
 {
@@ -99,7 +112,7 @@ void Nvc_Add(uint8 audioInd, uint8 maxRepeat)
 	{
 		Fsm_SetActiveFlag(AF_NVC, True);
 
-		//Printf("Nvc Add:%d\n",audioInd );
+		//Printf("Nvc Add:%d[%d-%d]\n",audioInd,g_NvcQueue.readInd,g_NvcQueue.writeInd );
 	}
 }
 
@@ -213,7 +226,8 @@ void Nvc_Run()
 		{
 			Nvc_SendNvcItem(g_pNvcItem);
 			Queue_pop(&g_NvcQueue);
-			//rt_thread_mdelay(20);		// 等待 NVC_IS_BSY()
+			//rt_thread_mdelay(100);		// 等待 NVC_IS_BSY()
+			//Printf("NVC Start[%d-%d]\n",g_NvcQueue.readInd,g_NvcQueue.writeInd );
 		}
 		else if(Nvc_IsPwrOn())
 		{
@@ -226,16 +240,21 @@ void Nvc_Run()
 		if(NVC_IS_BSY())
 		{
 			//正在播放语音
+			//Printf("NVC BSY\n");
 		}
 		else
 		{
+			
 			if(++g_pNvcItem->repeatCounter >= g_pNvcItem->maxRepeat)
 			{
-				Nvc_RemovedItem();
+				//Nvc_RemovedItem();
+				Nvc_RemovedItem_2();
+				//Printf("NVC Remove\n");
 			}
 			else
 			{
 				Sif_TxByte(&g_Sif, g_pNvcItem->cmd);
+				//Printf("NVC Next\n");
 			}
 		}
 	}
