@@ -30,6 +30,7 @@ void SwTimer_Stop(SwTimer* pTimer);
 Bool SwTimer_isTimerOut(SwTimer* pTimer);
 Bool SwTimer_isTimerOutEx(uint32_t initTicks, uint32_t timeOutTicks);
 Bool SwTimer_IsStart(SwTimer* pTimer);
+Bool SwTimer_IsStart_onId(SwTimer* pTimer,uint32_t timeId);
 Bool SwTimer_isTimerOut_onId(SwTimer* pTimer, uint32_t timeId);
 
 

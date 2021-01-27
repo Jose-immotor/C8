@@ -28,14 +28,17 @@ static Queue 	g_NvcQueue;
 static  uint8 	g_failedCounter;
 static SwTimer	g_NvcTimer;
 
+#define			_PALY_TIMEOUT_ID		1
+#define			_BUSY_TIMEOUT_ID		2
+
 static uint8 g_IsSendVol = False;
 
 void TIMER3_IRQHandler(void)
 {
 	if(timer_interrupt_flag_get(TIMER3, TIMER_INT_FLAG_UP)!=RESET)
 	{
-		Sif_Isr(&g_Sif, CLK_US);
 		timer_interrupt_flag_clear(TIMER3, TIMER_INT_FLAG_UP);
+		Sif_Isr(&g_Sif, CLK_US);
 	}
 }
 
@@ -141,7 +144,8 @@ void Nvc_Play(uint8 audioInd, uint8 maxRepeat)
 void Nvc_Done(Sif* pSif)
 {
 	//Printf("Nvc_Done[%x].\n", g_pNvcItem->cmd);
-	SwTimer_Start(&g_NvcTimer, 10000, 0);
+	//SwTimer_Start(&g_NvcTimer, 10000, 0);
+	SwTimer_Start(&g_NvcTimer, 500, _BUSY_TIMEOUT_ID );	// 等待2s后再开始检测BUSY
 	if(NVC_IS_BSY())
 	{
 		g_failedCounter = 0;
@@ -159,7 +163,7 @@ void Nvc_Done(Sif* pSif)
 	else 
 	{
 		++g_failedCounter;
-		g_pNvcItem = Null;
+		//g_pNvcItem = Null;
 		if(g_failedCounter >= 3)
 		{
 			//发送指令失败，在Nvc_Run中重发该命令
@@ -179,7 +183,7 @@ static void Nvc_Start(void)
 {
 //	timer_enable(TIMER3);
 
-	NVC_PWR_ON();
+	//NVC_PWR_ON();
 
 	Sif_Init(&g_Sif, Nvc_Done);
 
@@ -192,6 +196,7 @@ static void Nvc_Start(void)
 
 static void Nvc_Stop(void)
 {
+	SwTimer_Stop(&g_NvcTimer);
 	NVC_PWR_OFF();
     timer_deinit(TIMER3);
 	rcu_periph_clock_disable(RCU_TIMER3);
@@ -207,6 +212,7 @@ void Nvc_SendNvcItem(NvcItem* pNvcItem)
 	}
 	
 	Sif_TxByte(&g_Sif, g_pNvcItem->cmd);
+	SwTimer_Start(&g_NvcTimer, 10*1000, _PALY_TIMEOUT_ID );
 }
 
 void Nvc_Run()
@@ -214,11 +220,26 @@ void Nvc_Run()
 	if(!Sif_isDone(&g_Sif)) return;
 
 	//发送音量
-	if(SwTimer_isTimerOut(&g_NvcTimer))
+	//if(SwTimer_isTimerOut(&g_NvcTimer))
+	if( SwTimer_isTimerOut_onId(&g_NvcTimer , _PALY_TIMEOUT_ID ) )		// 整个超时
 	{
 		Nvc_RemovedItem();
+		//Printf("NVC Timeout\n");
 		return;
 	}
+
+	if( SwTimer_IsStart_onId( &g_NvcTimer , _BUSY_TIMEOUT_ID ) )
+	{
+		if( SwTimer_isTimerOut_onId(&g_NvcTimer , _BUSY_TIMEOUT_ID ) )
+		{
+		}
+		else
+		{
+			//Printf("NVC Buy Wait\n");
+			return ;
+		}
+	}
+	
 	if(g_pNvcItem == Null)
 	{
 		g_pNvcItem = Queue_Read(&g_NvcQueue);
@@ -254,6 +275,7 @@ void Nvc_Run()
 			else
 			{
 				Sif_TxByte(&g_Sif, g_pNvcItem->cmd);
+				SwTimer_Start(&g_NvcTimer, 10*1000, _PALY_TIMEOUT_ID );
 				//Printf("NVC Next\n");
 			}
 		}

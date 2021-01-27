@@ -77,6 +77,12 @@ Bool SwTimer_IsStart(SwTimer* pTimer)
 	return pTimer->m_isStart;
 }
 
+Bool SwTimer_IsStart_onId(SwTimer* pTimer,uint32_t timeId)
+{
+	return ( pTimer->m_isStart && pTimer->m_Id == timeId );
+}
+
+
 void SwTimer_Stop(SwTimer* pTimer)	
 {
 	pTimer->m_isStart = False ;

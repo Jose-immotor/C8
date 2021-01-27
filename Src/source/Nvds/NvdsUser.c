@@ -222,4 +222,6 @@ void NvdsUser_Init()
 		LocalTimeSync(&localDt);
 		//DateTime_dump(&localDt);
 	}
+	//
+	g_cfgInfo.isActive = 1;
 }

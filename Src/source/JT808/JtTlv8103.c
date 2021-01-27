@@ -18,6 +18,8 @@ TlvOutMgr g_jtTlvOutMgr_8103;
 #define		_USER_ZS_SERVER_INDEX  1		// 正式
 #define		_USER_YFB_SERVER_INDEX 2		// 预发布
 #define		_USER_KF_SERVER_INDEX  3		// 开发服务
+#define		_USER_HWT_SEVER_INDEX  4		// 海外测试
+#define		_USER_HWN_SEVER_INDEX  5		// 海外正式
 
 
 // 测试环境
@@ -32,6 +34,12 @@ TlvOutMgr g_jtTlvOutMgr_8103;
 #define		_SERVER_URL				"ec-netty-g2.ehuandian.net"
 #define		_SERVER_PORT			9006
 
+// 海外正式
+#define		_NAG_SERVER_URL			"ov-ec-netty.ehuandian.net"
+#define		_NAG_SERVER_PORT		9009
+// 海外测试
+#define		_NAV_TEST_SERVER_URL	"t-ov-ec-netty.ehuandian.net"
+#define		_NAV_TEST_SERVER_PORT		9009
 
 uint8 gCurServerIndex = _USER_ZS_SERVER_INDEX ;	// 默认为正式服务器
 
@@ -131,22 +139,34 @@ void updateServerAddr( uint8_t serindex )
 	{
 		case _USER_CS_SERVER_INDEX :		// 测试
 			strcpy( g_cfgParam.mainSvrUrl, _TEST_SERVER_URL ); // 0x74
+			g_cfgParam.mainSvrPort = _TEST_SERVER_PORT;
 			break ;
 		
 		case _USER_ZS_SERVER_INDEX  :		// 正式
 			strcpy( g_cfgParam.mainSvrUrl, _SERVER_URL );	// 0x65
+			g_cfgParam.mainSvrPort = _SERVER_PORT;
 			break ;
 		
 		case _USER_YFB_SERVER_INDEX :		// 预发布
 			strcpy( g_cfgParam.mainSvrUrl, _SERVER_URL );	// 0x65
+			g_cfgParam.mainSvrPort = _SERVER_PORT;
 			break ;
 		
 		case _USER_KF_SERVER_INDEX :		// 开发
 			strcpy( g_cfgParam.mainSvrUrl, _DEV_SERVER_URL );	// 0x64
+			g_cfgParam.mainSvrPort = _DEV_SERVER_PORT;
 			break ;
-		
+		case _USER_HWT_SEVER_INDEX :
+			strcpy( g_cfgParam.mainSvrUrl, _NAV_TEST_SERVER_URL );
+			g_cfgParam.mainSvrPort = _NAV_TEST_SERVER_PORT;
+			break ;
+		case  _USER_HWN_SEVER_INDEX :
+			strcpy( g_cfgParam.mainSvrUrl, _NAG_SERVER_URL );
+			g_cfgParam.mainSvrPort = _NAG_SERVER_PORT;
+			break ;
 		default :
 			strcpy( g_cfgParam.mainSvrUrl, _SERVER_URL ) ;	// 0x65
+			g_cfgParam.mainSvrPort = _SERVER_PORT;
 			break ;
 	}
 }
@@ -206,7 +226,7 @@ void JtTlv8103_init()
 	// URL
 	updateServerAddr( _USER_ZS_SERVER_INDEX );	// 启动的时候使用 正式服务器地址
 	//strcpy( g_cfgParam.mainSvrUrl , _NETWORK_SERVER_URL);
-	g_cfgParam.mainSvrPort = _NETWORK_SERVER_PORT;
+	//g_cfgParam.mainSvrPort = _NETWORK_SERVER_PORT;
 	
 	g_cfgParam.devType = _DEV_TYPE ;	// 类型
 	strcpy( (char*)g_cfgParam.devmodule,_DEV_MODEL );
