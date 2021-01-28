@@ -1568,9 +1568,6 @@ static void JT808_Work(void)
 {
 	JT808_timerProc();
 	JT808_fsm(MSG_RUN, 0, 0);
-	#ifdef DGT_CONFIG	
-	WDOG_Feed();
-	#endif
 	Utp_Run(&g_JtUtp);
 }
 

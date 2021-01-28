@@ -337,7 +337,7 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls>--diag_suppress=1295,188</MiscControls>
-              <Define>USE_STDPERIPH_DRIVER,GD32E103V_EVAL,XDEBUG,CFG_LOG,CONFIG_CMDLINE,CANBUS_MODE_JT808_ENABLE,_GENERAL_CENTRAL_CTL</Define>
+              <Define>USE_STDPERIPH_DRIVER,GD32E103V_EVAL,XDEBUG,CFG_LOG,CONFIG_CMDLINE,CANBUS_MODE_JT808_ENABLE,_GENERAL_CENTRAL_CTL,DGT_CONFIG</Define>
               <Undefine></Undefine>
               <IncludePath>..\..\Src\Firmware\GD32E10x_standard_peripheral\Include;..\..\Src\Firmware\CMSIS\GD\GD32E10x\Include;..\..\Src\Firmware\CMSIS;..\..\Src\rt-thread\include;..\..\Src\rt-thread\components\finsh;..\..\Src\source\CmBacktrace;..\..\Src\Arch;..\..\Src\source\drivers;..\..\Src\source\user;..\..\Src\source\nfc;..\..\Src\source\Pms;..\..\Src\source\debug;..\..\Src\source\Modbus;..\..\Src\source\utp;..\..\Src\source\JT808;..\..\Src\source\nvc;..\..\Src\source\nvds;..\..\Src\source\Log;..\..\Src\source\gsensor;..\..\Src\source\rs485;..\..\Src\source\cabin;..\..\Src\source\ButtonBoard</IncludePath>
             </VariousControls>

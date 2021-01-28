@@ -883,9 +883,7 @@ void Pms_run()
 	fm175Drv_run(&g_pms.fmDrv);
 
 	Mod_Run(g_pModBus);
-	#ifdef DGT_CONFIG
-	WDOG_Feed();
-	#endif
+
 	Bat_run(&g_Bat[0]);
 	Bat_run(&g_Bat[1]);
 

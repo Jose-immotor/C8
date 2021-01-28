@@ -16,6 +16,10 @@
 
 S_RTC_TIME_DATA_T sInitTime;
 
+#ifdef DGT_CONFIG
+extern uint32_t gDeepSleepSec ;
+#endif //
+
 /*!
     \brief      configure the RTC
     \param[in]  none
@@ -80,6 +84,9 @@ void RTC_Alarm_IRQHandler(void)
 		{
 			SetWakeUpType(WAKEUP_RTC);
 		}
+#ifdef DGT_CONFIG		
+		gDeepSleepSec += 2;
+#endif //		
 	}
 	if(SET == exti_interrupt_flag_get(EXTI_17))
 	{
@@ -87,6 +94,8 @@ void RTC_Alarm_IRQHandler(void)
 	}
 	rt_interrupt_leave();
 }
+
+
 /**
   * @brief  This function handles RTC global interrupt request.
   * @param  None
@@ -103,6 +112,9 @@ void RTC_IRQHandler(void)
 		{
 			SetWakeUpType(WAKEUP_RTC);
 		}
+#ifdef DGT_CONFIG		
+		gDeepSleepSec += 2;
+#endif //
 	}
 	rt_interrupt_leave();
 }

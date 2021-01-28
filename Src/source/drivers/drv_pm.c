@@ -78,6 +78,12 @@ extern void JT808CAN_Sleep(void);
 extern DrvIo* g_pNfcNpdBIO ;
 #endif 
 
+#ifdef DGT_CONFIG
+uint32_t gDeepSleepSec = 0;
+extern void WDOG_Feed(void);
+#endif //
+
+#define		_AUTO_WAKEUP_SEC		(12*60*60)
 
 void Enter_PowerDown()
 {	
@@ -93,18 +99,34 @@ void Enter_PowerDown()
 	
 #ifdef CANBUS_MODE_JT808_ENABLE
 	JT808CAN_Sleep();
-	gJT808ExtStatus = _JT808_EXT_SLEEP ;	// 唤醒外置模块
+	gJT808ExtStatus = _JT808_EXT_SLEEP ;	// 休眠之
 #endif 
 
 	gd32_hw_usart_deinit();
 
 	PortPin_Set(g_pLedIO->periph, g_pLedIO->pin, True);
 
-	RTC_TimerStart(12*60*60);			//定时12小时唤醒中控
-	
+#ifdef DGT_CONFIG		// 有看门狗,1s起来喂狗
+	gDeepSleepSec = 0x00;	// 清 0
+_REMCUSLEEP:	
+	g_WakeupType = 0x0000 ;
+	WDOG_Feed();
+	RTC_TimerStart(1);
+#else
+	RTC_TimerStart(_AUTO_WAKEUP_SEC);			//定时12小时唤醒中控
+#endif //
 	//待机模式
 	rcu_periph_clock_enable(RCU_PMU);
 	pmu_to_deepsleepmode(PMU_LDO_LOWPOWER, WFI_CMD);
+	
+#ifdef DGT_CONFIG
+	//等待一会才能喂狗
+	WDOG_Feed();
+	if( gDeepSleepSec < _AUTO_WAKEUP_SEC && g_WakeupType == WAKEUP_RTC)
+	{
+		goto _REMCUSLEEP ;
+	}
+#endif //
 	//停止模式唤醒后，需要重新配置系统时钟
 	SystemInit();
 	rt_thread_mdelay(200);

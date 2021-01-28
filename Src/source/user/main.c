@@ -68,6 +68,7 @@ const HwFwVer AppInfo={
 */
 //
 //
+#if 0
 //����WWDG������������ֵ,Ĭ��Ϊ���? 
 //�ô�����ֵ�ͼ���ֵһ��,�����Ͳ��ÿ���ι��ʱ���ڴ���ֵ~0x3F֮����
 #define WWDG_CNT 0x7f//tr   :T[6:0],������ֵ 
@@ -75,6 +76,9 @@ const HwFwVer AppInfo={
 //Fwwdg=PCLK1/(4096*2^fprer). ���Ź���ʱʱ��=1/720000000*8*0x40(s)=29ms
 //��ʼ�����ڿ��Ź�
 //ϵͳʱ��72MHz��
+
+// ʹ�ö������Ź�
+
 void Mcu_DgInit()
 {
 	rcu_periph_clock_enable(RCU_WWDGT);//   WWDGʱ��ʹ��
@@ -96,6 +100,39 @@ void WDOG_Feed(void)
 {   
 	wwdgt_counter_update(WWDG_CNT);	
 }
+#else
+static void Mcu_DgInit(void)
+{
+	if(RESET != rcu_flag_get(RCU_FLAG_FWDGTRST))
+	{
+		/* clear the FWDGT reset flag */
+	    rcu_all_reset_flag_clear();
+	}
+	/* enable IRC40K */
+    rcu_osci_on(RCU_IRC40K);
+    
+    /* wait till IRC40K is ready */
+    while(1 != rcu_osci_stab_wait(RCU_IRC40K)){
+    }
+	//fwdgt_write_enable();
+	/* confiure FWDGT counter clock: 40KHz(IRC40K) / 8 = 0.625 KHz */
+    fwdgt_config(4000,FWDGT_PSC_DIV32);
+}
+
+static void Mcu_DgStart(void)
+{
+    /* after 2.0 seconds to generate a reset */
+    fwdgt_enable();
+}
+
+void WDOG_Feed(void)
+{
+	fwdgt_counter_reload();
+}
+
+
+
+#endif 
 
 void endless_loop_for_wdTest()
 {
@@ -142,6 +179,7 @@ int main(void)
 	Mcu_DgInit();
 	Mcu_DgStart();
 	#endif
+	
     while(1)
 	{
 		#ifdef DGT_CONFIG	
