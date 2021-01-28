@@ -263,7 +263,7 @@ UTP_EVENT_RC JT808_cmd_getSimCfg(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT e
 		{
 			//i = 0;
 			readParamOffset = 0;
-			// �����Ĭ������?����������,���ΪԶ�����ã��򲻴����?			if( JtTlv8103_getFactoryCofnig() != 0 )	// �ǳ�������
+			if( JtTlv8103_getFactoryCofnig() != 0 )	// �ǳ�������
 			{
 				Utp_SendCmd(&g_JtUtp, JTCMD_CMD_SET_SIM_CFG );
 			}
