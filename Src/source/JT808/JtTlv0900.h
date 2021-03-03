@@ -121,7 +121,7 @@ extern "C"{
 		uint16_t	Minor ;
 		int8_t		RSSI ;
 		uint8_t 	soc ;		// 电池百分比
-		uint8_t		Voltage ;	// 电池电压
+		uint16_t	Voltage ;	// 电池电压
 	}Beacon;
 
 	typedef struct

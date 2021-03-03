@@ -87,7 +87,7 @@ void TlvOutMgr_updateMirror(TlvOutMgr* mgr, const uint8* pTlvBuf, int bufSize);
 返回值：总的有效的TLV数据长度
 ******************************************/
 int TlvOutMgr_getChanged(TlvOutMgr* mgr, uint8* pBuf, int bufSize, uint8* tlvCount);
-
+int TlvOutMgr_getValByTag(TlvOutMgr* mgr,uint8* pBuf ,int bufSize,uint32 tag);
 void TlvOutMgr_resetAll(TlvOutMgr* mgr);
 void TlvOutMgr_setFlag(TlvOutMgr* mgr, uint32 tag, TlvOutFlag flag);
 const TlvOut* TlvOutMgr_find(const TlvOut* pItems, int count, uint32 tag);

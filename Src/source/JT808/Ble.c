@@ -13,11 +13,14 @@
 #include "Ble.h"
 #include "BleTpu.h"
 #include "TlvIn.h"
+#include "JtTlv0900.h"
 #include "JT808.h"
 #include "debug.h"
 
 #ifdef CANBUS_MODE_JT808_ENABLE	
 
+
+// 所有BLE数据是小端
 extern void Cabin_UnLock(void);
 
 //spCmd->pExt->transferData && pCmd->pExt->transferLen 
@@ -104,23 +107,32 @@ static TlvInEventRc _SetServerAddr(void* pObj, const struct _TlvIn* pItem, TlvIn
 	return TERC_SUCCESS ;
 }
 
+static uint8_t gbleVol = 0 ;
+static TlvInEventRc _SetVol(void* pObj, const struct _TlvIn* pItem, TlvInEvent ev)
+{
+	if( ev == TE_CHANGED_AFTER )
+	{
+		Nvc_SetVol(gbleVol);
+		NvdsUser_Write(NVDS_CFG_INFO);
+	}
+	return TERC_SUCCESS ;
+}
+
 UTP_EVENT_RC Ble_setNvds(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
 	if (ev == UTP_GET_RSP)
 	{
 		const static TlvIn tlvs[] =
 		{
-			{"SmtFwVer", 0x01, 7, Null, DT_STRUCT},
-			{"PmsFwVer", 0x02, 7, Null, DT_STRUCT},
-			{"SmtHwVer", 0x04, 2, Null, DT_STRUCT},
-			{"SerAddr", 0x10, 1, (uint8_t*)&gCurServerIndex, DT_UINT8 ,(TlvInEventFn)_SetServerAddr }
+			{"SetAddr", 0x10, 1, (uint8_t*)&gCurServerIndex, DT_UINT8 ,(TlvInEventFn)_SetServerAddr },
+			{"SetVol" , 0x20, 1,(uint8_t*)&gbleVol,DT_UINT8,(TlvInEventFn)_SetVol}
 		};
 
 		for (int i = 0; i < GET_ELEMENT_COUNT(tlvs); i++)
 		{
 			if (tlvs[i].tag == pCmd->pStorage[0])
 			{
-				if (tlvs[i].storage)
+				if (tlvs[i].storage )
 				{
 					if( tlvs[i].Event ) tlvs[i].Event( pBle,&tlvs[i],TE_CHANGED_BEFORE);
 					memcpy(tlvs[i].storage, &pCmd->pStorage[2], MIN(pCmd->pStorage[1], tlvs[i].len));
@@ -200,6 +212,20 @@ UTP_EVENT_RC Ble_BatteryVerify(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 }
 
 //
+UTP_EVENT_RC Ble_GetBeacon(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
+{
+	if (ev == UTP_GET_RSP)
+	{
+		PFL(DL_JT808,"Get Beacon %d:%d\n",pBle->bleBeaconReq.major,pBle->bleBeaconReq.minor );
+		pCmd->pExt->transferLen = sizeof(BleBeaconPkt1);
+		BleBeaconPkt1 *pbleBeaconPk1 = (BleBeaconPkt1*)pCmd->pExt->transferData ;
+		memset( pbleBeaconPk1 , 0 , sizeof( BleBeaconPkt1) );
+		GetBleBeaconInfo( &pBle->bleBeaconReq , pbleBeaconPk1 );
+	}
+	return UTP_EVENT_RC_SUCCESS;
+}
+
+//
 extern DrvIo* g_pLockEnIO ;
 UTP_EVENT_RC Ble_setWheelLock(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
@@ -264,24 +290,25 @@ UTP_EVENT_RC Ble_setACC(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 }
 
 
-
-
 UTP_EVENT_RC Ble_getNvds(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
-	//_BLE_DEBUGMSG("getNvds:%x,ev:%d:%d\r\n" , pCmd->pStorage[0] , ev , gCurServerIndex );
+	otvItem*  pResult = (otvItem*)pCmd->pExt->transferData;
 	if (ev == UTP_GET_RSP)
 	{
 		pCmd->pExt->transferLen = 0;
 		switch ( pCmd->pStorage[0] )
 		{
 			case 0x10 :
-				{
-					otvItem*  pResult = (otvItem*)pCmd->pExt->transferData;
-					pResult->item = 0x10;
-					pResult->len = 0x01 ;
-					pResult->param = gCurServerIndex;
-					pCmd->pExt->transferLen = 3;
-				}
+				pResult->item = 0x10;
+				pResult->len = 0x01 ;
+				pResult->param = gCurServerIndex;
+				pCmd->pExt->transferLen = 3;
+				break ;
+			case 0x20 :
+				pResult->item = 0x20;
+				pResult->len = 0x01 ;
+				pResult->param = g_cfgInfo.vol;
+				pCmd->pExt->transferLen = 3;
 				break ;
 			default :
 				break ;
@@ -400,6 +427,19 @@ int Ble_txData(uint8_t cmd, const uint8_t* pData, uint32_t len)
 {
 	return len;
 }
+
+void UpdateBleBeacon(Beacon *pBeacon , uint8 bleCnt)
+{
+	uint8_t i = 0 ;
+	for( i = 0 ; i < bleCnt && i < 5 ; i++)
+	{
+		g_Ble.bleBeaconPkt.BeaconDecs[i].Major = pBeacon[i].Major ;
+		g_Ble.bleBeaconPkt.BeaconDecs[i].Minor = pBeacon[i].Minor;
+		g_Ble.bleBeaconPkt.BeaconDecs[i].RSSI = pBeacon[i].RSSI;
+	}
+	g_Ble.bleBeaconPkt.cnt = i ;
+}
+
 /*
 0x04 --- 获取电池信息   -- REQ_ID_GET_BATTERYINFO ok
 0x19 --- 获取版本信息  REQ_ID_GET_DEVICEID     -- ok
@@ -414,7 +454,7 @@ int Ble_txData(uint8_t cmd, const uint8_t* pData, uint32_t len)
 */
 void Ble_init(uint8* mac)
 {
-#define BLE_CMD_SIZE 17
+#define BLE_CMD_SIZE 19
 	static UtpCmdEx g_JtCmdEx[BLE_CMD_SIZE];
 	static uint8 rxBuf[32];
 	static uint8 txBuf[32];
@@ -443,6 +483,8 @@ void Ble_init(uint8* mac)
 		/*0x01*///{&g_JtCmdEx[11],UTP_EVENT, REQ_ID_BAT_VERIFY	  ,"BatVerify"   , Null, 0, (uint8*)& g_Ble.pmsPkt, sizeof(PmsPkt)},
 		/*0x01*///{&g_JtCmdEx[12],UTP_EVENT, REQ_ID_SET_ALARM_MODE,"SetAlarmMode", Null, 0, (uint8*)& g_Ble.pmsPkt, sizeof(PmsPkt)},
 		/*0x23*/{&g_JtCmdEx[16],UTP_EVENT, REQ_ID_RESET	  			,"DevReset"},
+		/*0x3E*/{&g_JtCmdEx[17],UTP_EVENT, REQ_ID_GET_BEACON_SCAN	  ,"GetBeaconScan"  , Null, 0, (uint8*)& g_Ble.bleBeaconPkt, sizeof(BleBeaconPkt)},
+		/*0x3E*/{&g_JtCmdEx[18],UTP_READ, REQ_ID_GET_BEACON_CMD	  ,"GetBeaconScan1"  , (uint8*)& g_Ble.bleBeaconReq, sizeof(GetBeaconREQ),Null,0,(UtpEventFn)Ble_GetBeacon},
 	};
 	//
 	static const UtpCfg cfg =
@@ -487,7 +529,7 @@ void Ble_init(uint8* mac)
 	g_Ble.pmsPkt.AppMainVer = g_Ble.devIdPkt.fwMainVer = FW_VER_MAIN;
 	g_Ble.pmsPkt.AppSubVer = g_Ble.devIdPkt.fwSubVer = FW_VER_S1;
 	g_Ble.pmsPkt.AppMinorVer = g_Ble.devIdPkt.fwMinorVer = FW_VER_S2;
-	g_Ble.pmsPkt.AppBuildNum = g_Ble.devIdPkt.buildNum = FW_VER_BUILD;
+	g_Ble.pmsPkt.AppBuildNum = g_Ble.devIdPkt.buildNum = FW_VER_BUILD;	// 小端
 	g_Ble.pmsPkt.State = 1;
 
 	//
@@ -506,7 +548,6 @@ void Ble_init(uint8* mac)
 	BIT[11-31]：保留
 	*/
 	g_Ble.devCapacity.capacity = BIT(1) | BIT(2) | BIT(7) | BIT(8) | BIT(9) | BIT(10);
-	
 	
 	BleTpu_Init(&g_BleTpu, &cfg, &g_BleFrameCfg);
 	BleUser_init(&g_Ble.user, mac);

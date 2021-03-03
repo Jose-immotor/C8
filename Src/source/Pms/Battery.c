@@ -207,13 +207,15 @@ MOD_EVENT_RC Bat_event_readBmsID(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVEN
 		g_Ble.batDesc[pBat->port].damage = bigendian16_get((uint8*)(&pBat->bmsID.ltsta));
 
 		g_Ble.bmsPkt[pBat->port].protocolVer = pBat->bmsID.prver ;
-		g_Ble.bmsPkt[pBat->port].hwMainVer = pBat->bmsID.hwver;
+		g_Ble.bmsPkt[pBat->port].hwMainVer = SWAP16(pBat->bmsID.hwver)>>8;		
+		g_Ble.bmsPkt[pBat->port].hwSubVer = SWAP16(pBat->bmsID.hwver) & 0xFF ;
 		
-		g_Ble.bmsPkt[pBat->port].hwSubVer = pBat->bmsID.fwmsv ;
-		g_Ble.bmsPkt[pBat->port].fwMainVer = pBat->bmsID.fwrev;
+		g_Ble.bmsPkt[pBat->port].fwMainVer = SWAP16(pBat->bmsID.fwrev) >> 8;
+		g_Ble.bmsPkt[pBat->port].fwSubVer = SWAP16(pBat->bmsID.fwrev) & 0xFF ;
 		
-		g_Ble.bmsPkt[pBat->port].fwSubVer = pBat->bmsID.fwbnh ;
-		g_Ble.bmsPkt[pBat->port].buildNum = pBat->bmsID.fwbnl;
+		g_Ble.bmsPkt[pBat->port].buildNum = ( SWAP16( pBat->bmsID.fwbnh ) << 16 ) | ( SWAP16(pBat->bmsID.fwbnl)) ;
+		g_Ble.bmsPkt[pBat->port].buildNum = SWAP32( g_Ble.bmsPkt[pBat->port].buildNum );// ´ó¶Ë
+		g_Ble.bmsPkt[pBat->port].buildNum = SWAP32( g_Ble.bmsPkt[pBat->port].buildNum );// Ð¡¶Ë
 #endif 
 		//PFL(DL_PMS,"Battery[%d] ReadID:%04X\n",pBat->port,pBat->bmsCtrl.ctrl );
 	}

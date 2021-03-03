@@ -154,6 +154,50 @@ int TlvOutMgr_getChanged(TlvOutMgr* mgr, uint8* pBuf, int bufSize, uint8* tlvCou
 	return offset;
 }
 
+
+int TlvOutMgr_getValByTag(TlvOutMgr* mgr,uint8* pBuf ,int bufSize ,uint32 tag)
+{
+	int offset = 0;
+	uint16_t tlv_l = 0 ;
+	const TlvOut* p = mgr->itemArray;
+	uint8 val[8];
+	for(int i = 0; i < mgr->itemCount ; i++, p++ )
+	{
+		if( p->tag == tag )
+		{
+			// 不能直接这么判断，有字符串
+			if( p->dt == DT_STRING )
+			{
+				tlv_l = strlen( p->storage );
+			}
+			else
+			{
+				tlv_l = p->len ;
+			}
+			if((offset + tlv_l/*p->len*/ + mgr->tagLen + 1) > bufSize) break;
+					memcpy(&pBuf[offset], &p->tag, mgr->tagLen);
+			offset += mgr->tagLen;
+					pBuf[offset++] = tlv_l;//p->len;	
+					//只有小于8个字节的数据才可能是整数，需要大小端转换
+			if (mgr->isSwap && tlv_l/*p->len*/ <= sizeof(val))
+			{
+				memcpy(val, p->storage, tlv_l/*p->len*/);		// 获取的是 storage 不是 miro
+				Dt_swap(val, p->dt);
+				memcpy(&pBuf[offset], val, tlv_l/*p->len*/);
+			}
+			else
+			{
+				memcpy(&pBuf[offset], p->storage, tlv_l/*p->len*/);
+			}
+			offset += tlv_l/*p->len*/;
+			return offset ;
+		}	
+	}
+	return 0;
+}
+
+
+
 //更新镜像指针值
 
 void TlvOutMgr_updateMirror(TlvOutMgr* mgr, const uint8* pTlvBuf, int bufSize)

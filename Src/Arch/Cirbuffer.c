@@ -51,7 +51,7 @@ uint16_t CirBuffPop( pCirBuff pcirbuff , uint8_t *poutbuff , uint16_t size )
 	while( pcirbuff->miHead != pcirbuff->miTail && len < size )
 	{
 		poutbuff[len++] = pcirbuff->mpBuff[pcirbuff->miHead];
-		_CIR_LOOP_ADD( pcirbuff->miHead, 1, pcirbuff->miHead );
+		_CIR_LOOP_ADD( pcirbuff->miHead, 1, pcirbuff->miSize );
 	}
 	return len ;
 }

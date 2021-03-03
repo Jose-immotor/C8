@@ -224,15 +224,23 @@ extern "C"{
 		uint8		mADV[62];	// ¹ã²¥Êý¾Ý
 	}BLEAdvContext;	
 
-#define		_BLE_BEACON_CNT			(4)
+	#define		_BLE_BEACON_CNT			(4)
 	typedef struct
 	{
-		uint8 			BeaconCntextLen;
+		//uint8 			BeaconCntextLen;
 		BLEAdvContext	BeaconADV[_BLE_BEACON_CNT];
 	}BeaconCntext ;
-	// Jose add end
 
-
+	typedef struct
+	{
+		uint8 	extraStType;	// 0xF0
+		uint8	extraStLen;	// 0x04
+		uint32 	extraStStatus;
+		uint8	extraAlType; // 0xF1
+		uint8 	extraAlLen;	// 0x04
+		uint32	extraAlam;
+	}LocationExtras;
+	
 	// beacon
 	typedef struct
 	{
@@ -240,6 +248,7 @@ extern "C"{
 		uint16_t 	miMajor;
 		uint16_t 	miMinor;
 		int8_t		miRSSI;
+		uint8_t		miSOC;
 		uint16_t 	miVoltage;
 	}BeaconCell;
 	
@@ -270,6 +279,7 @@ extern "C"{
 		JtDevBleCfgParam blecfgParam ;
 		BeaconCntext	 bleBeaconCntext;
 		GetSMSContext	smsContext ;
+		LocationExtras	locationExtras;
 		
 		// ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½
 		UpdateFileInfo  updatefileinfo ;
@@ -309,6 +319,7 @@ extern "C"{
 
 
 
+void SetLocationExtras(uint8 extras );
 
 #ifdef __cplusplus
 }

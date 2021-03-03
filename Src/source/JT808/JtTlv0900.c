@@ -304,13 +304,23 @@ void JtTlv0900_updateStorage( void )		//
 */
 void JTTlv0900_updateBeacon(Beacon *pBeacon , uint8 bleCnt)
 {
+	uint8_t cnt = 0 , i = 0  ;
 	if( !pBeacon || !bleCnt) return ;
 	// 如果里面有,则更新之
 	// 如果里没有,则添加之
 	// 如果里面已经满了,则清除信号最弱的
+	cnt = bleCnt > 10 ? 10 : bleCnt ;
 	memset( &g_tlvBeacondes , 0 , sizeof(g_tlvBeacondes) );
 	g_tlvBeacondes.beaconCnt = bleCnt ;
-	memcpy( g_tlvBeacondes.beaconArry , pBeacon , bleCnt * sizeof(Beacon) );
+	//memcpy( g_tlvBeacondes.beaconArry , pBeacon , cnt * sizeof(Beacon) );
+	for( i = 0 ; i < cnt ; i++)
+	{
+		g_tlvBeacondes.beaconArry[i].RSSI = pBeacon[i].RSSI;
+		g_tlvBeacondes.beaconArry[i].soc = pBeacon[i].soc ;
+		g_tlvBeacondes.beaconArry[i].Major = SWAP16( pBeacon[i].Major );
+		g_tlvBeacondes.beaconArry[i].Minor = SWAP16( pBeacon[i].Minor );
+		g_tlvBeacondes.beaconArry[i].Voltage = SWAP16( pBeacon[i].Voltage );
+	}
 }
 
 void JtTlv0900_Cache( uint8* pdata ,uint8 len )	// 获取缓存数据

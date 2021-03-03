@@ -52,6 +52,10 @@ extern "C"{
 #define REQ_ID_SET_CABINLOCK	0x38
 #define REQ_ID_SET_ACC			0x39
 
+#define	REQ_ID_GET_BEACON_SCAN	0x3E	//
+#define	REQ_ID_GET_BEACON_CMD	0x3F
+
+
 #define REQ_ID_SET_IP				0xf1
 #define REQ_ID_GET_IP				0xf2
 
@@ -178,7 +182,32 @@ extern "C"{
 		uint8  batVerify;
 		uint8  periheral;
 	}SelfTestResult;
+	//
+	typedef struct
+	{
+		uint8_t	cnt;
+		struct BeaconDecs
+		{
+			uint16_t Major;
+			uint16_t Minor;
+			int8_t	 RSSI;
+		}BeaconDecs[5];
+	}BleBeaconPkt;
 
+
+	typedef struct
+	{
+		uint8_t mac[6];
+		uint8	soc;
+		uint16_t vol;
+		int8_t rssi;
+	}BleBeaconPkt1;
+
+	typedef struct
+	{
+		uint16_t major;
+		uint16_t minor;
+	}GetBeaconREQ;
 	
 #pragma pack()
 
@@ -199,6 +228,9 @@ extern "C"{
 		PmsPkt pmsPkt;
 		PmsPortStatePkt portState;
 		//BatteryDesc		batterDesc;
+		BleBeaconPkt	bleBeaconPkt;
+		//BleBeaconPkt1	bleBeaconPkt1;
+		GetBeaconREQ	bleBeaconReq;
 		DevCapacity		devCapacity ;
 		BleGetDevIDPkt	bmsPkt[MAX_BAT_COUNT] ;
 		uint8			mActiveDevice ;// ¼¤»î

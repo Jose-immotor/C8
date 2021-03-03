@@ -70,7 +70,8 @@ uint16_t gCurRevLen = 0 ;
 static uint32 gBeaconTick = 0;
 static Bool gBeaconUpdate = False ;
 static uint8 gBleAdvCntextCnt = 0;
-static Beacon gBeaconCntext[10];	// 16¸ö
+static Beacon gBeaconCntext[10];	//±£´æµÄÔ­Ê¼Êý¾Ý--Ð¡¶Ë¸ñÊ½
+static Bool gLocationFlag = False ;
 
 // GPS 1sÒ»ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½2sÒ»ï¿½ï¿½
 #define			_CAN_BUS_REV_TIMEOUT_MS			(1000*5)
@@ -263,10 +264,7 @@ UTP_EVENT_RC JT808_cmd_getSimCfg(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT e
 		{
 			//i = 0;
 			readParamOffset = 0;
-			if( JtTlv8103_getFactoryCofnig() != 0 )	// ï¿½Ç³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-			{
-				Utp_SendCmd(&g_JtUtp, JTCMD_CMD_SET_SIM_CFG );
-			}
+			Utp_SendCmd(&g_JtUtp, JTCMD_CMD_SET_SIM_CFG );
 		}
 		i = 0 ;
 		gSendCanCmdCnt = 0x00 ;
@@ -301,7 +299,15 @@ UTP_EVENT_RC JT808_cmd_setSimCfg(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT e
 	if (ev == UTP_TX_START )
 	{
 		uint8_t tlvCount = 0 ;
-		pCmd->pExt->transferLen = JtTlv8103_getChanged( (uint8_t*)pCmd->pExt->transferData ,  pCmd->storageLen , &tlvCount );
+
+		if( JtTlv8103_getFactoryCofnig() != 0 )	// ï¿½Ç³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		{
+			pCmd->pExt->transferLen = JtTlv8103_getChanged( (uint8_t*)pCmd->pExt->transferData ,  pCmd->storageLen , &tlvCount );
+		}
+		else
+		{
+			pCmd->pExt->transferLen = JtTlv8103_getDefChanged( (uint8_t*)pCmd->pExt->transferData ,  pCmd->storageLen ) ;
+		}
 	}
 	else if( ev == UTP_REQ_SUCCESS )
 	{
@@ -716,13 +722,14 @@ void JT808_switchState(JT808* pJt, JT_state newState)
 {
 	if( newState > JT_STATE_OPERATION ) return ;
 	
-	if (pJt->opState == newState) return;
+	if (pJt->opState == newState && newState != JT_STATE_INIT ) return;
 	
 	switch (newState)
 	{
 		case JT_STATE_INIT:
 			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-			// ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?			if( pJt->setToOpState.OperationState != JT_STATE_SLEEP )
+			// ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?
+			if( pJt->setToOpState.OperationState != JT_STATE_SLEEP )
 			{
 				Utp_SendCmd(&g_JtUtp, JTCMD_MCU_HB);
 				_SetOperationState( JT_STATE_PREOPERATION,_OPERATION_PRE);
@@ -1031,12 +1038,15 @@ UTP_EVENT_RC JT808_event_sendSvrData(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVE
 	return UTP_EVENT_RC_SUCCESS;
 }
 
+
 UTP_EVENT_RC JT808_cmd_getFileContent(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 {
 	if( ev == UTP_TX_START )	// ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½Ò»ï¿½ï¿½
 	{
 		//ï¿½ï¿½ï¿½ï¿½Ö®Ç°ï¿½ï¿½ï¿½ï¿½Ê±--ï¿½ï¿½É´ï¿½ï¿½Ä£Ê½ï¿½Ô±ã·¢ï¿½ï¿½
 		pJt->filecontentreq.fileOffset = Dt_convertToU32( &pJt->filecontentreq.fileOffset , DT_UINT32 ); 		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÒªÈ¡ï¿½ï¿½
+
+		//g_JtUtp.waitRspMs = 1000 ;	// 10s
 	}
 	else if( ev == UTP_TX_DONE )
 	{
@@ -1135,30 +1145,45 @@ UTP_EVENT_RC JT808_event_setLocationExtras(JT808* pJt, const UtpCmd* pCmd, UTP_T
 	27 11 											// Major
 	4c b9 											// Minor
 	c5												// twPower
-
-	
 */
 
 //4c 00 02 15 fd a5 06 93 a4 e2 4f b1 af cf c6 eb 07 64 78 25 27 11 4c b9 c5
-static Bool _ConvertIbeacon( int8_t rssi ,uint8_t *pAdv , BeaconCell *pBecaon )
+static Bool _ConvertIbeacon_FF( int8_t rssi ,uint8_t *pAdv , BeaconCell *pBecaon )
 {
 	if( !pAdv || !pBecaon ) return False ;
 	memcpy( pBecaon->miUUID , pAdv + 4 , 16 );
 	pBecaon->miMajor = ( pAdv[21] << 8 ) | pAdv[22] ;
 	pBecaon->miMinor = ( pAdv[23] << 8 ) | pAdv[24] ;
-	pBecaon->miVoltage = pAdv[25];
 	pBecaon->miRSSI = rssi ;
 	return True ;
 }
+
+//29 15 63 0C 0E F4 01 00 03 F0 2B E3 AD 34 92 27 11 14 E9
+static Bool _ConvertIbeacon_16( int8_t rssi ,uint8_t *pAdv , BeaconCell *pBecaon )
+{
+	if( !pAdv || !pBecaon ) return False ;
+	pBecaon->miSOC = pAdv[2];
+	pBecaon->miVoltage = ( pAdv[3] << 8 ) | pAdv[4];
+	return True ;
+}
+static Bool _ConvertIbeacon_09( int8_t rssi ,uint8_t *pAdv , BeaconCell *pBecaon )
+{
+	if( !pAdv || !pBecaon ) return False ;
+	return True ;
+}
+
+
+
 
 static Bool _ConvertBleAdvToBeacon(BLEAdvContext *pAdvCntext, BeaconCell *pBecaon )
 {
 	uint8_t t = 0 , l = 0 , i = 0 ;
 	if( !pAdvCntext || !pBecaon ) return False ;
-	//
+	Bool result = False ;
 	for( i = 0 ; i < 62 ; )
 	{
 		l = pAdvCntext->mADV[i++];
+		if( l == 0 ) break ;
 		t = pAdvCntext->mADV[i++];
 		switch ( t )
 		{
@@ -1167,19 +1192,24 @@ static Bool _ConvertBleAdvToBeacon(BLEAdvContext *pAdvCntext, BeaconCell *pBecao
 					pAdvCntext->mADV[i+1] == 0x00 */&& pAdvCntext->mADV[i+2] == 0x02 && 
 					pAdvCntext->mADV[i+3] == 0x15 )
 				{
-					return _ConvertIbeacon( pAdvCntext->miRSSI ,&pAdvCntext->mADV[i] , pBecaon );
+					_ConvertIbeacon_FF( pAdvCntext->miRSSI ,&pAdvCntext->mADV[i] , pBecaon );
+					result = True ;
 				}
 				break;
-			case 0x16 :	// ²é¿´ÊÇ·ñÎªgoogleµÄBeacon
+			case 0x16 :	// Ë½ÓÐÐ­Òé-- µçÁ¿
+				_ConvertIbeacon_16( pAdvCntext->miRSSI ,&pAdvCntext->mADV[i] , pBecaon );
+				break ;
+			case 0x09 :	// ¹ã²¥Ãû×Ö
+				_ConvertIbeacon_09( pAdvCntext->miRSSI ,&pAdvCntext->mADV[i] , pBecaon );
 				break ;
 			case 0x2B :	// ²é¿´ÊÇ·ñÎªMeshµÄBeacon
 				break ;
 			default :
 				break ;
 		}
-		i += (l-1) ;
+		i += ( l - 1 ) ;
 	}
-	return False ;
+	return result ;
 }
 
 static Bool _ChecBeaconUUID( BeaconCell *pBeacon )
@@ -1207,7 +1237,7 @@ static void _UpdateBeacon( BeaconCell *pBeacon )
 	uint8 i = 0 ;
 	if( !pBeacon ) return ;
 
-	// ²éÕÒÏàÍ¬µÄ Beacon
+	// ÏÈ¸üÐÂIbeacon
 	for( i = 0 ; i < gBleAdvCntextCnt ; i++ )
 	{
 		if( pBeacon->miMajor == gBeaconCntext[i].Major &&
@@ -1218,8 +1248,17 @@ static void _UpdateBeacon( BeaconCell *pBeacon )
 	}
 	if( i < sizeof(gBeaconCntext)/sizeof(Beacon) )
 	{
-		memcpy( &gBeaconCntext[i] , pBeacon , sizeof(BeaconCell) );
+		gBeaconCntext[i].Major = pBeacon->miMajor;
+		gBeaconCntext[i].Minor = pBeacon->miMinor;
+		gBeaconCntext[i].RSSI = pBeacon->miRSSI;
+		gBeaconCntext[i].soc = pBeacon->miSOC;
+		gBeaconCntext[i].Voltage = pBeacon->miVoltage;
+		if( i >= gBleAdvCntextCnt ) gBleAdvCntextCnt++ ;
 	}
+	PFL(DL_JT808,"Update Ibeacon[%d:%d]:%02X-%02X,%d,%d,%d\n",
+		gBleAdvCntextCnt,i,
+		pBeacon->miMajor,pBeacon->miMinor,pBeacon->miRSSI,
+		pBeacon->miSOC,pBeacon->miVoltage );
 }
 
 UTP_EVENT_RC JT808_event_BeaconEvent(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
@@ -1229,25 +1268,27 @@ UTP_EVENT_RC JT808_event_BeaconEvent(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EVE
 	BeaconCell becaonCell = { 0x00 };
 	if( ev == UTP_CHANGED_AFTER )
 	{
-		//
-	}
-	else if( ev == UTP_GET_RSP )
-	{
-		// Æô¶¯¶¨Ê±Æ÷,¿ªÊ¼·¢ËÍ
-		if( !gBeaconUpdate ) gBleAdvCntextCnt = 0 ;
-		gBeaconUpdate = True ;
-		gBeaconTick = GET_TICKS();
-		for( i = 0 ; i < pJt->bleBeaconCntext.BeaconCntextLen/sizeof(BLEAdvContext) ; i++ )
+		//PFL(DL_JT808,"Beacon Event:%d\n",pCmd->pExt->transferLen);
+		for( i = 0 ; i < pCmd->pExt->transferLen/sizeof(BLEAdvContext) ; i += sizeof(BLEAdvContext) )
 		{
 			pAdvCntext = &pJt->bleBeaconCntext.BeaconADV[i];
 			if( _ConvertBleAdvToBeacon( pAdvCntext , &becaonCell ) )
 			{
 				if( _ChecBeaconUUID( &becaonCell ) )
 				{
+					if( !gBeaconUpdate ) gBleAdvCntextCnt = 0 ;
+					gBeaconUpdate = True ;
+					gBeaconTick = GET_TICKS();
 					_UpdateBeacon( &becaonCell );
+					Pms_postMsg(PmsMsg_GPRSIrq, 0, 0);
 				}
 			}
 		}
+		memset( &pJt->bleBeaconCntext , 0 , sizeof(BeaconCntext));
+	}
+	else if( ev == UTP_GET_RSP )
+	{
+		
 	}
 	return UTP_EVENT_RC_SUCCESS;
 }
@@ -1356,6 +1397,20 @@ void JT808_fsm_preoperation(uint8_t msgID, uint32_t param1, uint32_t param2)
 		}
 	}
 }
+//gBeaconCntext ,gBleAdvCntextCnt
+void GetBleBeaconInfo(  GetBeaconREQ *pBeaconREQ,BleBeaconPkt1*poutBle)
+{
+	for(uint8_t i = 0 ; i < gBleAdvCntextCnt ; i++ )
+	{
+		if( gBeaconCntext[i].Major == pBeaconREQ->major && 
+			gBeaconCntext[i].Minor == pBeaconREQ->minor )
+		{
+			poutBle->rssi = gBeaconCntext[i].RSSI ;
+			poutBle->soc = gBeaconCntext[i].soc ;			
+			poutBle->vol = gBeaconCntext[i].Voltage;
+		}
+	}
+}
 extern void JTTlv0900_updateBeacon(Beacon *pBeacon , uint8 bleCnt);
 void JT808_fsm_operation(uint8_t msgID, uint32_t param1, uint32_t param2)
 {
@@ -1378,14 +1433,26 @@ void JT808_fsm_operation(uint8_t msgID, uint32_t param1, uint32_t param2)
 			// Beaconï¿½ï¿½ï¿½ï¿½
 			if( gBeaconUpdate )
 			{
-				if( GET_TICKS() - gBeaconTick > 500 )		// 500msÃ»ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?				{
-					gBeaconUpdate = False ;
+				if( GET_TICKS() - gBeaconTick > 500 )		// 500msÃ»ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?
+				{
+					PFL(DL_JT808,"Send Beacon Info:%d[%d]\r\n",len ,gBleAdvCntextCnt);
 					JTTlv0900_updateBeacon( gBeaconCntext ,gBleAdvCntextCnt  );
+					// update Ble
+					UpdateBleBeacon( gBeaconCntext ,gBleAdvCntextCnt );
 					gBleAdvCntextCnt = 0x00;
-					PFL(DL_JT808,"Send Beacon Info:%d\r\n",len );
+					gBeaconUpdate = False ;
 				}
+				
+			}
+			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½
+			if( gLocationFlag )
+			{
+				gLocationFlag = False;
+				Utp_SendCmd(&g_JtUtp, JTCMD_CMD_SET_LOCATION_EXTRAS);
+				PFL(DL_JT808,"Send Location Info\r\n" );
 			}
 		}
+	}
 }
 
 
@@ -1736,8 +1803,8 @@ void JT808_start(void)
 	if( !gJT808Disconnect )
 	{
 		can0_wakeup();
-		Utp_Reset(&g_JtUtp);		// Çå³ýËùÓÐ·¢ËÍÊý¾Ý
-		//ï¿½ï¿½ï¿½ï¿½Ó²ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½Ð¶ï¿½
+		Utp_Reset(&g_JtUtp);		// Çå³ýËùÓÐ·¢ËÍÊý¾Ý //ï¿½ï¿½ï¿½ï¿½Ó²ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½Ð¶ï¿½
+		g_Jt.opState = JT_STATE_UNKNOWN ;
 		JT808_switchState(g_pJt, JT_STATE_INIT);
 
 		gCanbusRevTimeMS = GET_TICKS();	
@@ -1826,8 +1893,7 @@ void JT808_init()
 		{&g_JtCmdEx[12],UTP_WRITE, JTCMD_CMD_SEND_TO_SVR, "SendDataToSvr", (uint8_t*)g_txBuf, sizeof(g_txBuf), Null, 0, (UtpEventFn)JT808_event_sendSvrData},
 		{&g_JtCmdEx[13],UTP_READ,JTCMD_CMD_GET_SMS,"GetSMSContext",(uint8_t*)&g_Jt.smsContext,sizeof(GetSMSContext),Null,0,(UtpEventFn)JT808_event_getSMSContext},
 		{&g_JtCmdEx[14],UTP_READ , JTCMD_CMD_GET_FILE_CONTENT, "GetFileContent"	, (uint8_t*)&g_Jt.filecontentrsq, sizeof(FileContentRsq), (uint8_t*)&g_Jt.filecontentreq, sizeof(FileContentReq),(UtpEventFn)JT808_cmd_getFileContent},
-		{&g_JtCmdEx[15],UTP_WRITE, JTCMD_CMD_SET_LOCATION_EXTRAS, "SetLocationExtras", (uint8_t*)g_rxBuf, sizeof(g_rxBuf), Null, 0, (UtpEventFn)JT808_event_setLocationExtras},
-
+		{&g_JtCmdEx[15],UTP_WRITE, JTCMD_CMD_SET_LOCATION_EXTRAS, "SetLocationExtras", (uint8_t*)&g_Jt.locationExtras, sizeof(LocationExtras), Null, 0, (UtpEventFn)JT808_event_setLocationExtras},
 		// EVENT 
 		// ï¿½ï¿½ï¿½ï¿½ & GPS
 		{&g_JtCmdEx[16],UTP_EVENT, JTCMD_EVENT_DEV_STATE_CHANGED, "DevStateChanged", (uint8_t*)& g_Jt.devState, sizeof(JT_devState), Null, 0, (UtpEventFn)JT808_event_devStateChanged},
