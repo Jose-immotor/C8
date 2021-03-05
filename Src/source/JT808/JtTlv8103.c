@@ -235,7 +235,7 @@ void JtTlv8103_init()
 	TlvOutMgr_init(&g_jtTlvOutMgr_8103, g_tlvOut_8103, GET_ELEMENT_COUNT(g_tlvOut_8103), 2 , True);
 
 	// URL
-	updateServerAddr( _USER_CS_SERVER_INDEX/*_USER_ZS_SERVER_INDEX*/ );	// 启动的时候使用 正式服务器地址
+	updateServerAddr( _USER_ZS_SERVER_INDEX );	// 启动的时候使用 正式服务器地址
 	//strcpy( g_cfgParam.mainSvrUrl , _NETWORK_SERVER_URL);
 	//g_cfgParam.mainSvrPort = _NETWORK_SERVER_PORT;
 	

@@ -362,8 +362,8 @@ UTP_EVENT_RC Ble_getGpsGprsInfo(Ble* pBle, const UtpCmd* pCmd, UTP_TXF_EVENT ev)
 		pResult->SNR = g_Jt.devState.snr;
 		if( g_Jt.devState.cnt & _GPS_FIXE_BIT )
 		{
-			pResult->longitude = g_Jt.locatData.longitude;
-			pResult->latitude = g_Jt.locatData.latitude;
+			pResult->longitude = g_Jt.locatData.longitude ;
+			pResult->latitude = g_Jt.locatData.latitude ;
 		}
 		else
 		{
@@ -434,7 +434,7 @@ void UpdateBleBeacon(Beacon *pBeacon , uint8 bleCnt)
 	for( i = 0 ; i < bleCnt && i < 5 ; i++)
 	{
 		g_Ble.bleBeaconPkt.BeaconDecs[i].Major = pBeacon[i].Major ;
-		g_Ble.bleBeaconPkt.BeaconDecs[i].Minor = pBeacon[i].Minor;
+		g_Ble.bleBeaconPkt.BeaconDecs[i].Minor = pBeacon[i].Minor ;
 		g_Ble.bleBeaconPkt.BeaconDecs[i].RSSI = pBeacon[i].RSSI;
 	}
 	g_Ble.bleBeaconPkt.cnt = i ;
@@ -529,7 +529,7 @@ void Ble_init(uint8* mac)
 	g_Ble.pmsPkt.AppMainVer = g_Ble.devIdPkt.fwMainVer = FW_VER_MAIN;
 	g_Ble.pmsPkt.AppSubVer = g_Ble.devIdPkt.fwSubVer = FW_VER_S1;
 	g_Ble.pmsPkt.AppMinorVer = g_Ble.devIdPkt.fwMinorVer = FW_VER_S2;
-	g_Ble.pmsPkt.AppBuildNum = g_Ble.devIdPkt.buildNum = FW_VER_BUILD;	// Ð¡¶Ë
+	g_Ble.pmsPkt.AppBuildNum = g_Ble.devIdPkt.buildNum = FW_VER_BUILD;
 	g_Ble.pmsPkt.State = 1;
 
 	//

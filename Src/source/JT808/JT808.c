@@ -1083,8 +1083,8 @@ UTP_EVENT_RC JT808_cmd_getFileContent(JT808* pJt, const UtpCmd* pCmd, UTP_TXF_EV
 			}
 			else
 			{
-				Utp_DelaySendCmd( &g_JtUtp,  JTCMD_CMD_GET_FILE_CONTENT , 50 );
-				//Utp_SendCmd(&g_JtUtp,  JTCMD_CMD_GET_FILE_CONTENT );		// ��������
+				//Utp_DelaySendCmd( &g_JtUtp,  JTCMD_CMD_GET_FILE_CONTENT , 50 );
+				Utp_SendCmd(&g_JtUtp,  JTCMD_CMD_GET_FILE_CONTENT );		// ��������
 				PFL(DL_JT808,"Rev File Next Pack :%d\r\n",pJt->filecontentreq.fileOffset );
 			}
 		}
@@ -1890,9 +1890,9 @@ void JT808_init()
 		{&g_JtCmdEx[9],UTP_WRITE, JTCMD_CMD_SET_BLE_EN, "SetBLEEnable", (uint8_t*)&g_Jt.bleEnCtrl , 2, Null, 0, (UtpEventFn)JT808_cmd_setBleEnable},
 		{&g_JtCmdEx[10],UTP_READ , JTCMD_CMD_GET_FILE_INFO , "GetFileInfo",(uint8_t*)&g_Jt.updatefileinfo , sizeof(UpdateFileInfo),(uint8_t*)&g_Jt.fileDesc.fileType,sizeof(uint8),(UtpEventFn)JT808_cmd_getFileInfo },
 		{&g_JtCmdEx[11],UTP_WRITE , JTCMD_SET_OP_STATE, "SetOpState"	, (uint8_t*)& g_Jt.setToOpState, sizeof(JT_SetOperationState) , Null , 0 , (UtpEventFn)JT808_cmd_setToOpState},
-		{&g_JtCmdEx[12],UTP_WRITE, JTCMD_CMD_SEND_TO_SVR, "SendDataToSvr", (uint8_t*)g_txBuf, sizeof(g_txBuf), Null, 0, (UtpEventFn)JT808_event_sendSvrData},
-		{&g_JtCmdEx[13],UTP_READ,JTCMD_CMD_GET_SMS,"GetSMSContext",(uint8_t*)&g_Jt.smsContext,sizeof(GetSMSContext),Null,0,(UtpEventFn)JT808_event_getSMSContext},
-		{&g_JtCmdEx[14],UTP_READ , JTCMD_CMD_GET_FILE_CONTENT, "GetFileContent"	, (uint8_t*)&g_Jt.filecontentrsq, sizeof(FileContentRsq), (uint8_t*)&g_Jt.filecontentreq, sizeof(FileContentReq),(UtpEventFn)JT808_cmd_getFileContent},
+		{&g_JtCmdEx[12],UTP_READ , JTCMD_CMD_GET_FILE_CONTENT, "GetFileContent" , (uint8_t*)&g_Jt.filecontentrsq, sizeof(FileContentRsq), (uint8_t*)&g_Jt.filecontentreq, sizeof(FileContentReq),(UtpEventFn)JT808_cmd_getFileContent},
+		{&g_JtCmdEx[13],UTP_WRITE, JTCMD_CMD_SEND_TO_SVR, "SendDataToSvr", (uint8_t*)g_txBuf, sizeof(g_txBuf), Null, 0, (UtpEventFn)JT808_event_sendSvrData},
+		{&g_JtCmdEx[14],UTP_READ,JTCMD_CMD_GET_SMS,"GetSMSContext",(uint8_t*)&g_Jt.smsContext,sizeof(GetSMSContext),Null,0,(UtpEventFn)JT808_event_getSMSContext},
 		{&g_JtCmdEx[15],UTP_WRITE, JTCMD_CMD_SET_LOCATION_EXTRAS, "SetLocationExtras", (uint8_t*)&g_Jt.locationExtras, sizeof(LocationExtras), Null, 0, (UtpEventFn)JT808_event_setLocationExtras},
 		// EVENT 
 		// ���� & GPS

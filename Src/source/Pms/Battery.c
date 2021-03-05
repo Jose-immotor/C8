@@ -195,7 +195,8 @@ MOD_EVENT_RC Bat_event_readBmsID(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EVEN
 {
 	if (ev == MOD_REQ_SUCCESS)
 	{
-#ifdef CANBUS_MODE_JT808_ENABLE			
+#ifdef CANBUS_MODE_JT808_ENABLE	
+		if( pBat->port > 1 ) return MOD_EVENT_RC_SUCCESS;
 		g_Ble.portState.property[pBat->port].nominalVol = bigendian16_get((uint8*)(&pBat->bmsID.bvolt));
 		g_Ble.portState.property[pBat->port].nominalCap = bigendian16_get((uint8*)(&pBat->bmsID.bcap));
 		g_Ble.batDesc[pBat->port].serialNum[0] = pBat->bmsID.sn34&0xFF;
@@ -254,7 +255,8 @@ MOD_EVENT_RC Bat_event_readBmsInfo(Battery* pBat, const ModCmd* pCmd, MOD_TXF_EV
 			Pms_postMsg(PmsMsg_batPlugIn, (uint32)pBat, 0);
 		}			
 		pBat->presentStatus = BAT_IN;
-#ifdef CANBUS_MODE_JT808_ENABLE			
+#ifdef CANBUS_MODE_JT808_ENABLE	
+		if( pBat->port > 1 ) return MOD_EVENT_RC_SUCCESS;
 		g_Ble.portState.property[pBat->port].nominalCur = bigendian16_get((uint8*)(&pBat->bmsInfo.dsop));
 		tmp_value = bigendian16_get((uint8*)(&pBat->bmsInfo.soc));
 		if(tmp_value == 0xFFFF)
